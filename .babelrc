@@ -1,0 +1,22 @@
+{
+  "plugins": [
+    ["transform-runtime", {"polyfill": false, "regenerator": false }]
+  ],
+
+  "env": {
+    "es": {
+      "presets": [
+        ["es2015", {"loose": true, "modules": false}]
+      ]
+    },
+    "cjs": {
+      "presets": [
+        ["es2015", {"loose": true, "modules": "commonjs"}]
+      ],
+      "plugins": [
+        ["transform-runtime", {"polyfill": false, "regenerator": false }],
+        ["add-module-exports"]
+      ]
+    }
+  }
+}
