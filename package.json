@@ -49,9 +49,13 @@
     "karma-opera-launcher": "1.0.0",
     "karma-phantomjs-launcher": "1.0.2",
     "karma-safari-launcher": "1.0.0",
+    "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "1.8.0",
     "mocha": "3.1.2",
     "rimraf": "2.5.4",
     "webpack": "2.1.0-beta.25"
+  },
+  "dependencies": {
+    "lodash.isplainobject": "4.0.6"
   }
 }

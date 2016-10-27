@@ -1,52 +1,15 @@
-const noop = () => {}
+import isPlainObject from 'lodash.isplainobject'
+import { noop, toType, isFunction, validateType, withDefault, withRequired } from './utils'
 
-const ObjProto = Object.prototype
+const VuePropTypes = {
 
-const toString = ObjProto.toString
-
-const isFunction = (val) => toString.call(val) === '[object Function]'
-
-function withDefault(type, def) {
-  return Object.assign({}, this[type], { default: def })
-}
-
-const withRequired = (type) => {
-  Object.defineProperty(type, 'isRequired', {
-    get() {
-      return Object.assign({ required: true }, this)
-    },
-    enumerable: true
-  })
-}
-
-const validateType = (type, value) => {
-  if (type.validator) {
-    return type.validator(value)
-  }
-  if (type.type === Function) {
-    return isFunction(value)
-  }
-  if (type.type === Array) {
-    return Array.isArray(value)
-  }
-  return value === type.type(value)
-}
-
-const vueTypes = {
+  any: {
+    type: null
+  },
 
   func: {
     type: Function,
     default: noop
-  },
-
-  array: {
-    type: Array,
-    default: Array
-  },
-
-  object: {
-    type: Object,
-    default: Object
   },
 
   bool: {
@@ -59,21 +22,23 @@ const vueTypes = {
     default: ''
   },
 
-  num: {
-    type: Number,
-    default: 0
-  },
-
   number: {
     type: Number,
     default: 0
   },
 
-  any: {
-    type: null
+  array: {
+    type: Array,
+    default: Array
+  },
+
+  object: {
+    type: Object,
+    default: Object
   },
 
   integer: {
+    type: Number,
     validator(value) {
       return Number.isInteger(value)
     },
@@ -85,15 +50,9 @@ const vueTypes = {
       throw new TypeError('You must provide a function as argument')
     }
 
-    const type = {
+    return toType({
       validator
-    }
-
-    type.def = (def) => Object.assign({ default: def }, type)
-
-    withRequired(type)
-
-    return type
+    })
   },
 
   oneOf(arr) {
@@ -105,12 +64,32 @@ const vueTypes = {
   },
 
   instanceOf(instanceConstructor) {
-    return this.custom((value) => value instanceof instanceConstructor)
+    return toType({
+      type: instanceConstructor
+    })
   },
 
   oneOfType(arr) {
     if (!Array.isArray(arr)) {
       throw new TypeError('You must provide an array as argument')
+    }
+
+    const nativeChecks = arr.map((type) => {
+      if (isPlainObject(type)) {
+        if (type.type && !isFunction(type.validator)) {
+          return type.type
+        }
+        return null
+      }
+      return type
+    }).filter((type) => !!type)
+
+    if (nativeChecks.length === arr.length) {
+      // we got just native objects (ie: Array, Object)
+      // delegate to Vue native prop check
+      return toType({
+        type: nativeChecks
+      })
     }
 
     return this.custom((value) => {
@@ -146,16 +125,11 @@ const vueTypes = {
 
 }
 
-Object.keys(vueTypes).forEach((key) => {
-  if (isFunction(vueTypes[key]) === false) {
-    Object.defineProperty(vueTypes[key], 'def', {
-      value: withDefault.bind(vueTypes, key),
-      enumerable: true,
-      writable: false
-    })
-
-    withRequired(vueTypes[key])
+Object.keys(VuePropTypes).forEach((key) => {
+  if (isFunction(VuePropTypes[key]) === false) {
+    withRequired(VuePropTypes[key])
+    withDefault(VuePropTypes[key])
   }
 })
 
-export default vueTypes
+export default VuePropTypes

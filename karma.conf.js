@@ -15,6 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'node_modules/babel-polyfill/browser.js',
       'src/**/*.js',
       'test/**/*.spec.js'
     ],
@@ -27,8 +28,8 @@ module.exports = function(config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       // add webpack as preprocessor
-      'src/**/*.js': ['webpack'],
-      'test/**/*.spec.js': ['webpack']
+      'src/**/*.js': ['webpack', 'sourcemap'],
+      'test/**/*.spec.js': ['webpack', 'sourcemap']
     },
 
     webpack: {
