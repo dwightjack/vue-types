@@ -117,7 +117,7 @@ Validates that a prop is a number.
 
 #### `VuePropTypes.integer`
 
-Validates that a prop is a number.
+Validates that a prop is an integer (uses `Number.isInteger`).
 
 * default: `0`
 
