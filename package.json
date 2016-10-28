@@ -1,6 +1,6 @@
 {
   "name": "vue-prop-types",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Prop types utility for Vue",
   "author": "Marco Solazzi",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "src"
   ],
   "scripts": {
-    "build": "npm run lint && npm run build:cjs && npm run build:es && npm run build:umd && npm run build:min",
+    "build": "npm run lint && npm test && npm run build:cjs && npm run build:es && npm run build:umd && npm run build:min",
     "build:cjs": "rimraf dist && cross-env BABEL_ENV=cjs babel ./src -d dist",
     "build:es": "rimraf es && cross-env BABEL_ENV=es babel ./src -d es",
     "build:umd": "cross-env BABEL_ENV=cjs cross-env NODE_ENV=development webpack --config webpack.umd.js",

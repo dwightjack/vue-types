@@ -1,48 +1,64 @@
 import isPlainObject from 'lodash.isplainobject'
-import { noop, toType, isFunction, validateType, withDefault, withRequired } from './utils'
+import { noop, toType, isFunction, validateType } from './utils'
 
 const VuePropTypes = {
 
-  any: {
-    type: null
+  get any() {
+    return toType({
+      type: null
+    })
   },
 
-  func: {
-    type: Function,
-    default: noop
+  get func() {
+    return toType({
+      type: Function,
+      default: noop
+    })
   },
 
-  bool: {
-    type: Boolean,
-    default: true
+  get bool() {
+    return toType({
+      type: Boolean,
+      default: true
+    })
   },
 
-  string: {
-    type: String,
-    default: ''
+  get string() {
+    return toType({
+      type: String,
+      default: ''
+    })
   },
 
-  number: {
-    type: Number,
-    default: 0
+  get number() {
+    return toType({
+      type: Number,
+      default: 0
+    })
   },
 
-  array: {
-    type: Array,
-    default: Array
+  get array() {
+    return toType({
+      type: Array,
+      default: Array
+    })
   },
 
-  object: {
-    type: Object,
-    default: Object
+  get object() {
+    return toType({
+      type: Object,
+      default: Object
+    })
   },
 
-  integer: {
-    type: Number,
-    validator(value) {
-      return Number.isInteger(value)
-    },
-    default: 0
+  get integer() {
+    return toType({
+      type: Number,
+      validator(value) {
+        return Number.isInteger(value)
+      },
+      default: 0
+    })
   },
 
   custom(validator) {
@@ -100,19 +116,29 @@ const VuePropTypes = {
   },
 
   arrayOf(type) {
-    return this.custom((values) => {
-      if (!Array.isArray(values)) {
-        return false
+    return toType({
+      type: Array,
+      validator(values) {
+        return values.every((value) => validateType(type, value))
       }
-      return values.every((value) => {
-        return validateType(type, value)
-      })
+    })
+  },
+
+  objectOf(type) {
+    return toType({
+      type: Object,
+      validator(obj) {
+        return Object.keys(obj).every((key) => validateType(type, obj[key]))
+      }
     })
   },
 
   shape(obj) {
     const keys = Object.keys(obj)
     return this.custom((value) => {
+      if (!isPlainObject(value)) {
+        return false
+      }
       return Object.keys(value).every((key) => {
         if (keys.indexOf(key) === -1) {
           return false
@@ -124,12 +150,5 @@ const VuePropTypes = {
   }
 
 }
-
-Object.keys(VuePropTypes).forEach((key) => {
-  if (isFunction(VuePropTypes[key]) === false) {
-    withRequired(VuePropTypes[key])
-    withDefault(VuePropTypes[key])
-  }
-})
 
 export default VuePropTypes

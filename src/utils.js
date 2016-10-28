@@ -41,10 +41,12 @@ export const withDefault = function (type) {
   Object.defineProperty(type, 'def', {
     value(def) {
       if (!validateType(this, def)) {
-        console.warn('default value not allowed here') // eslint-disable-line no-console
+        console.warn('default value not allowed here', def) // eslint-disable-line no-console
         return type
       }
-      const newType = Object.assign({}, this, { default: def })
+      const newType = Object.assign({}, this, {
+        default: (Array.isArray(def) || isPlainObject(def)) ? function () { return def } : def
+      })
       if (!hasOwn.call(newType, 'required')) {
         withRequired(newType)
       }

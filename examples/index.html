@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Basic Example</title>
+</head>
+<body>
+
+  <div id="app"></div>
+
+  <script src="../node_modules/babel-polyfill/browser.js"></script>
+  <script src="https://unpkg.com/vue@2.0.3/dist/vue.js"></script>
+  <script src="../umd/vue-prop-types.js"></script>
+  <script>
+
+    var User = {
+      template: '<li><strong>{{ name }}</strong> ({{ age }})</li>',
+      props: {
+        name: VuePropTypes.string,
+        age: VuePropTypes.integer.def(10)
+      }
+    };
+
+    var UserList = {
+      template: '<ul><User v-for="user in users" :name="user.name" :age="user.age" /></ul>',
+      props: {
+        users: VuePropTypes.arrayOf(
+          VuePropTypes.object
+        )
+      },
+      components: {
+        User
+      }
+    }
+
+    var app = new Vue({
+      el: '#app',
+      template: '<section><h1>A list of users:</h1><UserList :users="users" /></section>',
+      data: {
+        users: [{
+          name: 'John',
+          age: 20
+        }, {
+          name: 'Jane',
+          age: 30
+        }, {
+          name: 'Jack'
+        }]
+      },
+      components: {
+        UserList
+      }
+    });
+
+
+  </script>
+
+</body>
+</html>

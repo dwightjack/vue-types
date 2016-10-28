@@ -2,3 +2,4 @@ dist
 es
 umd
 node_modules
+*.conf.js

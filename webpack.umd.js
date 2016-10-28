@@ -38,7 +38,7 @@ module.exports = {
   },
 
   output: {
-    library: 'VueProps',
+    library: 'VuePropTypes',
     libraryTarget: 'umd',
     path: path.join(process.cwd(), 'umd'),
     filename: process.env.NODE_ENV === 'production' ? 'vue-prop-types.min.js' : 'vue-prop-types.js',
