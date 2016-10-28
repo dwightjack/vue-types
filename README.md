@@ -1,15 +1,15 @@
-# vue-prop-types
+# vue-types
 
 > Prop type definitions for [Vue.js](http://vuejs.org). Compatible with both Vue 1.x and 2.x
 
 ## Introduction
 
-`vue-prop-types` is a collection of configurable [prop type](http://vuejs.org/guide/components.html#Props) definitions for Vue.js components, inspired by `React.PropTypes`.
+`vue-types` is a collection of configurable [prop type](http://vuejs.org/guide/components.html#Props) definitions for Vue.js components, inspired by `React.PropTypes`.
   
 ### When to use
 
 While basic prop type definition in Vue is simple and convenient, detailed prop validation can become verbose on complex components.
-This is the case for `vue-prop-types`.
+This is the case for `vue-types`.
 
 Instead of:
 
@@ -64,7 +64,7 @@ export default {
 ### NPM 
 
 ``` bash
-npm install vue-prop-types --save
+npm install vue-types --save
 ```
 
 ## Documentation
@@ -191,7 +191,7 @@ export default {
 
 #### `VuePropTypes.oneOfType()`
 
-Validates that a prop is an object that could be one of many types. Accepts both simple and `vue-prop-types` types.
+Validates that a prop is an object that could be one of many types. Accepts both simple and `vue-types` types.
 
 ```js
 export default {
@@ -237,7 +237,7 @@ export default {
 
 #### `VuePropTypes.shape()`
 
-Validates that a prop is an object taking on a particular shape. Accepts both simple and `vue-prop-types` types.
+Validates that a prop is an object taking on a particular shape. Accepts both simple and `vue-types` types.
 
 ```js
 export default {

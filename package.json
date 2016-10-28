@@ -1,5 +1,5 @@
 {
-  "name": "vue-prop-types",
+  "name": "vue-types",
   "version": "0.1.0",
   "description": "Prop types utility for Vue",
   "author": "Marco Solazzi",
@@ -19,6 +19,7 @@
     "build:umd": "cross-env BABEL_ENV=cjs cross-env NODE_ENV=development webpack --config webpack.umd.js",
     "build:min": "cross-env BABEL_ENV=cjs cross-env NODE_ENV=production webpack --config webpack.umd.js",
     "test": "cross-env BABEL_ENV=cjs karma start karma.conf.js --single-run --browsers PhantomJS",
+    "test:all": "cross-env BABEL_ENV=cjs karma start karma.conf.js --single-run --browsers Chrome,Firefox,IE,Safari,Opera",
     "lint": "eslint src *.js"
   },
   "keywords": [
@@ -28,7 +29,7 @@
   "devDependencies": {
     "babel-cli": "6.18.0",
     "babel-core": "6.18.0",
-    "babel-loader": "6.2.5",
+    "babel-loader": "6.2.7",
     "babel-plugin-add-module-exports": "0.2.1",
     "babel-plugin-transform-runtime": "6.15.0",
     "babel-polyfill": "6.16.0",

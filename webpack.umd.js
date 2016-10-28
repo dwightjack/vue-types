@@ -5,7 +5,7 @@ const version = require('./package.json').version
 /*eslint-disable */
 const banner =
   "/**\n" +
-  " * vue-prop-types v" + version + "\n" +
+  " * vue-types v" + version + "\n" +
   " * Copyright (c) 2016 Marco Solazzi\n" +
   " * MIT License\n" +
   " */\n";
@@ -34,14 +34,14 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
 
   entry: {
-    'vue-prop-types': ['./src/index.js']
+    'vue-types': ['./src/index.js']
   },
 
   output: {
     library: 'VuePropTypes',
     libraryTarget: 'umd',
     path: path.join(process.cwd(), 'umd'),
-    filename: process.env.NODE_ENV === 'production' ? 'vue-prop-types.min.js' : 'vue-prop-types.js',
+    filename: process.env.NODE_ENV === 'production' ? 'vue-types.min.js' : 'vue-types.js',
   },
 
   plugins: plugins,
