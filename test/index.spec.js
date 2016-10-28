@@ -1,7 +1,7 @@
 import expect, { spyOn } from 'expect'
 
 import { noop } from '../src/utils'
-import vuePropTypes from '../src/index'
+import vueTypes from '../src/index'
 
 const checkRequired = (type) => {
 
@@ -17,15 +17,15 @@ describe('VuePropTypes', () => {
   describe('`.any`', () => {
 
     it('should have a `null` type', () => {
-      expect(vuePropTypes.any.type).toBe(null)
+      expect(vueTypes.any.type).toBe(null)
     })
 
     it('should add a `required` flag', () => {
-      checkRequired(vuePropTypes.any)
+      checkRequired(vueTypes.any)
     })
 
     it('should provide a method to set a custom default', () => {
-      expect(vuePropTypes.any.def('test').default).toBe('test')
+      expect(vueTypes.any.def('test').default).toBe('test')
     })
   })
 
@@ -37,19 +37,19 @@ describe('VuePropTypes', () => {
         default: noop
       }
 
-      expect(vuePropTypes.func).toMatch(match)
+      expect(vueTypes.func).toMatch(match)
     })
 
     it('should add a `required` flag', () => {
 
-      checkRequired(vuePropTypes.func)
+      checkRequired(vueTypes.func)
 
     })
 
     it('should provide a method to set a custom default', () => {
       function myFn () {}
 
-      expect(vuePropTypes.func.def(myFn).default).toBe(myFn)
+      expect(vueTypes.func.def(myFn).default).toBe(myFn)
     })
 
   })
@@ -62,15 +62,15 @@ describe('VuePropTypes', () => {
         default: true
       }
 
-      expect(vuePropTypes.bool).toMatch(match)
+      expect(vueTypes.bool).toMatch(match)
     })
 
     it('should add a `required` flag', () => {
-      checkRequired(vuePropTypes.bool)
+      checkRequired(vueTypes.bool)
     })
 
     it('should provide a method to set a custom default', () => {
-      expect(vuePropTypes.bool.def(false).default).toBe(false)
+      expect(vueTypes.bool.def(false).default).toBe(false)
     })
 
   })
@@ -83,15 +83,15 @@ describe('VuePropTypes', () => {
         default: ''
       }
 
-      expect(vuePropTypes.string).toMatch(match)
+      expect(vueTypes.string).toMatch(match)
     })
 
     it('should add a `required` flag', () => {
-      checkRequired(vuePropTypes.string)
+      checkRequired(vueTypes.string)
     })
 
     it('should provide a method to set a custom default', () => {
-      expect(vuePropTypes.string.def('test').default).toBe('test')
+      expect(vueTypes.string.def('test').default).toBe('test')
     })
 
   })
@@ -104,15 +104,15 @@ describe('VuePropTypes', () => {
         default: 0
       }
 
-      expect(vuePropTypes.number).toMatch(match)
+      expect(vueTypes.number).toMatch(match)
     })
 
     it('should add a `required` flag', () => {
-      checkRequired(vuePropTypes.number)
+      checkRequired(vueTypes.number)
     })
 
     it('should provide a method to set a custom default', () => {
-      expect(vuePropTypes.number.def(100).default).toBe(100)
+      expect(vueTypes.number.def(100).default).toBe(100)
     })
 
   })
@@ -125,16 +125,16 @@ describe('VuePropTypes', () => {
         default: Array
       }
 
-      expect(vuePropTypes.array).toMatch(match)
+      expect(vueTypes.array).toMatch(match)
     })
 
     it('should add a `required` flag', () => {
-      checkRequired(vuePropTypes.array)
+      checkRequired(vueTypes.array)
     })
 
     it('should provide a method to set a custom default. `default` value must be a function', () => {
       const arr = [0, 1]
-      const def = vuePropTypes.array.def(arr).default
+      const def = vueTypes.array.def(arr).default
       expect(def).toMatch(Function)
       expect(def()).toEqual(arr)
     })
@@ -149,16 +149,16 @@ describe('VuePropTypes', () => {
         default: Object
       }
 
-      expect(vuePropTypes.object).toMatch(match)
+      expect(vueTypes.object).toMatch(match)
     })
 
     it('should add a `required` flag', () => {
-      checkRequired(vuePropTypes.object)
+      checkRequired(vueTypes.object)
     })
 
     it('should provide a method to set a custom default. `default` value must be a function', () => {
       const obj = { test: 'test' }
-      const def = vuePropTypes.object.def(obj).default
+      const def = vueTypes.object.def(obj).default
       expect(def).toMatch(Function)
       expect(def()).toEqual(obj)
     })
@@ -178,21 +178,21 @@ describe('VuePropTypes', () => {
         validator: Function
       }
 
-      expect(vuePropTypes.integer).toMatch(match)
+      expect(vueTypes.integer).toMatch(match)
     })
 
     it('should add a `required` flag', () => {
-      checkRequired(vuePropTypes.integer)
+      checkRequired(vueTypes.integer)
     })
 
     it('should provide a method to set a custom default', () => {
-      expect(vuePropTypes.integer.def(100).default).toBe(100)
+      expect(vueTypes.integer.def(100).default).toBe(100)
     })
 
     it('should provide a validator function that returns true on integer values', () => {
-      expect(vuePropTypes.integer.validator(100)).toBe(true)
-      expect(vuePropTypes.integer.validator(Infinity)).toBe(false)
-      expect(vuePropTypes.integer.validator(0.1)).toBe(false)
+      expect(vueTypes.integer.validator(100)).toBe(true)
+      expect(vueTypes.integer.validator(Infinity)).toBe(false)
+      expect(vueTypes.integer.validator(0.1)).toBe(false)
     })
 
   })
@@ -202,7 +202,7 @@ describe('VuePropTypes', () => {
     let customType
 
     beforeEach(() => {
-      customType = vuePropTypes.custom((val) => typeof val === 'string')
+      customType = vueTypes.custom((val) => typeof val === 'string')
     })
 
     it('should match an object with a validator method', () => {
@@ -233,7 +233,7 @@ describe('VuePropTypes', () => {
     let customType
 
     beforeEach(() => {
-      customType = vuePropTypes.oneOf([0, 1, 2])
+      customType = vueTypes.oneOf([0, 1, 2])
     })
 
     it('should match an object with a validator method', () => {
@@ -274,7 +274,7 @@ describe('VuePropTypes', () => {
     }
 
     beforeEach(() => {
-      customType = vuePropTypes.instanceOf(MyClass)
+      customType = vueTypes.instanceOf(MyClass)
     })
 
     it('should match an object with a validator method', () => {
@@ -303,45 +303,45 @@ describe('VuePropTypes', () => {
   describe('`.arrayOf`', () => {
 
     it('should have a type `Array`', () => {
-      const customType = vuePropTypes.arrayOf(Number)
+      const customType = vueTypes.arrayOf(Number)
       expect(customType.type).toBe(Array)
     })
 
     it('should add a `required` flag', () => {
-      const customType = vuePropTypes.arrayOf(Number)
+      const customType = vueTypes.arrayOf(Number)
       checkRequired(customType)
     })
 
     it('should provide a method to set a custom default. `default` value must be a function', () => {
-      const customType = vuePropTypes.arrayOf(Number)
+      const customType = vueTypes.arrayOf(Number)
       const def = customType.def([0, 1]).default
       expect(def).toMatch(Function)
       expect(def()).toEqual([0, 1])
     })
 
     it('should NOT accept default values out of the allowed one', () => {
-      const customType = vuePropTypes.arrayOf(Number)
+      const customType = vueTypes.arrayOf(Number)
       expect(customType.def(['test', 1])).toExcludeKey('default')
     })
 
     it('should validate an array of same-type values', () => {
-      const customType = vuePropTypes.arrayOf(Number)
+      const customType = vueTypes.arrayOf(Number)
       expect(customType.validator([0, 1, 2])).toBe(true)
 
     })
 
     it('should NOT validate an array of mixed-type values', () => {
-      const customType = vuePropTypes.arrayOf(Number)
+      const customType = vueTypes.arrayOf(Number)
       expect(customType.validator([0, 1, 'string'])).toBe(false)
     })
 
     it('should allow validation of VuePropTypes native types', () => {
-      const customType = vuePropTypes.arrayOf(vuePropTypes.number)
+      const customType = vueTypes.arrayOf(vueTypes.number)
       expect(customType.validator([0, 1, 2])).toBe(true)
     })
 
     it('should allow validation of VuePropTypes custom types', () => {
-      const customType = vuePropTypes.arrayOf(vuePropTypes.integer)
+      const customType = vueTypes.arrayOf(vueTypes.integer)
       expect(customType.validator([0, 1, 2])).toBe(true)
       expect(customType.validator([0, 1.2, 2])).toBe(false)
     })
@@ -351,45 +351,45 @@ describe('VuePropTypes', () => {
   describe('`.objectOf`', () => {
 
     it('should have a type `Object`', () => {
-      const customType = vuePropTypes.objectOf(Number)
+      const customType = vueTypes.objectOf(Number)
       expect(customType.type).toBe(Object)
     })
 
     it('should add a `required` flag', () => {
-      const customType = vuePropTypes.objectOf(Number)
+      const customType = vueTypes.objectOf(Number)
       checkRequired(customType)
     })
 
     it('should provide a method to set a custom default. `default` value must be a function', () => {
-      const customType = vuePropTypes.objectOf(Number)
+      const customType = vueTypes.objectOf(Number)
       const def = customType.def({ id: 10, age: 30 }).default
       expect(def).toMatch(Function)
       expect(def()).toEqual({ id: 10, age: 30 })
     })
 
     it('should NOT accept default values out of the allowed one', () => {
-      const customType = vuePropTypes.objectOf(Number)
+      const customType = vueTypes.objectOf(Number)
       expect(customType.def({ id: '10', age: 30 })).toExcludeKey('default')
     })
 
     it('should validate an object of same-type values', () => {
-      const customType = vuePropTypes.objectOf(Number)
+      const customType = vueTypes.objectOf(Number)
       expect(customType.validator({ id: 10, age: 30 })).toBe(true)
 
     })
 
     it('should NOT validate an array of mixed-type values', () => {
-      const customType = vuePropTypes.objectOf(Number)
+      const customType = vueTypes.objectOf(Number)
       expect(customType.validator({ id: '10', age: 30 })).toBe(false)
     })
 
     it('should allow validation of VuePropTypes native types', () => {
-      const customType = vuePropTypes.objectOf(vuePropTypes.number)
+      const customType = vueTypes.objectOf(vueTypes.number)
       expect(customType.validator({ id: 10, age: 30 })).toBe(true)
     })
 
     it('should allow validation of VuePropTypes custom types', () => {
-      const customType = vuePropTypes.objectOf(vuePropTypes.integer)
+      const customType = vueTypes.objectOf(vueTypes.integer)
       expect(customType.validator({ id: 10, age: 30 })).toBe(true)
       expect(customType.validator({ id: 10.2, age: 30 })).toBe(false)
     })
@@ -404,19 +404,19 @@ describe('VuePropTypes', () => {
       shape = {
         id: Number,
         name: String,
-        age: vuePropTypes.integer,
+        age: vueTypes.integer,
 
       }
     })
 
     it('should add a `required` flag', () => {
-      const customType = vuePropTypes.shape(shape)
+      const customType = vueTypes.shape(shape)
       checkRequired(customType)
     })
 
     it('should validate an object with a given shape', () => {
 
-      const customType = vuePropTypes.shape(shape)
+      const customType = vueTypes.shape(shape)
       expect(customType.validator({
         id: 10,
         name: 'John',
@@ -426,7 +426,7 @@ describe('VuePropTypes', () => {
 
     it('should NOT validate an object without a given shape', () => {
 
-      const customType = vuePropTypes.shape(shape)
+      const customType = vueTypes.shape(shape)
       expect(customType.validator({
         id: '10',
         name: 'John',
@@ -435,7 +435,7 @@ describe('VuePropTypes', () => {
     })
 
     it('should NOT validate a value which is NOT an object', () => {
-      const customType = vuePropTypes.shape(shape)
+      const customType = vueTypes.shape(shape)
       expect(customType.validator('a string')).toBe(false)
 
       class MyClass {
@@ -450,7 +450,7 @@ describe('VuePropTypes', () => {
     })
 
     it('should provide a method to set a custom default', () => {
-      const customType = vuePropTypes.shape(shape)
+      const customType = vueTypes.shape(shape)
       const defVals = {
         id: 10,
         name: 'John',
@@ -462,7 +462,7 @@ describe('VuePropTypes', () => {
     })
 
     it('should NOT accept default values with an incorrect shape', () => {
-      const customType = vuePropTypes.shape(shape)
+      const customType = vueTypes.shape(shape)
       const def = {
         id: '10',
         name: 'John',
@@ -484,14 +484,14 @@ describe('VuePropTypes', () => {
     }
 
     const nativeTypes = [Number, Array, MyClass]
-    const mixedTypes = [Number, vuePropTypes.array, vuePropTypes.integer]
+    const mixedTypes = [Number, vueTypes.array, vueTypes.integer]
     const complexTypes = [
-      vuePropTypes.oneOf([0, 1]),
-      vuePropTypes.shape({ id: Number })
+      vueTypes.oneOf([0, 1]),
+      vueTypes.shape({ id: Number })
     ]
 
     beforeEach(() => {
-      spy = spyOn(vuePropTypes, 'custom').andCallThrough()
+      spy = spyOn(vueTypes, 'custom').andCallThrough()
     })
 
     afterEach(() => {
@@ -499,22 +499,22 @@ describe('VuePropTypes', () => {
     })
 
     it('should add a `required` flag', () => {
-      const customType = vuePropTypes.oneOfType(nativeTypes)
+      const customType = vueTypes.oneOfType(nativeTypes)
       checkRequired(customType)
     })
 
     it('should provide a method to set a custom default', () => {
-      const customType = vuePropTypes.oneOfType(nativeTypes)
+      const customType = vueTypes.oneOfType(nativeTypes)
       expect(customType.def(1).default).toBe(1)
     })
 
     it('should NOT accept default values out of the allowed ones', () => {
-      const customType = vuePropTypes.oneOfType(nativeTypes)
+      const customType = vueTypes.oneOfType(nativeTypes)
       expect(customType.def('test')).toExcludeKey('default')
     })
 
     it('should return a prop object with `type` as an array', () => {
-      const customType = vuePropTypes.oneOfType(nativeTypes)
+      const customType = vueTypes.oneOfType(nativeTypes)
       expect(customType.type).toMatch(Array)
     })
 
@@ -523,14 +523,14 @@ describe('VuePropTypes', () => {
     })
 
     it('should use the custom type creator for mixed (native, VuePropTypes) options', () => {
-      const customType = vuePropTypes.oneOfType(mixedTypes)
+      const customType = vueTypes.oneOfType(mixedTypes)
 
       expect(spy).toHaveBeenCalled()
       expect(customType).toExcludeKey('type')
     })
 
     it('should validate custom types with complex shapes', () => {
-      const customType = vuePropTypes.oneOfType(complexTypes)
+      const customType = vueTypes.oneOfType(complexTypes)
 
       expect(customType.validator(1)).toBe(true)
       expect(customType.validator(5)).toBe(false)

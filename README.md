@@ -42,13 +42,13 @@ You may write:
 
 ```js
 
-import VuePropTypes from 'vue-pro-types';
+import VueTypes from 'vue-types';
 
 export default {
   props: {
-    id: VuePropTypes.number.def(10),
-    name: VuePropTypes.string.isRequired,
-    age: VuePropTypes.integer,
+    id: VueTypes.number.def(10),
+    name: VueTypes.string.isRequired,
+    age: VueTypes.integer,
     // No need for `default` or `required` key, so keep it simple
     nationality: String 
   },
@@ -87,54 +87,54 @@ const numPropRequiredCustom = vueTypes.number.def(10).isRequired
 // numPropRequiredCustom ===  { type: Number, default: 10, required : true}
 ```
 
-#### `VuePropTypes.any`
+#### `VueTypes.any`
 
 Validates any type of value and has no default value.
 
-#### `VuePropTypes.array`
+#### `VueTypes.array`
 
 Validates that a prop is an array primitive.
 
 * Default: `Array`
 
-#### `VuePropTypes.bool`
+#### `VueTypes.bool`
 
 Validates boolean props.
 
 * default: `true`
 
-#### `VuePropTypes.func`
+#### `VueTypes.func`
 
 Validates that a prop is a function.
 
 * default: an empty function
 
-#### `VuePropTypes.number`
+#### `VueTypes.number`
 
 Validates that a prop is a number.
 
 * default: `0`
 
-#### `VuePropTypes.integer`
+#### `VueTypes.integer`
 
 Validates that a prop is an integer (uses `Number.isInteger`).
 
 * default: `0`
 
-#### `VuePropTypes.object`
+#### `VueTypes.object`
 
 ```js
-VuePropTypes.object
+VueTypes.object
 ```
 
 Validates that a prop is an object.
 
 * default: `Object`
 
-#### `VuePropTypes.string`
+#### `VueTypes.string`
 
 ```js
-VuePropTypes.string
+VueTypes.string
 ```
 
 Validates that a prop is a string.
@@ -157,7 +157,7 @@ const oneOfPropRequiredCustom = vueTypes.oneOf([0, 1]).def(1).isRequired
 // oneOfPropRequiredCustom.required === true
 ```
 
-#### `VuePropTypes.instanceOf()`
+#### `VueTypes.instanceOf()`
 
 ```js
 class Person {
@@ -166,17 +166,17 @@ class Person {
 
 export default {
   props: {
-    user: VuePropTypes.instanceOf(Person)
+    user: VueTypes.instanceOf(Person)
   }
 }
 ```
 
 Validates that a prop is an instance of a JavaScript constructor. This uses JavaScript's `instanceof` operator.
 
-#### `VuePropTypes.oneOf()`
+#### `VueTypes.oneOf()`
 
 ```js
-VuePropTypes.oneOf(arrayOfValues)
+VueTypes.oneOf(arrayOfValues)
 ```
 
 Validates that a prop is one of the provided values.
@@ -184,35 +184,35 @@ Validates that a prop is one of the provided values.
 ```js
 export default {
   props: {
-    genre: VuePropTypes.oneOf(['action', 'thriller'])
+    genre: VueTypes.oneOf(['action', 'thriller'])
   }
 }
 ```
 
-#### `VuePropTypes.oneOfType()`
+#### `VueTypes.oneOfType()`
 
 Validates that a prop is an object that could be one of many types. Accepts both simple and `vue-types` types.
 
 ```js
 export default {
   props: {
-    theProp: VuePropTypes.oneOfType([
+    theProp: VueTypes.oneOfType([
       String, 
-      VuePropTypes.integer,
-      VuePropTypes.instanceOf(Person)
+      VueTypes.integer,
+      VueTypes.instanceOf(Person)
     ])
   }
 }
 ```
 
-#### `VuePropTypes.arrayOf()`
+#### `VueTypes.arrayOf()`
 
 Validates that a prop is an array of a certain type.
 
 ```js
 export default {
   props: {
-    theProp: VuePropTypes.arrayOf(String)
+    theProp: VueTypes.arrayOf(String)
   }
 }
 
@@ -220,14 +220,14 @@ export default {
 //rejects: ['my', 1]
 ```
 
-#### `VuePropTypes.objectOf()`
+#### `VueTypes.objectOf()`
 
 Validates that a prop is an object with values of a certain type.
 
 ```js
 export default {
   props: {
-    userData: VuePropTypes.objectOf(String)
+    userData: VueTypes.objectOf(String)
   }
 }
 
@@ -235,16 +235,16 @@ export default {
 //rejects: userData = {name: 'John', surname: 'Doe', age: 30}
 ```
 
-#### `VuePropTypes.shape()`
+#### `VueTypes.shape()`
 
 Validates that a prop is an object taking on a particular shape. Accepts both simple and `vue-types` types.
 
 ```js
 export default {
   props: {
-    userData: VuePropTypes.shape({
+    userData: VueTypes.shape({
       name: String,
-      age: VuePropTypes.integer
+      age: VueTypes.integer
     })
   }
 }
