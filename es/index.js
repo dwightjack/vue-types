@@ -1,5 +1,5 @@
 import isPlainObject from 'lodash.isplainobject';
-import { noop, toType, isFunction, validateType } from './utils';
+import { noop, toType, isFunction, validateType, isInteger, isArray } from './utils';
 
 var VuePropTypes = {
 
@@ -55,7 +55,7 @@ var VuePropTypes = {
     return toType({
       type: Number,
       validator: function validator(value) {
-        return Number.isInteger(value);
+        return isInteger(value);
       },
 
       default: 0
@@ -72,7 +72,7 @@ var VuePropTypes = {
     });
   },
   oneOf: function oneOf(arr) {
-    if (!Array.isArray(arr)) {
+    if (!isArray(arr)) {
       throw new TypeError('You must provide an array as argument');
     }
 
@@ -86,7 +86,7 @@ var VuePropTypes = {
     });
   },
   oneOfType: function oneOfType(arr) {
-    if (!Array.isArray(arr)) {
+    if (!isArray(arr)) {
       throw new TypeError('You must provide an array as argument');
     }
 
