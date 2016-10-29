@@ -27,7 +27,7 @@
     "vue",
     "props"
   ],
-  "repository" : {
+  "repository": {
     "type": "git",
     "url": "https://github.com/dwightjack/vue-types.git"
   },

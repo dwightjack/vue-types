@@ -10,7 +10,7 @@ var _utils = require('./utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var VuePropTypes = {
+var VueTypes = {
 
   get any() {
     return (0, _utils.toType)({
@@ -162,5 +162,5 @@ var VuePropTypes = {
   }
 };
 
-exports.default = VuePropTypes;
+exports.default = VueTypes;
 module.exports = exports['default'];

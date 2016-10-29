@@ -1,7 +1,7 @@
 import isPlainObject from 'lodash.isplainobject';
 import { noop, toType, isFunction, validateType, isInteger, isArray } from './utils';
 
-var VuePropTypes = {
+var VueTypes = {
 
   get any() {
     return toType({
@@ -153,4 +153,4 @@ var VuePropTypes = {
   }
 };
 
-export default VuePropTypes;
+export default VueTypes;

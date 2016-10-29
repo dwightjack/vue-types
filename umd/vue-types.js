@@ -1,5 +1,5 @@
 /**
- * vue-types v0.1.0
+ * vue-types v0.4.0
  * Copyright (c) 2016 Marco Solazzi
  * MIT License
  */
@@ -10,9 +10,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["VuePropTypes"] = factory();
+		exports["VueTypes"] = factory();
 	else
-		root["VuePropTypes"] = factory();
+		root["VueTypes"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -242,7 +242,7 @@ var _utils = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var VuePropTypes = {
+var VueTypes = {
 
   get any() {
     return (0, _utils.toType)({
@@ -394,7 +394,7 @@ var VuePropTypes = {
   }
 };
 
-exports.default = VuePropTypes;
+exports.default = VueTypes;
 module.exports = exports['default'];
 
 /***/ },

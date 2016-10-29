@@ -1,7 +1,7 @@
 import isPlainObject from 'lodash.isplainobject'
 import { noop, toType, isFunction, validateType, isInteger, isArray } from './utils'
 
-const VuePropTypes = {
+const VueTypes = {
 
   get any() {
     return toType({
@@ -151,4 +151,4 @@ const VuePropTypes = {
 
 }
 
-export default VuePropTypes
+export default VueTypes
