@@ -1,6 +1,6 @@
 {
   "name": "vue-types",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Prop types utility for Vue",
   "author": "Marco Solazzi",
   "license": "MIT",
@@ -27,12 +27,16 @@
     "vue",
     "props"
   ],
+  "repository" : {
+    "type": "git",
+    "url": "https://github.com/dwightjack/vue-types.git"
+  },
+  "bugs": "https://github.com/dwightjack/vue-types/issues",
   "devDependencies": {
     "babel-cli": "6.18.0",
     "babel-core": "6.18.0",
     "babel-loader": "6.2.7",
     "babel-plugin-add-module-exports": "0.2.1",
-    "babel-polyfill": "6.16.0",
     "babel-preset-es2015": "6.18.0",
     "cross-env": "3.1.3",
     "eslint": "3.8.1",
