@@ -64,7 +64,7 @@ var VuePropTypes = {
     return (0, _utils.toType)({
       type: Number,
       validator: function validator(value) {
-        return Number.isInteger(value);
+        return (0, _utils.isInteger)(value);
       },
 
       default: 0
@@ -81,7 +81,7 @@ var VuePropTypes = {
     });
   },
   oneOf: function oneOf(arr) {
-    if (!Array.isArray(arr)) {
+    if (!(0, _utils.isArray)(arr)) {
       throw new TypeError('You must provide an array as argument');
     }
 
@@ -95,7 +95,7 @@ var VuePropTypes = {
     });
   },
   oneOfType: function oneOfType(arr) {
-    if (!Array.isArray(arr)) {
+    if (!(0, _utils.isArray)(arr)) {
       throw new TypeError('You must provide an array as argument');
     }
 
