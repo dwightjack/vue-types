@@ -1,5 +1,5 @@
 import isPlainObject from 'lodash.isplainobject';
-import { noop, toType, isFunction, validateType, isInteger, isArray } from './utils';
+import { noop, toType, isFunction, validateType, isInteger, isArray, has } from './utils';
 
 var VuePropTypes = {
 
@@ -138,17 +138,33 @@ var VuePropTypes = {
   },
   shape: function shape(obj) {
     var keys = Object.keys(obj);
-    return this.custom(function (value) {
-      if (!isPlainObject(value)) {
-        return false;
-      }
-      return Object.keys(value).every(function (key) {
-        if (keys.indexOf(key) === -1) {
+    var requiredKeys = keys.filter(function (key) {
+      return obj[key] && obj[key].required === true;
+    });
+
+    return toType({
+      type: Object,
+      validator: function validator(value) {
+        if (!isPlainObject(value)) {
           return false;
         }
-        var type = obj[key];
-        return validateType(type, value[key]);
-      });
+        var valueKeys = Object.keys(value);
+
+        // check for required keys (if any)
+        if (requiredKeys.length > 0 && requiredKeys.some(function (req) {
+          return valueKeys.indexOf(req) === -1;
+        })) {
+          return false;
+        }
+
+        return valueKeys.every(function (key) {
+          if (keys.indexOf(key) === -1) {
+            return false;
+          }
+          var type = obj[key];
+          return validateType(type, value[key]);
+        });
+      }
     });
   }
 };

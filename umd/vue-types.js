@@ -1,5 +1,5 @@
 /**
- * vue-types v0.1.0
+ * vue-types v0.5.0
  * Copyright (c) 2016 Marco Solazzi
  * MIT License
  */
@@ -379,17 +379,33 @@ var VuePropTypes = {
   },
   shape: function shape(obj) {
     var keys = Object.keys(obj);
-    return this.custom(function (value) {
-      if (!(0, _lodash2.default)(value)) {
-        return false;
-      }
-      return Object.keys(value).every(function (key) {
-        if (keys.indexOf(key) === -1) {
+    var requiredKeys = keys.filter(function (key) {
+      return obj[key] && obj[key].required === true;
+    });
+
+    return (0, _utils.toType)({
+      type: Object,
+      validator: function validator(value) {
+        if (!(0, _lodash2.default)(value)) {
           return false;
         }
-        var type = obj[key];
-        return (0, _utils.validateType)(type, value[key]);
-      });
+        var valueKeys = Object.keys(value);
+
+        // check for required keys (if any)
+        if (requiredKeys.length > 0 && requiredKeys.some(function (req) {
+          return valueKeys.indexOf(req) === -1;
+        })) {
+          return false;
+        }
+
+        return valueKeys.every(function (key) {
+          if (keys.indexOf(key) === -1) {
+            return false;
+          }
+          var type = obj[key];
+          return (0, _utils.validateType)(type, value[key]);
+        });
+      }
     });
   }
 };

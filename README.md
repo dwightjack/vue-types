@@ -237,20 +237,22 @@ export default {
 
 #### `VueTypes.shape()`
 
-Validates that a prop is an object taking on a particular shape. Accepts both simple and `vue-types` types.
+Validates that a prop is an object taking on a particular shape. Accepts both simple and `vue-types` types. You can set shape's types as `required` but (obviously) you cannot use `.def()`
 
 ```js
 export default {
   props: {
     userData: VueTypes.shape({
       name: String,
-      age: VueTypes.integer
+      age: VueTypes.integer,
+      id: VueTypes.integer.isRequired
     })
   }
 }
 
-//accepts: userData = {name: 'John', age: 30}
-//rejects: userData = {name: 'John', age: 'wrong data'}
+//accepts: userData = {name: 'John', age: 30, id: 1}
+//rejects: userData = {name: 'John', age: 'wrong data', id: 1}
+//rejects: userData = {name: 'John', age: 'wrong data'} --> missing required `id` key
 ```
 
 ## License
@@ -258,4 +260,3 @@ export default {
 [MIT](http://opensource.org/licenses/MIT)
 
 Copyright (c) 2016 Marco Solazzi
-
