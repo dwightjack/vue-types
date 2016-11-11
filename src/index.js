@@ -1,5 +1,5 @@
 import isPlainObject from 'lodash.isplainobject'
-import { noop, toType, isFunction, validateType, isInteger, isArray } from './utils'
+import { noop, toType, isFunction, validateType, isInteger, isArray, has } from './utils'
 
 const VuePropTypes = {
 
@@ -135,17 +135,29 @@ const VuePropTypes = {
 
   shape(obj) {
     const keys = Object.keys(obj)
-    return this.custom((value) => {
-      if (!isPlainObject(value)) {
-        return false
-      }
-      return Object.keys(value).every((key) => {
-        if (keys.indexOf(key) === -1) {
+    const requiredKeys = keys.filter((key) => obj[key] && obj[key].required === true)
+
+    return toType({
+      type: Object,
+      validator(value) {
+        if (!isPlainObject(value)) {
           return false
         }
-        const type = obj[key]
-        return validateType(type, value[key])
-      })
+        const valueKeys = Object.keys(value)
+
+        // check for required keys (if any)
+        if (requiredKeys.length > 0 && requiredKeys.some((req) => valueKeys.indexOf(req) === -1)) {
+          return false
+        }
+
+        return valueKeys.every((key) => {
+          if (keys.indexOf(key) === -1) {
+            return false
+          }
+          const type = obj[key]
+          return validateType(type, value[key])
+        })
+      }
     })
   }
 
