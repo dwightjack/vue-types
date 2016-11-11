@@ -1,6 +1,6 @@
 {
   "name": "vue-types",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Prop types utility for Vue",
   "author": "Marco Solazzi",
   "license": "MIT",
@@ -27,7 +27,7 @@
     "vue",
     "props"
   ],
-  "repository" : {
+  "repository": {
     "type": "git",
     "url": "https://github.com/dwightjack/vue-types.git"
   },
@@ -53,6 +53,7 @@
     "karma-opera-launcher": "1.0.0",
     "karma-phantomjs-launcher": "1.0.2",
     "karma-safari-launcher": "1.0.0",
+    "karma-sauce-launcher": "1.1.0",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "1.8.0",
     "mocha": "3.1.2",
