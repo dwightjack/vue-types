@@ -1,5 +1,5 @@
 /**
- * vue-types v0.4.0
+ * vue-types v0.5.0
  * Copyright (c) 2016 Marco Solazzi
  * MIT License
  */
