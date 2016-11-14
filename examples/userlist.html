@@ -17,16 +17,16 @@
     var User = {
       template: '<li><strong>{{ name }}</strong> ({{ age }})</li>',
       props: {
-        name: VuePropTypes.string,
-        age: VuePropTypes.integer.def(10)
+        name: VueTypes.string,
+        age: VueTypes.integer.def(10)
       }
     };
 
     var UserList = {
       template: '<ul><User v-for="user in users" :name="user.name" :age="user.age" /></ul>',
       props: {
-        users: VuePropTypes.arrayOf(
-          VuePropTypes.object
+        users: VueTypes.arrayOf(
+          VueTypes.object
         )
       },
       components: {
