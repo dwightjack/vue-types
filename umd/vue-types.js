@@ -10,9 +10,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["VuePropTypes"] = factory();
+		exports["VueTypes"] = factory();
 	else
-		root["VuePropTypes"] = factory();
+		root["VueTypes"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
