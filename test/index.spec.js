@@ -189,6 +189,10 @@ describe('VuePropTypes', () => {
       expect(VueTypes.integer.def(100).default).toBe(100)
     })
 
+    it('should NOT allow float custom default', () => {
+      expect(VueTypes.integer.def(0.1).default).toNotBe(0.1)
+    })
+
     it('should provide a validator function that returns true on integer values', () => {
       expect(VueTypes.integer.validator(100)).toBe(true)
       expect(VueTypes.integer.validator(Infinity)).toBe(false)
@@ -233,7 +237,7 @@ describe('VuePropTypes', () => {
     let customType
 
     beforeEach(() => {
-      customType = VueTypes.oneOf([0, 1, 2])
+      customType = VueTypes.oneOf([0, 1, 'string'])
     })
 
     it('should match an object with a validator method', () => {
@@ -242,6 +246,11 @@ describe('VuePropTypes', () => {
       }
 
       expect(customType).toMatch(match)
+    })
+
+    it('should have a valid array `type` property', () => {
+      expect(customType.type).toBeA(Array)
+      expect(customType.type[0]).toBe(Number)
     })
 
     it('should add a `required` flag', () => {
@@ -259,6 +268,14 @@ describe('VuePropTypes', () => {
     it('should provide a custom validator function', () => {
       expect(customType.validator(0)).toBe(true)
       expect(customType.validator(5)).toBe(false)
+    })
+
+    it('should filter `null` values type checking', () => {
+      const myType = VueTypes.oneOf([null, undefined, 'string', 2])
+      expect(myType.type).toEqual([String, Number])
+
+      const myType2 = VueTypes.oneOf([null])
+      expect(myType2.type).toBe(null)
     })
 
   })
@@ -405,7 +422,6 @@ describe('VuePropTypes', () => {
         id: Number,
         name: String,
         age: VueTypes.integer,
-
       }
     })
 
@@ -443,6 +459,15 @@ describe('VuePropTypes', () => {
         age: 30,
         nationality: ''
       })).toBe(false)
+    })
+
+    it('should validate an object with keys NOT present in the shape on `loose` mode', () => {
+
+      const customType = VueTypes.shape(shape).loose
+      expect(customType.validator({
+        id: 10,
+        name: 'John'
+      })).toBe(true)
     })
 
     it('should NOT validate a value which is NOT an object', () => {
@@ -530,7 +555,7 @@ describe('VuePropTypes', () => {
     const nativeTypes = [Number, Array, MyClass]
     const mixedTypes = [Number, VueTypes.array, VueTypes.integer]
     const complexTypes = [
-      VueTypes.oneOf([0, 1]),
+      VueTypes.oneOf([0, 1, 'string']),
       VueTypes.shape({ id: Number })
     ]
 
@@ -577,7 +602,9 @@ describe('VuePropTypes', () => {
       const customType = VueTypes.oneOfType(complexTypes)
 
       expect(customType.validator(1)).toBe(true)
-      expect(customType.validator(5)).toBe(false)
+
+      // validates types not values!
+      expect(customType.validator(5)).toBe(true)
 
       expect(customType.validator({ id: 10 })).toBe(true)
       expect(customType.validator({ id: '10' })).toBe(false)

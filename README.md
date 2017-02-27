@@ -255,6 +255,27 @@ export default {
 //rejects: userData = {name: 'John', age: 'wrong data'} --> missing required `id` key
 ```
 
+By default `.shape()` won't validate objects with properties not defined in the shape. To allow partial matching use the `loose` flag:
+
+```js
+export default {
+  props: {
+    userData: VueTypes.shape({
+      name: String,
+      id: VueTypes.integer.isRequired
+    }),
+    userDataLoose: VueTypes.shape({
+      name: String,
+      id: VueTypes.integer.isRequired
+    }).loose
+  }
+}
+
+//accepts: userData = {name: 'John', id: 1}
+//rejects: userData = {name: 'John', age: 30, id: 1}
+//accepts: userData2 = {name: 'John', age: 30, id: 1} --> loose matching
+```
+
 ## License
 
 [MIT](http://opensource.org/licenses/MIT)

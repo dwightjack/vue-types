@@ -1,5 +1,3 @@
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 import isPlainObject from 'lodash.isplainobject';
 import objectAssign from 'object-assign';
 
@@ -10,8 +8,15 @@ export var hasOwn = ObjProto.hasOwnProperty;
 var FN_MATCH_REGEXP = /^\s*function (\w+)/;
 
 // https://github.com/vuejs/vue/blob/dev/src/core/util/props.js#L159
-var getType = function getType(fn) {
-  var match = fn && fn.toString().match(FN_MATCH_REGEXP);
+export var getType = function getType(fn) {
+  var type = fn !== null && fn !== undefined ? fn.type ? fn.type : fn : null;
+  var match = type && type.toString().match(FN_MATCH_REGEXP);
+  return match && match[1];
+};
+
+export var getNativeType = function getNativeType(value) {
+  if (value === null || value === undefined) return null;
+  var match = value.constructor.toString().match(FN_MATCH_REGEXP);
   return match && match[1];
 };
 
@@ -54,7 +59,7 @@ export var isArray = Array.isArray || function (value) {
 /**
  * Checks if a value is a function
  *
- * @param {any} val - Value to check
+ * @param {any} value - Value to check
  * @returns {boolean}
  */
 export var isFunction = function isFunction(value) {
@@ -70,7 +75,7 @@ export var withDefault = function withDefault(type) {
   Object.defineProperty(type, 'def', {
     value: function value(def) {
       if (!validateType(this, def)) {
-        console.warn('default value not allowed here', def); // eslint-disable-line no-console
+        warn('invalid default value', def);
         return type;
       }
       var newType = objectAssign({}, this, {
@@ -123,36 +128,66 @@ export var toType = function toType(obj) {
  *
  * @param {Object|*} type - Type to use for validation. Either a type object or a constructor
  * @param {*} value - Value to check
+ * @param {boolean} silent - Silence warnings
  * @returns {boolean}
  */
 export var validateType = function validateType(type, value) {
+  var silent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
   var typeToCheck = type;
   var valid = true;
-
+  var expectedType = void 0;
   if (!isPlainObject(type)) {
     typeToCheck = { type: type };
   }
 
   if (hasOwn.call(typeToCheck, 'type') && typeToCheck.type !== null) {
-    var expectedType = getType(typeToCheck.type);
-
-    if (expectedType === 'Array') {
-      valid = isArray(value);
-    } else if (expectedType === 'Object') {
-      valid = isPlainObject(value);
-    } else if (expectedType === 'String' || expectedType === 'Number' || expectedType === 'Boolean' || expectedType === 'Function') {
-      valid = (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === expectedType.toLowerCase();
+    if (isArray(typeToCheck.type)) {
+      valid = typeToCheck.type.some(function (type) {
+        return validateType(type, value, true);
+      });
+      expectedType = typeToCheck.type.map(function (type) {
+        return getType(type);
+      }).join(' or ');
     } else {
-      valid = value instanceof typeToCheck.type;
+      expectedType = getType(typeToCheck);
+
+      if (expectedType === 'Array') {
+        valid = isArray(value);
+      } else if (expectedType === 'Object') {
+        valid = isPlainObject(value);
+      } else if (expectedType === 'String' || expectedType === 'Number' || expectedType === 'Boolean' || expectedType === 'Function') {
+        valid = getNativeType(value) === expectedType;
+      } else {
+        valid = value instanceof typeToCheck.type;
+      }
     }
   }
 
   if (!valid) {
+    silent === false && warn('value "' + value + '" should be of type \'' + expectedType + '\'');
     return false;
   }
 
   if (hasOwn.call(typeToCheck, 'validator') && isFunction(typeToCheck.validator)) {
-    return typeToCheck.validator(value);
+    valid = typeToCheck.validator(value);
+    if (!valid && silent === false) warn('custom validation failed');
+    return valid;
   }
   return valid;
 };
+
+var warn = noop;
+
+if (process.env.NODE_ENV !== 'production') {
+  (function () {
+    var hasConsole = typeof console !== 'undefined';
+    warn = function warn(msg) {
+      if (hasConsole) {
+        console.warn('[VueTypes warn]: ' + msg);
+      }
+    };
+  })();
+}
+
+export { warn };
