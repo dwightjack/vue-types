@@ -8,8 +8,15 @@ export const hasOwn = ObjProto.hasOwnProperty
 const FN_MATCH_REGEXP = /^\s*function (\w+)/
 
 // https://github.com/vuejs/vue/blob/dev/src/core/util/props.js#L159
-const getType = (fn) => {
-  const match = fn && fn.toString().match(FN_MATCH_REGEXP)
+export const getType = (fn) => {
+  const type = (fn !== null && fn !== undefined) ? (fn.type ? fn.type : fn) : null
+  const match = type && type.toString().match(FN_MATCH_REGEXP)
+  return match && match[1]
+}
+
+export const getNativeType = (value) => {
+  if (value === null || value === undefined) return null
+  const match = value.constructor.toString().match(FN_MATCH_REGEXP)
   return match && match[1]
 }
 
@@ -50,7 +57,7 @@ export const isArray = Array.isArray || function(value) {
 /**
  * Checks if a value is a function
  *
- * @param {any} val - Value to check
+ * @param {any} value - Value to check
  * @returns {boolean}
  */
 export const isFunction = (value) => toString.call(value) === '[object Function]'
@@ -64,11 +71,13 @@ export const withDefault = function (type) {
   Object.defineProperty(type, 'def', {
     value(def) {
       if (!validateType(this, def)) {
-        console.warn('default value not allowed here', def) // eslint-disable-line no-console
+        warn('invalid default value', def)
         return type
       }
       const newType = objectAssign({}, this, {
-        default: (isArray(def) || isPlainObject(def)) ? function () { return def } : def
+        default: (isArray(def) || isPlainObject(def)) ? function () {
+          return def
+        } : def
       })
       if (!hasOwn.call(newType, 'required')) {
         withRequired(newType)
@@ -113,36 +122,58 @@ export const toType = (obj) => {
  *
  * @param {Object|*} type - Type to use for validation. Either a type object or a constructor
  * @param {*} value - Value to check
+ * @param {boolean} silent - Silence warnings
  * @returns {boolean}
  */
-export const validateType = (type, value) => {
+export const validateType = (type, value, silent = false) => {
   let typeToCheck = type
   let valid = true
-
+  let expectedType
   if (!isPlainObject(type)) {
     typeToCheck = { type }
   }
 
   if (hasOwn.call(typeToCheck, 'type') && typeToCheck.type !== null) {
-    const expectedType = getType(typeToCheck.type)
-
-    if (expectedType === 'Array') {
-      valid = isArray(value)
-    } else if (expectedType === 'Object') {
-      valid = isPlainObject(value)
-    } else if (expectedType === 'String' || expectedType === 'Number' || expectedType === 'Boolean' || expectedType === 'Function') {
-      valid = typeof value === expectedType.toLowerCase()
+    if (isArray(typeToCheck.type)) {
+      valid = typeToCheck.type.some((type) => validateType(type, value, true))
+      expectedType = typeToCheck.type.map((type) => getType(type)).join(' or ')
     } else {
-      valid = value instanceof typeToCheck.type
+      expectedType = getType(typeToCheck)
+
+      if (expectedType === 'Array') {
+        valid = isArray(value)
+      } else if (expectedType === 'Object') {
+        valid = isPlainObject(value)
+      } else if (expectedType === 'String' || expectedType === 'Number' || expectedType === 'Boolean' || expectedType === 'Function') {
+        valid = getNativeType(value) === expectedType
+      } else {
+        valid = value instanceof typeToCheck.type
+      }
     }
   }
 
   if (!valid) {
+    silent === false && warn(`value "${value}" should be of type '${expectedType}'`)
     return false
   }
 
   if (hasOwn.call(typeToCheck, 'validator') && isFunction(typeToCheck.validator)) {
-    return typeToCheck.validator(value)
+    valid = typeToCheck.validator(value)
+    if (!valid && silent === false) warn('custom validation failed')
+    return valid
   }
   return valid
 }
+
+let warn = noop
+
+if (process.env.NODE_ENV !== 'production') {
+  const hasConsole = typeof console !== 'undefined'
+  warn = (msg) => {
+    if (hasConsole) {
+      console.warn(`[VueTypes warn]: ${msg}`)
+    }
+  }
+}
+
+export { warn }
