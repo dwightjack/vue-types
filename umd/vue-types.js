@@ -1,5 +1,5 @@
 /**
- * vue-types v0.5.2
+ * vue-types v0.6.2
  * Copyright (c) 2016 Marco Solazzi
  * MIT License
  */
@@ -722,6 +722,9 @@ var withRequired = exports.withRequired = function withRequired(type) {
 var toType = exports.toType = function toType(obj) {
   withRequired(obj);
   withDefault(obj);
+  if (obj.validator && isFunction(obj.validator)) {
+    obj.validator = obj.validator.bind(obj);
+  }
   return obj;
 };
 
