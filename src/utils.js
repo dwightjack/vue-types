@@ -114,6 +114,9 @@ export const withRequired = function (type) {
 export const toType = (obj) => {
   withRequired(obj)
   withDefault(obj)
+  if (obj.validator && isFunction(obj.validator)) {
+    obj.validator = obj.validator.bind(obj)
+  }
   return obj
 }
 
