@@ -1,6 +1,6 @@
 {
   "name": "vue-types",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Prop types utility for Vue",
   "author": "Marco Solazzi",
   "license": "MIT",
