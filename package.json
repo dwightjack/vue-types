@@ -14,6 +14,7 @@
     "umd"
   ],
   "scripts": {
+    "prepublishOnly": "build",
     "build": "npm run lint && npm test && npm run build:cjs && npm run build:es && npm run build:umd && npm run build:min",
     "build:cjs": "rimraf dist && cross-env BABEL_ENV=cjs babel ./src -d dist",
     "build:es": "rimraf es && cross-env BABEL_ENV=es babel ./src -d es",
@@ -23,7 +24,7 @@
     "test:all": "cross-env BABEL_ENV=cjs karma start karma.conf.js --single-run --browsers Chrome,Firefox,IE,Safari,Opera",
     "test:saucelab": "cross-env BABEL_ENV=cjs karma start karma-sauce.conf.js --single-run",
     "lint": "eslint src *.js",
-    "server": "node ./server/index.js"
+    "start": "node ./server/index.js"
   },
   "keywords": [
     "vue",
