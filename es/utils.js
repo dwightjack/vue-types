@@ -120,6 +120,9 @@ export var withRequired = function withRequired(type) {
 export var toType = function toType(obj) {
   withRequired(obj);
   withDefault(obj);
+  if (obj.validator && isFunction(obj.validator)) {
+    obj.validator = obj.validator.bind(obj);
+  }
   return obj;
 };
 
