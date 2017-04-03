@@ -220,7 +220,7 @@ var VuePropTypes = {
 
         return valueKeys.every(function (key) {
           if (keys.indexOf(key) === -1) {
-            if (_this.isLoose === true) return true;
+            if (_this._vueTypes_isLoose === true) return true;
             warn('object is missing "' + key + '" property');
             return false;
           }
@@ -229,11 +229,17 @@ var VuePropTypes = {
         });
       }
     });
+    type.validator = type.validator.bind(type);
+
+    Object.defineProperty(type, '_vueTypes_isLoose', {
+      enumerable: false,
+      writable: true,
+      value: false
+    });
 
     Object.defineProperty(type, 'loose', {
       get: function get() {
-        this.isLoose = true;
-        this.validator = this.validator.bind(this);
+        this._vueTypes_isLoose = true;
         return this;
       },
 

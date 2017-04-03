@@ -211,7 +211,7 @@ const VuePropTypes = {
 
         return valueKeys.every((key) => {
           if (keys.indexOf(key) === -1) {
-            if (this.isLoose === true) return true
+            if (this._vueTypes_isLoose === true) return true
             warn(`object is missing "${key}" property`)
             return false
           }
@@ -220,11 +220,17 @@ const VuePropTypes = {
         })
       }
     })
+    type.validator = type.validator.bind(type)
+
+    Object.defineProperty(type, '_vueTypes_isLoose', {
+      enumerable: false,
+      writable: true,
+      value: false
+    })
 
     Object.defineProperty(type, 'loose', {
       get() {
-        this.isLoose = true
-        this.validator = this.validator.bind(this)
+        this._vueTypes_isLoose = true
         return this
       },
       enumerable: false
