@@ -6,10 +6,6 @@ var _lodash = require('lodash.isplainobject');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _objectAssign = require('object-assign');
-
-var _objectAssign2 = _interopRequireDefault(_objectAssign);
-
 var _utils = require('./utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -245,10 +241,9 @@ var VuePropTypes = {
 
     Object.defineProperty(type, 'loose', {
       get: function get() {
-        var t = (0, _objectAssign2.default)({ isLoose: true }, this);
-        (0, _utils.withRequired)(t);
-        (0, _utils.withDefault)(t);
-        return t;
+        this.isLoose = true;
+        this.validator = this.validator.bind(this);
+        return this;
       },
 
       enumerable: false

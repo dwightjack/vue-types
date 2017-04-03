@@ -132,9 +132,6 @@ var withRequired = exports.withRequired = function withRequired(type) {
 var toType = exports.toType = function toType(obj) {
   withRequired(obj);
   withDefault(obj);
-  if (obj.validator && isFunction(obj.validator)) {
-    obj.validator = obj.validator.bind(obj);
-  }
   return obj;
 };
 

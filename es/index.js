@@ -1,6 +1,5 @@
 import isPlainObject from 'lodash.isplainobject';
-import objectAssign from 'object-assign';
-import { noop, toType, getType, withDefault, withRequired, isFunction, validateType, isInteger, isArray, warn } from './utils';
+import { noop, toType, getType, isFunction, validateType, isInteger, isArray, warn } from './utils';
 
 var VuePropTypes = {
 
@@ -233,10 +232,9 @@ var VuePropTypes = {
 
     Object.defineProperty(type, 'loose', {
       get: function get() {
-        var t = objectAssign({ isLoose: true }, this);
-        withRequired(t);
-        withDefault(t);
-        return t;
+        this.isLoose = true;
+        this.validator = this.validator.bind(this);
+        return this;
       },
 
       enumerable: false

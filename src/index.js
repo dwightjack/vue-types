@@ -1,6 +1,5 @@
 import isPlainObject from 'lodash.isplainobject'
-import objectAssign from 'object-assign'
-import { noop, toType, getType, withDefault, withRequired, isFunction, validateType, isInteger, isArray, warn } from './utils'
+import { noop, toType, getType, isFunction, validateType, isInteger, isArray, warn } from './utils'
 
 const VuePropTypes = {
 
