@@ -224,10 +224,9 @@ const VuePropTypes = {
 
     Object.defineProperty(type, 'loose', {
       get() {
-        const t = objectAssign({ isLoose: true }, this)
-        withRequired(t)
-        withDefault(t)
-        return t
+        this.isLoose = true
+        this.validator = this.validator.bind(this)
+        return this
       },
       enumerable: false
     })

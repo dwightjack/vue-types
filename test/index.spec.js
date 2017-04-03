@@ -466,7 +466,9 @@ describe('VuePropTypes', () => {
       const customType = VueTypes.shape(shape).loose
       expect(customType.validator({
         id: 10,
-        name: 'John'
+        name: 'John',
+        age: 30,
+        nationality: ''
       })).toBe(true)
     })
 
