@@ -192,12 +192,14 @@ var validateType = exports.validateType = function validateType(type, value) {
 var warn = noop;
 
 if (process.env.NODE_ENV !== 'production') {
-  var hasConsole = typeof console !== 'undefined';
-  exports.warn = warn = function warn(msg) {
-    if (hasConsole) {
-      console.warn('[VueTypes warn]: ' + msg);
-    }
-  };
+  (function () {
+    var hasConsole = typeof console !== 'undefined';
+    exports.warn = warn = function warn(msg) {
+      if (hasConsole) {
+        console.warn('[VueTypes warn]: ' + msg);
+      }
+    };
+  })();
 }
 
 exports.warn = warn;
