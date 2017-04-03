@@ -12,6 +12,9 @@ const checkRequired = (type) => {
   })
 }
 
+// Vue.js does keep the context for validators, so there is no `this`
+const forceNoContext = (validator) => validator.bind(undefined)
+
 describe('VuePropTypes', () => {
 
   describe('`.any`', () => {
@@ -194,9 +197,10 @@ describe('VuePropTypes', () => {
     })
 
     it('should provide a validator function that returns true on integer values', () => {
-      expect(VueTypes.integer.validator(100)).toBe(true)
-      expect(VueTypes.integer.validator(Infinity)).toBe(false)
-      expect(VueTypes.integer.validator(0.1)).toBe(false)
+      const validator = forceNoContext(VueTypes.integer.validator)
+      expect(validator(100)).toBe(true)
+      expect(validator(Infinity)).toBe(false)
+      expect(validator(0.1)).toBe(false)
     })
 
   })
@@ -226,8 +230,9 @@ describe('VuePropTypes', () => {
     })
 
     it('should provide a custom validator function', () => {
-      expect(customType.validator('mytest')).toBe(true)
-      expect(customType.validator(0)).toBe(false)
+      const validator = forceNoContext(customType.validator)
+      expect(validator('mytest')).toBe(true)
+      expect(validator(0)).toBe(false)
     })
 
   })
@@ -266,8 +271,9 @@ describe('VuePropTypes', () => {
     })
 
     it('should provide a custom validator function', () => {
-      expect(customType.validator(0)).toBe(true)
-      expect(customType.validator(5)).toBe(false)
+      const validator = forceNoContext(customType.validator)
+      expect(validator(0)).toBe(true)
+      expect(validator(5)).toBe(false)
     })
 
     it('should filter `null` values type checking', () => {
@@ -343,24 +349,25 @@ describe('VuePropTypes', () => {
 
     it('should validate an array of same-type values', () => {
       const customType = VueTypes.arrayOf(Number)
-      expect(customType.validator([0, 1, 2])).toBe(true)
+      expect(forceNoContext(customType.validator)([0, 1, 2])).toBe(true)
 
     })
 
     it('should NOT validate an array of mixed-type values', () => {
       const customType = VueTypes.arrayOf(Number)
-      expect(customType.validator([0, 1, 'string'])).toBe(false)
+      expect(forceNoContext(customType.validator)([0, 1, 'string'])).toBe(false)
     })
 
     it('should allow validation of VuePropTypes native types', () => {
       const customType = VueTypes.arrayOf(VueTypes.number)
-      expect(customType.validator([0, 1, 2])).toBe(true)
+      expect(forceNoContext(customType.validator)([0, 1, 2])).toBe(true)
     })
 
     it('should allow validation of VuePropTypes custom types', () => {
       const customType = VueTypes.arrayOf(VueTypes.integer)
-      expect(customType.validator([0, 1, 2])).toBe(true)
-      expect(customType.validator([0, 1.2, 2])).toBe(false)
+      const validator = forceNoContext(customType.validator)
+      expect(validator([0, 1, 2])).toBe(true)
+      expect(validator([0, 1.2, 2])).toBe(false)
     })
 
   })
@@ -391,24 +398,25 @@ describe('VuePropTypes', () => {
 
     it('should validate an object of same-type values', () => {
       const customType = VueTypes.objectOf(Number)
-      expect(customType.validator({ id: 10, age: 30 })).toBe(true)
+      expect(forceNoContext(customType.validator)({ id: 10, age: 30 })).toBe(true)
 
     })
 
     it('should NOT validate an array of mixed-type values', () => {
       const customType = VueTypes.objectOf(Number)
-      expect(customType.validator({ id: '10', age: 30 })).toBe(false)
+      expect(forceNoContext(customType.validator)({ id: '10', age: 30 })).toBe(false)
     })
 
     it('should allow validation of VuePropTypes native types', () => {
       const customType = VueTypes.objectOf(VueTypes.number)
-      expect(customType.validator({ id: 10, age: 30 })).toBe(true)
+      expect(forceNoContext(customType.validator)({ id: 10, age: 30 })).toBe(true)
     })
 
     it('should allow validation of VuePropTypes custom types', () => {
       const customType = VueTypes.objectOf(VueTypes.integer)
-      expect(customType.validator({ id: 10, age: 30 })).toBe(true)
-      expect(customType.validator({ id: 10.2, age: 30 })).toBe(false)
+      const validator = forceNoContext(customType.validator)
+      expect(validator({ id: 10, age: 30 })).toBe(true)
+      expect(validator({ id: 10.2, age: 30 })).toBe(false)
     })
 
   })
@@ -433,7 +441,7 @@ describe('VuePropTypes', () => {
     it('should validate an object with a given shape', () => {
 
       const customType = VueTypes.shape(shape)
-      expect(customType.validator({
+      expect(forceNoContext(customType.validator)({
         id: 10,
         name: 'John',
         age: 30
@@ -443,7 +451,7 @@ describe('VuePropTypes', () => {
     it('should NOT validate an object without a given shape', () => {
 
       const customType = VueTypes.shape(shape)
-      expect(customType.validator({
+      expect(forceNoContext(customType.validator)({
         id: '10',
         name: 'John',
         age: 30
@@ -453,7 +461,7 @@ describe('VuePropTypes', () => {
     it('should NOT validate an object with keys NOT present in the shape', () => {
 
       const customType = VueTypes.shape(shape)
-      expect(customType.validator({
+      expect(forceNoContext(customType.validator)({
         id: 10,
         name: 'John',
         age: 30,
@@ -464,7 +472,7 @@ describe('VuePropTypes', () => {
     it('should validate an object with keys NOT present in the shape on `loose` mode', () => {
 
       const customType = VueTypes.shape(shape).loose
-      expect(customType.validator({
+      expect(forceNoContext(customType.validator)({
         id: 10,
         name: 'John',
         age: 30,
@@ -474,7 +482,8 @@ describe('VuePropTypes', () => {
 
     it('should NOT validate a value which is NOT an object', () => {
       const customType = VueTypes.shape(shape)
-      expect(customType.validator('a string')).toBe(false)
+      const validator = forceNoContext(customType.validator)
+      expect(validator('a string')).toBe(false)
 
       class MyClass {
         constructor() {
@@ -484,7 +493,7 @@ describe('VuePropTypes', () => {
         }
       }
 
-      expect(customType.validator(new MyClass())).toBe(false)
+      expect(validator(new MyClass())).toBe(false)
     })
 
     it('should provide a method to set a custom default', () => {
@@ -515,12 +524,13 @@ describe('VuePropTypes', () => {
         id: VueTypes.integer.isRequired,
         name: String
       })
+      const validator = forceNoContext(customType.validator)
 
-      expect(customType.validator({
+      expect(validator({
         name: 'John'
       })).toBe(false)
 
-      expect(customType.validator({
+      expect(validator({
         id: 10
       })).toBe(true)
     })
@@ -531,12 +541,13 @@ describe('VuePropTypes', () => {
         myKey: VueTypes.any.isRequired,
         name: null
       })
+      const validator = forceNoContext(customType.validator)
 
-      expect(customType.validator({
+      expect(validator({
         name: 'John'
       })).toBe(false)
 
-      expect(customType.validator({
+      expect(validator({
         myKey: null
       })).toBe(true)
 
@@ -602,14 +613,15 @@ describe('VuePropTypes', () => {
 
     it('should validate custom types with complex shapes', () => {
       const customType = VueTypes.oneOfType(complexTypes)
+      const validator = forceNoContext(customType.validator)
 
-      expect(customType.validator(1)).toBe(true)
+      expect(validator(1)).toBe(true)
 
       // validates types not values!
-      expect(customType.validator(5)).toBe(true)
+      expect(validator(5)).toBe(true)
 
-      expect(customType.validator({ id: 10 })).toBe(true)
-      expect(customType.validator({ id: '10' })).toBe(false)
+      expect(validator({ id: 10 })).toBe(true)
+      expect(validator({ id: '10' })).toBe(false)
 
     })
 
