@@ -19,17 +19,17 @@ describe('`toType()`', () => {
 
   })
 
-  it('should bind provided `validator function to the passed in object`', () => {
-    const obj = {
-      validator() {
-        return this
-      }
-    }
-
-    const type = utils.toType(obj)
-    const validator = type.validator
-
-    expect(validator()).toBe(obj)
-  })
+  // it('should bind provided `validator function to the passed in object`', () => {
+  //   const obj = {
+  //     validator() {
+  //       return this
+  //     }
+  //   }
+  //
+  //   const type = utils.toType(obj)
+  //   const validator = type.validator
+  //
+  //   expect(validator()).toBe(obj)
+  // })
 
 })
