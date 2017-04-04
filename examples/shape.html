@@ -10,7 +10,7 @@
 <body>
 
   <div id="app"></div>
-  <script src="https://unpkg.com/vue@2.0.5/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue@2.2.6"></script>
   <script src="../umd/vue-types.js"></script>
   <script>
 
@@ -37,7 +37,7 @@
       el: '#app',
       template: ['<section><h1>A list of models</h1>',
         '<button type="button" @click="addModel">Add model</button>',
-        '<ul><Model v-for="model in models" :model="model" /></ul></section>'
+        '<ul><Model v-for="model in models" :model="model" :key="model.id" /></ul></section>'
       ].join(''),
       data: {
         models: []
