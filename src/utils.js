@@ -69,7 +69,10 @@ export const isFunction = (value) => toString.call(value) === '[object Function]
 export const withDefault = function (type) {
   Object.defineProperty(type, 'def', {
     value(def) {
-      if (!validateType(this, def)) {
+      if (def === undefined && !this.default) {
+        return this
+      }
+      if (!isFunction(def) && !validateType(this, def)) {
         warn(`${this._vueTypes_name} - invalid default value: "${def}"`, def)
         return this
       }
