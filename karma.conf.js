@@ -40,9 +40,7 @@ module.exports = function(config) {
               path.join(process.cwd(), 'src'),
               path.join(process.cwd(), 'test')
             ],
-            use: [
-              'babel'
-            ]
+            loader: 'babel-loader'
           }
         ]
       }

@@ -15,7 +15,7 @@ const checkRequired = (type) => {
 // Vue.js does keep the context for validators, so there is no `this`
 const forceNoContext = (validator) => validator.bind(undefined)
 
-describe('VuePropTypes', () => {
+describe('VueTypes', () => {
 
   describe('`.any`', () => {
 
@@ -44,9 +44,7 @@ describe('VuePropTypes', () => {
     })
 
     it('should add a `required` flag', () => {
-
       checkRequired(VueTypes.func)
-
     })
 
     it('should provide a method to set a custom default', () => {
@@ -66,6 +64,8 @@ describe('VuePropTypes', () => {
       }
 
       expect(VueTypes.bool).toMatch(match)
+
+
     })
 
     it('should add a `required` flag', () => {
@@ -124,11 +124,11 @@ describe('VuePropTypes', () => {
 
     it('should match an object with methods, type and default', () => {
       const match = {
-        type: Array,
-        default: Array
+        type: Array
       }
 
       expect(VueTypes.array).toMatch(match)
+      expect(VueTypes.array.default()).toBeA(Array)
     })
 
     it('should add a `required` flag', () => {
@@ -148,11 +148,11 @@ describe('VuePropTypes', () => {
 
     it('should match an object with methods, type and default', () => {
       const match = {
-        type: Object,
-        default: Object
+        type: Object
       }
 
       expect(VueTypes.object).toMatch(match)
+      expect(VueTypes.object.default()).toBeA(Object)
     })
 
     it('should add a `required` flag', () => {
@@ -623,6 +623,72 @@ describe('VuePropTypes', () => {
       expect(validator({ id: 10 })).toBe(true)
       expect(validator({ id: '10' })).toBe(false)
 
+    })
+
+  })
+
+  describe('`sensibleDefaults` option', () => {
+
+    it('should remove default "defaults" from types', () => {
+
+      VueTypes.sensibleDefaults = false
+
+      const types = [
+        'func',
+        'bool',
+        'string',
+        'number',
+        'array',
+        'object',
+        'integer'
+      ]
+
+      types.forEach((prop) => {
+        expect(VueTypes[prop]).toExcludeKey('default')
+      })
+    })
+
+    it('should set sensible "defaults" for types', () => {
+
+      VueTypes.sensibleDefaults = false
+      VueTypes.sensibleDefaults = true
+
+      const types = [
+        'func',
+        'bool',
+        'string',
+        'number',
+        'array',
+        'object',
+        'integer'
+      ]
+
+      types.forEach((prop) => {
+        expect(VueTypes[prop]).toIncludeKey('default')
+      })
+    })
+
+    it('should allow custom defaults for types', () => {
+
+      VueTypes.sensibleDefaults = {
+        func: noop,
+        string: 'test'
+      }
+
+      const types = [
+        'bool',
+        'number',
+        'array',
+        'object',
+        'integer'
+      ]
+
+      types.forEach((prop) => {
+        expect(VueTypes[prop]).toExcludeKey('default')
+      })
+
+      expect(VueTypes.func.default).toBe(noop)
+      expect(VueTypes.string.default).toBe('test')
     })
 
   })

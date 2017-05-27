@@ -6,14 +6,14 @@ const version = require('./package.json').version
 const banner =
   "/**\n" +
   " * vue-types v" + version + "\n" +
-  " * Copyright (c) 2016 Marco Solazzi\n" +
+  " * Copyright (c) " + (new Date().getFullYear()) + " Marco Solazzi\n" +
   " * MIT License\n" +
   " */\n";
 /*eslint-enable */
 
 const plugins = [
   new webpack.BannerPlugin({ raw: true, banner }),
-  new webpack.NoErrorsPlugin(),
+  new webpack.NoEmitOnErrorsPlugin(),
   new webpack.DefinePlugin({
     'process.env': {
       'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
@@ -53,9 +53,7 @@ module.exports = {
         include: [
           path.join(process.cwd(), 'src')
         ],
-        use: [
-          'babel'
-        ]
+        loader: 'babel-loader'
       }
     ]
   }
