@@ -1,5 +1,4 @@
 import isPlainObject from 'lodash.isplainobject';
-import objectAssign from 'object-assign';
 
 var ObjProto = Object.prototype;
 var toString = ObjProto.toString;
@@ -75,18 +74,13 @@ export var withDefault = function withDefault(type) {
   Object.defineProperty(type, 'def', {
     value: function value(def) {
       if (!validateType(this, def)) {
-        warn('invalid default value', def);
-        return type;
+        warn(this._vueTypes_name + ' - invalid default value: "' + def + '"', def);
+        return this;
       }
-      var newType = objectAssign({}, this, {
-        default: isArray(def) || isPlainObject(def) ? function () {
-          return def;
-        } : def
-      });
-      if (!hasOwn.call(newType, 'required')) {
-        withRequired(newType);
-      }
-      return newType;
+      this.default = isArray(def) || isPlainObject(def) ? function () {
+        return def;
+      } : def;
+      return this;
     },
 
     enumerable: false,
@@ -102,9 +96,8 @@ export var withDefault = function withDefault(type) {
 export var withRequired = function withRequired(type) {
   Object.defineProperty(type, 'isRequired', {
     get: function get() {
-      var newType = objectAssign({ required: true }, this);
-      withDefault(newType);
-      return newType;
+      this.required = true;
+      return this;
     },
 
     enumerable: false
@@ -114,17 +107,27 @@ export var withRequired = function withRequired(type) {
 /**
  * Adds `isRequired` and `def` modifiers to an object
  *
+ * @param {string} name - Type internal name
  * @param {object} obj - Object to enhance
  * @returns {object}
  */
-export var toType = function toType(obj) {
+export var toType = function toType(name, obj) {
+  Object.defineProperty(obj, '_vueTypes_name', {
+    enumerable: false,
+    writable: false,
+    value: name
+  });
   withRequired(obj);
   withDefault(obj);
+
+  if (isFunction(obj.validator)) {
+    obj.validator = obj.validator.bind(obj);
+  }
   return obj;
 };
 
 /**
- * Validates a given value agains a prop type object
+ * Validates a given value against a prop type object
  *
  * @param {Object|*} type - Type to use for validation. Either a type object or a constructor
  * @param {*} value - Value to check
@@ -140,6 +143,7 @@ export var validateType = function validateType(type, value) {
   if (!isPlainObject(type)) {
     typeToCheck = { type: type };
   }
+  var namePrefix = typeToCheck._vueTypes_name ? typeToCheck._vueTypes_name + ' - ' : '';
 
   if (hasOwn.call(typeToCheck, 'type') && typeToCheck.type !== null) {
     if (isArray(typeToCheck.type)) {
@@ -165,13 +169,13 @@ export var validateType = function validateType(type, value) {
   }
 
   if (!valid) {
-    silent === false && warn('value "' + value + '" should be of type \'' + expectedType + '\'');
+    silent === false && warn(namePrefix + 'value "' + value + '" should be of type "' + expectedType + '"');
     return false;
   }
 
   if (hasOwn.call(typeToCheck, 'validator') && isFunction(typeToCheck.validator)) {
     valid = typeToCheck.validator(value);
-    if (!valid && silent === false) warn('custom validation failed');
+    if (!valid && silent === false) warn(namePrefix + 'custom validation failed');
     return valid;
   }
   return valid;
@@ -180,14 +184,12 @@ export var validateType = function validateType(type, value) {
 var warn = noop;
 
 if (process.env.NODE_ENV !== 'production') {
-  (function () {
-    var hasConsole = typeof console !== 'undefined';
-    warn = function warn(msg) {
-      if (hasConsole) {
-        console.warn('[VueTypes warn]: ' + msg);
-      }
-    };
-  })();
+  var hasConsole = typeof console !== 'undefined';
+  warn = function warn(msg) {
+    if (hasConsole) {
+      console.warn('[VueTypes warn]: ' + msg);
+    }
+  };
 }
 
 export { warn };

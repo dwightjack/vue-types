@@ -5,7 +5,7 @@
 ## Introduction
 
 `vue-types` is a collection of configurable [prop type](http://vuejs.org/guide/components.html#Props) definitions for Vue.js components, inspired by `React.PropTypes`.
-  
+
 ### When to use
 
 While basic prop type definition in Vue is simple and convenient, detailed prop validation can become verbose on complex components.
@@ -50,7 +50,7 @@ export default {
     name: VueTypes.string.isRequired,
     age: VueTypes.integer,
     // No need for `default` or `required` key, so keep it simple
-    nationality: String 
+    nationality: String
   },
   methods: {
     // ...
@@ -61,10 +61,12 @@ export default {
 
 ## Installation
 
-### NPM 
+### NPM
 
 ``` bash
 npm install vue-types --save
+# or
+yarn add vue-types
 ```
 
 ## Documentation
@@ -95,7 +97,7 @@ Validates any type of value and has no default value.
 
 Validates that a prop is an array primitive.
 
-* Default: `Array`
+* Default: an empty array
 
 #### `VueTypes.bool`
 
@@ -129,7 +131,7 @@ VueTypes.object
 
 Validates that a prop is an object.
 
-* default: `Object`
+* default: an empty object
 
 #### `VueTypes.string`
 
@@ -140,6 +142,27 @@ VueTypes.string
 Validates that a prop is a string.
 
 * default: `''`
+
+### Native Types Configuration
+
+All native types (with the exception of `any`) come with a sensible default value. Anyway you may wish to set your custom defaults or disable them.
+
+To do so you can set the `vueTypes.sensibleDefaults` property:
+
+```js
+//use vue-types default (this is the "default" value)
+vueTypes.sensibleDefaults = true
+
+//disable all sensible defaults.
+//Use .def(...) to set one
+vueTypes.sensibleDefaults = false
+
+//assign an object to specify custom defaults
+vueTypes.sensibleDefaults = {
+  string: 'mystringdefault'
+  //...
+}
+```
 
 ### Custom Types
 
@@ -197,7 +220,7 @@ Validates that a prop is an object that could be one of many types. Accepts both
 export default {
   props: {
     theProp: VueTypes.oneOfType([
-      String, 
+      String,
       VueTypes.integer,
       VueTypes.instanceOf(Person)
     ])

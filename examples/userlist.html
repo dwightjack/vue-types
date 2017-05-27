@@ -10,7 +10,7 @@
 <body>
 
   <div id="app"></div>
-  <script src="https://unpkg.com/vue@2.0.3/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue@2.2.6"></script>
   <script src="../umd/vue-types.js"></script>
   <script>
 
@@ -23,7 +23,7 @@
     };
 
     var UserList = {
-      template: '<ul><User v-for="user in users" :name="user.name" :age="user.age" /></ul>',
+      template: '<ul><User v-for="user in users" :name="user.name" :age="user.age"  :key="user.name" /></ul>',
       props: {
         users: VueTypes.arrayOf(
           VueTypes.object

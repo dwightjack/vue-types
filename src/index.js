@@ -4,69 +4,54 @@ import { noop, toType, getType, isFunction, validateType, isInteger, isArray, wa
 const VuePropTypes = {
 
   get any() {
-    return toType({
-      type: null,
-      name: 'any'
+    return toType('any', {
+      type: null
     })
   },
 
   get func() {
-    return toType({
-      type: Function,
-      name: 'function',
-      default: noop
-    })
+    return toType('function', {
+      type: Function
+    }).def(currentDefaults.func)
   },
 
   get bool() {
-    return toType({
-      type: Boolean,
-      name: 'boolean',
-      default: true
-    })
+    return toType('boolean', {
+      type: Boolean
+    }).def(currentDefaults.bool)
   },
 
   get string() {
-    return toType({
-      type: String,
-      name: 'string',
-      default: ''
-    })
+    return toType('string', {
+      type: String
+    }).def(currentDefaults.string)
   },
 
   get number() {
-    return toType({
-      type: Number,
-      name: 'number',
-      default: 0
-    })
+    return toType('number', {
+      type: Number
+    }).def(currentDefaults.number)
   },
 
   get array() {
-    return toType({
-      type: Array,
-      name: 'array',
-      default: Array
-    })
+    return toType('array', {
+      type: Array
+    }).def(currentDefaults.array)
   },
 
   get object() {
-    return toType({
-      type: Object,
-      name: 'object',
-      default: Object
-    })
+    return toType('object', {
+      type: Object
+    }).def(currentDefaults.object)
   },
 
   get integer() {
-    return toType({
+    return toType('integer', {
       type: Number,
-      name: 'integer',
       validator(value) {
         return isInteger(value)
-      },
-      default: 0
-    })
+      }
+    }).def(currentDefaults.integer)
   },
 
   custom(validatorFn, warnMsg = 'custom validation failed') {
@@ -74,11 +59,10 @@ const VuePropTypes = {
       throw new TypeError('[VueTypes error]: You must provide a function as argument')
     }
 
-    return toType({
-      name: validatorFn.name || '<<anonymous function>>',
+    return toType(validatorFn.name || '<<anonymous function>>', {
       validator(...args) {
         const valid = validatorFn(...args)
-        if (!valid) warn(warnMsg)
+        if (!valid) warn(`${this._vueTypes_name} - ${warnMsg}`)
         return valid
       }
     })
@@ -88,7 +72,7 @@ const VuePropTypes = {
     if (!isArray(arr)) {
       throw new TypeError('[VueTypes error]: You must provide an array as argument')
     }
-    const msg = `value should be one of "${arr.join('", "')}"`
+    const msg = `oneOf - value should be one of "${arr.join('", "')}"`
     const allowedTypes = arr.reduce((ret, v) => {
       if (v !== null && v !== undefined) {
         ret.indexOf(v.constructor) === -1 && ret.push(v.constructor)
@@ -96,8 +80,7 @@ const VuePropTypes = {
       return ret
     }, [])
 
-    return toType({
-      name: 'oneOf',
+    return toType('oneOf', {
       type: allowedTypes.length > 0 ? allowedTypes : null,
       validator(value) {
         const valid = arr.indexOf(value) !== -1
@@ -108,8 +91,7 @@ const VuePropTypes = {
   },
 
   instanceOf(instanceConstructor) {
-    return toType({
-      name: 'instanceOf',
+    return toType('instanceOf', {
       type: instanceConstructor
     })
   },
@@ -123,7 +105,7 @@ const VuePropTypes = {
 
     const nativeChecks = arr.reduce((ret, type, i) => {
       if (isPlainObject(type)) {
-        if (type.name === 'oneOf') {
+        if (type._vueTypes_name === 'oneOf') {
           return ret.concat(type.type || [])
         }
         if (type.type && !isFunction(type.validator)) {
@@ -141,8 +123,7 @@ const VuePropTypes = {
     if (!hasCustomValidators) {
       // we got just native objects (ie: Array, Object)
       // delegate to Vue native prop check
-      return toType({
-        name: 'oneOfType',
+      return toType('oneOfType', {
         type: nativeChecks
       })
     }
@@ -156,35 +137,33 @@ const VuePropTypes = {
 
     return this.custom(function oneOfType(value) {
       const valid = arr.some((type) => {
-        if (type.name === 'oneOf') {
+        if (type._vueTypes_name === 'oneOf') {
           return type.type ? validateType(type.type, value, true) : true
         }
         return validateType(type, value, true)
       })
-      if (!valid) warn(`value type should be one of "${typesStr}"`)
+      if (!valid) warn(`oneOfType - value type should be one of "${typesStr}"`)
       return valid
     })
   },
 
   arrayOf(type) {
-    return toType({
-      name: 'arrayOf',
+    return toType('arrayOf', {
       type: Array,
       validator(values) {
         const valid = values.every((value) => validateType(type, value))
-        if (!valid) warn(`value must be an array of '${getType(type)}'`)
+        if (!valid) warn(`arrayOf - value must be an array of "${getType(type)}"`)
         return valid
       }
     })
   },
 
   objectOf(type) {
-    return toType({
-      name: 'objectOf',
+    return toType('objectOf', {
       type: Object,
       validator(obj) {
         const valid = Object.keys(obj).every((key) => validateType(type, obj[key]))
-        if (!valid) warn(`value must be an object of '${getType(type)}'`)
+        if (!valid) warn(`objectOf - value must be an object of "${getType(type)}"`)
         return valid
       }
     })
@@ -194,8 +173,7 @@ const VuePropTypes = {
     const keys = Object.keys(obj)
     const requiredKeys = keys.filter((key) => obj[key] && obj[key].required === true)
 
-    const type = toType({
-      name: 'shape',
+    const type = toType('shape', {
       type: Object,
       validator(value) {
         if (!isPlainObject(value)) {
@@ -205,14 +183,14 @@ const VuePropTypes = {
 
         // check for required keys (if any)
         if (requiredKeys.length > 0 && requiredKeys.some((req) => valueKeys.indexOf(req) === -1)) {
-          warn(`at least one of required properties "${requiredKeys.join('", "')}" is not present`)
+          warn(`shape - at least one of required properties "${requiredKeys.join('", "')}" is not present`)
           return false
         }
 
         return valueKeys.every((key) => {
           if (keys.indexOf(key) === -1) {
             if (this._vueTypes_isLoose === true) return true
-            warn(`object is missing "${key}" property`)
+            warn(`shape - object is missing "${key}" property`)
             return false
           }
           const type = obj[key]
@@ -220,7 +198,6 @@ const VuePropTypes = {
         })
       }
     })
-    type.validator = type.validator.bind(type)
 
     Object.defineProperty(type, '_vueTypes_isLoose', {
       enumerable: false,
@@ -240,5 +217,33 @@ const VuePropTypes = {
   }
 
 }
+
+const typeDefaults = () => ({
+  func: noop,
+  bool: true,
+  string: '',
+  number: 0,
+  array: () => [],
+  object: () => ({}),
+  integer: 0
+})
+
+let currentDefaults = typeDefaults()
+
+Object.defineProperty(VuePropTypes, 'sensibleDefaults', {
+  enumerable: false,
+  set(value) {
+    if (value === false) {
+      currentDefaults = {}
+    } else if (value === true) {
+      currentDefaults = typeDefaults()
+    } else if (isPlainObject(value)) {
+      currentDefaults = value
+    }
+  },
+  get() {
+    return currentDefaults
+  }
+})
 
 export default VuePropTypes
