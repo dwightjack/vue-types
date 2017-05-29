@@ -11,44 +11,38 @@ var VuePropTypes = {
 
   get func() {
     return toType('function', {
-      type: Function,
-      default: noop
-    });
+      type: Function
+    }).def(currentDefaults.func);
   },
 
   get bool() {
     return toType('boolean', {
-      type: Boolean,
-      default: true
-    });
+      type: Boolean
+    }).def(currentDefaults.bool);
   },
 
   get string() {
     return toType('string', {
-      type: String,
-      default: ''
-    });
+      type: String
+    }).def(currentDefaults.string);
   },
 
   get number() {
     return toType('number', {
-      type: Number,
-      default: 0
-    });
+      type: Number
+    }).def(currentDefaults.number);
   },
 
   get array() {
     return toType('array', {
-      type: Array,
-      default: Array
-    });
+      type: Array
+    }).def(currentDefaults.array);
   },
 
   get object() {
     return toType('object', {
-      type: Object,
-      default: Object
-    });
+      type: Object
+    }).def(currentDefaults.object);
   },
 
   get integer() {
@@ -56,10 +50,8 @@ var VuePropTypes = {
       type: Number,
       validator: function validator(value) {
         return isInteger(value);
-      },
-
-      default: 0
-    });
+      }
+    }).def(currentDefaults.integer);
   },
 
   custom: function custom(validatorFn) {
@@ -233,5 +225,39 @@ var VuePropTypes = {
     return type;
   }
 };
+
+var typeDefaults = function typeDefaults() {
+  return {
+    func: noop,
+    bool: true,
+    string: '',
+    number: 0,
+    array: function array() {
+      return [];
+    },
+    object: function object() {
+      return {};
+    },
+    integer: 0
+  };
+};
+
+var currentDefaults = typeDefaults();
+
+Object.defineProperty(VuePropTypes, 'sensibleDefaults', {
+  enumerable: false,
+  set: function set(value) {
+    if (value === false) {
+      currentDefaults = {};
+    } else if (value === true) {
+      currentDefaults = typeDefaults();
+    } else if (isPlainObject(value)) {
+      currentDefaults = value;
+    }
+  },
+  get: function get() {
+    return currentDefaults;
+  }
+});
 
 export default VuePropTypes;
