@@ -73,7 +73,10 @@ export var isFunction = function isFunction(value) {
 export var withDefault = function withDefault(type) {
   Object.defineProperty(type, 'def', {
     value: function value(def) {
-      if (!validateType(this, def)) {
+      if (def === undefined && !this.default) {
+        return this;
+      }
+      if (!isFunction(def) && !validateType(this, def)) {
         warn(this._vueTypes_name + ' - invalid default value: "' + def + '"', def);
         return this;
       }
