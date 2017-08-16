@@ -1,4 +1,4 @@
-import expect, { spyOn } from 'expect'
+import expect from 'expect'
 
 import { noop } from '../src/utils'
 import VueTypes from '../src/index'
@@ -64,7 +64,6 @@ describe('VueTypes', () => {
       }
 
       expect(VueTypes.bool).toMatch(match)
-
 
     })
 
@@ -573,7 +572,7 @@ describe('VueTypes', () => {
     ]
 
     beforeEach(() => {
-      spy = spyOn(VueTypes, 'custom').andCallThrough()
+      spy = expect.spyOn(VueTypes, 'custom').andCallThrough()
     })
 
     afterEach(() => {

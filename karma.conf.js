@@ -3,82 +3,74 @@
 
 const path = require('path');
 
-module.exports = function(config) {
-  config.set({
+const production = process.env.PRODUCTION === 'true';
 
-    // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+const baseConfig = {
+  // base path that will be used to resolve all patterns (eg. files, exclude)
+  basePath: '',
 
-    // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha'],
+  // frameworks to use
+  // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+  frameworks: ['mocha'],
 
-    // list of files / patterns to load in the browser
-    files: [
-      'src/**/*.js',
-      'test/**/*.spec.js'
+  // list of files / patterns to load in the browser
+  files: [
+    { pattern: 'src/*.js', included: false },
+    'test/**/*.spec.js'
+  ],
+
+  // list of files to exclude
+  exclude: [
+  ],
+
+  // preprocess matching files before serving them to the browser
+  // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+  preprocessors: {
+    // add webpack as preprocessor
+    'src/**/*.js': ['rollup'],
+    'test/**/*.spec.js': ['rollup']
+  },
+
+  rollupPreprocessor: {
+    plugins: [
+      require('rollup-plugin-node-resolve')(), //eslint-disable-line
+      require('rollup-plugin-commonjs')(), //eslint-disable-line
+      require('rollup-plugin-babel')({ //eslint-disable-line
+        exclude: 'node_modules/**'
+      }),
+      require('rollup-plugin-replace')({ //eslint-disable-line
+        'process.env.NODE_DEBUG': !production
+      }),
+      require('rollup-plugin-stub')(), //eslint-disable-line
+      require('rollup-plugin-node-globals')() //eslint-disable-line
     ],
+    format: 'iife',
+    moduleName: 'VueTypes',
+    sourceMap: 'inline'
+  },
 
-    // list of files to exclude
-    exclude: [
-    ],
+  // test results reporter to use
+  // possible values: 'dots', 'progress'
+  // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+  reporters: ['mocha'],
 
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-      // add webpack as preprocessor
-      'src/**/*.js': ['webpack', 'sourcemap'],
-      'test/**/*.spec.js': ['webpack', 'sourcemap']
-    },
+  // web server port
+  port: 9876,
 
-    webpack: {
-      module: {
-        rules: [
-          {
-            test: /\.js$/,
-            include: [
-              path.join(process.cwd(), 'src'),
-              path.join(process.cwd(), 'test')
-            ],
-            loader: 'babel-loader'
-          }
-        ]
-      }
-    },
+  // enable / disable colors in the output (reporters and logs)
+  colors: true,
 
-    webpackMiddleware: {
-      noInfo: true,
-      stats: 'errors-only'
-    },
+  concurrency: Infinity
+}
 
-    // test results reporter to use
-    // possible values: 'dots', 'progress'
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha'],
-
-    // web server port
-    port: 9876,
-
-    // enable / disable colors in the output (reporters and logs)
-    colors: true,
+module.exports = (config) => {
+  config.set(Object.assign({}, baseConfig, {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
 
-    // enable / disable watching file and executing tests whenever any file changes
-    //autoWatch: true,
+    logLevel: config.LOG_INFO
+  }));
+};
 
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    //browsers: ['PhantomJS', 'Chrome', 'Firefox', 'IE', 'Safari', 'Opera'],
-
-    // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
-    //singleRun: false,
-
-    // Concurrency level
-    // how many browser should be started simultaneous
-    concurrency: Infinity
-  })
-}
+module.exports.baseConfig = baseConfig
