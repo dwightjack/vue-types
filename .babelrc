@@ -5,6 +5,14 @@
         ["es2015", {"loose": true, "modules": false}]
       ]
     },
+    "rollup": {
+      "presets": [
+        ["es2015", {"loose": true, "modules": false}]
+      ],
+      "plugins": [
+        ["external-helpers"]
+      ]
+    },
     "cjs": {
       "presets": [
         ["es2015", {"loose": true, "modules": "commonjs"}]
