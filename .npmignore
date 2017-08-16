@@ -5,5 +5,5 @@ examples
 .babelrc
 .editorconfig
 .eslintrc.js
-karma.conf.js
-webpack.*
+karma*.conf.js
+rollup.*

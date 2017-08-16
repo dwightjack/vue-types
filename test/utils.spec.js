@@ -1,4 +1,4 @@
-import expect, { spyOn, createSpy } from 'expect'
+import expect from 'expect'
 import * as utils from '../src/utils'
 
 describe('`toType()`', () => {

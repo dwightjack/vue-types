@@ -1,90 +1,15 @@
-/**
- * vue-types v1.0.1
- * Copyright (c) 2017 Marco Solazzi
- * MIT License
+
+/*! vue-types - v1.0.1
+ * https://github.com/dwightjack/vue-types
+ * Copyright (c) 2017 - Marco Solazzi;
+ * Licensed MIT
  */
 
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
-	else if(typeof define === 'function' && define.amd)
-		define([], factory);
-	else if(typeof exports === 'object')
-		exports["VueTypes"] = factory();
-	else
-		root["VueTypes"] = factory();
-})(this, function() {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
-/******/ 			return installedModules[moduleId].exports;
-/******/
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports) {
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global.VueTypes = factory());
+}(this, (function () { 'use strict';
 
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -132,8 +57,8 @@ function overArg(func, transform) {
 }
 
 /** Used for built-in method references. */
-var funcProto = Function.prototype,
-    objectProto = Object.prototype;
+var funcProto = Function.prototype;
+var objectProto = Object.prototype;
 
 /** Used to resolve the decompiled source of functions. */
 var funcToString = funcProto.toString;
@@ -224,75 +149,250 @@ function isPlainObject(value) {
     Ctor instanceof Ctor && funcToString.call(Ctor) == objectCtorString);
 }
 
-module.exports = isPlainObject;
+var index = isPlainObject;
+
+var ObjProto = Object.prototype;
+var toString = ObjProto.toString;
+var hasOwn = ObjProto.hasOwnProperty;
+
+var FN_MATCH_REGEXP = /^\s*function (\w+)/;
+
+// https://github.com/vuejs/vue/blob/dev/src/core/util/props.js#L159
+var getType = function getType(fn) {
+  var type = fn !== null && fn !== undefined ? fn.type ? fn.type : fn : null;
+  var match = type && type.toString().match(FN_MATCH_REGEXP);
+  return match && match[1];
+};
+
+var getNativeType = function getNativeType(value) {
+  if (value === null || value === undefined) return null;
+  var match = value.constructor.toString().match(FN_MATCH_REGEXP);
+  return match && match[1];
+};
+
+/**
+ * No-op function
+ */
+var noop = function noop() {};
+
+/**
+ * Checks for a own property in an object
+ *
+ * @param {object} obj - Object
+ * @param {string} prop - Property to check
+ */
 
 
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+/**
+ * Determines whether the passed value is an integer. Uses `Number.isInteger` if available
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger
+ * @param {*} value - The value to be tested for being an integer.
+ * @returns {boolean}
+ */
+var isInteger = Number.isInteger || function (value) {
+  return typeof value === 'number' && isFinite(value) && Math.floor(value) === value;
+};
 
-"use strict";
+/**
+ * Determines whether the passed value is an Array.
+ *
+ * @param {*} value - The value to be tested for being an array.
+ * @returns {boolean}
+ */
+var isArray = Array.isArray || function (value) {
+  return toString.call(value) === '[object Array]';
+};
 
+/**
+ * Checks if a value is a function
+ *
+ * @param {any} value - Value to check
+ * @returns {boolean}
+ */
+var isFunction = function isFunction(value) {
+  return toString.call(value) === '[object Function]';
+};
 
-exports.__esModule = true;
+/**
+ * Adds a `def` method to the object returning a new object with passed in argument as `default` property
+ *
+ * @param {object} type - Object to enhance
+ */
+var withDefault = function withDefault(type) {
+  Object.defineProperty(type, 'def', {
+    value: function value(def) {
+      if (def === undefined && !this.default) {
+        return this;
+      }
+      if (!isFunction(def) && !validateType(this, def)) {
+        warn(this._vueTypes_name + ' - invalid default value: "' + def + '"', def);
+        return this;
+      }
+      this.default = isArray(def) || index(def) ? function () {
+        return def;
+      } : def;
+      return this;
+    },
 
-var _lodash = __webpack_require__(0);
+    enumerable: false,
+    writable: false
+  });
+};
 
-var _lodash2 = _interopRequireDefault(_lodash);
+/**
+ * Adds a `isRequired` getter returning a new object with `required: true` key-value
+ *
+ * @param {object} type - Object to enhance
+ */
+var withRequired = function withRequired(type) {
+  Object.defineProperty(type, 'isRequired', {
+    get: function get() {
+      this.required = true;
+      return this;
+    },
 
-var _utils = __webpack_require__(2);
+    enumerable: false
+  });
+};
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+/**
+ * Adds `isRequired` and `def` modifiers to an object
+ *
+ * @param {string} name - Type internal name
+ * @param {object} obj - Object to enhance
+ * @returns {object}
+ */
+var toType = function toType(name, obj) {
+  Object.defineProperty(obj, '_vueTypes_name', {
+    enumerable: false,
+    writable: false,
+    value: name
+  });
+  withRequired(obj);
+  withDefault(obj);
+
+  if (isFunction(obj.validator)) {
+    obj.validator = obj.validator.bind(obj);
+  }
+  return obj;
+};
+
+/**
+ * Validates a given value against a prop type object
+ *
+ * @param {Object|*} type - Type to use for validation. Either a type object or a constructor
+ * @param {*} value - Value to check
+ * @param {boolean} silent - Silence warnings
+ * @returns {boolean}
+ */
+var validateType = function validateType(type, value) {
+  var silent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+  var typeToCheck = type;
+  var valid = true;
+  var expectedType = void 0;
+  if (!index(type)) {
+    typeToCheck = { type: type };
+  }
+  var namePrefix = typeToCheck._vueTypes_name ? typeToCheck._vueTypes_name + ' - ' : '';
+
+  if (hasOwn.call(typeToCheck, 'type') && typeToCheck.type !== null) {
+    if (isArray(typeToCheck.type)) {
+      valid = typeToCheck.type.some(function (type) {
+        return validateType(type, value, true);
+      });
+      expectedType = typeToCheck.type.map(function (type) {
+        return getType(type);
+      }).join(' or ');
+    } else {
+      expectedType = getType(typeToCheck);
+
+      if (expectedType === 'Array') {
+        valid = isArray(value);
+      } else if (expectedType === 'Object') {
+        valid = index(value);
+      } else if (expectedType === 'String' || expectedType === 'Number' || expectedType === 'Boolean' || expectedType === 'Function') {
+        valid = getNativeType(value) === expectedType;
+      } else {
+        valid = value instanceof typeToCheck.type;
+      }
+    }
+  }
+
+  if (!valid) {
+    silent === false && warn(namePrefix + 'value "' + value + '" should be of type "' + expectedType + '"');
+    return false;
+  }
+
+  if (hasOwn.call(typeToCheck, 'validator') && isFunction(typeToCheck.validator)) {
+    valid = typeToCheck.validator(value);
+    if (!valid && silent === false) warn(namePrefix + 'custom validation failed');
+    return valid;
+  }
+  return valid;
+};
+
+var warn = noop;
+
+{
+  var hasConsole = typeof console !== 'undefined';
+  warn = function warn(msg) {
+    if (hasConsole) {
+      console.warn('[VueTypes warn]: ' + msg);
+    }
+  };
+}
 
 var VuePropTypes = {
 
   get any() {
-    return (0, _utils.toType)('any', {
+    return toType('any', {
       type: null
     });
   },
 
   get func() {
-    return (0, _utils.toType)('function', {
+    return toType('function', {
       type: Function
     }).def(currentDefaults.func);
   },
 
   get bool() {
-    return (0, _utils.toType)('boolean', {
+    return toType('boolean', {
       type: Boolean
     }).def(currentDefaults.bool);
   },
 
   get string() {
-    return (0, _utils.toType)('string', {
+    return toType('string', {
       type: String
     }).def(currentDefaults.string);
   },
 
   get number() {
-    return (0, _utils.toType)('number', {
+    return toType('number', {
       type: Number
     }).def(currentDefaults.number);
   },
 
   get array() {
-    return (0, _utils.toType)('array', {
+    return toType('array', {
       type: Array
     }).def(currentDefaults.array);
   },
 
   get object() {
-    return (0, _utils.toType)('object', {
+    return toType('object', {
       type: Object
     }).def(currentDefaults.object);
   },
 
   get integer() {
-    return (0, _utils.toType)('integer', {
+    return toType('integer', {
       type: Number,
       validator: function validator(value) {
-        return (0, _utils.isInteger)(value);
+        return isInteger(value);
       }
     }).def(currentDefaults.integer);
   },
@@ -304,16 +404,16 @@ var VuePropTypes = {
       throw new TypeError('[VueTypes error]: You must provide a function as argument');
     }
 
-    return (0, _utils.toType)(validatorFn.name || '<<anonymous function>>', {
+    return toType(validatorFn.name || '<<anonymous function>>', {
       validator: function validator() {
         var valid = validatorFn.apply(undefined, arguments);
-        if (!valid) (0, _utils.warn)(this._vueTypes_name + ' - ' + warnMsg);
+        if (!valid) warn(this._vueTypes_name + ' - ' + warnMsg);
         return valid;
       }
     });
   },
   oneOf: function oneOf(arr) {
-    if (!(0, _utils.isArray)(arr)) {
+    if (!isArray(arr)) {
       throw new TypeError('[VueTypes error]: You must provide an array as argument');
     }
     var msg = 'oneOf - value should be one of "' + arr.join('", "') + '"';
@@ -324,36 +424,36 @@ var VuePropTypes = {
       return ret;
     }, []);
 
-    return (0, _utils.toType)('oneOf', {
+    return toType('oneOf', {
       type: allowedTypes.length > 0 ? allowedTypes : null,
       validator: function validator(value) {
         var valid = arr.indexOf(value) !== -1;
-        if (!valid) (0, _utils.warn)(msg);
+        if (!valid) warn(msg);
         return valid;
       }
     });
   },
   instanceOf: function instanceOf(instanceConstructor) {
-    return (0, _utils.toType)('instanceOf', {
+    return toType('instanceOf', {
       type: instanceConstructor
     });
   },
   oneOfType: function oneOfType(arr) {
-    if (!(0, _utils.isArray)(arr)) {
+    if (!isArray(arr)) {
       throw new TypeError('[VueTypes error]: You must provide an array as argument');
     }
 
     var hasCustomValidators = false;
 
     var nativeChecks = arr.reduce(function (ret, type, i) {
-      if ((0, _lodash2.default)(type)) {
+      if (index(type)) {
         if (type._vueTypes_name === 'oneOf') {
           return ret.concat(type.type || []);
         }
-        if (type.type && !(0, _utils.isFunction)(type.validator)) {
-          if ((0, _utils.isArray)(type.type)) return ret.concat(type.type);
+        if (type.type && !isFunction(type.validator)) {
+          if (isArray(type.type)) return ret.concat(type.type);
           ret.push(type.type);
-        } else if ((0, _utils.isFunction)(type.validator)) {
+        } else if (isFunction(type.validator)) {
           hasCustomValidators = true;
         }
         return ret;
@@ -365,51 +465,51 @@ var VuePropTypes = {
     if (!hasCustomValidators) {
       // we got just native objects (ie: Array, Object)
       // delegate to Vue native prop check
-      return (0, _utils.toType)('oneOfType', {
+      return toType('oneOfType', {
         type: nativeChecks
       });
     }
 
     var typesStr = arr.map(function (type) {
-      if (type && (0, _utils.isArray)(type.type)) {
-        return type.type.map(_utils.getType);
+      if (type && isArray(type.type)) {
+        return type.type.map(getType);
       }
-      return (0, _utils.getType)(type);
+      return getType(type);
     }).reduce(function (ret, type) {
-      return ret.concat((0, _utils.isArray)(type) ? type : [type]);
+      return ret.concat(isArray(type) ? type : [type]);
     }, []).join('", "');
 
     return this.custom(function oneOfType(value) {
       var valid = arr.some(function (type) {
         if (type._vueTypes_name === 'oneOf') {
-          return type.type ? (0, _utils.validateType)(type.type, value, true) : true;
+          return type.type ? validateType(type.type, value, true) : true;
         }
-        return (0, _utils.validateType)(type, value, true);
+        return validateType(type, value, true);
       });
-      if (!valid) (0, _utils.warn)('oneOfType - value type should be one of "' + typesStr + '"');
+      if (!valid) warn('oneOfType - value type should be one of "' + typesStr + '"');
       return valid;
     });
   },
   arrayOf: function arrayOf(type) {
-    return (0, _utils.toType)('arrayOf', {
+    return toType('arrayOf', {
       type: Array,
       validator: function validator(values) {
         var valid = values.every(function (value) {
-          return (0, _utils.validateType)(type, value);
+          return validateType(type, value);
         });
-        if (!valid) (0, _utils.warn)('arrayOf - value must be an array of "' + (0, _utils.getType)(type) + '"');
+        if (!valid) warn('arrayOf - value must be an array of "' + getType(type) + '"');
         return valid;
       }
     });
   },
   objectOf: function objectOf(type) {
-    return (0, _utils.toType)('objectOf', {
+    return toType('objectOf', {
       type: Object,
       validator: function validator(obj) {
         var valid = Object.keys(obj).every(function (key) {
-          return (0, _utils.validateType)(type, obj[key]);
+          return validateType(type, obj[key]);
         });
-        if (!valid) (0, _utils.warn)('objectOf - value must be an object of "' + (0, _utils.getType)(type) + '"');
+        if (!valid) warn('objectOf - value must be an object of "' + getType(type) + '"');
         return valid;
       }
     });
@@ -420,12 +520,12 @@ var VuePropTypes = {
       return obj[key] && obj[key].required === true;
     });
 
-    var type = (0, _utils.toType)('shape', {
+    var type = toType('shape', {
       type: Object,
       validator: function validator(value) {
         var _this = this;
 
-        if (!(0, _lodash2.default)(value)) {
+        if (!index(value)) {
           return false;
         }
         var valueKeys = Object.keys(value);
@@ -434,18 +534,18 @@ var VuePropTypes = {
         if (requiredKeys.length > 0 && requiredKeys.some(function (req) {
           return valueKeys.indexOf(req) === -1;
         })) {
-          (0, _utils.warn)('shape - at least one of required properties "' + requiredKeys.join('", "') + '" is not present');
+          warn('shape - at least one of required properties "' + requiredKeys.join('", "') + '" is not present');
           return false;
         }
 
         return valueKeys.every(function (key) {
           if (keys.indexOf(key) === -1) {
             if (_this._vueTypes_isLoose === true) return true;
-            (0, _utils.warn)('shape - object is missing "' + key + '" property');
+            warn('shape - object is missing "' + key + '" property');
             return false;
           }
           var type = obj[key];
-          return (0, _utils.validateType)(type, value[key]);
+          return validateType(type, value[key]);
         });
       }
     });
@@ -471,7 +571,7 @@ var VuePropTypes = {
 
 var typeDefaults = function typeDefaults() {
   return {
-    func: _utils.noop,
+    func: noop,
     bool: true,
     string: '',
     number: 0,
@@ -494,7 +594,7 @@ Object.defineProperty(VuePropTypes, 'sensibleDefaults', {
       currentDefaults = {};
     } else if (value === true) {
       currentDefaults = typeDefaults();
-    } else if ((0, _lodash2.default)(value)) {
+    } else if (index(value)) {
       currentDefaults = value;
     }
   },
@@ -503,229 +603,7 @@ Object.defineProperty(VuePropTypes, 'sensibleDefaults', {
   }
 });
 
-exports.default = VuePropTypes;
-module.exports = exports['default'];
+return VuePropTypes;
 
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-exports.warn = exports.validateType = exports.toType = exports.withRequired = exports.withDefault = exports.isFunction = exports.isArray = exports.isInteger = exports.has = exports.noop = exports.getNativeType = exports.getType = exports.hasOwn = undefined;
-
-var _lodash = __webpack_require__(0);
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ObjProto = Object.prototype;
-var toString = ObjProto.toString;
-var hasOwn = exports.hasOwn = ObjProto.hasOwnProperty;
-
-var FN_MATCH_REGEXP = /^\s*function (\w+)/;
-
-// https://github.com/vuejs/vue/blob/dev/src/core/util/props.js#L159
-var getType = exports.getType = function getType(fn) {
-  var type = fn !== null && fn !== undefined ? fn.type ? fn.type : fn : null;
-  var match = type && type.toString().match(FN_MATCH_REGEXP);
-  return match && match[1];
-};
-
-var getNativeType = exports.getNativeType = function getNativeType(value) {
-  if (value === null || value === undefined) return null;
-  var match = value.constructor.toString().match(FN_MATCH_REGEXP);
-  return match && match[1];
-};
-
-/**
- * No-op function
- */
-var noop = exports.noop = function noop() {};
-
-/**
- * Checks for a own property in an object
- *
- * @param {object} obj - Object
- * @param {string} prop - Property to check
- */
-var has = exports.has = function has(obj, prop) {
-  return hasOwn.call(obj, prop);
-};
-
-/**
- * Determines whether the passed value is an integer. Uses `Number.isInteger` if available
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger
- * @param {*} value - The value to be tested for being an integer.
- * @returns {boolean}
- */
-var isInteger = exports.isInteger = Number.isInteger || function (value) {
-  return typeof value === 'number' && isFinite(value) && Math.floor(value) === value;
-};
-
-/**
- * Determines whether the passed value is an Array.
- *
- * @param {*} value - The value to be tested for being an array.
- * @returns {boolean}
- */
-var isArray = exports.isArray = Array.isArray || function (value) {
-  return toString.call(value) === '[object Array]';
-};
-
-/**
- * Checks if a value is a function
- *
- * @param {any} value - Value to check
- * @returns {boolean}
- */
-var isFunction = exports.isFunction = function isFunction(value) {
-  return toString.call(value) === '[object Function]';
-};
-
-/**
- * Adds a `def` method to the object returning a new object with passed in argument as `default` property
- *
- * @param {object} type - Object to enhance
- */
-var withDefault = exports.withDefault = function withDefault(type) {
-  Object.defineProperty(type, 'def', {
-    value: function value(def) {
-      if (def === undefined && !this.default) {
-        return this;
-      }
-      if (!isFunction(def) && !validateType(this, def)) {
-        warn(this._vueTypes_name + ' - invalid default value: "' + def + '"', def);
-        return this;
-      }
-      this.default = isArray(def) || (0, _lodash2.default)(def) ? function () {
-        return def;
-      } : def;
-      return this;
-    },
-
-    enumerable: false,
-    writable: false
-  });
-};
-
-/**
- * Adds a `isRequired` getter returning a new object with `required: true` key-value
- *
- * @param {object} type - Object to enhance
- */
-var withRequired = exports.withRequired = function withRequired(type) {
-  Object.defineProperty(type, 'isRequired', {
-    get: function get() {
-      this.required = true;
-      return this;
-    },
-
-    enumerable: false
-  });
-};
-
-/**
- * Adds `isRequired` and `def` modifiers to an object
- *
- * @param {string} name - Type internal name
- * @param {object} obj - Object to enhance
- * @returns {object}
- */
-var toType = exports.toType = function toType(name, obj) {
-  Object.defineProperty(obj, '_vueTypes_name', {
-    enumerable: false,
-    writable: false,
-    value: name
-  });
-  withRequired(obj);
-  withDefault(obj);
-
-  if (isFunction(obj.validator)) {
-    obj.validator = obj.validator.bind(obj);
-  }
-  return obj;
-};
-
-/**
- * Validates a given value against a prop type object
- *
- * @param {Object|*} type - Type to use for validation. Either a type object or a constructor
- * @param {*} value - Value to check
- * @param {boolean} silent - Silence warnings
- * @returns {boolean}
- */
-var validateType = exports.validateType = function validateType(type, value) {
-  var silent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
-  var typeToCheck = type;
-  var valid = true;
-  var expectedType = void 0;
-  if (!(0, _lodash2.default)(type)) {
-    typeToCheck = { type: type };
-  }
-  var namePrefix = typeToCheck._vueTypes_name ? typeToCheck._vueTypes_name + ' - ' : '';
-
-  if (hasOwn.call(typeToCheck, 'type') && typeToCheck.type !== null) {
-    if (isArray(typeToCheck.type)) {
-      valid = typeToCheck.type.some(function (type) {
-        return validateType(type, value, true);
-      });
-      expectedType = typeToCheck.type.map(function (type) {
-        return getType(type);
-      }).join(' or ');
-    } else {
-      expectedType = getType(typeToCheck);
-
-      if (expectedType === 'Array') {
-        valid = isArray(value);
-      } else if (expectedType === 'Object') {
-        valid = (0, _lodash2.default)(value);
-      } else if (expectedType === 'String' || expectedType === 'Number' || expectedType === 'Boolean' || expectedType === 'Function') {
-        valid = getNativeType(value) === expectedType;
-      } else {
-        valid = value instanceof typeToCheck.type;
-      }
-    }
-  }
-
-  if (!valid) {
-    silent === false && warn(namePrefix + 'value "' + value + '" should be of type "' + expectedType + '"');
-    return false;
-  }
-
-  if (hasOwn.call(typeToCheck, 'validator') && isFunction(typeToCheck.validator)) {
-    valid = typeToCheck.validator(value);
-    if (!valid && silent === false) warn(namePrefix + 'custom validation failed');
-    return valid;
-  }
-  return valid;
-};
-
-var warn = noop;
-
-if (true) {
-  var hasConsole = typeof console !== 'undefined';
-  exports.warn = warn = function warn(msg) {
-    if (hasConsole) {
-      console.warn('[VueTypes warn]: ' + msg);
-    }
-  };
-}
-
-exports.warn = warn;
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(1);
-
-
-/***/ })
-/******/ ]);
-});
+})));
+//# sourceMappingURL=vue-types.js.map
