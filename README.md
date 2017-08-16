@@ -61,12 +61,19 @@ export default {
 
 ## Installation
 
-### NPM
+### NPM package
 
 ``` bash
 npm install vue-types --save
 # or
 yarn add vue-types
+```
+
+### CDN delivered `<script>`
+
+add the following script tags before your code
+```html
+<script src="https://unpkg.com/vue-types"></script>
 ```
 
 ## Documentation
@@ -303,4 +310,4 @@ export default {
 
 [MIT](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2016 Marco Solazzi
+Copyright (c) 2017 Marco Solazzi
