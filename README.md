@@ -150,6 +150,16 @@ Validates that a prop is a string.
 
 * default: `''`
 
+#### `VueTypes.symbol`
+
+```js
+VueTypes.symbol
+```
+
+Validates that a prop is a Symbol.
+
+* default: none
+
 ### Native Types Configuration
 
 All native types (with the exception of `any`) come with a sensible default value. Anyway you may wish to set your custom defaults or disable them.
