@@ -23,7 +23,7 @@
     "build:umd": "rimraf umd && cross-env BABEL_ENV=rollup rollup -c rollup.config.js",
     "test": "cross-env BABEL_ENV=rollup karma start karma.conf.js --single-run --browsers PhantomJS",
     "test:all": "cross-env BABEL_ENV=rollup karma start karma.conf.js --single-run --browsers Chrome,Firefox",
-    "test:saucelab": "cross-env BABEL_ENV=cjs karma start karma-sauce.conf.js --single-run",
+    "test:saucelab": "cross-env BABEL_ENV=rollup karma start karma-sauce.conf.js --single-run",
     "lint": "eslint src/*.js test/*.js",
     "start": "node ./server/index.js"
   },
