@@ -45,8 +45,8 @@ const baseConfig = {
       require('rollup-plugin-node-globals')() //eslint-disable-line
     ],
     format: 'iife',
-    moduleName: 'VueTypes',
-    sourceMap: 'inline'
+    name: 'VueTypes',
+    sourcemap: 'inline'
   },
 
   // test results reporter to use
