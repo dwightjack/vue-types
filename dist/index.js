@@ -2,6 +2,8 @@
 
 exports.__esModule = true;
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _lodash = require('lodash.isplainobject');
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -61,6 +63,15 @@ var VuePropTypes = {
         return (0, _utils.isInteger)(value);
       }
     }).def(currentDefaults.integer);
+  },
+
+  get symbol() {
+    return (0, _utils.toType)('symbol', {
+      type: null,
+      validator: function validator(value) {
+        return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'symbol';
+      }
+    });
   },
 
   custom: function custom(validatorFn) {
