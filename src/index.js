@@ -54,6 +54,15 @@ const VuePropTypes = {
     }).def(currentDefaults.integer)
   },
 
+  get symbol() {
+    return toType('symbol', {
+      type: null,
+      validator(value) {
+        return typeof value === 'symbol'
+      }
+    })
+  },
+
   custom(validatorFn, warnMsg = 'custom validation failed') {
     if (typeof validatorFn !== 'function') {
       throw new TypeError('[VueTypes error]: You must provide a function as argument')

@@ -1,3 +1,5 @@
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 import isPlainObject from 'lodash.isplainobject';
 import { noop, toType, getType, isFunction, validateType, isInteger, isArray, warn } from './utils';
 
@@ -52,6 +54,15 @@ var VuePropTypes = {
         return isInteger(value);
       }
     }).def(currentDefaults.integer);
+  },
+
+  get symbol() {
+    return toType('symbol', {
+      type: null,
+      validator: function validator(value) {
+        return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'symbol';
+      }
+    });
   },
 
   custom: function custom(validatorFn) {

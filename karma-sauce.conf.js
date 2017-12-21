@@ -3,7 +3,7 @@
 
 const path = require('path');
 const baseConfig = require('./karma.conf').baseConfig;
-const version = require('./package.json').version;
+const pkg = require('./package.json')
 
 const customLaunchers = {
     sl_chrome: {

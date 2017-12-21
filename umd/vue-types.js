@@ -344,6 +344,12 @@ var warn = noop;
   };
 }
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
 var VuePropTypes = {
 
   get any() {
@@ -395,6 +401,15 @@ var VuePropTypes = {
         return isInteger(value);
       }
     }).def(currentDefaults.integer);
+  },
+
+  get symbol() {
+    return toType('symbol', {
+      type: null,
+      validator: function validator(value) {
+        return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'symbol';
+      }
+    });
   },
 
   custom: function custom(validatorFn) {
@@ -557,7 +572,7 @@ var VuePropTypes = {
     });
 
     Object.defineProperty(type, 'loose', {
-      get: function get() {
+      get: function get$$1() {
         this._vueTypes_isLoose = true;
         return this;
       },
@@ -589,7 +604,7 @@ var currentDefaults = typeDefaults();
 
 Object.defineProperty(VuePropTypes, 'sensibleDefaults', {
   enumerable: false,
-  set: function set(value) {
+  set: function set$$1(value) {
     if (value === false) {
       currentDefaults = {};
     } else if (value === true) {
@@ -598,7 +613,7 @@ Object.defineProperty(VuePropTypes, 'sensibleDefaults', {
       currentDefaults = value;
     }
   },
-  get: function get() {
+  get: function get$$1() {
     return currentDefaults;
   }
 });
