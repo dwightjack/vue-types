@@ -23,23 +23,24 @@ const plugins = [
   })
 ]
 
-const baseConfig = {
-  entry: 'src/index.js',
+const baseOutputConfig = {
   format: 'umd',
-  moduleName: 'VueTypes',
-  banner,
-  sourceMap: true
+  name: 'VueTypes',
+  sourcemap: true
 }
 
 export default [
-  Object.assign({
-    dest: 'umd/vue-types.js',
+  {
+    input: 'src/index.js',
+    output: Object.assign({ file: 'umd/vue-types.js'}, baseOutputConfig),
     plugins: [replace({
       'process.env.NODE_ENV': JSON.stringify('development')
-    }), ...plugins, bundlesize()]
-  }, baseConfig),
-  Object.assign({
-    dest: 'umd/vue-types.min.js',
+    }), ...plugins, bundlesize()],
+    banner
+  },
+  {
+    input: 'src/index.js',
+    output: Object.assign({ file: 'umd/vue-types.min.js' }, baseOutputConfig),
     plugins: [replace({
       'process.env.NODE_ENV': JSON.stringify('production')
     }), ...plugins, uglify({
@@ -51,6 +52,7 @@ export default [
       output: {
         comments: /^!/
       }
-    }), bundlesize()]
-  }, baseConfig)
+    }), bundlesize()],
+    banner
+  }
 ]
