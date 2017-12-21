@@ -149,7 +149,7 @@ function isPlainObject(value) {
     Ctor instanceof Ctor && funcToString.call(Ctor) == objectCtorString);
 }
 
-var index = isPlainObject;
+var lodash_isplainobject = isPlainObject;
 
 var ObjProto = Object.prototype;
 var toString = ObjProto.toString;
@@ -229,7 +229,7 @@ var withDefault = function withDefault(type) {
         warn(this._vueTypes_name + ' - invalid default value: "' + def + '"', def);
         return this;
       }
-      this.default = isArray(def) || index(def) ? function () {
+      this.default = isArray(def) || lodash_isplainobject(def) ? function () {
         return def;
       } : def;
       return this;
@@ -292,7 +292,7 @@ var validateType = function validateType(type, value) {
   var typeToCheck = type;
   var valid = true;
   var expectedType = void 0;
-  if (!index(type)) {
+  if (!lodash_isplainobject(type)) {
     typeToCheck = { type: type };
   }
   var namePrefix = typeToCheck._vueTypes_name ? typeToCheck._vueTypes_name + ' - ' : '';
@@ -311,7 +311,7 @@ var validateType = function validateType(type, value) {
       if (expectedType === 'Array') {
         valid = isArray(value);
       } else if (expectedType === 'Object') {
-        valid = index(value);
+        valid = lodash_isplainobject(value);
       } else if (expectedType === 'String' || expectedType === 'Number' || expectedType === 'Boolean' || expectedType === 'Function') {
         valid = getNativeType(value) === expectedType;
       } else {
@@ -446,7 +446,7 @@ var VuePropTypes = {
     var hasCustomValidators = false;
 
     var nativeChecks = arr.reduce(function (ret, type, i) {
-      if (index(type)) {
+      if (lodash_isplainobject(type)) {
         if (type._vueTypes_name === 'oneOf') {
           return ret.concat(type.type || []);
         }
@@ -525,7 +525,7 @@ var VuePropTypes = {
       validator: function validator(value) {
         var _this = this;
 
-        if (!index(value)) {
+        if (!lodash_isplainobject(value)) {
           return false;
         }
         var valueKeys = Object.keys(value);
@@ -594,7 +594,7 @@ Object.defineProperty(VuePropTypes, 'sensibleDefaults', {
       currentDefaults = {};
     } else if (value === true) {
       currentDefaults = typeDefaults();
-    } else if (index(value)) {
+    } else if (lodash_isplainobject(value)) {
       currentDefaults = value;
     }
   },
