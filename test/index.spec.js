@@ -204,6 +204,28 @@ describe('VueTypes', () => {
 
   })
 
+  describe('symbol', () => {
+
+    it('should match an object with type and validator, but not default', () => {
+      const match = {
+        type: null,
+        validator: Function
+      }
+
+      expect(VueTypes.symbol).toMatch(match)
+      expect(VueTypes.symbol.default).toBe(undefined)
+    })
+
+    it('should validate symbols', function () {
+      if ('Symbol' in window) {
+        expect(VueTypes.symbol.validator(Symbol())).toBe(true)
+      } else {
+        this.skip()
+      }
+    })
+
+  })
+
   describe('`.custom`', () => {
 
     let customType
