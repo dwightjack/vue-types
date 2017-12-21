@@ -3,7 +3,7 @@ import resolve from 'rollup-plugin-node-resolve'
 import babel from 'rollup-plugin-babel'
 import uglify from 'rollup-plugin-uglify'
 import replace from 'rollup-plugin-replace'
-import bundlesize from 'rollup-plugin-bundle-size'
+import filesize from 'rollup-plugin-filesize'
 
 import { version, name, license, author, homepage } from './package.json'
 
@@ -35,7 +35,7 @@ export default [
     output: Object.assign({ file: 'umd/vue-types.js'}, baseOutputConfig),
     plugins: [replace({
       'process.env.NODE_ENV': JSON.stringify('development')
-    }), ...plugins, bundlesize()],
+    }), ...plugins, filesize()],
     banner
   },
   {
@@ -52,7 +52,7 @@ export default [
       output: {
         comments: /^!/
       }
-    }), bundlesize()],
+    }), filesize()],
     banner
   }
 ]
