@@ -3,7 +3,7 @@ import resolve from 'rollup-plugin-node-resolve'
 import babel from 'rollup-plugin-babel'
 import uglify from 'rollup-plugin-uglify'
 import replace from 'rollup-plugin-replace'
-import bundlesize from 'rollup-plugin-bundle-size'
+import filesize from 'rollup-plugin-filesize'
 
 import { version, name, license, author, homepage } from './package.json'
 
@@ -23,23 +23,24 @@ const plugins = [
   })
 ]
 
-const baseConfig = {
-  entry: 'src/index.js',
+const baseOutputConfig = {
   format: 'umd',
-  moduleName: 'VueTypes',
-  banner,
-  sourceMap: true
+  name: 'VueTypes',
+  sourcemap: true
 }
 
 export default [
-  Object.assign({
-    dest: 'umd/vue-types.js',
+  {
+    input: 'src/index.js',
+    output: Object.assign({ file: 'umd/vue-types.js'}, baseOutputConfig),
     plugins: [replace({
       'process.env.NODE_ENV': JSON.stringify('development')
-    }), ...plugins, bundlesize()]
-  }, baseConfig),
-  Object.assign({
-    dest: 'umd/vue-types.min.js',
+    }), ...plugins, filesize()],
+    banner
+  },
+  {
+    input: 'src/index.js',
+    output: Object.assign({ file: 'umd/vue-types.min.js' }, baseOutputConfig),
     plugins: [replace({
       'process.env.NODE_ENV': JSON.stringify('production')
     }), ...plugins, uglify({
@@ -51,6 +52,7 @@ export default [
       output: {
         comments: /^!/
       }
-    }), bundlesize()]
-  }, baseConfig)
+    }), filesize()],
+    banner
+  }
 ]
