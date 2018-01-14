@@ -2,6 +2,13 @@
 // Generated on Wed Oct 26 2016 17:54:27 GMT+0200 (CEST)
 
 const path = require('path');
+const resolve = require('rollup-plugin-node-resolve');
+const commonjs = require('rollup-plugin-commonjs');
+const babel = require('rollup-plugin-babel');
+const replace = require('rollup-plugin-replace');
+const stub = require('rollup-plugin-stub');
+const globals = require('rollup-plugin-node-globals');
+const builtins = require('rollup-plugin-node-builtins');
 
 const production = process.env.PRODUCTION === 'true';
 
@@ -33,16 +40,19 @@ const baseConfig = {
 
   rollupPreprocessor: {
     plugins: [
-      require('rollup-plugin-node-resolve')(), //eslint-disable-line
-      require('rollup-plugin-commonjs')(), //eslint-disable-line
-      require('rollup-plugin-babel')({ //eslint-disable-line
+      resolve({
+        preferBuiltins: true
+      }),
+      commonjs(),
+      babel({
         exclude: 'node_modules/**'
       }),
-      require('rollup-plugin-replace')({ //eslint-disable-line
+      replace({
         'process.env.NODE_DEBUG': !production
       }),
-      require('rollup-plugin-stub')(), //eslint-disable-line
-      require('rollup-plugin-node-globals')() //eslint-disable-line
+      stub(),
+      globals(),
+      builtins()
     ],
     format: 'iife',
     name: 'VueTypes',
