@@ -54,9 +54,11 @@ const baseConfig = {
       globals(),
       builtins()
     ],
-    format: 'iife',
-    name: 'VueTypes',
-    sourcemap: 'inline'
+    output: {
+      format: 'iife',
+      name: 'VueTypes',
+      sourcemap: 'inline'
+    }
   },
 
   // test results reporter to use
