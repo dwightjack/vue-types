@@ -26,7 +26,8 @@ const plugins = [
 const baseOutputConfig = {
   format: 'umd',
   name: 'VueTypes',
-  sourcemap: true
+  sourcemap: true,
+  banner
 }
 
 export default [
@@ -35,8 +36,7 @@ export default [
     output: Object.assign({ file: 'umd/vue-types.js'}, baseOutputConfig),
     plugins: [replace({
       'process.env.NODE_ENV': JSON.stringify('development')
-    }), ...plugins, filesize()],
-    banner
+    }), ...plugins, filesize()]
   },
   {
     input: 'src/index.js',
@@ -52,7 +52,6 @@ export default [
       output: {
         comments: /^!/
       }
-    }), filesize()],
-    banner
+    }), filesize()]
   }
 ]
