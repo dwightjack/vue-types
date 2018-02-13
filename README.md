@@ -4,7 +4,7 @@
 
 ## Introduction
 
-`vue-types` is a collection of configurable [prop type](http://vuejs.org/guide/components.html#Props) definitions for Vue.js components, inspired by `React.PropTypes`.
+`vue-types` is a collection of configurable [prop type](http://vuejs.org/guide/components.html#Props) definitions for Vue.js components, inspired by React's `prop-types`.
 
 ### When to use
 
@@ -80,7 +80,11 @@ add the following script tags before your code
 
 ### Native Types
 
-Most native types come with a default value, a `.def()` method to reassign the default value for the current prop and a `isRequired` flag to set the `required: true` key
+Most native types come with:
+
+* a default value, 
+* a `.def()` method to reassign the default value for the current prop 
+* a `isRequired` flag to set the `required: true` key
 
 ```js
 const numProp = vueTypes.number
@@ -90,7 +94,7 @@ const numPropCustom = vueTypes.number.def(10)
 // numPropCustom ===  { type: Number, default : 10}
 
 const numPropRequired = vueTypes.number.isRequired
-// numPropCustom ===  { type: Number, required : true}
+// numPropRequired ===  { type: Number, required : true}
 
 const numPropRequiredCustom = vueTypes.number.def(10).isRequired
 // numPropRequiredCustom ===  { type: Number, default: 10, required : true}
@@ -98,13 +102,13 @@ const numPropRequiredCustom = vueTypes.number.def(10).isRequired
 
 #### `VueTypes.any`
 
-Validates any type of value and has no default value.
+Validates any type of value and **has no default value**.
 
 #### `VueTypes.array`
 
 Validates that a prop is an array primitive.
 
-* Default: an empty array
+* default: an empty array
 
 #### `VueTypes.bool`
 
@@ -126,25 +130,17 @@ Validates that a prop is a number.
 
 #### `VueTypes.integer`
 
-Validates that a prop is an integer (uses `Number.isInteger`).
+Validates that a prop is an integer.
 
 * default: `0`
 
 #### `VueTypes.object`
-
-```js
-VueTypes.object
-```
 
 Validates that a prop is an object.
 
 * default: an empty object
 
 #### `VueTypes.string`
-
-```js
-VueTypes.string
-```
 
 Validates that a prop is a string.
 
@@ -162,9 +158,7 @@ Validates that a prop is a Symbol.
 
 ### Native Types Configuration
 
-All native types (with the exception of `any`) come with a sensible default value. Anyway you may wish to set your custom defaults or disable them.
-
-To do so you can set the `vueTypes.sensibleDefaults` property:
+All native types (with the exception of `any`) come with a sensible default value. In order to modify or disable it you can set the global option `vueTypes.sensibleDefaults`:
 
 ```js
 //use vue-types default (this is the "default" value)
@@ -174,7 +168,7 @@ vueTypes.sensibleDefaults = true
 //Use .def(...) to set one
 vueTypes.sensibleDefaults = false
 
-//assign an object to specify custom defaults
+//assign an object in order to specify custom defaults
 vueTypes.sensibleDefaults = {
   string: 'mystringdefault'
   //...
@@ -183,14 +177,18 @@ vueTypes.sensibleDefaults = {
 
 ### Custom Types
 
-Custom types have not default value, a `.def()` method to assign a default value for the current prop and a `isRequired` flag to set the `required: true` key
+Custom types are a special kind of types useful to describe complex validation requirements. By design each custom type:
+
+* **doesn't have** any sensible default value
+* has a `.def()` method to assign a default value on the current prop
+*  has an `isRequired` flag to set the `required: true` key
 
 ```js
 const oneOfPropDefault = vueTypes.oneOf([0, 1]).def(1)
-// oneOfPropCustom.default === 1
+// oneOfPropDefault.default === 1
 
 const oneOfPropRequired = vueTypes.oneOf([0, 1]).isRequired
-// oneOfPropCustom.required ===  true
+// oneOfPropRequired.required ===  true
 
 const oneOfPropRequiredCustom = vueTypes.oneOf([0, 1]).def(1).isRequired
 // oneOfPropRequiredCustom.default ===  1
@@ -214,10 +212,6 @@ export default {
 Validates that a prop is an instance of a JavaScript constructor. This uses JavaScript's `instanceof` operator.
 
 #### `VueTypes.oneOf()`
-
-```js
-VueTypes.oneOf(arrayOfValues)
-```
 
 Validates that a prop is one of the provided values.
 
