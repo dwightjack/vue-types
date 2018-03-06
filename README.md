@@ -353,7 +353,7 @@ export default {
 
 `vue-types` exposes some utility functions on the `.utils` property:
 
-c
+#### `VueTypes.utils.validate(value, type)`
 
 Checks a value against a type definition
 
