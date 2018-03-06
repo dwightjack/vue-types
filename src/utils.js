@@ -6,7 +6,7 @@ export const hasOwn = ObjProto.hasOwnProperty
 
 const FN_MATCH_REGEXP = /^\s*function (\w+)/
 
-// https://github.com/vuejs/vue/blob/dev/src/core/util/props.js#L159
+// https://github.com/vuejs/vue/blob/dev/src/core/util/props.js#L177
 export const getType = (fn) => {
   const type = (fn !== null && fn !== undefined) ? (fn.type ? fn.type : fn) : null
   const match = type && type.toString().match(FN_MATCH_REGEXP)
