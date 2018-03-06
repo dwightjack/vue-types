@@ -3,7 +3,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 import isPlainObject from 'lodash.isplainobject';
 import { noop, toType, getType, isFunction, validateType, isInteger, isArray, warn } from './utils';
 
-var VuePropTypes = {
+var VueTypes = {
 
   get any() {
     return toType('any', {
@@ -255,7 +255,7 @@ var typeDefaults = function typeDefaults() {
 
 var currentDefaults = typeDefaults();
 
-Object.defineProperty(VuePropTypes, 'sensibleDefaults', {
+Object.defineProperty(VueTypes, 'sensibleDefaults', {
   enumerable: false,
   set: function set(value) {
     if (value === false) {
@@ -271,4 +271,12 @@ Object.defineProperty(VuePropTypes, 'sensibleDefaults', {
   }
 });
 
-export default VuePropTypes;
+VueTypes.utils = {
+  validate: function validate(value, type) {
+    return validateType(type, value, true);
+  },
+
+  toType: toType
+};
+
+export default VueTypes;

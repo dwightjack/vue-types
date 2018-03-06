@@ -57,8 +57,8 @@ function overArg(func, transform) {
 }
 
 /** Used for built-in method references. */
-var funcProto = Function.prototype;
-var objectProto = Object.prototype;
+var funcProto = Function.prototype,
+    objectProto = Object.prototype;
 
 /** Used to resolve the decompiled source of functions. */
 var funcToString = funcProto.toString;
@@ -157,7 +157,7 @@ var hasOwn = ObjProto.hasOwnProperty;
 
 var FN_MATCH_REGEXP = /^\s*function (\w+)/;
 
-// https://github.com/vuejs/vue/blob/dev/src/core/util/props.js#L159
+// https://github.com/vuejs/vue/blob/dev/src/core/util/props.js#L177
 var getType = function getType(fn) {
   var type = fn !== null && fn !== undefined ? fn.type ? fn.type : fn : null;
   var match = type && type.toString().match(FN_MATCH_REGEXP);
@@ -174,14 +174,6 @@ var getNativeType = function getNativeType(value) {
  * No-op function
  */
 var noop = function noop() {};
-
-/**
- * Checks for a own property in an object
- *
- * @param {object} obj - Object
- * @param {string} prop - Property to check
- */
-
 
 /**
  * Determines whether the passed value is an integer. Uses `Number.isInteger` if available
@@ -350,7 +342,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 };
 
-var VuePropTypes = {
+var VueTypes = {
 
   get any() {
     return toType('any', {
@@ -602,7 +594,7 @@ var typeDefaults = function typeDefaults() {
 
 var currentDefaults = typeDefaults();
 
-Object.defineProperty(VuePropTypes, 'sensibleDefaults', {
+Object.defineProperty(VueTypes, 'sensibleDefaults', {
   enumerable: false,
   set: function set$$1(value) {
     if (value === false) {
@@ -618,7 +610,15 @@ Object.defineProperty(VuePropTypes, 'sensibleDefaults', {
   }
 });
 
-return VuePropTypes;
+VueTypes.utils = {
+  validate: function validate(value, type) {
+    return validateType(type, value, true);
+  },
+
+  toType: toType
+};
+
+return VueTypes;
 
 })));
 //# sourceMappingURL=vue-types.js.map

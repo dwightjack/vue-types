@@ -12,7 +12,7 @@ var _utils = require('./utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var VuePropTypes = {
+var VueTypes = {
 
   get any() {
     return (0, _utils.toType)('any', {
@@ -264,7 +264,7 @@ var typeDefaults = function typeDefaults() {
 
 var currentDefaults = typeDefaults();
 
-Object.defineProperty(VuePropTypes, 'sensibleDefaults', {
+Object.defineProperty(VueTypes, 'sensibleDefaults', {
   enumerable: false,
   set: function set(value) {
     if (value === false) {
@@ -280,5 +280,13 @@ Object.defineProperty(VuePropTypes, 'sensibleDefaults', {
   }
 });
 
-exports.default = VuePropTypes;
+VueTypes.utils = {
+  validate: function validate(value, type) {
+    return (0, _utils.validateType)(type, value, true);
+  },
+
+  toType: _utils.toType
+};
+
+exports.default = VueTypes;
 module.exports = exports['default'];
