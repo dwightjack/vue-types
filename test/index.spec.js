@@ -1,6 +1,6 @@
 import expect from 'expect'
 
-import { noop } from '../src/utils'
+import { noop, toType } from '../src/utils'
 import VueTypes from '../src/index'
 
 const checkRequired = (type) => {
@@ -712,6 +712,53 @@ describe('VueTypes', () => {
       expect(VueTypes.string.default).toBe('test')
     })
 
+  })
+
+})
+
+describe('VueTypes.utils', () => {
+
+  const _utils = VueTypes.utils
+
+  it('should be defined', () => {
+    expect(VueTypes.utils).toBeA(Object)
+  })
+
+  describe('.toType', () => {
+
+    it('should be a function', () => {
+      expect(_utils.toType).toBeA(Function)
+    })
+
+    it('proxes to `toType` internal utility function', () => {
+      expect(_utils.toType).toBe(toType)
+    })
+  })
+
+  describe('.validate', () => {
+
+    it('should be a function', () => {
+      expect(_utils.validate).toBeA(Function)
+    })
+
+    it('should succeed with VueTypes types', () => {
+      expect(_utils.validate('string', VueTypes.string)).toBe(true)
+      expect(_utils.validate(0, VueTypes.string)).toBe(false)
+    })
+
+    it('should succeed with simple type checks', () => {
+      expect(_utils.validate('string', { type: String })).toBe(true)
+      expect(_utils.validate(0, { type: String })).toBe(false)
+    })
+
+    it('should allow custom validator functions', () => {
+      const type = {
+        type: String,
+        validator: (value) => value.length > 4
+      }
+      expect(_utils.validate('string', type)).toBe(true)
+      expect(_utils.validate('s', type)).toBe(false)
+    })
   })
 
 })
