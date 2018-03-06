@@ -82,8 +82,8 @@ add the following script tags before your code
 
 Most native types come with:
 
-* a default value, 
-* a `.def()` method to reassign the default value for the current prop 
+* a default value,
+* a `.def()` method to reassign the default value for the current prop
 * a `isRequired` flag to set the `required: true` key
 
 ```js
@@ -310,8 +310,98 @@ export default {
 //accepts: userData2 = {name: 'John', age: 30, id: 1} --> loose matching
 ```
 
+#### `VueTypes.custom()`
+
+Validates prop values against a custom validator function.
+
+```js
+
+function minLength(value) {
+    return typeof value === 'string' && value.length >= 6
+  }
+
+export default {
+  props: {
+    theProp: VueTypes.custom(minLength)
+  }
+}
+
+//accepts: 'string'
+//rejects: 'my', 1
+```
+
+Note that the passed-in function name will be used as the custom validator name in warnings.
+
+You can pass a validation error message as second argument as well:
+
+```js
+function minLength(value) {
+    return typeof value === 'string' && value.length >= 6
+  }
+
+export default {
+  props: {
+    theProp: VueTypes.custom(
+      minLength,
+      'theProp is not a string or is too short'
+    )
+  }
+}
+```
+
+### Utilities
+
+`vue-types` exposes some utility functions on the `.utils` property:
+
+c
+
+Checks a value against a type definition
+
+```js
+VueTypes.utils.validate('John', VueTypes.string) //true
+
+VueTypes.utils.validate('John', { type: String }) //true
+```
+
+Note that this utility won't check for `isRequired` flag, but will execute any custom validator function is provided.
+
+```js
+const isJohn = {
+  type: String,
+  validator(value) {
+    return value.length === 'John'
+  }
+}
+
+VueTypes.utils.validate('John', isJohn) //true
+VueTypes.utils.validate('Jane', isJohn) //false
+```
+
+#### `VueTypes.utils.toType(name, obj)`
+
+Will convert a plain object to a VueTypes' type object with `.def()` and `isRequired` modifiers:
+
+```js
+const password = {
+  type: String,
+  validator(value) {
+    //very raw!
+    return value.length > 10
+  }
+}
+
+const passwordType = VueTypes.utils.toType('password', password)
+
+export default {
+  props: {
+    password: passwordType.isRequired
+  }
+}
+
+```
+
 ## License
 
 [MIT](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2017 Marco Solazzi
+Copyright (c) 2018 Marco Solazzi
