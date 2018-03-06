@@ -41,7 +41,7 @@
     "babel-core": "6.26.0",
     "babel-plugin-add-module-exports": "0.2.1",
     "babel-plugin-external-helpers": "6.22.0",
-    "babel-preset-es2015": "6.24.1",
+    "babel-preset-env": "1.6.1",
     "cross-env": "5.1.3",
     "eslint": "4.15.0",
     "eslint-config-vue": "2.0.2",
@@ -76,5 +76,17 @@
   },
   "dependencies": {
     "lodash.isplainobject": "4.0.6"
+  },
+  "browserslist": {
+    "targets": {
+        "browsers": [
+          "last 3 versions",
+          "Safari >= 10",
+          "not ie <= 8",
+          "Edge >= 12",
+          "iOS >= 10",
+          "Android >= 4.4"
+        ]
+      }
   }
 }
