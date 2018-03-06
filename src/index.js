@@ -1,7 +1,7 @@
 import isPlainObject from 'lodash.isplainobject'
 import { noop, toType, getType, isFunction, validateType, isInteger, isArray, warn } from './utils'
 
-const VuePropTypes = {
+const VueTypes = {
 
   get any() {
     return toType('any', {
@@ -239,7 +239,7 @@ const typeDefaults = () => ({
 
 let currentDefaults = typeDefaults()
 
-Object.defineProperty(VuePropTypes, 'sensibleDefaults', {
+Object.defineProperty(VueTypes, 'sensibleDefaults', {
   enumerable: false,
   set(value) {
     if (value === false) {
@@ -255,4 +255,11 @@ Object.defineProperty(VuePropTypes, 'sensibleDefaults', {
   }
 })
 
-export default VuePropTypes
+VueTypes.utils = {
+  validate(value, type) {
+    return validateType(type, value, true)
+  },
+  toType
+}
+
+export default VueTypes
