@@ -1,7 +1,11 @@
 import expect from 'expect'
+import Vue from 'vue'
 
 import { noop, toType } from '../src/utils'
 import VueTypes from '../src/index'
+
+Vue.config.productionTip = false
+Vue.config.silent = true
 
 const checkRequired = (type) => {
 
@@ -644,6 +648,27 @@ describe('VueTypes', () => {
       expect(validator({ id: 10 })).toBe(true)
       expect(validator({ id: '10' })).toBe(false)
 
+    })
+
+    it('should validate multiple shapes', () => {
+      const customType = VueTypes.oneOfType([
+        VueTypes.shape({
+          id: Number,
+          name: VueTypes.string.isRequired,
+        }),
+        VueTypes.shape({
+          id: Number,
+          age: VueTypes.integer.isRequired,
+        }),
+        VueTypes.shape({})
+      ])
+
+      const validator = forceNoContext(customType.validator)
+      expect(validator({ id: 1, name: 'John' })).toBe(true)
+      expect(validator({ id: 2, age: 30 })).toBe(true)
+      expect(validator({})).toBe(true)
+
+      expect(validator({ id: 2 })).toBe(false)
     })
 
   })
