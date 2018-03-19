@@ -12,13 +12,32 @@ const builtins = require('rollup-plugin-node-builtins');
 
 const production = process.env.PRODUCTION === 'true';
 
+//fixing mocha bug: https://github.com/karma-runner/karma-mocha/issues/203
+const fixMocha = function(files) {
+  files.unshift({
+    pattern: path.resolve('./node_modules/core-js/client/core.js'),
+    included: true,
+    served: true,
+    watched: false
+  })
+}
+
+fixMocha.$inject = ['config.files']
+
 const baseConfig = {
   // base path that will be used to resolve all patterns (eg. files, exclude)
   basePath: '',
 
   // frameworks to use
   // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-  frameworks: ['mocha'],
+  frameworks: ['mocha', 'inline-mocha-fix'],
+
+  plugins: [
+    'karma-*',
+    {
+      'framework:inline-mocha-fix': ['factory', fixMocha]
+    }
+  ],
 
   // list of files / patterns to load in the browser
   files: [
