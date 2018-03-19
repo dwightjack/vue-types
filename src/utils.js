@@ -1,4 +1,5 @@
 import isPlainObject from 'lodash.isplainobject'
+import Vue from 'vue'
 
 const ObjProto = Object.prototype
 const toString = ObjProto.toString
@@ -165,7 +166,16 @@ export const validateType = (type, value, silent = false) => {
   }
 
   if (hasOwn.call(typeToCheck, 'validator') && isFunction(typeToCheck.validator)) {
+    // swallow warn
+    let oldWarn
+    if (silent) {
+      oldWarn = warn
+      warn = noop
+    }
+
     valid = typeToCheck.validator(value)
+    oldWarn && (warn = oldWarn)
+
     if (!valid && silent === false) warn(`${namePrefix}custom validation failed`)
     return valid
   }
@@ -176,11 +186,9 @@ let warn = noop
 
 if (process.env.NODE_ENV !== 'production') {
   const hasConsole = typeof console !== 'undefined'
-  warn = (msg) => {
-    if (hasConsole) {
-      console.warn(`[VueTypes warn]: ${msg}`)
-    }
-  }
+  warn = hasConsole ? (msg) => {
+    Vue.config.silent === false && console.warn(`[VueTypes warn]: ${msg}`)
+  } : noop
 }
 
 export { warn }
