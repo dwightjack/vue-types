@@ -27,13 +27,15 @@ const baseOutputConfig = {
   format: 'umd',
   name: 'VueTypes',
   sourcemap: true,
-  banner
+  banner,
+  globals: { vue: 'Vue' }
 }
 
 export default [
   {
     input: 'src/index.js',
     output: Object.assign({ file: 'umd/vue-types.js'}, baseOutputConfig),
+    external: ['vue'],
     plugins: [replace({
       'process.env.NODE_ENV': JSON.stringify('development')
     }), ...plugins, filesize()]
@@ -41,6 +43,7 @@ export default [
   {
     input: 'src/index.js',
     output: Object.assign({ file: 'umd/vue-types.min.js' }, baseOutputConfig),
+    external: ['vue'],
     plugins: [replace({
       'process.env.NODE_ENV': JSON.stringify('production')
     }), ...plugins, uglify({
