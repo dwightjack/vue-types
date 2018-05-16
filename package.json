@@ -27,7 +27,7 @@
     "test:all": "cross-env BABEL_ENV=rollup karma start karma.conf.js --single-run --browsers Chrome,Firefox",
     "test:saucelab": "cross-env BABEL_ENV=rollup karma start karma-sauce.conf.js --single-run",
     "test:types": "tsc -p ./types/test/tsconfig.json",
-    "lint": "eslint src/*.js test/*.js",
+    "lint": "eslint src/*.js test/*.js && dtslint types",
     "start": "node ./server/index.js"
   },
   "keywords": [
@@ -51,6 +51,7 @@
     "babel-plugin-external-helpers": "6.22.0",
     "babel-preset-env": "1.7.0",
     "cross-env": "5.1.5",
+    "dtslint": "0.3.0",
     "eslint": "4.19.1",
     "eslint-plugin-vue-libs": "3.0.0",
     "expect": "1.20.2",
@@ -79,6 +80,7 @@
     "rollup-plugin-stub": "1.2.0",
     "rollup-plugin-uglify": "3.0.0",
     "serve-index": "1.9.1",
+    "tslint": "5.10.0",
     "typescript": "2.8.3",
     "vue": "2.5.16"
   },
