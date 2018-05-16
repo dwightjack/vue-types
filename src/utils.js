@@ -50,7 +50,7 @@ export const isInteger = Number.isInteger || function (value) {
  * @param {*} value - The value to be tested for being an array.
  * @returns {boolean}
  */
-export const isArray = Array.isArray || function(value) {
+export const isArray = Array.isArray || function (value) {
   return toString.call(value) === '[object Array]'
 }
 
@@ -69,7 +69,7 @@ export const isFunction = (value) => toString.call(value) === '[object Function]
  */
 export const withDefault = function (type) {
   Object.defineProperty(type, 'def', {
-    value(def) {
+    value (def) {
       if (def === undefined && !this.default) {
         return this
       }
@@ -94,7 +94,7 @@ export const withDefault = function (type) {
  */
 export const withRequired = function (type) {
   Object.defineProperty(type, 'isRequired', {
-    get() {
+    get () {
       this.required = true
       return this
     },
