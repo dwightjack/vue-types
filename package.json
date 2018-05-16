@@ -9,11 +9,13 @@
   "unpkg": "umd/vue-types.min.js",
   "jsnext:main": "es/index.js",
   "module": "es/index.js",
+  "typings": "types/index.d.ts",
   "files": [
     "dist",
     "es",
     "src",
-    "umd"
+    "umd",
+    "types/*.d.ts"
   ],
   "scripts": {
     "prepublishOnly": "npm run build",
@@ -24,6 +26,7 @@
     "test": "cross-env BABEL_ENV=rollup karma start karma.conf.js --single-run --browsers PhantomJS",
     "test:all": "cross-env BABEL_ENV=rollup karma start karma.conf.js --single-run --browsers Chrome,Firefox",
     "test:saucelab": "cross-env BABEL_ENV=rollup karma start karma-sauce.conf.js --single-run",
+    "test:types": "tsc -p ./types/test/tsconfig.json",
     "lint": "eslint src/*.js test/*.js",
     "start": "node ./server/index.js"
   },
@@ -40,6 +43,8 @@
     "vue": "*"
   },
   "devDependencies": {
+    "@types/lodash.isplainobject": "4.0.3",
+    "@types/node": "10.1.0",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.3",
     "babel-plugin-add-module-exports": "0.2.1",
@@ -74,6 +79,7 @@
     "rollup-plugin-stub": "1.2.0",
     "rollup-plugin-uglify": "3.0.0",
     "serve-index": "1.9.1",
+    "typescript": "2.8.3",
     "vue": "2.5.16"
   },
   "dependencies": {
