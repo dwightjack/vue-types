@@ -69,8 +69,8 @@ const VueTypes = {
     }
 
     return toType(validatorFn.name || '<<anonymous function>>', {
-      validator (...args) {
-        const valid = validatorFn(...args)
+      validator (value) {
+        const valid = validatorFn(value)
         if (!valid) warn(`${this._vueTypes_name} - ${warnMsg}`)
         return valid
       }
