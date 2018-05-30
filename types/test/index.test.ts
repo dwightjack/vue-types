@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import VueTypes from '../index';
+import VueTypes, { VueTypeOneOf, VueTypeCustom } from '../index';
 
 const noop = () => {};
 
@@ -25,13 +25,37 @@ const symbolType = VueTypes.symbol.def(Symbol('foo')).isRequired;
 const validator = (v: number) => true;
 const customType = VueTypes.custom(validator).def(0).isRequired;
 
-const oneOfType = VueTypes.oneOf([0, 'string', null]).def(10).isRequired;
+const oneOfType = VueTypes.oneOf([0, 'string', null]).def('test').isRequired;
+
+const oneOfTypeStrict = VueTypes.oneOf<string | boolean>([true, 'string']).def(true).isRequired;
+oneOfType.type = [Boolean, Number];
+
+class MyClass {
+  test = 'testProp';
+}
+
+const instance = new MyClass();
+
+const instanceOfType = VueTypes.instanceOf(MyClass).def(instance).isRequired;
+instanceOfType.type = MyClass;
+
+const oneOfTypeType = VueTypes.oneOfType([
+  String,
+  {
+    type: Boolean,
+  },
+  VueTypes.number
+]).def(null).isRequired; // check can be just at runtime
+
+const ArrayOfType = VueTypes.arrayOf(VueTypes.string).def(['test', 'string']).isRequired;
+
+const ObjectOfType = VueTypes.objectOf<string>(VueTypes.string).def({ prop: 'test' }).isRequired;
 
 const shapeType = VueTypes.shape({
   name: String,
   surname: { type: String, default: 'Doe' },
   age: VueTypes.number,
-}).def({}).loose.isRequired;
+}).def({ name: 'test' }).loose.isRequired;
 
 VueTypes.sensibleDefaults = false;
 VueTypes.sensibleDefaults = true;
