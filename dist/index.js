@@ -82,8 +82,8 @@ var VueTypes = {
     }
 
     return (0, _utils.toType)(validatorFn.name || '<<anonymous function>>', {
-      validator: function validator() {
-        var valid = validatorFn.apply(undefined, arguments);
+      validator: function validator(value) {
+        var valid = validatorFn(value);
         if (!valid) (0, _utils.warn)(this._vueTypes_name + ' - ' + warnMsg);
         return valid;
       }
