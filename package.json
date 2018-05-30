@@ -19,7 +19,7 @@
   ],
   "scripts": {
     "prepublishOnly": "npm run build",
-    "build": "npm run lint && npm test && npm run build:cjs && npm run build:es && npm run build:umd",
+    "build": "npm run lint && npm run test:types && npm test && npm run build:cjs && npm run build:es && npm run build:umd",
     "build:cjs": "rimraf dist && cross-env BABEL_ENV=cjs babel ./src -d dist",
     "build:es": "rimraf es && cross-env BABEL_ENV=es babel ./src -d es",
     "build:umd": "rimraf umd && cross-env BABEL_ENV=rollup rollup -c rollup.config.js",
@@ -27,7 +27,8 @@
     "test:all": "cross-env BABEL_ENV=rollup karma start karma.conf.js --single-run --browsers Chrome,Firefox",
     "test:saucelab": "cross-env BABEL_ENV=rollup karma start karma-sauce.conf.js --single-run",
     "test:types": "tsc -p ./types/test/tsconfig.json",
-    "lint": "eslint src/*.js test/*.js && dtslint types",
+    "lint": "eslint src/*.js test/*.js",
+    "lint:types": "dtslint types",
     "start": "node ./server/index.js"
   },
   "keywords": [
