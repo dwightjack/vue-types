@@ -76,6 +76,12 @@ add the following script tags before your code
 <script src="https://unpkg.com/vue-types"></script>
 ```
 
+## Usage with [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue)
+
+When used in a project with [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue), the linter might report errors related to the `vue/require-default-prop` rule.
+
+To prevent that error use [eslint-plugin-vue-types](https://github.com/dwightjack/eslint-plugin-vue-types)
+
 ## Documentation
 
 ### Native Types
