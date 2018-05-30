@@ -8,6 +8,12 @@
   dependencies:
     "@babel/highlight" "7.0.0-beta.44"
 
+"@babel/code-frame@^7.0.0-beta.47":
+  version "7.0.0-beta.49"
+  resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.0.0-beta.49.tgz#becd805482734440c9d137e46d77340e64d7f51b"
+  dependencies:
+    "@babel/highlight" "7.0.0-beta.49"
+
 "@babel/generator@7.0.0-beta.44":
   version "7.0.0-beta.44"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.0.0-beta.44.tgz#c7e67b9b5284afcf69b309b50d7d37f3e5033d42"
@@ -46,6 +52,14 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
+"@babel/highlight@7.0.0-beta.49":
+  version "7.0.0-beta.49"
+  resolved "https://registry.yarnpkg.com/@babel/highlight/-/highlight-7.0.0-beta.49.tgz#96bdc6b43e13482012ba6691b1018492d39622cc"
+  dependencies:
+    chalk "^2.0.0"
+    esutils "^2.0.2"
+    js-tokens "^3.0.0"
+
 "@babel/template@7.0.0-beta.44":
   version "7.0.0-beta.44"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.0.0-beta.44.tgz#f8832f4fdcee5d59bf515e595fc5106c529b394f"
@@ -78,9 +92,9 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@types/estree@0.0.38":
-  version "0.0.38"
-  resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.38.tgz#c1be40aa933723c608820a99a373a16d215a1ca2"
+"@types/estree@0.0.39":
+  version "0.0.39"
+  resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"
 
 "@types/lodash.isplainobject@4.0.3":
   version "4.0.3"
@@ -92,9 +106,13 @@
   version "4.14.108"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.108.tgz#02656af3add2e5b3174f830862c47421c00ef817"
 
-"@types/node@*", "@types/node@10.1.0":
+"@types/node@*":
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.1.0.tgz#2783ee1b6c47cbd4044f4a233976c1ac5fa9e942"
+
+"@types/node@10.1.4":
+  version "10.1.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.1.4.tgz#606651d3f8a8bec08b8cb262161aab9209f4a29d"
 
 "@types/parsimmon@^1.3.0":
   version "1.6.2"
@@ -1397,17 +1415,9 @@ combined-stream@1.0.6, combined-stream@^1.0.5, combined-stream@~1.0.5:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@2.11.0:
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.11.0.tgz#157152fd1e7a6c8d98a5b715cf376df928004563"
-
-commander@^2.11.0, commander@^2.12.1, commander@^2.9.0:
+commander@2.15.1, commander@^2.11.0, commander@^2.12.1, commander@^2.9.0, commander@~2.15.0:
   version "2.15.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.15.1.tgz#df46e867d0fc2aec66a34662b406a9ccafff5b0f"
-
-commander@~2.13.0:
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.13.0.tgz#6964bca67685df7c1f1430c584f07d7597885b9c"
 
 component-bind@1.0.0:
   version "1.0.0"
@@ -1535,9 +1545,9 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-cross-env@5.1.5:
-  version "5.1.5"
-  resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-5.1.5.tgz#31daf7f3a52ef337c8ddda585f08175cce5d1fa5"
+cross-env@5.1.6:
+  version "5.1.6"
+  resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-5.1.6.tgz#0dc05caf945b24e4b9e3b12871fe0e858d08b38d"
   dependencies:
     cross-spawn "^5.1.0"
     is-windows "^1.0.0"
@@ -2520,9 +2530,9 @@ graceful-fs@^4.1.0, graceful-fs@^4.1.2, graceful-fs@^4.1.4, graceful-fs@^4.1.6, 
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
 
-growl@1.10.3:
-  version "1.10.3"
-  resolved "https://registry.yarnpkg.com/growl/-/growl-1.10.3.tgz#1926ba90cf3edfe2adb4927f5880bc22c66c790f"
+growl@1.10.5:
+  version "1.10.5"
+  resolved "https://registry.yarnpkg.com/growl/-/growl-1.10.5.tgz#f2735dc2283674fa67478b10181059355c369e5e"
 
 gzip-size@^3.0.0:
   version "3.0.0"
@@ -2565,10 +2575,6 @@ has-binary2@~1.0.2:
 has-cors@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/has-cors/-/has-cors-1.1.0.tgz#5e474793f7ea9843d1bb99c23eef49ff126fff39"
-
-has-flag@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-2.0.0.tgz#e8207af1cc7b30d446cc70b734b5e8be18f88d51"
 
 has-flag@^3.0.0:
   version "3.0.0"
@@ -3708,21 +3714,21 @@ mkdirp@0.5.1, mkdirp@^0.5.0, mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
-mocha@5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/mocha/-/mocha-5.1.1.tgz#b774c75609dac05eb48f4d9ba1d827b97fde8a7b"
+mocha@5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/mocha/-/mocha-5.2.0.tgz#6d8ae508f59167f940f2b5b3c4a612ae50c90ae6"
   dependencies:
     browser-stdout "1.3.1"
-    commander "2.11.0"
+    commander "2.15.1"
     debug "3.1.0"
     diff "3.5.0"
     escape-string-regexp "1.0.5"
     glob "7.1.2"
-    growl "1.10.3"
+    growl "1.10.5"
     he "1.1.1"
     minimatch "3.0.4"
     mkdirp "0.5.1"
-    supports-color "4.4.0"
+    supports-color "5.4.0"
 
 ms@2.0.0:
   version "2.0.0"
@@ -4700,11 +4706,12 @@ rollup-plugin-stub@1.2.0:
     magic-string "^0.17.0"
     rollup-pluginutils "^1.5.2"
 
-rollup-plugin-uglify@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-uglify/-/rollup-plugin-uglify-3.0.0.tgz#a34eca24617709c6bf1778e9653baafa06099b86"
+rollup-plugin-uglify@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-uglify/-/rollup-plugin-uglify-4.0.0.tgz#6eb471738f1ce9ba7d9d4bc43b71cba02417c8fb"
   dependencies:
-    uglify-es "^3.3.7"
+    "@babel/code-frame" "^7.0.0-beta.47"
+    uglify-js "^3.3.25"
 
 rollup-pluginutils@^1.5.0, rollup-pluginutils@^1.5.2:
   version "1.5.2"
@@ -4720,11 +4727,11 @@ rollup-pluginutils@^2.0.1:
     estree-walker "^0.5.2"
     micromatch "^2.3.11"
 
-rollup@0.58.2:
-  version "0.58.2"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.58.2.tgz#2feddea8c0c022f3e74b35c48e3c21b3433803ce"
+rollup@0.59.4:
+  version "0.59.4"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.59.4.tgz#6f80f7017c22667ff1bf3e62adf8624a44cc44aa"
   dependencies:
-    "@types/estree" "0.0.38"
+    "@types/estree" "0.0.39"
     "@types/node" "*"
 
 run-async@^2.2.0:
@@ -5148,21 +5155,15 @@ strip-json-comments@^2.0.1, strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
 
-supports-color@4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-4.4.0.tgz#883f7ddabc165142b2a61427f3352ded195d1a3e"
-  dependencies:
-    has-flag "^2.0.0"
-
-supports-color@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-2.0.0.tgz#535d045ce6b6363fa40117084629995e9df324c7"
-
-supports-color@^5.3.0:
+supports-color@5.4.0, supports-color@^5.3.0:
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-5.4.0.tgz#1c6b337402c2137605efe19f10fec390f6faab54"
   dependencies:
     has-flag "^3.0.0"
+
+supports-color@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-2.0.0.tgz#535d045ce6b6363fa40117084629995e9df324c7"
 
 table@4.0.2:
   version "4.0.2"
@@ -5369,11 +5370,11 @@ typescript@next:
   version "2.9.0-dev.20180516"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.9.0-dev.20180516.tgz#8ef56c66b3cfe04e894970323e0905c29f8c0d89"
 
-uglify-es@^3.3.7:
-  version "3.3.9"
-  resolved "https://registry.yarnpkg.com/uglify-es/-/uglify-es-3.3.9.tgz#0c1c4f0700bed8dbc124cdb304d2592ca203e677"
+uglify-js@^3.3.25:
+  version "3.3.28"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.3.28.tgz#0efb9a13850e11303361c1051f64d2ec68d9be06"
   dependencies:
-    commander "~2.13.0"
+    commander "~2.15.0"
     source-map "~0.6.1"
 
 ultron@~1.1.0:
@@ -5482,6 +5483,10 @@ void-elements@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
 
+vue-class-component@~6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-6.2.0.tgz#7adb1daa9a868c75f30f97f33f4f1b94aee62089"
+
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-2.0.3.tgz#c268c96c6d94cfe3d938a5f7593959b0ca3360d1"
@@ -5493,7 +5498,7 @@ vue-eslint-parser@^2.0.3:
     esquery "^1.0.0"
     lodash "^4.17.4"
 
-vue@2.5.16:
+vue@~2.5.0:
   version "2.5.16"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.16.tgz#07edb75e8412aaeed871ebafa99f4672584a0085"
 
