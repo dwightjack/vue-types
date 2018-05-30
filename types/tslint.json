@@ -1,3 +1,6 @@
 {
-  "extends": "dtslint/dtslint.json"
+  "extends": "dtslint/dtslint.json",
+  "rules": {
+    "use-default-type-parameter": false
+  }
 }
