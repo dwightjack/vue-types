@@ -42,7 +42,7 @@ const baseConfig = {
   // list of files / patterns to load in the browser
   files: [
     { pattern: 'src/*.js', included: false },
-    'test/**/*.spec.js'
+    'test/**/*.test.js'
   ],
 
   // list of files to exclude
@@ -54,7 +54,7 @@ const baseConfig = {
   preprocessors: {
     // add webpack as preprocessor
     'src/**/*.js': ['rollup'],
-    'test/**/*.spec.js': ['rollup']
+    'test/**/*.test.js': ['rollup']
   },
 
   rollupPreprocessor: {
