@@ -1,5 +1,5 @@
 
-/*! vue-types - v1.2.3
+/*! vue-types - v1.2.4
  * https://github.com/dwightjack/vue-types
  * Copyright (c) 2018 - Marco Solazzi;
  * Licensed MIT
