@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noImplicitThis": true,
+    "experimentalDecorators": true,
     "strict": true,
     "noEmit": true,
     "lib": [

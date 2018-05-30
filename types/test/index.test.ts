@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import VueTypes, { VueTypeOneOf, VueTypeCustom } from '../index';
+import Component from 'vue-class-component';
+import VueTypes from '../index';
 
 const noop = () => {};
 
@@ -13,7 +14,7 @@ const funcType = VueTypes.func.def(noop).isRequired;
 
 const arrayType = VueTypes.array.def([]).isRequired;
 
-const stringType = VueTypes.string.def('string').isRequired;
+const stringType = VueTypes.string.def('John').isRequired;
 
 const numberType = VueTypes.number.def(0).isRequired;
 const integerType = VueTypes.integer.def(0).isRequired;
@@ -22,13 +23,14 @@ const objectType = VueTypes.object.def({}).isRequired;
 
 const symbolType = VueTypes.symbol.def(Symbol('foo')).isRequired;
 
-const validator = (v: number) => true;
+const validator = (v: number) => v > 18;
 const customType = VueTypes.custom(validator).def(0).isRequired;
+
+const customTypeStrict = VueTypes.custom<number>(validator).def(0).isRequired;
 
 const oneOfType = VueTypes.oneOf([0, 'string', null]).def('test').isRequired;
 
 const oneOfTypeStrict = VueTypes.oneOf<string | boolean>([true, 'string']).def(true).isRequired;
-oneOfType.type = [Boolean, Number];
 
 class MyClass {
   test = 'testProp';
@@ -55,8 +57,53 @@ const shapeType = VueTypes.shape({
   name: String,
   surname: { type: String, default: 'Doe' },
   age: VueTypes.number,
-}).def({ name: 'test' }).loose.isRequired;
+}).def({ name: 2 }).loose.isRequired;
 
+shapeType.type = Object;
+
+VueTypes.sensibleDefaults = {};
 VueTypes.sensibleDefaults = false;
 VueTypes.sensibleDefaults = true;
-VueTypes.sensibleDefaults = {};
+
+const BaseComponent = Vue.extend({
+  props: {
+    verified: boolType,
+    funcProp: funcType,
+    hobbies: arrayType,
+    name: stringType,
+    height: numberType,
+    age: integerType,
+    obj: objectType,
+    uniqueSym: symbolType,
+    ageLimit: customTypeStrict,
+    colors: VueTypes.oneOf(['red', 'blue']),
+    userType: instanceOfType,
+    fieldWithText: VueTypes.oneOfType([String, VueTypes.string]),
+    friendsId: VueTypes.arrayOf(VueTypes.number).isRequired,
+    simpleObj: ObjectOfType,
+    meta: shapeType
+  }
+});
+
+@Component({
+  props: {
+    verified: boolType,
+    funcProp: funcType,
+    hobbies: arrayType,
+    name: stringType,
+    height: numberType,
+    age: integerType,
+    obj: objectType,
+    uniqueSym: symbolType,
+    ageLimit: customTypeStrict,
+    colors: VueTypes.oneOf(['red', 'blue']),
+    userType: instanceOfType,
+    fieldWithText: VueTypes.oneOfType([String, VueTypes.string]),
+    friendsId: VueTypes.arrayOf(VueTypes.number).isRequired,
+    simpleObj: ObjectOfType,
+    meta: shapeType
+  }
+})
+class ClassComponent extends Vue {
+  msg = 10;
+}
