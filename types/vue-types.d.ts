@@ -18,9 +18,13 @@ export interface VueTypeInstanceOf<T extends Constructor> extends VueTypeDef<Ins
 }
 
 export interface VueTypeShape<T> extends VueTypeDef<T> {
-  _vueTypes_isLoose?: boolean;
   readonly def: <P extends { [K in keyof T]?: any }>(def: P) => this & { default: P };
-  readonly loose: this & { _vueTypes_isLoose: true };
+  readonly loose: VueTypeLooseShape<T>;
+}
+
+export interface VueTypeLooseShape<T> extends VueTypeShape<T> {
+  readonly _vueTypes_isLoose: true;
+  readonly def: <D extends { [K in keyof T]?: any } & { [key: string]: any }>(def: D) => this & { default: D };
 }
 
 export interface VueTypeArrayOf<T> extends VueTypeDef<T[]> {
