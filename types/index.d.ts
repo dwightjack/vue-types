@@ -12,6 +12,7 @@ export {
   VueTypeDef,
   VueTypeInstanceOf,
   VueTypeShape,
+  VueTypeLooseShape,
   VueTypeArrayOf,
   ValidatorFunction,
   VueTypeCustom,

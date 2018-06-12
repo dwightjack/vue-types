@@ -57,7 +57,13 @@ const shapeType = VueTypes.shape({
   name: String,
   surname: { type: String, default: 'Doe' },
   age: VueTypes.number,
-}).def({ name: 2 }).loose.isRequired;
+}).def({ name: 2 }).isRequired; // I guess this is just checkable at runtime
+
+const shapeTypeLoose = VueTypes.shape({
+  name: String,
+  surname: { type: String, default: 'Doe' },
+  age: VueTypes.number,
+}).loose.def({ nationality: 'unknown' }).isRequired;
 
 shapeType.type = Object;
 
@@ -81,7 +87,8 @@ const BaseComponent = Vue.extend({
     fieldWithText: VueTypes.oneOfType([String, VueTypes.string]),
     friendsId: VueTypes.arrayOf(VueTypes.number).isRequired,
     simpleObj: ObjectOfType,
-    meta: shapeType
+    meta: shapeType,
+    extendedMeta: shapeTypeLoose
   }
 });
 
@@ -101,7 +108,8 @@ const BaseComponent = Vue.extend({
     fieldWithText: VueTypes.oneOfType([String, VueTypes.string]),
     friendsId: VueTypes.arrayOf(VueTypes.number).isRequired,
     simpleObj: ObjectOfType,
-    meta: shapeType
+    meta: shapeType,
+    extendedMeta: shapeTypeLoose
   }
 })
 class ClassComponent extends Vue {
