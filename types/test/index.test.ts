@@ -13,6 +13,7 @@ const boolType = VueTypes.bool.def(true).isRequired;
 const funcType = VueTypes.func.def(noop).isRequired;
 
 const arrayType = VueTypes.array.def([]).isRequired;
+const arrayType2 = VueTypes.array.def(() => []).isRequired;
 
 const stringType = VueTypes.string.def('John').isRequired;
 
@@ -20,6 +21,7 @@ const numberType = VueTypes.number.def(0).isRequired;
 const integerType = VueTypes.integer.def(0).isRequired;
 
 const objectType = VueTypes.object.def({}).isRequired;
+const objectType2 = VueTypes.object.def(() => {}).isRequired;
 
 const symbolType = VueTypes.symbol.def(Symbol('foo')).isRequired;
 
@@ -80,6 +82,7 @@ const BaseComponent = Vue.extend({
     height: numberType,
     age: integerType,
     obj: objectType,
+    obj2: objectType2,
     uniqueSym: symbolType,
     ageLimit: customTypeStrict,
     colors: VueTypes.oneOf(['red', 'blue']),

@@ -77,9 +77,13 @@ export const withDefault = function (type) {
         warn(`${this._vueTypes_name} - invalid default value: "${def}"`, def)
         return this
       }
-      this.default = (isArray(def) || isPlainObject(def)) ? function () {
-        return def
-      } : def
+      if (isArray(def)) {
+        this.default = () => [...def]
+      } else if (isPlainObject(def)) {
+        this.default = () => Object.assign({}, def)
+      } else {
+        this.default = def
+      }
       return this
     },
     enumerable: false,

@@ -116,6 +116,8 @@ Validates that a prop is an array primitive.
 
 * default: an empty array
 
+_Note: [Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) requires Array definitions to provide default value as a factory function. `VueTypes.array.def()` accepts both factory functions and arrays. In the latter case, VueTypes will convert the value to a factory function for you._
+
 #### `VueTypes.bool`
 
 Validates boolean props.
@@ -145,6 +147,8 @@ Validates that a prop is an integer.
 Validates that a prop is an object.
 
 * default: an empty object
+
+_Note: [Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) requires Object definitions to provide default value as a factory function. `VueTypes.object.def()` accepts both factory functions and plain objects. In the latter case, VueTypes will convert the value to a factory function for you._
 
 #### `VueTypes.string`
 
@@ -277,7 +281,7 @@ export default {
 
 #### `VueTypes.shape()`
 
-Validates that a prop is an object taking on a particular shape. Accepts both simple and `vue-types` types. You can set shape's types as `required` but (obviously) you cannot use `.def()`
+Validates that a prop is an object taking on a particular shape. Accepts both simple and `vue-types` types. You can set shape's properties as `required` but (obviously) you cannot use `.def()`. On the other hand you can use `def()` to set a default value for the shape itself. Like `VueTypes.array` and `VueTypes.object`, you can pass to `.def()` either a factory function returning an object or a plain  object.
 
 ```js
 export default {
@@ -286,10 +290,11 @@ export default {
       name: String,
       age: VueTypes.integer,
       id: VueTypes.integer.isRequired
-    })
+    }).def(() => { name: 'John' })
   }
 }
 
+// default value = {name: 'John'}
 //accepts: userData = {name: 'John', age: 30, id: 1}
 //rejects: userData = {name: 'John', age: 'wrong data', id: 1}
 //rejects: userData = {name: 'John', age: 'wrong data'} --> missing required `id` key
