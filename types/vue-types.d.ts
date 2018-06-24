@@ -5,7 +5,12 @@ export interface Constructor {
   new (...args: any[]): any;
 }
 
-export interface VueTypeDef<T = any, D = T> extends PropOptions<T> {
+export type DefaultFactory<T> = { (): T } | T
+
+export type defaultType<T> = T extends any[] ? DefaultFactory<T>
+  : T extends object ? DefaultFactory<T>
+  : T
+export interface VueTypeDef<T = any, D = defaultType<T>> extends PropOptions<T> {
   readonly _vueTypes_name: string;
   readonly def: (def: D) => this & { default: D };
   readonly isRequired: this & { required: true };
@@ -18,13 +23,13 @@ export interface VueTypeInstanceOf<T extends Constructor> extends VueTypeDef<Ins
 }
 
 export interface VueTypeShape<T> extends VueTypeDef<T> {
-  readonly def: <P extends { [K in keyof T]?: any }>(def: P) => this & { default: P };
+  readonly def: <P extends defaultType<{ [K in keyof T]?: any }>>(def: P) => this & { default: P };
   readonly loose: VueTypeLooseShape<T>;
 }
 
 export interface VueTypeLooseShape<T> extends VueTypeShape<T> {
   readonly _vueTypes_isLoose: true;
-  readonly def: <D extends { [K in keyof T]?: any } & { [key: string]: any }>(def: D) => this & { default: D };
+  readonly def: <D extends defaultType<{ [K in keyof T]?: any } & { [key: string]: any }>>(def: D) => this & { default: D };
 }
 
 export interface VueTypeArrayOf<T> extends VueTypeDef<T[]> {
