@@ -98,7 +98,6 @@ describe('`withDefault()`', () => {
       expect(obj.default()).toNotBe(value)
       expect(obj.default()).toEqual(value)
     })
-
   })
 })
 

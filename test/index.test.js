@@ -180,7 +180,6 @@ describe('VueTypes', () => {
       const def = VueTypes.object.def(objFactory).default
       expect(def).toBe(objFactory)
     })
-
   })
 
   /**
