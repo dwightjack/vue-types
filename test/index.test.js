@@ -121,6 +121,14 @@ describe('VueTypes', () => {
       expect(VueTypes.array.default()).toBeA(Array)
     })
 
+    it('should have default as a function', () => {
+      expect(VueTypes.array.default).toBeA(Function)
+    })
+
+    it('should return an array as default value', () => {
+      expect(VueTypes.array.default()).toBeA(Array)
+    })
+
     it('should add a `required` flag', () => {
       checkRequired(VueTypes.array)
     })
@@ -131,6 +139,12 @@ describe('VueTypes', () => {
       expect(def).toMatch(Function)
       expect(def()).toEqual(arr)
     })
+
+    it('should provide a method to set a custom default. If default value is a function it will be used as factory function', () => {
+      const arrFactory = () => [0, 1]
+      const def = VueTypes.array.def(arrFactory).default
+      expect(def).toBe(arrFactory)
+    })
   })
 
   describe('`.object`', () => {
@@ -140,7 +154,14 @@ describe('VueTypes', () => {
       }
 
       expect(VueTypes.object).toMatch(match)
-      expect(VueTypes.object.default()).toBeA(Object)
+    })
+
+    it('should have default as a function', () => {
+      expect(VueTypes.array.default).toBeA(Function)
+    })
+
+    it('should return an object as default value', () => {
+      expect(VueTypes.array.default()).toBeA(Object)
     })
 
     it('should add a `required` flag', () => {
@@ -153,6 +174,13 @@ describe('VueTypes', () => {
       expect(def).toMatch(Function)
       expect(def()).toEqual(obj)
     })
+
+    it('should provide a method to set a custom default. If default value is a function it will be used as factory function', () => {
+      const objFactory = () => ({ test: 'test' })
+      const def = VueTypes.object.def(objFactory).default
+      expect(def).toBe(objFactory)
+    })
+
   })
 
   /**
