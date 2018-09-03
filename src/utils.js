@@ -1,4 +1,4 @@
-import isPlainObject from 'lodash.isplainobject'
+import isPlainObject from 'lodash/isPlainObject'
 import Vue from 'vue'
 
 const ObjProto = Object.prototype
