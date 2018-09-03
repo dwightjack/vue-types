@@ -5,11 +5,11 @@ export interface Constructor {
   new (...args: any[]): any;
 }
 
-export type DefaultFactory<T> = { (): T } | T
+export type DefaultFactory<T> = (() => T) | T;
 
 export type defaultType<T> = T extends any[] ? DefaultFactory<T>
   : T extends object ? DefaultFactory<T>
-  : T
+  : T;
 export interface VueTypeDef<T = any, D = defaultType<T>> extends PropOptions<T> {
   readonly _vueTypes_name: string;
   readonly def: (def: D) => this & { default: D };
