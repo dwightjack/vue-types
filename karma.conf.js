@@ -95,6 +95,9 @@ const baseConfig = {
 }
 
 module.exports = (config) => {
+  if (Array.isArray(config.browsers) && config.browsers[0] === 'ChromeHeadless') {
+    process.env.CHROME_BIN = require('puppeteer').executablePath()
+  }
   config.set(Object.assign({}, baseConfig, {
 
     // level of logging
