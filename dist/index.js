@@ -1,19 +1,15 @@
-'use strict';
+"use strict";
 
 exports.__esModule = true;
+exports.default = void 0;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _isPlainObject = _interopRequireDefault(require("lodash/isPlainObject"));
 
-var _lodash = require('lodash.isplainobject');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _utils = require('./utils');
+var _utils = require("./utils");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var VueTypes = {
-
   get any() {
     return (0, _utils.toType)('any', {
       type: null
@@ -69,13 +65,15 @@ var VueTypes = {
     return (0, _utils.toType)('symbol', {
       type: null,
       validator: function validator(value) {
-        return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'symbol';
+        return typeof value === 'symbol';
       }
     });
   },
 
-  custom: function custom(validatorFn) {
-    var warnMsg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'custom validation failed';
+  custom: function custom(validatorFn, warnMsg) {
+    if (warnMsg === void 0) {
+      warnMsg = 'custom validation failed';
+    }
 
     if (typeof validatorFn !== 'function') {
       throw new TypeError('[VueTypes error]: You must provide a function as argument');
@@ -84,7 +82,7 @@ var VueTypes = {
     return (0, _utils.toType)(validatorFn.name || '<<anonymous function>>', {
       validator: function validator(value) {
         var valid = validatorFn(value);
-        if (!valid) (0, _utils.warn)(this._vueTypes_name + ' - ' + warnMsg);
+        if (!valid) (0, _utils.warn)(this._vueTypes_name + " - " + warnMsg);
         return valid;
       }
     });
@@ -93,14 +91,15 @@ var VueTypes = {
     if (!(0, _utils.isArray)(arr)) {
       throw new TypeError('[VueTypes error]: You must provide an array as argument');
     }
-    var msg = 'oneOf - value should be one of "' + arr.join('", "') + '"';
+
+    var msg = "oneOf - value should be one of \"" + arr.join('", "') + "\"";
     var allowedTypes = arr.reduce(function (ret, v) {
       if (v !== null && v !== undefined) {
         ret.indexOf(v.constructor) === -1 && ret.push(v.constructor);
       }
+
       return ret;
     }, []);
-
     return (0, _utils.toType)('oneOf', {
       type: allowedTypes.length > 0 ? allowedTypes : null,
       validator: function validator(value) {
@@ -121,20 +120,22 @@ var VueTypes = {
     }
 
     var hasCustomValidators = false;
-
     var nativeChecks = arr.reduce(function (ret, type, i) {
-      if ((0, _lodash2.default)(type)) {
+      if ((0, _isPlainObject.default)(type)) {
         if (type._vueTypes_name === 'oneOf') {
           return ret.concat(type.type || []);
         }
+
         if (type.type && !(0, _utils.isFunction)(type.validator)) {
           if ((0, _utils.isArray)(type.type)) return ret.concat(type.type);
           ret.push(type.type);
         } else if ((0, _utils.isFunction)(type.validator)) {
           hasCustomValidators = true;
         }
+
         return ret;
       }
+
       ret.push(type);
       return ret;
     }, []);
@@ -151,19 +152,20 @@ var VueTypes = {
       if (type && (0, _utils.isArray)(type.type)) {
         return type.type.map(_utils.getType);
       }
+
       return (0, _utils.getType)(type);
     }).reduce(function (ret, type) {
       return ret.concat((0, _utils.isArray)(type) ? type : [type]);
     }, []).join('", "');
-
     return this.custom(function oneOfType(value) {
       var valid = arr.some(function (type) {
         if (type._vueTypes_name === 'oneOf') {
           return type.type ? (0, _utils.validateType)(type.type, value, true) : true;
         }
+
         return (0, _utils.validateType)(type, value, true);
       });
-      if (!valid) (0, _utils.warn)('oneOfType - value type should be one of "' + typesStr + '"');
+      if (!valid) (0, _utils.warn)("oneOfType - value type should be one of \"" + typesStr + "\"");
       return valid;
     });
   },
@@ -174,7 +176,7 @@ var VueTypes = {
         var valid = values.every(function (value) {
           return (0, _utils.validateType)(type, value);
         });
-        if (!valid) (0, _utils.warn)('arrayOf - value must be an array of "' + (0, _utils.getType)(type) + '"');
+        if (!valid) (0, _utils.warn)("arrayOf - value must be an array of \"" + (0, _utils.getType)(type) + "\"");
         return valid;
       }
     });
@@ -186,7 +188,7 @@ var VueTypes = {
         var valid = Object.keys(obj).every(function (key) {
           return (0, _utils.validateType)(type, obj[key]);
         });
-        if (!valid) (0, _utils.warn)('objectOf - value must be an object of "' + (0, _utils.getType)(type) + '"');
+        if (!valid) (0, _utils.warn)("objectOf - value must be an object of \"" + (0, _utils.getType)(type) + "\"");
         return valid;
       }
     });
@@ -196,52 +198,48 @@ var VueTypes = {
     var requiredKeys = keys.filter(function (key) {
       return obj[key] && obj[key].required === true;
     });
-
     var type = (0, _utils.toType)('shape', {
       type: Object,
       validator: function validator(value) {
         var _this = this;
 
-        if (!(0, _lodash2.default)(value)) {
+        if (!(0, _isPlainObject.default)(value)) {
           return false;
         }
-        var valueKeys = Object.keys(value);
 
-        // check for required keys (if any)
+        var valueKeys = Object.keys(value); // check for required keys (if any)
+
         if (requiredKeys.length > 0 && requiredKeys.some(function (req) {
           return valueKeys.indexOf(req) === -1;
         })) {
-          (0, _utils.warn)('shape - at least one of required properties "' + requiredKeys.join('", "') + '" is not present');
+          (0, _utils.warn)("shape - at least one of required properties \"" + requiredKeys.join('", "') + "\" is not present");
           return false;
         }
 
         return valueKeys.every(function (key) {
           if (keys.indexOf(key) === -1) {
             if (_this._vueTypes_isLoose === true) return true;
-            (0, _utils.warn)('shape - object is missing "' + key + '" property');
+            (0, _utils.warn)("shape - object is missing \"" + key + "\" property");
             return false;
           }
+
           var type = obj[key];
           return (0, _utils.validateType)(type, value[key]);
         });
       }
     });
-
     Object.defineProperty(type, '_vueTypes_isLoose', {
       enumerable: false,
       writable: true,
       value: false
     });
-
     Object.defineProperty(type, 'loose', {
       get: function get() {
         this._vueTypes_isLoose = true;
         return this;
       },
-
       enumerable: false
     });
-
     return type;
   }
 };
@@ -263,7 +261,6 @@ var typeDefaults = function typeDefaults() {
 };
 
 var currentDefaults = typeDefaults();
-
 Object.defineProperty(VueTypes, 'sensibleDefaults', {
   enumerable: false,
   set: function set(value) {
@@ -271,7 +268,7 @@ Object.defineProperty(VueTypes, 'sensibleDefaults', {
       currentDefaults = {};
     } else if (value === true) {
       currentDefaults = typeDefaults();
-    } else if ((0, _lodash2.default)(value)) {
+    } else if ((0, _isPlainObject.default)(value)) {
       currentDefaults = value;
     }
   },
@@ -279,14 +276,11 @@ Object.defineProperty(VueTypes, 'sensibleDefaults', {
     return currentDefaults;
   }
 });
-
 VueTypes.utils = {
   validate: function validate(value, type) {
     return (0, _utils.validateType)(type, value, true);
   },
-
   toType: _utils.toType
 };
-
-exports.default = VueTypes;
-module.exports = exports['default'];
+var _default = VueTypes;
+exports.default = _default;
