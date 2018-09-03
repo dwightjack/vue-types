@@ -2,60 +2,60 @@
 import { Prop, PropOptions } from 'vue/types/options';
 import { Constructor, VueTypeDef } from './index';
 
-export const hasOwn: (v: string | PropertyKey) => boolean;
+export function hasOwn(v: string | PropertyKey): boolean;
 
-export const getType: (fn?: VueTypeDef | PropOptions | (() => any) | (new (...args: any[]) => any)) => string;
+export function getType(fn?: VueTypeDef | PropOptions | (() => any) | (new (...args: any[]) => any)): string;
 /**
  * Returns the native type of a constructor
  *
  */
-export const getNativeType: (value: Constructor) => string;
+export function getNativeType(value: Constructor): string;
 /**
  * No-op function
  */
-export const noop: () => void;
+export function noop(): undefined;
 /**
  * Checks for a own property in an object
  *
  */
-export const has: (obj: object, prop: string) => boolean;
+export function has(obj: object, prop: string): boolean;
 /**
  * Determines whether the passed value is an integer. Uses `Number.isInteger` if available
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger
  */
-export const isInteger: (number: number) => boolean;
+export function isInteger(number: number): boolean;
 /**
  * Determines whether the passed value is an Array.
  *
  */
-export const isArray: (arg: any) => arg is any[];
+export function isArray(arg: any): arg is any[];
 /**
  * Checks if a value is a function
  *
  */
-export const isFunction: (value: any) => value is () => any;
-export const isVueType: (value: any) => value is VueTypeDef;
-export const isPropOptions: (value: any) => value is PropOptions<object>;
+export function isFunction(value: any): value is () => any;
+export function isVueType(value: any): value is VueTypeDef;
+export function isPropOptions(value: any): value is PropOptions<object>;
 /**
  * Adds a `def` method to the object returning a new object with passed in argument as `default` property
  *
  */
-export const withDefault: (type: PropOptions) => void;
+export function withDefault(type: PropOptions): undefined;
 /**
  * Adds a `isRequired` getter returning a new object with `required: true` key-value
  *
  */
-export const withRequired: (type: PropOptions) => void;
+export function withRequired(type: PropOptions): undefined;
 /**
  * Adds `isRequired` and `def` modifiers to an object
  *
  */
-export const toType: (name: string, obj: PropOptions) => VueTypeDef;
+export function toType(name: string, obj: PropOptions): VueTypeDef;
 /**
  * Validates a given value against a prop type object
  *
  */
-export const validateType: (type: VueTypeDef | PropOptions | (() => any) | (new (...args: any[]) => any) | Array<Prop<any>>, value: any, silent?: boolean) => boolean;
+export function validateType(type: VueTypeDef | PropOptions | (() => any) | (new (...args: any[]) => any) | Array<Prop<any>>, value: any, silent?: boolean): boolean;
 
-export const warn: (...msg: any[]) => void;
+export function warn(...msg: any[]): undefined;
