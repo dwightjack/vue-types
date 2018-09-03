@@ -78,10 +78,24 @@ export var withDefault = function withDefault(type) {
         warn(this._vueTypes_name + " - invalid default value: \"" + def + "\"", def);
         return this;
       }
+<<<<<<< HEAD
 
       this.default = isArray(def) || isPlainObject(def) ? function () {
         return def;
       } : def;
+=======
+      if (isArray(def)) {
+        this.default = function () {
+          return [].concat(def);
+        };
+      } else if (isPlainObject(def)) {
+        this.default = function () {
+          return Object.assign({}, def);
+        };
+      } else {
+        this.default = def;
+      }
+>>>>>>> 5769a2c3b502e79499fbd1de6a4c2542b7ea4d7e
       return this;
     },
     enumerable: false,

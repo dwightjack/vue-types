@@ -10,6 +10,8 @@ const stub = require('rollup-plugin-stub');
 const globals = require('rollup-plugin-node-globals');
 const builtins = require('rollup-plugin-node-builtins');
 
+process.env.CHROME_BIN = require('puppeteer').executablePath();
+
 const production = process.env.PRODUCTION === 'true';
 
 //fixing mocha bug: https://github.com/karma-runner/karma-mocha/issues/203
