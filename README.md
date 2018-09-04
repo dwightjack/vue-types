@@ -290,7 +290,7 @@ export default {
       name: String,
       age: VueTypes.integer,
       id: VueTypes.integer.isRequired
-    }).def(() => ({ name: 'John' })
+    }).def(() => ({ name: 'John' }))
   }
 }
 
