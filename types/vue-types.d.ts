@@ -2,7 +2,7 @@
 import { Prop, PropOptions } from 'vue/types/options';
 
 export interface Constructor {
-  new (...args: any[]): any;
+  new(...args: any[]): any;
 }
 
 export type DefaultFactory<T> = (() => T) | T;
@@ -16,20 +16,20 @@ export interface VueTypeDef<T = any, D = defaultType<T>> extends PropOptions<T> 
   readonly isRequired: this & { required: true };
 }
 
-export type VueProp = VueTypeDef | PropOptions;
+export type VueProp<T = any> = VueTypeDef<T> | PropOptions<T>;
 
 export interface VueTypeInstanceOf<T extends Constructor> extends VueTypeDef<InstanceType<T>> {
   type: T;
 }
 
 export interface VueTypeShape<T> extends VueTypeDef<T> {
-  readonly def: <P extends defaultType<{ [K in keyof T]?: any }>>(def: P) => this & { default: P };
+  readonly def: <P extends defaultType<Partial<T>>>(def: P) => this & { default: P };
   readonly loose: VueTypeLooseShape<T>;
 }
 
 export interface VueTypeLooseShape<T> extends VueTypeShape<T> {
   readonly _vueTypes_isLoose: true;
-  readonly def: <D extends defaultType<{ [K in keyof T]?: any } & { [key: string]: any }>>(def: D) => this & { default: D };
+  readonly def: <D extends defaultType<Partial<T> & { [key: string]: any }>>(def: D) => this & { default: D };
 }
 
 export interface VueTypeArrayOf<T> extends VueTypeDef<T[]> {
@@ -68,16 +68,16 @@ export interface VueTypes {
   readonly array: VueTypeDef<any[]>;
   readonly string: VueTypeDef<string>;
   readonly number: VueTypeDef<number>;
-  readonly object: VueTypeDef<object>;
+  readonly object: VueTypeDef<{ [key: string]: any }>;
   readonly integer: VueTypeDef<number>;
   readonly symbol: VueTypeDef<symbol>;
   custom<T = any>(fn: ValidatorFunction<T>, warnMsg?: string): VueTypeCustom<T, ValidatorFunction<T>>;
   oneOf<T = any>(arr: T[]): VueTypeDef<T[], T>;
   instanceOf<C extends Constructor>(instanceConstructor: C): VueTypeInstanceOf<C>;
-  oneOfType<T = Prop<any> | VueProp>(arr: T[]): VueTypeDef<T, any>;
+  oneOfType(arr: Array<Prop<any> | VueProp<any>>): VueTypeDef;
   arrayOf<V extends any>(type: VueTypeDef<V> | Prop<V>): VueTypeArrayOf<V>;
-  objectOf<T = any>(type: Prop<T> | VueProp): VueTypeObjectOf<T>;
-  shape<S extends { [key: string]: VueProp | Prop<any> }>(obj: S): VueTypeShape<S>;
+  objectOf<T = any>(type: Prop<T> | VueProp<T>): VueTypeObjectOf<T>;
+  shape<T>(obj: { [K in keyof T]?: Prop<T[K]> | VueProp<T[K]> }): VueTypeShape<T>;
 }
 
 export const VueTypes: VueTypes;
