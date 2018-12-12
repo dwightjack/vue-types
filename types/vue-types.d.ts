@@ -59,7 +59,7 @@ export interface TypeDefaults {
   integer?: number;
 }
 
-export interface VueTypes {
+export interface VueTypesInterface {
   sensibleDefaults: TypeDefaults | boolean;
   utils: VueTypesUtils;
   readonly any: VueTypeDef;
@@ -80,4 +80,4 @@ export interface VueTypes {
   shape<T>(obj: { [K in keyof T]?: Prop<T[K]> | VueProp<T[K]> }): VueTypeShape<T>;
 }
 
-export const VueTypes: VueTypes;
+export const VueTypes: VueTypesInterface;
