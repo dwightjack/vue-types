@@ -1,6 +1,6 @@
 {
   "name": "vue-types",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Prop types utility for Vue",
   "author": "Marco Solazzi",
   "license": "MIT",
@@ -27,7 +27,7 @@
     "test:all": "cross-env BABEL_ENV=rollup karma start karma.conf.js --single-run --browsers Chrome,Firefox",
     "test:saucelab": "cross-env BABEL_ENV=rollup karma start karma-sauce.conf.js --single-run",
     "test:types": "tsc -p ./types/test/tsconfig.json",
-    "lint": "eslint src/*.js test/*.js",
+    "lint": "eslint src/*.js test/*.js && npm run lint:types",
     "lint:types": "dtslint types",
     "start": "node ./server/index.js"
   },

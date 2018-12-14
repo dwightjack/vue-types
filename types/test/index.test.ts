@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import VueTypes from '../index';
 
-const noop = () => {};
+const noop = () => { };
 
 const anyType = VueTypes.any;
 anyType.def(0);
@@ -20,8 +20,8 @@ const stringType = VueTypes.string.def('John').isRequired;
 const numberType = VueTypes.number.def(0).isRequired;
 const integerType = VueTypes.integer.def(0).isRequired;
 
-const objectType = VueTypes.object.def({}).isRequired;
-const objectType2 = VueTypes.object.def(() => {}).isRequired;
+const objectType = VueTypes.object.def({ demo: true }).isRequired;
+const objectType2 = VueTypes.object.def(() => { }).isRequired;
 
 const symbolType = VueTypes.symbol.def(Symbol('foo')).isRequired;
 
@@ -46,7 +46,7 @@ instanceOfType.type = MyClass;
 const oneOfTypeType = VueTypes.oneOfType([
   String,
   {
-    type: Boolean,
+    type: String
   },
   VueTypes.number
 ]).def(null).isRequired; // check can be just at runtime
@@ -59,7 +59,7 @@ const shapeType = VueTypes.shape({
   name: String,
   surname: { type: String, default: 'Doe' },
   age: VueTypes.number,
-}).def({ name: 2 }).isRequired; // I guess this is just checkable at runtime
+}).def({ name: 'test' }).isRequired;
 
 const shapeTypeLoose = VueTypes.shape({
   name: String,
