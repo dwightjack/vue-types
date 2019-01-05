@@ -1,5 +1,10 @@
 import isPlainObject from 'lodash/isPlainObject'
-import { noop, toType, getType, isFunction, validateType, isInteger, isArray, warn } from './utils'
+
+import * as utils from './utils'
+import * as shim from './shim'
+
+const { noop, toType, getType, isFunction, validateType, isInteger, isArray, warn }
+  = (process.env.NODE_ENV === 'production' ? shim : utils)
 
 const VueTypes = {
 
