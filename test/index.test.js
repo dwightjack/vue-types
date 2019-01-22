@@ -35,12 +35,8 @@ describe('VueTypes', () => {
 
   describe('`.func`', () => {
     it('should match an object with methods, type and default function', () => {
-      const match = {
-        type: Function,
-        default: noop
-      }
-
-      expect(VueTypes.func).toMatch(match)
+      expect(VueTypes.func.type).toBe(Function)
+      expect(VueTypes.func.default).toBeA(Function)
     })
 
     it('should add a `required` flag', () => {
