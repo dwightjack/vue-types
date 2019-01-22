@@ -29,7 +29,7 @@
     "test:types": "tsc -p ./types/test/tsconfig.json",
     "lint": "eslint src/*.js test/*.js && npm run lint:types",
     "lint:types": "dtslint types",
-    "start": "node ./server/index.js"
+    "start": "rollup -c ./examples/rollup.config.js -w"
   },
   "keywords": [
     "vue",
@@ -54,7 +54,6 @@
     "eslint": "4.19.1",
     "eslint-plugin-vue-libs": "3.0.0",
     "expect": "1.20.2",
-    "express": "4.16.3",
     "karma": "3.0.0",
     "karma-chrome-launcher": "2.2.0",
     "karma-firefox-launcher": "1.1.0",
@@ -67,6 +66,7 @@
     "puppeteer": "1.7.0",
     "rimraf": "2.6.2",
     "rollup": "0.65.0",
+    "rollup-plugin-alias": "1.5.1",
     "rollup-plugin-babel": "4.0.2",
     "rollup-plugin-commonjs": "9.1.6",
     "rollup-plugin-filesize": "4.0.1",
@@ -74,13 +74,14 @@
     "rollup-plugin-node-globals": "1.2.1",
     "rollup-plugin-node-resolve": "3.3.0",
     "rollup-plugin-replace": "2.0.0",
+    "rollup-plugin-serve": "1.0.0",
     "rollup-plugin-stub": "1.2.0",
     "rollup-plugin-uglify": "5.0.2",
-    "serve-index": "1.9.1",
     "tslint": "5.11.0",
     "typescript": "3.0.3",
     "vue": "~2.5.17",
-    "vue-class-component": "~6.2.0"
+    "vue-class-component": "~6.2.0",
+    "webpack": "4.29.0"
   },
   "dependencies": {
     "lodash": "^4.17.10"
