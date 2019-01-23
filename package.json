@@ -51,7 +51,7 @@
     "@types/node": "10.12.18",
     "cross-env": "5.2.0",
     "dtslint": "0.3.0",
-    "eslint": "4.19.1",
+    "eslint": "5.12.1",
     "eslint-plugin-vue-libs": "3.0.0",
     "expect": "1.20.2",
     "karma": "3.1.4",
