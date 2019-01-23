@@ -2,6 +2,27 @@
 
 > Prop type definitions for [Vue.js](http://vuejs.org). Compatible with both Vue 1.x and 2.x
 
+
+<!-- TOC depthTo:3 -->
+
+- [Introduction](#introduction)
+    - [When to use](#when-to-use)
+- [Installation](#installation)
+    - [NPM package](#npm-package)
+    - [CDN delivered `<script>`](#cdn-delivered-script)
+- [Usage with [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue)](#usage-with-eslint-plugin-vuehttpsgithubcomvuejseslint-plugin-vue)
+- [Production build](#production-build)
+    - [Webpack](#webpack)
+    - [Rollup](#rollup)
+- [Documentation](#documentation)
+    - [Native Types](#native-types)
+    - [Native Types Configuration](#native-types-configuration)
+    - [Custom Types](#custom-types)
+    - [Utilities](#utilities)
+- [License](#license)
+
+<!-- /TOC -->
+
 ## Introduction
 
 `vue-types` is a collection of configurable [prop type](http://vuejs.org/guide/components.html#Props) definitions for Vue.js components, inspired by React's `prop-types`.
@@ -81,6 +102,47 @@ add the following script tags before your code
 When used in a project with [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue), the linter might report errors related to the `vue/require-default-prop` rule.
 
 To prevent that error use [eslint-plugin-vue-types](https://github.com/dwightjack/eslint-plugin-vue-types)
+
+## Production build
+
+Vue.js does not validate components' props when used in a production build. If you're using a bundler such as Webpack or rollup you can shrink vue-types filesize by removing the validation logic while preserving the library's API methods. To achieve that result setup an alias to `vue-types/es/shim.js` (`vue-types/dist/shim.js` if you're using CommonJS modules).
+
+### Webpack
+
+The following example will shim the module in Webpack by adding an [alias field](https://webpack.js.org/configuration/resolve/#resolve-alias) to the configuration when `NODE_ENV` is set to `"production"`:
+
+```js
+// webpack.config.js
+
+return {
+  // ... configuration
+  resolve: {
+    alias: {
+      'vue-types': process.env.NODE_ENV === 'production' ? 'vue-types/es/shim.js' : undefined
+    }
+  }
+}
+```
+
+### Rollup
+
+The following example will shim the module in rollup using [rollup-plugin-alias](https://github.com/rollup/rollup-plugin-alias) when `NODE_ENV` is set to `"production"`:
+
+```js
+// rollup.config.js
+import alias from 'rollup-plugin-alias';
+
+return {
+  // ... configuration
+  plugins: [
+    process.env.NODE_ENV === 'production' ? alias({
+      'vue-types': './node_modules/vue-types/es/shim.js'
+    })
+  ]
+}
+```
+
+Note: If you are using [rollup-plugin-node-resolve](https://github.com/rollup/rollup-plugin-node-resolve) make sure to place the alias plugin **before** the resolve plugin.
 
 ## Documentation
 

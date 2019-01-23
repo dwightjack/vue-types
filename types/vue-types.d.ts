@@ -1,9 +1,7 @@
 // TypeScript Version: 2.8
 import { Prop, PropOptions } from 'vue/types/options';
 
-export interface Constructor {
-  new(...args: any[]): any;
-}
+export type Constructor = new (...args: any[]) => any;
 
 export type DefaultFactory<T> = (() => T) | T;
 

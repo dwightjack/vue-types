@@ -1,15 +1,15 @@
 
 /*! vue-types - v1.3.4
  * https://github.com/dwightjack/vue-types
- * Copyright (c) 2018 - Marco Solazzi;
+ * Copyright (c) 2019 - Marco Solazzi;
  * Licensed MIT
  */
 
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('vue')) :
 	typeof define === 'function' && define.amd ? define(['vue'], factory) :
-	(global.VueTypes = factory(global.Vue));
-}(this, (function (Vue) { 'use strict';
+	(global = global || self, global.VueTypes = factory(global.Vue));
+}(this, function (Vue) { 'use strict';
 
 	Vue = Vue && Vue.hasOwnProperty('default') ? Vue['default'] : Vue;
 
@@ -62,10 +62,11 @@
 
 	  try {
 	    value[symToStringTag] = undefined;
+	    var unmasked = true;
 	  } catch (e) {}
 
 	  var result = nativeObjectToString.call(value);
-	  {
+	  if (unmasked) {
 	    if (isOwn) {
 	      value[symToStringTag] = tag;
 	    } else {
@@ -306,7 +307,7 @@
 
 	      if (isArray(def)) {
 	        this.default = function () {
-	          return def.concat();
+	          return [].concat(def);
 	        };
 	      } else if (isPlainObject_1(def)) {
 	        this.default = function () {
@@ -440,6 +441,41 @@
 	  } : noop;
 	}
 
+	var typeDefaults = function typeDefaults() {
+	  return {
+	    func: function func() {},
+	    bool: true,
+	    string: '',
+	    number: 0,
+	    array: function array() {
+	      return [];
+	    },
+	    object: function object() {
+	      return {};
+	    },
+	    integer: 0
+	  };
+	};
+
+	var setDefaults = function setDefaults(root) {
+	  var currentDefaults = typeDefaults();
+	  return Object.defineProperty(root, 'sensibleDefaults', {
+	    enumerable: false,
+	    set: function set(value) {
+	      if (value === false) {
+	        currentDefaults = {};
+	      } else if (value === true) {
+	        currentDefaults = typeDefaults();
+	      } else {
+	        currentDefaults = value;
+	      }
+	    },
+	    get: function get() {
+	      return currentDefaults;
+	    }
+	  });
+	};
+
 	var VueTypes = {
 	  get any() {
 	    return toType('any', {
@@ -450,37 +486,37 @@
 	  get func() {
 	    return toType('function', {
 	      type: Function
-	    }).def(currentDefaults.func);
+	    }).def(VueTypes.sensibleDefaults.func);
 	  },
 
 	  get bool() {
 	    return toType('boolean', {
 	      type: Boolean
-	    }).def(currentDefaults.bool);
+	    }).def(VueTypes.sensibleDefaults.bool);
 	  },
 
 	  get string() {
 	    return toType('string', {
 	      type: String
-	    }).def(currentDefaults.string);
+	    }).def(VueTypes.sensibleDefaults.string);
 	  },
 
 	  get number() {
 	    return toType('number', {
 	      type: Number
-	    }).def(currentDefaults.number);
+	    }).def(VueTypes.sensibleDefaults.number);
 	  },
 
 	  get array() {
 	    return toType('array', {
 	      type: Array
-	    }).def(currentDefaults.array);
+	    }).def(VueTypes.sensibleDefaults.array);
 	  },
 
 	  get object() {
 	    return toType('object', {
 	      type: Object
-	    }).def(currentDefaults.object);
+	    }).def(VueTypes.sensibleDefaults.object);
 	  },
 
 	  get integer() {
@@ -489,7 +525,7 @@
 	      validator: function validator(value) {
 	        return isInteger(value);
 	      }
-	    }).def(currentDefaults.integer);
+	    }).def(VueTypes.sensibleDefaults.integer);
 	  },
 
 	  get symbol() {
@@ -674,39 +710,7 @@
 	    return type;
 	  }
 	};
-
-	var typeDefaults = function typeDefaults() {
-	  return {
-	    func: noop,
-	    bool: true,
-	    string: '',
-	    number: 0,
-	    array: function array() {
-	      return [];
-	    },
-	    object: function object() {
-	      return {};
-	    },
-	    integer: 0
-	  };
-	};
-
-	var currentDefaults = typeDefaults();
-	Object.defineProperty(VueTypes, 'sensibleDefaults', {
-	  enumerable: false,
-	  set: function set(value) {
-	    if (value === false) {
-	      currentDefaults = {};
-	    } else if (value === true) {
-	      currentDefaults = typeDefaults();
-	    } else if (isPlainObject_1(value)) {
-	      currentDefaults = value;
-	    }
-	  },
-	  get: function get() {
-	    return currentDefaults;
-	  }
-	});
+	setDefaults(VueTypes);
 	VueTypes.utils = {
 	  validate: function validate(value, type) {
 	    return validateType(type, value, true);
@@ -716,5 +720,5 @@
 
 	return VueTypes;
 
-})));
+}));
 //# sourceMappingURL=vue-types.js.map

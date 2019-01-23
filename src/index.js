@@ -1,5 +1,6 @@
 import isPlainObject from 'lodash/isPlainObject'
-import { noop, toType, getType, isFunction, validateType, isInteger, isArray, warn } from './utils'
+import { toType, getType, isFunction, validateType, isInteger, isArray, warn } from './utils'
+import { setDefaults } from './sensibles'
 
 const VueTypes = {
 
@@ -12,37 +13,37 @@ const VueTypes = {
   get func () {
     return toType('function', {
       type: Function
-    }).def(currentDefaults.func)
+    }).def(VueTypes.sensibleDefaults.func)
   },
 
   get bool () {
     return toType('boolean', {
       type: Boolean
-    }).def(currentDefaults.bool)
+    }).def(VueTypes.sensibleDefaults.bool)
   },
 
   get string () {
     return toType('string', {
       type: String
-    }).def(currentDefaults.string)
+    }).def(VueTypes.sensibleDefaults.string)
   },
 
   get number () {
     return toType('number', {
       type: Number
-    }).def(currentDefaults.number)
+    }).def(VueTypes.sensibleDefaults.number)
   },
 
   get array () {
     return toType('array', {
       type: Array
-    }).def(currentDefaults.array)
+    }).def(VueTypes.sensibleDefaults.array)
   },
 
   get object () {
     return toType('object', {
       type: Object
-    }).def(currentDefaults.object)
+    }).def(VueTypes.sensibleDefaults.object)
   },
 
   get integer () {
@@ -51,7 +52,7 @@ const VueTypes = {
       validator (value) {
         return isInteger(value)
       }
-    }).def(currentDefaults.integer)
+    }).def(VueTypes.sensibleDefaults.integer)
   },
 
   get symbol () {
@@ -227,33 +228,7 @@ const VueTypes = {
 
 }
 
-const typeDefaults = () => ({
-  func: noop,
-  bool: true,
-  string: '',
-  number: 0,
-  array: () => [],
-  object: () => ({}),
-  integer: 0
-})
-
-let currentDefaults = typeDefaults()
-
-Object.defineProperty(VueTypes, 'sensibleDefaults', {
-  enumerable: false,
-  set (value) {
-    if (value === false) {
-      currentDefaults = {}
-    } else if (value === true) {
-      currentDefaults = typeDefaults()
-    } else if (isPlainObject(value)) {
-      currentDefaults = value
-    }
-  },
-  get () {
-    return currentDefaults
-  }
-})
+setDefaults(VueTypes)
 
 VueTypes.utils = {
   validate (value, type) {

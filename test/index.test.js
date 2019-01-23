@@ -35,12 +35,8 @@ describe('VueTypes', () => {
 
   describe('`.func`', () => {
     it('should match an object with methods, type and default function', () => {
-      const match = {
-        type: Function,
-        default: noop
-      }
-
-      expect(VueTypes.func).toMatch(match)
+      expect(VueTypes.func.type).toBe(Function)
+      expect(VueTypes.func.default).toBeA(Function)
     })
 
     it('should add a `required` flag', () => {
@@ -229,8 +225,7 @@ describe('VueTypes', () => {
     })
 
     it('should validate symbols', function () {
-      if ('Symbol' in window) {
-        console.log(typeof Symbol())
+      if ('Symbol' in window && typeof Symbol() === 'symbol') {
         expect(VueTypes.symbol.validator(Symbol())).toBe(true)
       } else {
         this.skip()
