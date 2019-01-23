@@ -63,8 +63,8 @@
     "karma-rollup-preprocessor": "7.0.0-rc.2",
     "karma-sauce-launcher": "1.2.0",
     "mocha": "5.2.0",
-    "puppeteer": "1.7.0",
-    "rimraf": "2.6.2",
+    "puppeteer": "1.11.0",
+    "rimraf": "2.6.3",
     "rollup": "1.1.2",
     "rollup-plugin-alias": "1.5.1",
     "rollup-plugin-babel": "4.3.2",
@@ -80,7 +80,7 @@
     "tslint": "5.12.1",
     "typescript": "3.2.4",
     "vue": "~2.5.17",
-    "vue-class-component": "~6.2.0"
+    "vue-class-component": "~6.3.2"
   },
   "dependencies": {
     "lodash": "^4.17.10"
