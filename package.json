@@ -78,7 +78,7 @@
     "rollup-plugin-stub": "1.2.0",
     "rollup-plugin-uglify": "6.0.1",
     "tslint": "5.12.1",
-    "typescript": "3.0.3",
+    "typescript": "3.2.4",
     "vue": "~2.5.17",
     "vue-class-component": "~6.2.0"
   },
