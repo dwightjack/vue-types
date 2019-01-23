@@ -225,8 +225,7 @@ describe('VueTypes', () => {
     })
 
     it('should validate symbols', function () {
-      if ('Symbol' in window) {
-        console.log(typeof Symbol())
+      if ('Symbol' in window && typeof Symbol() === 'symbol') {
         expect(VueTypes.symbol.validator(Symbol())).toBe(true)
       } else {
         this.skip()

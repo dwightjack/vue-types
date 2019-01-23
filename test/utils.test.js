@@ -27,9 +27,10 @@ describe('`withDefault()`', () => {
   it('`def` should NOT be writtable', () => {
     utils.withDefault(obj)
 
-    expect(() => {
+    try {
       obj.def = 'demo'
-    }).toThrow()
+    } catch (e) {}
+    expect(obj.def).toBeA(Function)
   })
 
   describe('passed-in value', () => {
