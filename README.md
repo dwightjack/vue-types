@@ -142,6 +142,8 @@ return {
 }
 ```
 
+Note: If you are using [rollup-plugin-node-resolve](https://github.com/rollup/rollup-plugin-node-resolve) make sure to place the alias plugin **before** the resolve plugin.
+
 ## Documentation
 
 ### Native Types
