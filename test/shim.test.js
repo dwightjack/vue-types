@@ -34,6 +34,10 @@ describe('SHIM: VueTypes', () => {
     it('should have a `validator` method', () => {
       expect(VueTypes.any.validator).toBeA(Function)
     })
+
+    it('should have a `validate` method', () => {
+      expect(VueTypes.any.validate).toBeA(Function)
+    })
   })
 
   describe('SHIM: `.func`', () => {
@@ -59,6 +63,10 @@ describe('SHIM: VueTypes', () => {
 
     it('should have a `validator` method', () => {
       expect(VueTypes.func.validator).toBeA(Function)
+    })
+
+    it('should have a `validate` method', () => {
+      expect(VueTypes.func.validate).toBeA(Function)
     })
   })
 
@@ -86,6 +94,10 @@ describe('SHIM: VueTypes', () => {
     it('should have a `validator` method', () => {
       expect(VueTypes.bool.validator).toBeA(Function)
     })
+
+    it('should have a `validate` method', () => {
+      expect(VueTypes.bool.validate).toBeA(Function)
+    })
   })
 
   describe('SHIM: `.string`', () => {
@@ -111,6 +123,10 @@ describe('SHIM: VueTypes', () => {
 
     it('should have a `validator` method', () => {
       expect(VueTypes.string.validator).toBeA(Function)
+    })
+
+    it('should have a `validate` method', () => {
+      expect(VueTypes.string.validate).toBeA(Function)
     })
   })
 
@@ -138,6 +154,10 @@ describe('SHIM: VueTypes', () => {
     it('should have a `validator` method', () => {
       expect(VueTypes.number.validator).toBeA(Function)
     })
+
+    it('should have a `validate` method', () => {
+      expect(VueTypes.number.validate).toBeA(Function)
+    })
   })
 
   describe('SHIM: `.array`', () => {
@@ -164,6 +184,10 @@ describe('SHIM: VueTypes', () => {
     it('should have a `validator` method', () => {
       expect(VueTypes.array.validator).toBeA(Function)
     })
+
+    it('should have a `validate` method', () => {
+      expect(VueTypes.array.validate).toBeA(Function)
+    })
   })
 
   describe('SHIM: `.object`', () => {
@@ -189,6 +213,10 @@ describe('SHIM: VueTypes', () => {
 
     it('should have a `validator` method', () => {
       expect(VueTypes.object.validator).toBeA(Function)
+    })
+
+    it('should have a `validate` method', () => {
+      expect(VueTypes.object.validate).toBeA(Function)
     })
   })
 
@@ -245,6 +273,10 @@ describe('SHIM: VueTypes', () => {
 
     it('should have a `validator` method', () => {
       expect(VueTypes.symbol.validator).toBeA(Function)
+    })
+
+    it('should have a `validate` method', () => {
+      expect(VueTypes.symbol.validate).toBeA(Function)
     })
   })
 

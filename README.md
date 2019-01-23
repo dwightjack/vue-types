@@ -150,9 +150,10 @@ Note: If you are using [rollup-plugin-node-resolve](https://github.com/rollup/ro
 
 Most native types come with:
 
-* a default value,
-* a `.def()` method to reassign the default value for the current prop
-* a `isRequired` flag to set the `required: true` key
+* a default value (not available in `.any` and `.symbol`).
+* a `.def(any)` method to reassign the default value for the current prop. The passed-in value will be validated against the type configuration in order to prevent invalid values.
+* a `isRequired` flag to set the `required: true` key.
+* a `validate(function [, boolean])` method to set a custom validator function (not available in `.integer`).
 
 ```js
 const numProp = VueTypes.number
@@ -167,6 +168,9 @@ const numPropRequired = VueTypes.number.isRequired
 const numPropRequiredCustom = VueTypes.number.def(10).isRequired
 // numPropRequiredCustom ===  { type: Number, default: 10, required : true}
 
+const gtTen = (num) => num > 10
+const numPropGreaterThanTen = VueTypes.number.validate(gtTen)
+// numPropGreaterThanTen ===  { type: Number, validator: (num) => num > 10 }
 ```
 
 #### `VueTypes.any`
@@ -253,8 +257,9 @@ VueTypes.sensibleDefaults = {
 Custom types are a special kind of types useful to describe complex validation requirements. By design each custom type:
 
 * **doesn't have** any sensible default value
+* **doesn't have** a `validate` method
 * has a `.def()` method to assign a default value on the current prop
-*  has an `isRequired` flag to set the `required: true` key
+* has an `isRequired` flag to set the `required: true` key
 
 ```js
 const oneOfPropDefault = VueTypes.oneOf([0, 1]).def(1)

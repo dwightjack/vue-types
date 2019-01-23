@@ -102,6 +102,40 @@ describe('`withDefault()`', () => {
   })
 })
 
+describe('`withValidate()`', () => {
+  let obj
+
+  beforeEach(() => {
+    obj = utils.withValidate({
+      _vueTypes_name: 'demo'
+    })
+  })
+
+  it('adds a `validate` property', () => {
+    expect(obj.validate).toBeA(Function)
+  })
+
+  it('sets the validator method', () => {
+    const fn = expect.createSpy()
+    obj.validate(fn)
+    expect(obj.validator).toBeA(Function)
+  })
+
+  it('uses arguments passed to validator', () => {
+    const fn = expect.createSpy()
+    obj.validate(fn)
+    obj.validator('demo')
+    expect(fn).toHaveBeenCalledWith('demo')
+  })
+
+  it('binds the provided function to the object', () => {
+    const fn = expect.createSpy()
+    obj.validate(fn)
+    obj.validator()
+    expect(fn.calls[0].context).toBe(obj)
+  })
+})
+
 describe('`toType()`', () => {
   it('should enhance the passed-in object without cloning', () => {
     const obj = {}
@@ -122,6 +156,20 @@ describe('`toType()`', () => {
 
     utils.toType('testType', obj)
     expect(obj.def).toBeA(Function)
+  })
+
+  it('should NOT add a `validate` method by default', () => {
+    const obj = {}
+
+    utils.toType('testType', obj)
+    expect(obj.validate).toBe(undefined)
+  })
+
+  it('should add a `validate` method with a flag', () => {
+    const obj = {}
+
+    utils.toType('testType', obj, true)
+    expect(obj.validate).toBeA(Function)
   })
 
   it('should bind provided `validator function to the passed in object`', () => {
