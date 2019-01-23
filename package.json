@@ -80,8 +80,7 @@
     "tslint": "5.11.0",
     "typescript": "3.0.3",
     "vue": "~2.5.17",
-    "vue-class-component": "~6.2.0",
-    "webpack": "4.29.0"
+    "vue-class-component": "~6.2.0"
   },
   "dependencies": {
     "lodash": "^4.17.10"
