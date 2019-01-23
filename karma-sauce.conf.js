@@ -2,7 +2,7 @@
 // Generated on Wed Oct 26 2016 17:54:27 GMT+0200 (CEST)
 
 const path = require('path');
-const baseConfig = require('./karma.conf').baseConfig;
+const baseConfig = require('./karma.conf');
 const pkg = require('./package.json')
 
 const customLaunchers = {
@@ -62,9 +62,9 @@ module.exports = function(config) {
     process.exit(1);
   }
 
-  config.set(Object.assign({}, baseConfig, {
+  baseConfig(config)
 
-    logLevel: config.LOG_INFO,
+  config.set({
 
     sauceLabs: {
         testName: 'vue-types',
