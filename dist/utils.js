@@ -112,7 +112,7 @@ var withDefault = function withDefault(type) {
 
       if (isArray(def)) {
         this.default = function () {
-          return def.concat();
+          return [].concat(def);
         };
       } else if ((0, _isPlainObject.default)(def)) {
         this.default = function () {

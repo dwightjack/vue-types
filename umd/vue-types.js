@@ -8,8 +8,8 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('vue')) :
 	typeof define === 'function' && define.amd ? define(['vue'], factory) :
-	(global.VueTypes = factory(global.Vue));
-}(this, (function (Vue) { 'use strict';
+	(global = global || self, global.VueTypes = factory(global.Vue));
+}(this, function (Vue) { 'use strict';
 
 	Vue = Vue && Vue.hasOwnProperty('default') ? Vue['default'] : Vue;
 
@@ -62,10 +62,11 @@
 
 	  try {
 	    value[symToStringTag] = undefined;
+	    var unmasked = true;
 	  } catch (e) {}
 
 	  var result = nativeObjectToString.call(value);
-	  {
+	  if (unmasked) {
 	    if (isOwn) {
 	      value[symToStringTag] = tag;
 	    } else {
@@ -306,7 +307,7 @@
 
 	      if (isArray(def)) {
 	        this.default = function () {
-	          return def.concat();
+	          return [].concat(def);
 	        };
 	      } else if (isPlainObject_1(def)) {
 	        this.default = function () {
@@ -719,5 +720,5 @@
 
 	return VueTypes;
 
-})));
+}));
 //# sourceMappingURL=vue-types.js.map
