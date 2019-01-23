@@ -66,9 +66,10 @@ export const isFunction = (value) => toString.call(value) === '[object Function]
  * Adds a `def` method to the object returning a new object with passed in argument as `default` property
  *
  * @param {object} type - Object to enhance
+ * @returns {object} the passed-in prop type
  */
 export const withDefault = function (type) {
-  Object.defineProperty(type, 'def', {
+  return Object.defineProperty(type, 'def', {
     value (def) {
       if (def === undefined && !this.default) {
         return this
@@ -95,11 +96,28 @@ export const withDefault = function (type) {
  * Adds a `isRequired` getter returning a new object with `required: true` key-value
  *
  * @param {object} type - Object to enhance
+ * @returns {object} the passed-in prop type
  */
 export const withRequired = function (type) {
-  Object.defineProperty(type, 'isRequired', {
+  return Object.defineProperty(type, 'isRequired', {
     get () {
       this.required = true
+      return this
+    },
+    enumerable: false
+  })
+}
+
+/**
+ * Adds a validate method useful to set the prop `validator` function.
+ *
+ * @param {object} type Prop type to extend
+ * @returns {object} the passed-in prop type
+ */
+export const withValidate = function (type) {
+  return Object.defineProperty(type, 'validate', {
+    value (fn) {
+      this.validator = fn.bind(this)
       return this
     },
     enumerable: false
@@ -113,14 +131,18 @@ export const withRequired = function (type) {
  * @param {object} obj - Object to enhance
  * @returns {object}
  */
-export const toType = (name, obj) => {
+export const toType = (name, obj, validateFn = false) => {
   Object.defineProperty(obj, '_vueTypes_name', {
     enumerable: false,
     writable: false,
     value: name
   })
-  withRequired(obj)
-  withDefault(obj)
+
+  withDefault(withRequired(obj))
+
+  if (validateFn) {
+    withValidate(obj)
+  }
 
   if (isFunction(obj.validator)) {
     obj.validator = obj.validator.bind(obj)

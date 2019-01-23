@@ -10,7 +10,7 @@
 - [Installation](#installation)
     - [NPM package](#npm-package)
     - [CDN delivered `<script>`](#cdn-delivered-script)
-- [Usage with [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue)](#usage-with-eslint-plugin-vuehttpsgithubcomvuejseslint-plugin-vue)
+- [Usage with `eslint-plugin-vue`](#usage-with-eslint-plugin-vue)
 - [Production build](#production-build)
     - [Webpack](#webpack)
     - [Rollup](#rollup)
@@ -97,7 +97,7 @@ add the following script tags before your code
 <script src="https://unpkg.com/vue-types"></script>
 ```
 
-## Usage with [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue)
+## Usage with `eslint-plugin-vue`
 
 When used in a project with [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue), the linter might report errors related to the `vue/require-default-prop` rule.
 
@@ -150,22 +150,27 @@ Note: If you are using [rollup-plugin-node-resolve](https://github.com/rollup/ro
 
 Most native types come with:
 
-* a default value,
-* a `.def()` method to reassign the default value for the current prop
-* a `isRequired` flag to set the `required: true` key
+* a default value (not available in `.any` and `.symbol`).
+* a `.def(any)` method to reassign the default value for the current prop. The passed-in value will be validated against the type configuration in order to prevent invalid values.
+* a `isRequired` flag to set the `required: true` key.
+* a `validate(function [, boolean])` method to set a custom validator function (not available in `.integer`).
 
 ```js
-const numProp = vueTypes.number
+const numProp = VueTypes.number
 // numProp === { type: Number, default : 0}
 
-const numPropCustom = vueTypes.number.def(10)
+const numPropCustom = VueTypes.number.def(10)
 // numPropCustom ===  { type: Number, default : 10}
 
-const numPropRequired = vueTypes.number.isRequired
+const numPropRequired = VueTypes.number.isRequired
 // numPropRequired ===  { type: Number, required : true}
 
-const numPropRequiredCustom = vueTypes.number.def(10).isRequired
+const numPropRequiredCustom = VueTypes.number.def(10).isRequired
 // numPropRequiredCustom ===  { type: Number, default: 10, required : true}
+
+const gtTen = (num) => num > 10
+const numPropGreaterThanTen = VueTypes.number.validate(gtTen)
+// numPropGreaterThanTen ===  { type: Number, validator: (num) => num > 10 }
 ```
 
 #### `VueTypes.any`
@@ -230,18 +235,18 @@ Validates that a prop is a Symbol.
 
 ### Native Types Configuration
 
-All native types (with the exception of `any`) come with a sensible default value. In order to modify or disable it you can set the global option `vueTypes.sensibleDefaults`:
+All native types (with the exception of `any`) come with a sensible default value. In order to modify or disable it you can set the global option `VueTypes.sensibleDefaults`:
 
 ```js
 //use vue-types default (this is the "default" value)
-vueTypes.sensibleDefaults = true
+VueTypes.sensibleDefaults = true
 
 //disable all sensible defaults.
 //Use .def(...) to set one
-vueTypes.sensibleDefaults = false
+VueTypes.sensibleDefaults = false
 
 //assign an object in order to specify custom defaults
-vueTypes.sensibleDefaults = {
+VueTypes.sensibleDefaults = {
   string: 'mystringdefault'
   //...
 }
@@ -252,17 +257,18 @@ vueTypes.sensibleDefaults = {
 Custom types are a special kind of types useful to describe complex validation requirements. By design each custom type:
 
 * **doesn't have** any sensible default value
+* **doesn't have** a `validate` method
 * has a `.def()` method to assign a default value on the current prop
-*  has an `isRequired` flag to set the `required: true` key
+* has an `isRequired` flag to set the `required: true` key
 
 ```js
-const oneOfPropDefault = vueTypes.oneOf([0, 1]).def(1)
+const oneOfPropDefault = VueTypes.oneOf([0, 1]).def(1)
 // oneOfPropDefault.default === 1
 
-const oneOfPropRequired = vueTypes.oneOf([0, 1]).isRequired
+const oneOfPropRequired = VueTypes.oneOf([0, 1]).isRequired
 // oneOfPropRequired.required ===  true
 
-const oneOfPropRequiredCustom = vueTypes.oneOf([0, 1]).def(1).isRequired
+const oneOfPropRequiredCustom = VueTypes.oneOf([0, 1]).def(1).isRequired
 // oneOfPropRequiredCustom.default ===  1
 // oneOfPropRequiredCustom.required === true
 ```

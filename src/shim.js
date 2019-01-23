@@ -1,6 +1,6 @@
 import { setDefaults } from './sensibles'
 
-const type = () => ({
+const type = (props) => Object.assign({
   def (v) {
     this.default = v
     return this
@@ -9,8 +9,8 @@ const type = () => ({
     this.required = true
     return this
   },
-  validator () { }
-})
+  validator () {}
+}, props)
 
 const vueTypes = setDefaults({
   utils: {
@@ -19,18 +19,19 @@ const vueTypes = setDefaults({
   }
 })
 
-const createValidator = (root, name, getter = false) => {
+const createValidator = (root, name, getter = false, props) => {
   const prop = getter ? 'get' : 'value'
-  const descr = { [prop]: () => type().def(getter ? vueTypes.sensibleDefaults[name] : undefined) }
+  const descr = { [prop]: () => type(props).def(getter ? vueTypes.sensibleDefaults[name] : undefined) }
 
   return Object.defineProperty(root, name, descr)
 }
 
-const getters = ['any', 'func', 'bool', 'string', 'number', 'array', 'object', 'integer', 'symbol']
+const getters = ['any', 'func', 'bool', 'string', 'number', 'array', 'object', 'symbol']
 const methods = ['oneOf', 'custom', 'instanceOf', 'oneOfType', 'arrayOf', 'objectOf']
 
-getters.forEach((p) => createValidator(vueTypes, p, true))
+getters.forEach((p) => createValidator(vueTypes, p, true, { validate () {} }))
 methods.forEach((p) => createValidator(vueTypes, p, false))
+createValidator(vueTypes, 'integer', true) // does not have a validate method
 
 Object.defineProperty(vueTypes, 'shape', {
   value () {
