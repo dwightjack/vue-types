@@ -10,7 +10,7 @@
 - [Installation](#installation)
     - [NPM package](#npm-package)
     - [CDN delivered `<script>`](#cdn-delivered-script)
-- [Usage with [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue)](#usage-with-eslint-plugin-vuehttpsgithubcomvuejseslint-plugin-vue)
+- [Usage with `eslint-plugin-vue`](#usage-with-eslint-plugin-vue)
 - [Production build](#production-build)
     - [Webpack](#webpack)
     - [Rollup](#rollup)
@@ -97,7 +97,7 @@ add the following script tags before your code
 <script src="https://unpkg.com/vue-types"></script>
 ```
 
-## Usage with [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue)
+## Usage with `eslint-plugin-vue`
 
 When used in a project with [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue), the linter might report errors related to the `vue/require-default-prop` rule.
 
