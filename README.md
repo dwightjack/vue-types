@@ -155,17 +155,18 @@ Most native types come with:
 * a `isRequired` flag to set the `required: true` key
 
 ```js
-const numProp = vueTypes.number
+const numProp = VueTypes.number
 // numProp === { type: Number, default : 0}
 
-const numPropCustom = vueTypes.number.def(10)
+const numPropCustom = VueTypes.number.def(10)
 // numPropCustom ===  { type: Number, default : 10}
 
-const numPropRequired = vueTypes.number.isRequired
+const numPropRequired = VueTypes.number.isRequired
 // numPropRequired ===  { type: Number, required : true}
 
-const numPropRequiredCustom = vueTypes.number.def(10).isRequired
+const numPropRequiredCustom = VueTypes.number.def(10).isRequired
 // numPropRequiredCustom ===  { type: Number, default: 10, required : true}
+
 ```
 
 #### `VueTypes.any`
@@ -230,18 +231,18 @@ Validates that a prop is a Symbol.
 
 ### Native Types Configuration
 
-All native types (with the exception of `any`) come with a sensible default value. In order to modify or disable it you can set the global option `vueTypes.sensibleDefaults`:
+All native types (with the exception of `any`) come with a sensible default value. In order to modify or disable it you can set the global option `VueTypes.sensibleDefaults`:
 
 ```js
 //use vue-types default (this is the "default" value)
-vueTypes.sensibleDefaults = true
+VueTypes.sensibleDefaults = true
 
 //disable all sensible defaults.
 //Use .def(...) to set one
-vueTypes.sensibleDefaults = false
+VueTypes.sensibleDefaults = false
 
 //assign an object in order to specify custom defaults
-vueTypes.sensibleDefaults = {
+VueTypes.sensibleDefaults = {
   string: 'mystringdefault'
   //...
 }
@@ -256,13 +257,13 @@ Custom types are a special kind of types useful to describe complex validation r
 *  has an `isRequired` flag to set the `required: true` key
 
 ```js
-const oneOfPropDefault = vueTypes.oneOf([0, 1]).def(1)
+const oneOfPropDefault = VueTypes.oneOf([0, 1]).def(1)
 // oneOfPropDefault.default === 1
 
-const oneOfPropRequired = vueTypes.oneOf([0, 1]).isRequired
+const oneOfPropRequired = VueTypes.oneOf([0, 1]).isRequired
 // oneOfPropRequired.required ===  true
 
-const oneOfPropRequiredCustom = vueTypes.oneOf([0, 1]).def(1).isRequired
+const oneOfPropRequiredCustom = VueTypes.oneOf([0, 1]).def(1).isRequired
 // oneOfPropRequiredCustom.default ===  1
 // oneOfPropRequiredCustom.required === true
 ```
