@@ -105,9 +105,7 @@ To prevent that error use [eslint-plugin-vue-types](https://github.com/dwightjac
 
 ## Production build
 
-Vue.js does not validate components' props when used in a production build. If you're using a bundler such as Webpack or rollup you can shrink vue-types filesize from 2.26 KB to just **0.5KB** (minified and gzipped) by removing the validation logic while preserving the library's API methods. To achieve that result setup an alias to `vue-types/es/shim.js` (`vue-types/dist/shim.js` if you're using CommonJS modules).
-
-
+Vue.js does not validate components' props when used in a production build. If you're using a bundler such as Webpack or rollup you can shrink vue-types filesize by around **70%** (minified and gzipped) by removing the validation logic while preserving the library's API methods. To achieve that result setup an alias to `vue-types/es/shim.js` (`vue-types/dist/shim.js` if you're using CommonJS modules).
 
 ### Webpack
 
