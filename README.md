@@ -153,7 +153,7 @@ Most native types come with:
 * a default value (not available in `.any` and `.symbol`).
 * a `.def(any)` method to reassign the default value for the current prop. The passed-in value will be validated against the type configuration in order to prevent invalid values.
 * a `isRequired` flag to set the `required: true` key.
-* a `validate(function [, boolean])` method to set a custom validator function (not available in `.integer`).
+* a `validate(function)` method to set a custom validator function (not available in `.integer`).
 
 ```js
 const numProp = VueTypes.number
