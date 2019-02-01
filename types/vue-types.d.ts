@@ -39,7 +39,6 @@ export interface VueTypeLooseShape<T> extends VueTypeShape<T> {
 export interface VueTypeArrayOf<T> extends VueTypeDef<T[]> {
 }
 
-
 export interface VueTypeCustom<T, F extends ValidatorFunction<T>> extends VueTypeDef<T> {
   validator(value: T): ReturnType<F>;
 }
@@ -79,7 +78,7 @@ export interface VueTypesInterface {
   instanceOf<C extends Constructor>(instanceConstructor: C): VueTypeInstanceOf<C>;
   oneOfType(arr: Array<Prop<any> | VueProp<any>>): VueTypeDef;
   arrayOf<V extends any, D = defaultType<V>>(type: VueTypeValidableDef<V> | VueTypeDef<V, D> | Prop<V>): VueTypeArrayOf<V>;
-  objectOf<T = any>(type: Prop<T> | VueProp<T>): VueTypeObjectOf<T>;
+  objectOf<T extends any>(type: Prop<T> | VueProp<T>): VueTypeObjectOf<T>;
   shape<T>(obj: { [K in keyof T]?: Prop<T[K]> | VueProp<T[K], any> }): VueTypeShape<T>;
 }
 
