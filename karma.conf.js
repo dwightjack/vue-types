@@ -26,87 +26,82 @@ const fixMocha = function(files) {
 
 fixMocha.$inject = ['config.files']
 
-const baseConfig = {
-  // base path that will be used to resolve all patterns (eg. files, exclude)
-  basePath: '',
-
-  // frameworks to use
-  // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-  frameworks: ['mocha', 'inline-mocha-fix'],
-
-  plugins: [
-    'karma-*',
-    {
-      'framework:inline-mocha-fix': ['factory', fixMocha]
-    }
-  ],
-
-  // list of files / patterns to load in the browser
-  files: [
-    { pattern: 'src/*.js', included: false },
-    'test/**/*.test.js'
-  ],
-
-  // list of files to exclude
-  exclude: [
-  ],
-
-  // preprocess matching files before serving them to the browser
-  // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-  preprocessors: {
-    // add webpack as preprocessor
-    'src/**/*.js': ['rollup'],
-    'test/**/*.test.js': ['rollup']
-  },
-
-  rollupPreprocessor: {
-    plugins: [
-      resolve({
-        preferBuiltins: true
-      }),
-      commonjs(),
-      babel({
-        exclude: 'node_modules/**'
-      }),
-      replace({
-        'process.env.NODE_DEBUG': !production
-      }),
-      stub(),
-      globals(),
-      builtins()
-    ],
-    output: {
-      format: 'iife',
-      name: 'VueTypes',
-      sourcemap: 'inline'
-    }
-  },
-
-  // test results reporter to use
-  // possible values: 'dots', 'progress'
-  // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-  reporters: ['mocha'],
-
-  // web server port
-  port: 9876,
-
-  // enable / disable colors in the output (reporters and logs)
-  colors: true,
-
-  concurrency: Infinity
-}
-
 module.exports = (config) => {
   if (Array.isArray(config.browsers) && config.browsers[0] === 'ChromeHeadless') {
     process.env.CHROME_BIN = require('puppeteer').executablePath()
   }
-  config.set(Object.assign({}, baseConfig, {
+
+  config.set({
+    // base path that will be used to resolve all patterns (eg. files, exclude)
+    basePath: '',
+
+    // frameworks to use
+    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+    frameworks: ['mocha', 'inline-mocha-fix'],
+
+    plugins: [
+      'karma-*',
+      {
+        'framework:inline-mocha-fix': ['factory', fixMocha]
+      }
+    ],
+
+    // list of files / patterns to load in the browser
+    files: [
+      { pattern: 'src/*.js', included: false },
+      'test/**/*.test.js'
+    ],
+
+    // list of files to exclude
+    exclude: [
+    ],
+
+    // preprocess matching files before serving them to the browser
+    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+    preprocessors: {
+      // add webpack as preprocessor
+      'src/**/*.js': ['rollup'],
+      'test/**/*.test.js': ['rollup']
+    },
+
+    rollupPreprocessor: {
+      plugins: [
+        resolve({
+          preferBuiltins: true
+        }),
+        commonjs(),
+        babel({
+          exclude: 'node_modules/**'
+        }),
+        replace({
+          'process.env.NODE_DEBUG': !production
+        }),
+        stub(),
+        globals(),
+        builtins()
+      ],
+      output: {
+        format: 'iife',
+        name: 'VueTypes',
+        sourcemap: 'inline'
+      }
+    },
+
+    // test results reporter to use
+    // possible values: 'dots', 'progress'
+    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+    reporters: ['mocha'],
+
+    // web server port
+    port: 9876,
+
+    // enable / disable colors in the output (reporters and logs)
+    colors: true,
+
+    concurrency: Infinity,
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-
     logLevel: config.LOG_INFO
-  }));
+  });
 };
-
-module.exports.baseConfig = baseConfig

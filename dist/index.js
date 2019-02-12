@@ -7,49 +7,51 @@ var _isPlainObject = _interopRequireDefault(require("lodash/isPlainObject"));
 
 var _utils = require("./utils");
 
+var _sensibles = require("./sensibles");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var VueTypes = {
   get any() {
     return (0, _utils.toType)('any', {
       type: null
-    });
+    }, true);
   },
 
   get func() {
     return (0, _utils.toType)('function', {
       type: Function
-    }).def(currentDefaults.func);
+    }, true).def(VueTypes.sensibleDefaults.func);
   },
 
   get bool() {
     return (0, _utils.toType)('boolean', {
       type: Boolean
-    }).def(currentDefaults.bool);
+    }, true).def(VueTypes.sensibleDefaults.bool);
   },
 
   get string() {
     return (0, _utils.toType)('string', {
       type: String
-    }).def(currentDefaults.string);
+    }, true).def(VueTypes.sensibleDefaults.string);
   },
 
   get number() {
     return (0, _utils.toType)('number', {
       type: Number
-    }).def(currentDefaults.number);
+    }, true).def(VueTypes.sensibleDefaults.number);
   },
 
   get array() {
     return (0, _utils.toType)('array', {
       type: Array
-    }).def(currentDefaults.array);
+    }, true).def(VueTypes.sensibleDefaults.array);
   },
 
   get object() {
     return (0, _utils.toType)('object', {
       type: Object
-    }).def(currentDefaults.object);
+    }, true).def(VueTypes.sensibleDefaults.object);
   },
 
   get integer() {
@@ -58,7 +60,7 @@ var VueTypes = {
       validator: function validator(value) {
         return (0, _utils.isInteger)(value);
       }
-    }).def(currentDefaults.integer);
+    }).def(VueTypes.sensibleDefaults.integer);
   },
 
   get symbol() {
@@ -67,7 +69,7 @@ var VueTypes = {
       validator: function validator(value) {
         return typeof value === 'symbol';
       }
-    });
+    }, true);
   },
 
   custom: function custom(validatorFn, warnMsg) {
@@ -243,39 +245,7 @@ var VueTypes = {
     return type;
   }
 };
-
-var typeDefaults = function typeDefaults() {
-  return {
-    func: _utils.noop,
-    bool: true,
-    string: '',
-    number: 0,
-    array: function array() {
-      return [];
-    },
-    object: function object() {
-      return {};
-    },
-    integer: 0
-  };
-};
-
-var currentDefaults = typeDefaults();
-Object.defineProperty(VueTypes, 'sensibleDefaults', {
-  enumerable: false,
-  set: function set(value) {
-    if (value === false) {
-      currentDefaults = {};
-    } else if (value === true) {
-      currentDefaults = typeDefaults();
-    } else if ((0, _isPlainObject.default)(value)) {
-      currentDefaults = value;
-    }
-  },
-  get: function get() {
-    return currentDefaults;
-  }
-});
+(0, _sensibles.setDefaults)(VueTypes);
 VueTypes.utils = {
   validate: function validate(value, type) {
     return (0, _utils.validateType)(type, value, true);

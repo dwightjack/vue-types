@@ -2,6 +2,7 @@
   "extends": "dtslint/dtslint.json",
   "rules": {
     "use-default-type-parameter": false,
-    "file-name-casing": false
+    "file-name-casing": false,
+    "no-unnecessary-generics": false
   }
 }

@@ -1,15 +1,15 @@
 
-/*! vue-types - v1.3.4
+/*! vue-types - v1.4.0
  * https://github.com/dwightjack/vue-types
- * Copyright (c) 2018 - Marco Solazzi;
+ * Copyright (c) 2019 - Marco Solazzi;
  * Licensed MIT
  */
 
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('vue')) :
 	typeof define === 'function' && define.amd ? define(['vue'], factory) :
-	(global.VueTypes = factory(global.Vue));
-}(this, (function (Vue) { 'use strict';
+	(global = global || self, global.VueTypes = factory(global.Vue));
+}(this, function (Vue) { 'use strict';
 
 	Vue = Vue && Vue.hasOwnProperty('default') ? Vue['default'] : Vue;
 
@@ -62,10 +62,11 @@
 
 	  try {
 	    value[symToStringTag] = undefined;
+	    var unmasked = true;
 	  } catch (e) {}
 
 	  var result = nativeObjectToString.call(value);
-	  {
+	  if (unmasked) {
 	    if (isOwn) {
 	      value[symToStringTag] = tag;
 	    } else {
@@ -290,10 +291,11 @@
 	 * Adds a `def` method to the object returning a new object with passed in argument as `default` property
 	 *
 	 * @param {object} type - Object to enhance
+	 * @returns {object} the passed-in prop type
 	 */
 
 	var withDefault = function withDefault(type) {
-	  Object.defineProperty(type, 'def', {
+	  return Object.defineProperty(type, 'def', {
 	    value: function value(def) {
 	      if (def === undefined && !this.default) {
 	        return this;
@@ -306,7 +308,7 @@
 
 	      if (isArray(def)) {
 	        this.default = function () {
-	          return def.concat();
+	          return [].concat(def);
 	        };
 	      } else if (isPlainObject_1(def)) {
 	        this.default = function () {
@@ -326,12 +328,29 @@
 	 * Adds a `isRequired` getter returning a new object with `required: true` key-value
 	 *
 	 * @param {object} type - Object to enhance
+	 * @returns {object} the passed-in prop type
 	 */
 
 	var withRequired = function withRequired(type) {
-	  Object.defineProperty(type, 'isRequired', {
+	  return Object.defineProperty(type, 'isRequired', {
 	    get: function get() {
 	      this.required = true;
+	      return this;
+	    },
+	    enumerable: false
+	  });
+	};
+	/**
+	 * Adds a validate method useful to set the prop `validator` function.
+	 *
+	 * @param {object} type Prop type to extend
+	 * @returns {object} the passed-in prop type
+	 */
+
+	var withValidate = function withValidate(type) {
+	  return Object.defineProperty(type, 'validate', {
+	    value: function value(fn) {
+	      this.validator = fn.bind(this);
 	      return this;
 	    },
 	    enumerable: false
@@ -345,14 +364,21 @@
 	 * @returns {object}
 	 */
 
-	var toType = function toType(name, obj) {
+	var toType = function toType(name, obj, validateFn) {
+	  if (validateFn === void 0) {
+	    validateFn = false;
+	  }
+
 	  Object.defineProperty(obj, '_vueTypes_name', {
 	    enumerable: false,
 	    writable: false,
 	    value: name
 	  });
-	  withRequired(obj);
-	  withDefault(obj);
+	  withDefault(withRequired(obj));
+
+	  if (validateFn) {
+	    withValidate(obj);
+	  }
 
 	  if (isFunction(obj.validator)) {
 	    obj.validator = obj.validator.bind(obj);
@@ -440,47 +466,82 @@
 	  } : noop;
 	}
 
+	var typeDefaults = function typeDefaults() {
+	  return {
+	    func: function func() {},
+	    bool: true,
+	    string: '',
+	    number: 0,
+	    array: function array() {
+	      return [];
+	    },
+	    object: function object() {
+	      return {};
+	    },
+	    integer: 0
+	  };
+	};
+
+	var setDefaults = function setDefaults(root) {
+	  var currentDefaults = typeDefaults();
+	  return Object.defineProperty(root, 'sensibleDefaults', {
+	    enumerable: false,
+	    set: function set(value) {
+	      if (value === false) {
+	        currentDefaults = {};
+	      } else if (value === true) {
+	        currentDefaults = typeDefaults();
+	      } else {
+	        currentDefaults = value;
+	      }
+	    },
+	    get: function get() {
+	      return currentDefaults;
+	    }
+	  });
+	};
+
 	var VueTypes = {
 	  get any() {
 	    return toType('any', {
 	      type: null
-	    });
+	    }, true);
 	  },
 
 	  get func() {
 	    return toType('function', {
 	      type: Function
-	    }).def(currentDefaults.func);
+	    }, true).def(VueTypes.sensibleDefaults.func);
 	  },
 
 	  get bool() {
 	    return toType('boolean', {
 	      type: Boolean
-	    }).def(currentDefaults.bool);
+	    }, true).def(VueTypes.sensibleDefaults.bool);
 	  },
 
 	  get string() {
 	    return toType('string', {
 	      type: String
-	    }).def(currentDefaults.string);
+	    }, true).def(VueTypes.sensibleDefaults.string);
 	  },
 
 	  get number() {
 	    return toType('number', {
 	      type: Number
-	    }).def(currentDefaults.number);
+	    }, true).def(VueTypes.sensibleDefaults.number);
 	  },
 
 	  get array() {
 	    return toType('array', {
 	      type: Array
-	    }).def(currentDefaults.array);
+	    }, true).def(VueTypes.sensibleDefaults.array);
 	  },
 
 	  get object() {
 	    return toType('object', {
 	      type: Object
-	    }).def(currentDefaults.object);
+	    }, true).def(VueTypes.sensibleDefaults.object);
 	  },
 
 	  get integer() {
@@ -489,7 +550,7 @@
 	      validator: function validator(value) {
 	        return isInteger(value);
 	      }
-	    }).def(currentDefaults.integer);
+	    }).def(VueTypes.sensibleDefaults.integer);
 	  },
 
 	  get symbol() {
@@ -498,7 +559,7 @@
 	      validator: function validator(value) {
 	        return typeof value === 'symbol';
 	      }
-	    });
+	    }, true);
 	  },
 
 	  custom: function custom(validatorFn, warnMsg) {
@@ -674,39 +735,7 @@
 	    return type;
 	  }
 	};
-
-	var typeDefaults = function typeDefaults() {
-	  return {
-	    func: noop,
-	    bool: true,
-	    string: '',
-	    number: 0,
-	    array: function array() {
-	      return [];
-	    },
-	    object: function object() {
-	      return {};
-	    },
-	    integer: 0
-	  };
-	};
-
-	var currentDefaults = typeDefaults();
-	Object.defineProperty(VueTypes, 'sensibleDefaults', {
-	  enumerable: false,
-	  set: function set(value) {
-	    if (value === false) {
-	      currentDefaults = {};
-	    } else if (value === true) {
-	      currentDefaults = typeDefaults();
-	    } else if (isPlainObject_1(value)) {
-	      currentDefaults = value;
-	    }
-	  },
-	  get: function get() {
-	    return currentDefaults;
-	  }
-	});
+	setDefaults(VueTypes);
 	VueTypes.utils = {
 	  validate: function validate(value, type) {
 	    return validateType(type, value, true);
@@ -716,5 +745,5 @@
 
 	return VueTypes;
 
-})));
+}));
 //# sourceMappingURL=vue-types.js.map

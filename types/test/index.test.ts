@@ -16,6 +16,7 @@ const arrayType = VueTypes.array.def([]).isRequired;
 const arrayType2 = VueTypes.array.def(() => []).isRequired;
 
 const stringType = VueTypes.string.def('John').isRequired;
+const stringTypeValidate = VueTypes.string.def('John').isRequired.validate((v) => v === 'John');
 
 const numberType = VueTypes.number.def(0).isRequired;
 const integerType = VueTypes.integer.def(0).isRequired;
@@ -51,7 +52,7 @@ const oneOfTypeType = VueTypes.oneOfType([
   VueTypes.number
 ]).def(null).isRequired; // check can be just at runtime
 
-const ArrayOfType = VueTypes.arrayOf(VueTypes.string).def(['test', 'string']).isRequired;
+const ArrayOfType = VueTypes.arrayOf(VueTypes.string).def(['string', 'string']).isRequired;
 
 const ObjectOfType = VueTypes.objectOf<string>(VueTypes.string).def({ prop: 'test' }).isRequired;
 
@@ -59,7 +60,9 @@ const shapeType = VueTypes.shape({
   name: String,
   surname: { type: String, default: 'Doe' },
   age: VueTypes.number,
-}).def({ name: 'test' }).isRequired;
+  hobbies: VueTypes.array,
+}).def({ name: 'test', age: 100, hobbies: [true] }).isRequired;
+
 
 const shapeTypeLoose = VueTypes.shape({
   name: String,

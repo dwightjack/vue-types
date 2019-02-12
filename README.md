@@ -2,6 +2,27 @@
 
 > Prop type definitions for [Vue.js](http://vuejs.org). Compatible with both Vue 1.x and 2.x
 
+
+<!-- TOC depthTo:3 -->
+
+- [Introduction](#introduction)
+    - [When to use](#when-to-use)
+- [Installation](#installation)
+    - [NPM package](#npm-package)
+    - [CDN delivered `<script>`](#cdn-delivered-script)
+- [Usage with `eslint-plugin-vue`](#usage-with-eslint-plugin-vue)
+- [Production build](#production-build)
+    - [Webpack](#webpack)
+    - [Rollup](#rollup)
+- [Documentation](#documentation)
+    - [Native Types](#native-types)
+    - [Native Types Configuration](#native-types-configuration)
+    - [Custom Types](#custom-types)
+    - [Utilities](#utilities)
+- [License](#license)
+
+<!-- /TOC -->
+
 ## Introduction
 
 `vue-types` is a collection of configurable [prop type](http://vuejs.org/guide/components.html#Props) definitions for Vue.js components, inspired by React's `prop-types`.
@@ -76,11 +97,52 @@ add the following script tags before your code
 <script src="https://unpkg.com/vue-types"></script>
 ```
 
-## Usage with [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue)
+## Usage with `eslint-plugin-vue`
 
 When used in a project with [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue), the linter might report errors related to the `vue/require-default-prop` rule.
 
 To prevent that error use [eslint-plugin-vue-types](https://github.com/dwightjack/eslint-plugin-vue-types)
+
+## Production build
+
+Vue.js does not validate components' props when used in a production build. If you're using a bundler such as Webpack or rollup you can shrink vue-types filesize by around **70%** (minified and gzipped) by removing the validation logic while preserving the library's API methods. To achieve that result setup an alias to `vue-types/es/shim.js` (`vue-types/dist/shim.js` if you're using CommonJS modules).
+
+### Webpack
+
+The following example will shim the module in Webpack by adding an [alias field](https://webpack.js.org/configuration/resolve/#resolve-alias) to the configuration when `NODE_ENV` is set to `"production"`:
+
+```js
+// webpack.config.js
+
+return {
+  // ... configuration
+  resolve: {
+    alias: {
+      'vue-types': process.env.NODE_ENV === 'production' ? 'vue-types/es/shim.js' : undefined
+    }
+  }
+}
+```
+
+### Rollup
+
+The following example will shim the module in rollup using [rollup-plugin-alias](https://github.com/rollup/rollup-plugin-alias) when `NODE_ENV` is set to `"production"`:
+
+```js
+// rollup.config.js
+import alias from 'rollup-plugin-alias';
+
+return {
+  // ... configuration
+  plugins: [
+    process.env.NODE_ENV === 'production' ? alias({
+      'vue-types': './node_modules/vue-types/es/shim.js'
+    })
+  ]
+}
+```
+
+Note: If you are using [rollup-plugin-node-resolve](https://github.com/rollup/rollup-plugin-node-resolve) make sure to place the alias plugin **before** the resolve plugin.
 
 ## Documentation
 
@@ -88,22 +150,27 @@ To prevent that error use [eslint-plugin-vue-types](https://github.com/dwightjac
 
 Most native types come with:
 
-* a default value,
-* a `.def()` method to reassign the default value for the current prop
-* a `isRequired` flag to set the `required: true` key
+* a default value (not available in `.any` and `.symbol`).
+* a `.def(any)` method to reassign the default value for the current prop. The passed-in value will be validated against the type configuration in order to prevent invalid values.
+* a `isRequired` flag to set the `required: true` key.
+* a `validate(function)` method to set a custom validator function (not available in `.integer`).
 
 ```js
-const numProp = vueTypes.number
+const numProp = VueTypes.number
 // numProp === { type: Number, default : 0}
 
-const numPropCustom = vueTypes.number.def(10)
+const numPropCustom = VueTypes.number.def(10)
 // numPropCustom ===  { type: Number, default : 10}
 
-const numPropRequired = vueTypes.number.isRequired
+const numPropRequired = VueTypes.number.isRequired
 // numPropRequired ===  { type: Number, required : true}
 
-const numPropRequiredCustom = vueTypes.number.def(10).isRequired
+const numPropRequiredCustom = VueTypes.number.def(10).isRequired
 // numPropRequiredCustom ===  { type: Number, default: 10, required : true}
+
+const gtTen = (num) => num > 10
+const numPropGreaterThanTen = VueTypes.number.validate(gtTen)
+// numPropGreaterThanTen ===  { type: Number, validator: (num) => num > 10 }
 ```
 
 #### `VueTypes.any`
@@ -168,18 +235,18 @@ Validates that a prop is a Symbol.
 
 ### Native Types Configuration
 
-All native types (with the exception of `any`) come with a sensible default value. In order to modify or disable it you can set the global option `vueTypes.sensibleDefaults`:
+All native types (with the exception of `any`) come with a sensible default value. In order to modify or disable it you can set the global option `VueTypes.sensibleDefaults`:
 
 ```js
 //use vue-types default (this is the "default" value)
-vueTypes.sensibleDefaults = true
+VueTypes.sensibleDefaults = true
 
 //disable all sensible defaults.
 //Use .def(...) to set one
-vueTypes.sensibleDefaults = false
+VueTypes.sensibleDefaults = false
 
 //assign an object in order to specify custom defaults
-vueTypes.sensibleDefaults = {
+VueTypes.sensibleDefaults = {
   string: 'mystringdefault'
   //...
 }
@@ -190,17 +257,18 @@ vueTypes.sensibleDefaults = {
 Custom types are a special kind of types useful to describe complex validation requirements. By design each custom type:
 
 * **doesn't have** any sensible default value
+* **doesn't have** a `validate` method
 * has a `.def()` method to assign a default value on the current prop
-*  has an `isRequired` flag to set the `required: true` key
+* has an `isRequired` flag to set the `required: true` key
 
 ```js
-const oneOfPropDefault = vueTypes.oneOf([0, 1]).def(1)
+const oneOfPropDefault = VueTypes.oneOf([0, 1]).def(1)
 // oneOfPropDefault.default === 1
 
-const oneOfPropRequired = vueTypes.oneOf([0, 1]).isRequired
+const oneOfPropRequired = VueTypes.oneOf([0, 1]).isRequired
 // oneOfPropRequired.required ===  true
 
-const oneOfPropRequiredCustom = vueTypes.oneOf([0, 1]).def(1).isRequired
+const oneOfPropRequiredCustom = VueTypes.oneOf([0, 1]).def(1).isRequired
 // oneOfPropRequiredCustom.default ===  1
 // oneOfPropRequiredCustom.required === true
 ```
