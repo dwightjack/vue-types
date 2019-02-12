@@ -1,7 +1,7 @@
 "use strict";
 
 exports.__esModule = true;
-exports.warn = exports.validateType = exports.toType = exports.withRequired = exports.withDefault = exports.isFunction = exports.isArray = exports.isInteger = exports.has = exports.noop = exports.getNativeType = exports.getType = exports.hasOwn = void 0;
+exports.warn = exports.validateType = exports.toType = exports.withValidate = exports.withRequired = exports.withDefault = exports.isFunction = exports.isArray = exports.isInteger = exports.has = exports.noop = exports.getNativeType = exports.getType = exports.hasOwn = void 0;
 
 var _isPlainObject = _interopRequireDefault(require("lodash/isPlainObject"));
 
@@ -93,13 +93,14 @@ var isFunction = function isFunction(value) {
  * Adds a `def` method to the object returning a new object with passed in argument as `default` property
  *
  * @param {object} type - Object to enhance
+ * @returns {object} the passed-in prop type
  */
 
 
 exports.isFunction = isFunction;
 
 var withDefault = function withDefault(type) {
-  Object.defineProperty(type, 'def', {
+  return Object.defineProperty(type, 'def', {
     value: function value(def) {
       if (def === undefined && !this.default) {
         return this;
@@ -132,15 +133,35 @@ var withDefault = function withDefault(type) {
  * Adds a `isRequired` getter returning a new object with `required: true` key-value
  *
  * @param {object} type - Object to enhance
+ * @returns {object} the passed-in prop type
  */
 
 
 exports.withDefault = withDefault;
 
 var withRequired = function withRequired(type) {
-  Object.defineProperty(type, 'isRequired', {
+  return Object.defineProperty(type, 'isRequired', {
     get: function get() {
       this.required = true;
+      return this;
+    },
+    enumerable: false
+  });
+};
+/**
+ * Adds a validate method useful to set the prop `validator` function.
+ *
+ * @param {object} type Prop type to extend
+ * @returns {object} the passed-in prop type
+ */
+
+
+exports.withRequired = withRequired;
+
+var withValidate = function withValidate(type) {
+  return Object.defineProperty(type, 'validate', {
+    value: function value(fn) {
+      this.validator = fn.bind(this);
       return this;
     },
     enumerable: false
@@ -155,16 +176,23 @@ var withRequired = function withRequired(type) {
  */
 
 
-exports.withRequired = withRequired;
+exports.withValidate = withValidate;
 
-var toType = function toType(name, obj) {
+var toType = function toType(name, obj, validateFn) {
+  if (validateFn === void 0) {
+    validateFn = false;
+  }
+
   Object.defineProperty(obj, '_vueTypes_name', {
     enumerable: false,
     writable: false,
     value: name
   });
-  withRequired(obj);
-  withDefault(obj);
+  withDefault(withRequired(obj));
+
+  if (validateFn) {
+    withValidate(obj);
+  }
 
   if (isFunction(obj.validator)) {
     obj.validator = obj.validator.bind(obj);

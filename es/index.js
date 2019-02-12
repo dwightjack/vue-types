@@ -5,43 +5,43 @@ var VueTypes = {
   get any() {
     return toType('any', {
       type: null
-    });
+    }, true);
   },
 
   get func() {
     return toType('function', {
       type: Function
-    }).def(VueTypes.sensibleDefaults.func);
+    }, true).def(VueTypes.sensibleDefaults.func);
   },
 
   get bool() {
     return toType('boolean', {
       type: Boolean
-    }).def(VueTypes.sensibleDefaults.bool);
+    }, true).def(VueTypes.sensibleDefaults.bool);
   },
 
   get string() {
     return toType('string', {
       type: String
-    }).def(VueTypes.sensibleDefaults.string);
+    }, true).def(VueTypes.sensibleDefaults.string);
   },
 
   get number() {
     return toType('number', {
       type: Number
-    }).def(VueTypes.sensibleDefaults.number);
+    }, true).def(VueTypes.sensibleDefaults.number);
   },
 
   get array() {
     return toType('array', {
       type: Array
-    }).def(VueTypes.sensibleDefaults.array);
+    }, true).def(VueTypes.sensibleDefaults.array);
   },
 
   get object() {
     return toType('object', {
       type: Object
-    }).def(VueTypes.sensibleDefaults.object);
+    }, true).def(VueTypes.sensibleDefaults.object);
   },
 
   get integer() {
@@ -59,7 +59,7 @@ var VueTypes = {
       validator: function validator(value) {
         return typeof value === 'symbol';
       }
-    });
+    }, true);
   },
 
   custom: function custom(validatorFn, warnMsg) {

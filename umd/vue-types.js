@@ -1,5 +1,5 @@
 
-/*! vue-types - v1.3.4
+/*! vue-types - v1.4.0
  * https://github.com/dwightjack/vue-types
  * Copyright (c) 2019 - Marco Solazzi;
  * Licensed MIT
@@ -291,10 +291,11 @@
 	 * Adds a `def` method to the object returning a new object with passed in argument as `default` property
 	 *
 	 * @param {object} type - Object to enhance
+	 * @returns {object} the passed-in prop type
 	 */
 
 	var withDefault = function withDefault(type) {
-	  Object.defineProperty(type, 'def', {
+	  return Object.defineProperty(type, 'def', {
 	    value: function value(def) {
 	      if (def === undefined && !this.default) {
 	        return this;
@@ -327,12 +328,29 @@
 	 * Adds a `isRequired` getter returning a new object with `required: true` key-value
 	 *
 	 * @param {object} type - Object to enhance
+	 * @returns {object} the passed-in prop type
 	 */
 
 	var withRequired = function withRequired(type) {
-	  Object.defineProperty(type, 'isRequired', {
+	  return Object.defineProperty(type, 'isRequired', {
 	    get: function get() {
 	      this.required = true;
+	      return this;
+	    },
+	    enumerable: false
+	  });
+	};
+	/**
+	 * Adds a validate method useful to set the prop `validator` function.
+	 *
+	 * @param {object} type Prop type to extend
+	 * @returns {object} the passed-in prop type
+	 */
+
+	var withValidate = function withValidate(type) {
+	  return Object.defineProperty(type, 'validate', {
+	    value: function value(fn) {
+	      this.validator = fn.bind(this);
 	      return this;
 	    },
 	    enumerable: false
@@ -346,14 +364,21 @@
 	 * @returns {object}
 	 */
 
-	var toType = function toType(name, obj) {
+	var toType = function toType(name, obj, validateFn) {
+	  if (validateFn === void 0) {
+	    validateFn = false;
+	  }
+
 	  Object.defineProperty(obj, '_vueTypes_name', {
 	    enumerable: false,
 	    writable: false,
 	    value: name
 	  });
-	  withRequired(obj);
-	  withDefault(obj);
+	  withDefault(withRequired(obj));
+
+	  if (validateFn) {
+	    withValidate(obj);
+	  }
 
 	  if (isFunction(obj.validator)) {
 	    obj.validator = obj.validator.bind(obj);
@@ -480,43 +505,43 @@
 	  get any() {
 	    return toType('any', {
 	      type: null
-	    });
+	    }, true);
 	  },
 
 	  get func() {
 	    return toType('function', {
 	      type: Function
-	    }).def(VueTypes.sensibleDefaults.func);
+	    }, true).def(VueTypes.sensibleDefaults.func);
 	  },
 
 	  get bool() {
 	    return toType('boolean', {
 	      type: Boolean
-	    }).def(VueTypes.sensibleDefaults.bool);
+	    }, true).def(VueTypes.sensibleDefaults.bool);
 	  },
 
 	  get string() {
 	    return toType('string', {
 	      type: String
-	    }).def(VueTypes.sensibleDefaults.string);
+	    }, true).def(VueTypes.sensibleDefaults.string);
 	  },
 
 	  get number() {
 	    return toType('number', {
 	      type: Number
-	    }).def(VueTypes.sensibleDefaults.number);
+	    }, true).def(VueTypes.sensibleDefaults.number);
 	  },
 
 	  get array() {
 	    return toType('array', {
 	      type: Array
-	    }).def(VueTypes.sensibleDefaults.array);
+	    }, true).def(VueTypes.sensibleDefaults.array);
 	  },
 
 	  get object() {
 	    return toType('object', {
 	      type: Object
-	    }).def(VueTypes.sensibleDefaults.object);
+	    }, true).def(VueTypes.sensibleDefaults.object);
 	  },
 
 	  get integer() {
@@ -534,7 +559,7 @@
 	      validator: function validator(value) {
 	        return typeof value === 'symbol';
 	      }
-	    });
+	    }, true);
 	  },
 
 	  custom: function custom(validatorFn, warnMsg) {

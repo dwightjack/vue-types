@@ -15,43 +15,43 @@ var VueTypes = {
   get any() {
     return (0, _utils.toType)('any', {
       type: null
-    });
+    }, true);
   },
 
   get func() {
     return (0, _utils.toType)('function', {
       type: Function
-    }).def(VueTypes.sensibleDefaults.func);
+    }, true).def(VueTypes.sensibleDefaults.func);
   },
 
   get bool() {
     return (0, _utils.toType)('boolean', {
       type: Boolean
-    }).def(VueTypes.sensibleDefaults.bool);
+    }, true).def(VueTypes.sensibleDefaults.bool);
   },
 
   get string() {
     return (0, _utils.toType)('string', {
       type: String
-    }).def(VueTypes.sensibleDefaults.string);
+    }, true).def(VueTypes.sensibleDefaults.string);
   },
 
   get number() {
     return (0, _utils.toType)('number', {
       type: Number
-    }).def(VueTypes.sensibleDefaults.number);
+    }, true).def(VueTypes.sensibleDefaults.number);
   },
 
   get array() {
     return (0, _utils.toType)('array', {
       type: Array
-    }).def(VueTypes.sensibleDefaults.array);
+    }, true).def(VueTypes.sensibleDefaults.array);
   },
 
   get object() {
     return (0, _utils.toType)('object', {
       type: Object
-    }).def(VueTypes.sensibleDefaults.object);
+    }, true).def(VueTypes.sensibleDefaults.object);
   },
 
   get integer() {
@@ -69,7 +69,7 @@ var VueTypes = {
       validator: function validator(value) {
         return typeof value === 'symbol';
       }
-    });
+    }, true);
   },
 
   custom: function custom(validatorFn, warnMsg) {

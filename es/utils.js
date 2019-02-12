@@ -65,10 +65,11 @@ export var isFunction = function isFunction(value) {
  * Adds a `def` method to the object returning a new object with passed in argument as `default` property
  *
  * @param {object} type - Object to enhance
+ * @returns {object} the passed-in prop type
  */
 
 export var withDefault = function withDefault(type) {
-  Object.defineProperty(type, 'def', {
+  return Object.defineProperty(type, 'def', {
     value: function value(def) {
       if (def === undefined && !this.default) {
         return this;
@@ -101,12 +102,29 @@ export var withDefault = function withDefault(type) {
  * Adds a `isRequired` getter returning a new object with `required: true` key-value
  *
  * @param {object} type - Object to enhance
+ * @returns {object} the passed-in prop type
  */
 
 export var withRequired = function withRequired(type) {
-  Object.defineProperty(type, 'isRequired', {
+  return Object.defineProperty(type, 'isRequired', {
     get: function get() {
       this.required = true;
+      return this;
+    },
+    enumerable: false
+  });
+};
+/**
+ * Adds a validate method useful to set the prop `validator` function.
+ *
+ * @param {object} type Prop type to extend
+ * @returns {object} the passed-in prop type
+ */
+
+export var withValidate = function withValidate(type) {
+  return Object.defineProperty(type, 'validate', {
+    value: function value(fn) {
+      this.validator = fn.bind(this);
       return this;
     },
     enumerable: false
@@ -120,14 +138,21 @@ export var withRequired = function withRequired(type) {
  * @returns {object}
  */
 
-export var toType = function toType(name, obj) {
+export var toType = function toType(name, obj, validateFn) {
+  if (validateFn === void 0) {
+    validateFn = false;
+  }
+
   Object.defineProperty(obj, '_vueTypes_name', {
     enumerable: false,
     writable: false,
     value: name
   });
-  withRequired(obj);
-  withDefault(obj);
+  withDefault(withRequired(obj));
+
+  if (validateFn) {
+    withValidate(obj);
+  }
 
   if (isFunction(obj.validator)) {
     obj.validator = obj.validator.bind(obj);
