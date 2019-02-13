@@ -64,6 +64,18 @@ const VueTypes = {
     }, true)
   },
 
+  extend (props = {}) {
+    const { name, validate = false, getter = false, ...type } = props
+    const descriptor = {
+      [getter ? 'get' : 'value'] () {
+        return toType(name, type, validate)
+      },
+      enumerable: true,
+      configurable: false
+    }
+    return Object.defineProperty(this, name, descriptor)
+  },
+
   custom (validatorFn, warnMsg = 'custom validation failed') {
     if (typeof validatorFn !== 'function') {
       throw new TypeError('[VueTypes error]: You must provide a function as argument')

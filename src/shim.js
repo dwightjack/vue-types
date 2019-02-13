@@ -42,4 +42,9 @@ Object.defineProperty(vueTypes, 'shape', {
   }
 })
 
+vueTypes.extend = (props) => {
+  const { name, validate, getter = false } = props
+  return createValidator(vueTypes, name, getter, validate && { validate () {} })
+}
+
 export default vueTypes
