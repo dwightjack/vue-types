@@ -742,6 +742,19 @@ describe('VueTypes', () => {
       })
     })
 
+    it('should pass configuration params to the validator method', () => {
+      const validator = expect.createSpy()
+      VueTypes.extend({
+        name: 'dateFnArgs',
+        type: Date,
+        validator
+      })
+
+      const dateFnType = VueTypes.dateFnArgs(1, 2)
+      dateFnType.validator(3)
+      expect(validator).toHaveBeenCalledWith(1, 2, 3)
+    })
+
     it('should add a validate method to the prop', () => {
       VueTypes.extend({
         name: 'stringCustom',
