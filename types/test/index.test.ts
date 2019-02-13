@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import VueTypes from '../index';
-import { VueTypesInterface, VueTypeDef, VueTypeValidableDef } from '../vue-types';
+import VueTypes, { VueTypesInterface, VueTypeValidableDef } from '../index';
 
 const noop = () => { };
 
