@@ -18,6 +18,7 @@
     - [Native Types](#native-types)
     - [Native Types Configuration](#native-types-configuration)
     - [Custom Types](#custom-types)
+    - [Extending VueTypes](#extending-vuetypes)
     - [Utilities](#utilities)
 - [License](#license)
 
@@ -252,6 +253,25 @@ VueTypes.sensibleDefaults = {
 }
 ```
 
+Under the hood `VueTypes.sensibleDefaults` is a plain object with just some added _magic_. That let's you play with it like you'd do with every other object.
+
+For example you can remove some of the default values by leveraging [object rest spread](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#Spread_in_object_literals) or [lodash.omit](https://lodash.com/docs/4.17.11#omit) like functions.
+
+```js
+// copy every default value but boolean
+
+console.log(VueTypes.bool.default)
+// logs true
+
+const { bool, ...newDefaults } = VueTypes.sensibleDefaults
+
+VueTypes.sensibleDefaults = newDefaults
+// or VueTypes.sensibleDefaults = _.omit(VueTypes.sensibleDefaults, ['bool'])
+
+console.log(VueTypes.bool.default)
+// logs undefined
+```
+
 ### Custom Types
 
 Custom types are a special kind of types useful to describe complex validation requirements. By design each custom type:
@@ -426,6 +446,99 @@ export default {
     )
   }
 }
+```
+
+### Extending VueTypes
+
+You can extend VueTypes with your own types via `VueTypes.extend({...})`. The method accepts an object with every key supported by [Vue prop validation objects](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) plus the following custom properties:
+
+- `name`: (string, required) The type name. Will be exposed as VueType.<name>
+- `validate`: (boolean, default: `false`) If `true` the type will have a `validate` method like native types.
+- `getter`: (boolean, default: `false`) If `true` will setup the type as an accessor property (like, for example `VueTypes.string`) else will setup the type as a configurable method (like, for example `VueTypes.arrayOf`).
+
+Examples:
+```js
+// as an accessor type
+VueTypes.extend({
+  name: 'negative',
+  getter: true,
+  type: Number,
+  validator: (v) => v < 0
+})
+
+const negativeProp = VueTypes.negative
+
+// as a configurable method
+VueTypes.extend({
+  name: 'negativeFn',
+  type: Number,
+  validator: (v) => v < 0
+})
+
+const negativeProp2 = VueTypes.negativeFn() // <-- we need to call it
+```
+
+Note that if `getter` is set to `false`, arguments passed to the type will be passed to the `validator` method together with the prop value:
+
+```js
+VueTypes.extend({
+  name: 'maxLength',
+  // getter: false, this is the default
+  type: String,
+  validator: (max, v) => v.length <= max
+})
+
+const maxLengthType = VueTypes.maxLength(2)
+
+maxLengthType.validator('ab') // true
+maxLengthType.validator('abcd') // false
+```
+
+#### Typescript
+
+When used in a TypeScript project, types added via `.extend()` might fail type checking. In order to instruct TypeScript about your custom types you can use the following pattern:
+
+```ts
+// propTypes.ts
+
+// import
+// - VueTypes library
+// - validation object interface (VueTypeDef)
+// - the default VueType interface (VueTypesInterface)
+import VueTypes, { VueTypeDef, VueTypesInterface } from 'vue-types'
+
+interface ProjectTypes extends VueTypesInterface {
+  //VueTypeDef accepts the prop expected type as argument
+  maxLength(max: number): VueTypeDef<string>
+}
+
+VueTypes.extend({
+  name: 'maxLength',
+  type: String,
+  validator: (max: number, v: string) => v.length <= max
+})
+
+export default VueTypes as ProjectTypes
+```
+
+Then import the newly created `propTypes.ts` instead of `vue-types`:
+
+```html
+<!-- MyComponent.vue -->
+<template>
+<!-- template here -->
+</template>
+<script lang="ts">
+import Vue from "vue";
+import VueTypes from "./prop-types";
+
+export default Vue.extend({
+  name: "MyComponent",
+  props: {
+    msg: VueTypes.maxLength(2)
+  }
+});
+</script>
 ```
 
 ### Utilities
