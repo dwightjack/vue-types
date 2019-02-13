@@ -1,11 +1,20 @@
 import Vue from 'vue'
 import VueTypes from 'vue-types'
 
+VueTypes.extend({
+  name: 'adult',
+  getter: true,
+  type: Number,
+  validator (v) {
+    return v >= 18
+  }
+})
+
 var User = {
   template: '<li><strong>{{ name }}</strong> ({{ age }})</li>',
   props: {
     name: VueTypes.string.isRequired,
-    age: VueTypes.integer.def(10)
+    age: VueTypes.adult
   }
 }
 
@@ -36,7 +45,8 @@ new Vue({
       name: 'Jane',
       age: 30
     }, {
-      name: 'Jack'
+      name: 'Jack',
+      age: 18
     }]
   },
   components: {
