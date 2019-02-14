@@ -11,6 +11,8 @@ var _sensibles = require("./sensibles");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 var VueTypes = {
   get any() {
     return (0, _utils.toType)('any', {
@@ -72,6 +74,51 @@ var VueTypes = {
     }, true);
   },
 
+  extend: function extend(props) {
+    if (props === void 0) {
+      props = {};
+    }
+
+    var _props = props,
+        name = _props.name,
+        _props$validate = _props.validate,
+        validate = _props$validate === void 0 ? false : _props$validate,
+        _props$getter = _props.getter,
+        getter = _props$getter === void 0 ? false : _props$getter,
+        type = _objectWithoutPropertiesLoose(_props, ["name", "validate", "getter"]);
+
+    var descriptor;
+
+    if (getter) {
+      descriptor = {
+        get: function get() {
+          return (0, _utils.toType)(name, type, validate);
+        },
+        enumerable: true,
+        configurable: false
+      };
+    } else {
+      var validator = type.validator;
+      descriptor = {
+        value: function value() {
+          if (validator) {
+            for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+              args[_key] = arguments[_key];
+            }
+
+            type.validator = validator.bind.apply(validator, [this].concat(args));
+          }
+
+          return (0, _utils.toType)(name, type, validate);
+        },
+        writable: false,
+        enumerable: true,
+        configurable: false
+      };
+    }
+
+    return Object.defineProperty(this, name, descriptor);
+  },
   custom: function custom(validatorFn, warnMsg) {
     if (warnMsg === void 0) {
       warnMsg = 'custom validation failed';

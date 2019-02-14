@@ -61,4 +61,15 @@ Object.defineProperty(vueTypes, 'shape', {
     });
   }
 });
+
+vueTypes.extend = function (props) {
+  var name = props.name,
+      validate = props.validate,
+      _props$getter = props.getter,
+      getter = _props$getter === void 0 ? false : _props$getter;
+  return createValidator(vueTypes, name, getter, validate && {
+    validate: function validate() {}
+  });
+};
+
 export default vueTypes;

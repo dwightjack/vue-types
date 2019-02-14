@@ -3,6 +3,7 @@
   "rules": {
     "use-default-type-parameter": false,
     "file-name-casing": false,
-    "no-unnecessary-generics": false
+    "no-unnecessary-generics": false,
+    "strict-export-declare-modifiers": false
   }
 }

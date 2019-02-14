@@ -26,14 +26,12 @@ export interface VueTypeInstanceOf<T extends Constructor> extends VueTypeDef<Ins
   type: T;
 }
 
-export interface VueTypeShape<T> extends VueTypeDef<T> {
-  readonly def: <P extends defaultType<Partial<T>>>(def: P) => this & { default: P };
+export interface VueTypeShape<T, D = DefaultFactory<Partial<T>>> extends VueTypeDef<T, D> {
   readonly loose: VueTypeLooseShape<T>;
 }
 
-export interface VueTypeLooseShape<T> extends VueTypeShape<T> {
+export interface VueTypeLooseShape<T, D = DefaultFactory<Partial<T & { [key: string]: any }>>> extends VueTypeShape<T, D> {
   readonly _vueTypes_isLoose: true;
-  readonly def: <D extends defaultType<Partial<T> & { [key: string]: any }>>(def: D) => this & { default: D };
 }
 
 export interface VueTypeArrayOf<T> extends VueTypeDef<T[]> {
@@ -61,8 +59,15 @@ export interface TypeDefaults {
   integer?: number;
 }
 
+export interface extendProps extends PropOptions {
+  name: string;
+  getter?: boolean;
+  validate?: boolean;
+}
+
 export interface VueTypesInterface {
   sensibleDefaults: TypeDefaults | boolean;
+  extend<T extends VueTypesInterface>(props: extendProps): T;
   utils: VueTypesUtils;
   readonly any: VueTypeValidableDef;
   readonly bool: VueTypeValidableDef<boolean>;
