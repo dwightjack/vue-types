@@ -10,6 +10,7 @@ export {
   VueProp,
   Constructor,
   VueTypeDef,
+  VueTypeValidableDef,
   VueTypeInstanceOf,
   VueTypeShape,
   VueTypeLooseShape,
@@ -17,4 +18,5 @@ export {
   ValidatorFunction,
   VueTypeCustom,
   VueTypeObjectOf,
+  VueTypesInterface
 } from './vue-types';

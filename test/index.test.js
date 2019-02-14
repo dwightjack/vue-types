@@ -712,6 +712,59 @@ describe('VueTypes', () => {
       expect(VueTypes.string.default).toBe('test')
     })
   })
+
+  describe('`.extend` helper', () => {
+    it('should add getter prop to the library', () => {
+      const validator = expect.createSpy()
+      VueTypes.extend({
+        name: 'date',
+        validator,
+        getter: true,
+        type: Date
+      })
+
+      const dateType = VueTypes.date
+
+      expect(dateType).toNotBe(undefined)
+      dateType.validator('v')
+      expect(validator).toHaveBeenCalledWith('v')
+    })
+
+    it('should add a method to the library', () => {
+      VueTypes.extend({
+        name: 'dateFn',
+        type: Date
+      })
+      expect(VueTypes.dateFn).toBeA(Function)
+      expect(VueTypes.dateFn().isRequired).toEqual({
+        type: Date,
+        required: true
+      })
+    })
+
+    it('should pass configuration params to the validator method', () => {
+      const validator = expect.createSpy()
+      VueTypes.extend({
+        name: 'dateFnArgs',
+        type: Date,
+        validator
+      })
+
+      const dateFnType = VueTypes.dateFnArgs(1, 2)
+      dateFnType.validator(3)
+      expect(validator).toHaveBeenCalledWith(1, 2, 3)
+    })
+
+    it('should add a validate method to the prop', () => {
+      VueTypes.extend({
+        name: 'stringCustom',
+        type: Date,
+        getter: true,
+        validate: true
+      })
+      expect(VueTypes.stringCustom.validate).toBeA(Function)
+    })
+  })
 })
 
 describe('VueTypes.utils', () => {

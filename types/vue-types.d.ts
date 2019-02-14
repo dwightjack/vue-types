@@ -61,8 +61,15 @@ export interface TypeDefaults {
   integer?: number;
 }
 
+export interface extendProps extends PropOptions {
+  name: string;
+  getter?: boolean;
+  validate?: boolean;
+}
+
 export interface VueTypesInterface {
   sensibleDefaults: TypeDefaults | boolean;
+  extend<T extends VueTypesInterface>(props: extendProps): T;
   utils: VueTypesUtils;
   readonly any: VueTypeValidableDef;
   readonly bool: VueTypeValidableDef<boolean>;

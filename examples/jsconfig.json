@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "vue-types": ["../src/index.js"],
+      "vue-types/types": ["../types/vue-types.d.ts"]
+    }
+  }
+}

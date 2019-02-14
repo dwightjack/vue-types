@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import VueTypes from '../index';
+import VueTypes, { VueTypesInterface, VueTypeValidableDef } from '../index';
 
 const noop = () => { };
 
@@ -75,6 +75,20 @@ shapeType.type = Object;
 VueTypes.sensibleDefaults = {};
 VueTypes.sensibleDefaults = false;
 VueTypes.sensibleDefaults = true;
+
+interface CustomVueTypes extends VueTypesInterface {
+  readonly test: VueTypeValidableDef<any>;
+}
+// extending
+const myTypes = VueTypes.extend<CustomVueTypes>({
+  name: 'test',
+  validate: true,
+  getter: true
+});
+
+(VueTypes as CustomVueTypes).test.isRequired;
+myTypes.test.isRequired;
+myTypes.test.isRequired;
 
 const BaseComponent = Vue.extend({
   props: {

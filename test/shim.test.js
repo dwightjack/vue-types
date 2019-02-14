@@ -527,6 +527,38 @@ describe('SHIM: VueTypes', () => {
       expect(VueTypes.string.default).toBe('test')
     })
   })
+
+  describe('SHIM: `.extend` helper', () => {
+    it('should add getter prop to the library', () => {
+      VueTypes.extend({
+        name: 'date',
+        getter: true,
+        type: Date
+      })
+
+      const dateType = VueTypes.date
+      expect(dateType).toNotBe(undefined)
+    })
+
+    it('should add a method to the library', () => {
+      VueTypes.extend({
+        name: 'dateFn',
+        type: Date
+      })
+      expect(VueTypes.dateFn).toBeA(Function)
+      expect(VueTypes.dateFn().isRequired.required).toBe(true)
+    })
+
+    it('should add a validate method to the prop', () => {
+      VueTypes.extend({
+        name: 'stringCustom',
+        type: Date,
+        getter: true,
+        validate: true
+      })
+      expect(VueTypes.stringCustom.validate).toBeA(Function)
+    })
+  })
 })
 
 describe('SHIM: VueTypes.utils', () => {
