@@ -1,5 +1,5 @@
 import isPlainObject from 'lodash/isPlainObject'
-import { toType, getType, isFunction, validateType, isInteger, isArray, warn, noop } from './utils'
+import { toType, getType, isFunction, validateType, isInteger, isArray, warn } from './utils'
 import { setDefaults } from './sensibles'
 
 const VueTypes = {
