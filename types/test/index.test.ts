@@ -63,7 +63,6 @@ const shapeType = VueTypes.shape({
   hobbies: VueTypes.array,
 }).def({ name: 'test', age: 100, hobbies: [true] }).isRequired;
 
-
 const shapeTypeLoose = VueTypes.shape({
   name: String,
   surname: { type: String, default: 'Doe' },
