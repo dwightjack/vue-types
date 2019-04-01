@@ -1,5 +1,6 @@
-import { setDefaults } from './sensibles';
+import Vue from 'vue';
 import isPlainObject from 'lodash/isPlainObject';
+import { setDefaults } from './sensibles';
 
 var isArray = Array.isArray || function (value) {
   return Object.prototype.toString.call(value) === '[object Array]';
@@ -32,7 +33,9 @@ var type = function type(props) {
       return this;
     },
 
-    validator: function validator() {}
+    validator: function validator() {
+      return true;
+    }
   }, props);
 };
 
@@ -113,5 +116,9 @@ vueTypes.extend = function extend(props) {
     validate: validate ? function () {} : undefined
   });
 };
+
+if (process.env.NODE_ENV !== 'production') {
+  Vue.config.silent === false && console.warn('You are using the production shimmed version of VueTypes in a development build. Refer to https://github.com/dwightjack/vue-types#production-build to learn how to configure VueTypes for usage in multiple environments.');
+}
 
 export default vueTypes;

@@ -3,9 +3,11 @@
 exports.__esModule = true;
 exports.default = void 0;
 
-var _sensibles = require("./sensibles");
+var _vue = _interopRequireDefault(require("vue"));
 
 var _isPlainObject = _interopRequireDefault(require("lodash/isPlainObject"));
+
+var _sensibles = require("./sensibles");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -40,7 +42,9 @@ var type = function type(props) {
       return this;
     },
 
-    validator: function validator() {}
+    validator: function validator() {
+      return true;
+    }
   }, props);
 };
 
@@ -121,6 +125,10 @@ vueTypes.extend = function extend(props) {
     validate: validate ? function () {} : undefined
   });
 };
+
+if (process.env.NODE_ENV !== 'production') {
+  _vue.default.config.silent === false && console.warn('You are using the production shimmed version of VueTypes in a development build. Refer to https://github.com/dwightjack/vue-types#production-build to learn how to configure VueTypes for usage in multiple environments.');
+}
 
 var _default = vueTypes;
 exports.default = _default;
