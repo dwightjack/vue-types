@@ -1,5 +1,6 @@
-import { setDefaults } from './sensibles'
+import Vue from 'vue'
 import isPlainObject from 'lodash/isPlainObject'
+import { setDefaults } from './sensibles'
 
 const isArray = Array.isArray || function (value) {
   return Object.prototype.toString.call(value) === '[object Array]'
@@ -23,7 +24,7 @@ const type = (props) => Object.assign({
     this.required = true
     return this
   },
-  validator () {}
+  validator () { return true }
 }, props)
 
 const vueTypes = setDefaults({
@@ -72,6 +73,10 @@ Object.defineProperty(vueTypes, 'shape', {
 vueTypes.extend = function extend (props) {
   const { name, validate, getter = false, type = null } = props
   return createValidator(vueTypes, name, getter, { type, validate: validate ? () => {} : undefined })
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  Vue.config.silent === false && console.warn('You are using the production shimmed version of VueTypes in a development build. Refer to https://github.com/dwightjack/vue-types#production-build to learn how to configure VueTypes for usage in multiple environments.')
 }
 
 export default vueTypes
