@@ -1,9 +1,29 @@
 import { setDefaults } from './sensibles';
+import isPlainObject from 'lodash/isPlainObject';
+
+var isArray = Array.isArray || function (value) {
+  return Object.prototype.toString.call(value) === '[object Array]';
+};
 
 var type = function type(props) {
   return Object.assign({
     def: function def(v) {
-      this.default = v;
+      if (v === undefined && !this.default) {
+        return this;
+      }
+
+      if (isArray(v)) {
+        this.default = function () {
+          return [].concat(v);
+        };
+      } else if (isPlainObject(v)) {
+        this.default = function () {
+          return Object.assign({}, v);
+        };
+      } else {
+        this.default = v;
+      }
+
       return this;
     },
 
@@ -24,8 +44,22 @@ var vueTypes = setDefaults({
     }
   }
 });
+var typeMap = {
+  func: Function,
+  bool: Boolean,
+  string: String,
+  number: Number,
+  integer: Number,
+  array: Array,
+  object: Object,
+  arrayOf: Array,
+  objectOf: Object,
+  shape: Object
+};
+var getters = ['any', 'func', 'bool', 'string', 'number', 'array', 'object', 'symbol'];
+var methods = ['oneOf', 'custom', 'instanceOf', 'oneOfType', 'arrayOf', 'objectOf'];
 
-var createValidator = function createValidator(root, name, getter, props) {
+function createValidator(root, name, getter, props) {
   var _descr;
 
   if (getter === void 0) {
@@ -37,23 +71,28 @@ var createValidator = function createValidator(root, name, getter, props) {
     return type(props).def(getter ? vueTypes.sensibleDefaults[name] : undefined);
   }, _descr);
   return Object.defineProperty(root, name, descr);
-};
+}
 
-var getters = ['any', 'func', 'bool', 'string', 'number', 'array', 'object', 'symbol'];
-var methods = ['oneOf', 'custom', 'instanceOf', 'oneOfType', 'arrayOf', 'objectOf'];
 getters.forEach(function (p) {
   return createValidator(vueTypes, p, true, {
+    type: typeMap[p] || null,
     validate: function validate() {}
   });
 });
 methods.forEach(function (p) {
-  return createValidator(vueTypes, p, false);
+  return createValidator(vueTypes, p, false, {
+    type: typeMap[p] || null
+  });
 });
-createValidator(vueTypes, 'integer', true); // does not have a validate method
+createValidator(vueTypes, 'integer', true, {
+  type: Number
+}); // does not have a validate method
 
 Object.defineProperty(vueTypes, 'shape', {
   value: function value() {
-    return Object.defineProperty(type(), 'loose', {
+    return Object.defineProperty(type({
+      type: Object
+    }), 'loose', {
       get: function get() {
         return this;
       },
@@ -62,13 +101,16 @@ Object.defineProperty(vueTypes, 'shape', {
   }
 });
 
-vueTypes.extend = function (props) {
+vueTypes.extend = function extend(props) {
   var name = props.name,
       validate = props.validate,
       _props$getter = props.getter,
-      getter = _props$getter === void 0 ? false : _props$getter;
-  return createValidator(vueTypes, name, getter, validate && {
-    validate: function validate() {}
+      getter = _props$getter === void 0 ? false : _props$getter,
+      _props$type = props.type,
+      type = _props$type === void 0 ? null : _props$type;
+  return createValidator(vueTypes, name, getter, {
+    type: type,
+    validate: validate ? function () {} : undefined
   });
 };
 
