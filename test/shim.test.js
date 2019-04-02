@@ -15,6 +15,11 @@ describe('SHIM: VueTypes', () => {
       expect(VueTypes.any).toNotBe(undefined)
     })
 
+    it('should have a `type` property', () => {
+      const type = VueTypes.any
+      expect(type.type).toBe(null)
+    })
+
     it('should have a `isRequired` flag that returns the type itself', () => {
       const type = VueTypes.any
       expect(type.isRequired).toBe(type)
@@ -43,6 +48,10 @@ describe('SHIM: VueTypes', () => {
   describe('SHIM: `.func`', () => {
     it('should exist', () => {
       expect(VueTypes.func).toNotBe(undefined)
+    })
+
+    it('should have a `type` property', () => {
+      expect(VueTypes.func.type).toBe(Function)
     })
 
     it('should have a `isRequired` flag that returns the type itself', () => {
@@ -75,6 +84,10 @@ describe('SHIM: VueTypes', () => {
       expect(VueTypes.bool).toNotBe(undefined)
     })
 
+    it('should have a `type` property', () => {
+      expect(VueTypes.bool.type).toBe(Boolean)
+    })
+
     it('should have a `isRequired` flag that returns the type itself', () => {
       const type = VueTypes.bool
       expect(type.isRequired).toBe(type)
@@ -103,6 +116,10 @@ describe('SHIM: VueTypes', () => {
   describe('SHIM: `.string`', () => {
     it('should exist', () => {
       expect(VueTypes.string).toNotBe(undefined)
+    })
+
+    it('should have a `type` property', () => {
+      expect(VueTypes.string.type).toBe(String)
     })
 
     it('should have a `isRequired` flag that returns the type itself', () => {
@@ -135,6 +152,10 @@ describe('SHIM: VueTypes', () => {
       expect(VueTypes.number).toNotBe(undefined)
     })
 
+    it('should have a `type` property', () => {
+      expect(VueTypes.number.type).toBe(Number)
+    })
+
     it('should have a `isRequired` flag that returns the type itself', () => {
       const type = VueTypes.number
       expect(type.isRequired).toBe(type)
@@ -165,6 +186,10 @@ describe('SHIM: VueTypes', () => {
       expect(VueTypes.array).toNotBe(undefined)
     })
 
+    it('should have a `type` property', () => {
+      expect(VueTypes.array.type).toBe(Array)
+    })
+
     it('should have a `isRequired` flag that returns the type itself', () => {
       const type = VueTypes.array
       expect(type.isRequired).toBe(type)
@@ -178,7 +203,7 @@ describe('SHIM: VueTypes', () => {
     it('should have a `def` method that sets a `default` property', () => {
       const type = VueTypes.array
       const defValue = ['demo']
-      expect(type.def(defValue).default).toBe(defValue)
+      expect(type.def(defValue).default()).toEqual(defValue)
     })
 
     it('should have a `validator` method', () => {
@@ -195,6 +220,10 @@ describe('SHIM: VueTypes', () => {
       expect(VueTypes.object).toNotBe(undefined)
     })
 
+    it('should have a `type` property', () => {
+      expect(VueTypes.object.type).toBe(Object)
+    })
+
     it('should have a `isRequired` flag that returns the type itself', () => {
       const type = VueTypes.object
       expect(type.isRequired).toBe(type)
@@ -208,7 +237,7 @@ describe('SHIM: VueTypes', () => {
     it('should have a `def` method that sets a `default` property', () => {
       const type = VueTypes.object
       const defValue = { demo: true }
-      expect(type.def(defValue).default).toBe(defValue)
+      expect(type.def(defValue).default()).toEqual(defValue)
     })
 
     it('should have a `validator` method', () => {
@@ -227,6 +256,10 @@ describe('SHIM: VueTypes', () => {
   describe('SHIM: `.integer`', () => {
     it('should exist', () => {
       expect(VueTypes.integer).toNotBe(undefined)
+    })
+
+    it('should have a `type` property', () => {
+      expect(VueTypes.integer.type).toBe(Number)
     })
 
     it('should have a `isRequired` flag that returns the type itself', () => {
@@ -253,6 +286,10 @@ describe('SHIM: VueTypes', () => {
   describe('symbol', () => {
     it('should exist', () => {
       expect(VueTypes.symbol).toNotBe(undefined)
+    })
+
+    it('should have a `type` property', () => {
+      expect(VueTypes.symbol.type).toBe(null)
     })
 
     it('should have a `isRequired` flag that returns the type itself', () => {
@@ -285,6 +322,10 @@ describe('SHIM: VueTypes', () => {
       expect(VueTypes.custom).toBeA(Function)
     })
 
+    it('should have a `type` property', () => {
+      expect(VueTypes.custom().type).toBe(null)
+    })
+
     it('should have a `isRequired` flag that returns the type itself', () => {
       const type = VueTypes.custom()
       expect(type.isRequired).toBe(type)
@@ -309,6 +350,10 @@ describe('SHIM: VueTypes', () => {
   describe('SHIM: `.oneOf`', () => {
     it('should exist', () => {
       expect(VueTypes.oneOf).toBeA(Function)
+    })
+
+    it('should have a `type` property', () => {
+      expect(VueTypes.oneOf().type).toBe(null)
     })
 
     it('should have a `isRequired` flag that returns the type itself', () => {
@@ -337,6 +382,10 @@ describe('SHIM: VueTypes', () => {
       expect(VueTypes.instanceOf).toBeA(Function)
     })
 
+    it('should have a `type` property', () => {
+      expect(VueTypes.instanceOf().type).toBe(null)
+    })
+
     it('should have a `isRequired` flag that returns the type itself', () => {
       const type = VueTypes.instanceOf()
       expect(type.isRequired).toBe(type)
@@ -363,6 +412,10 @@ describe('SHIM: VueTypes', () => {
       expect(VueTypes.arrayOf).toBeA(Function)
     })
 
+    it('should have a `type` property', () => {
+      expect(VueTypes.arrayOf().type).toBe(Array)
+    })
+
     it('should have a `isRequired` flag that returns the type itself', () => {
       const type = VueTypes.arrayOf()
       expect(type.isRequired).toBe(type)
@@ -375,8 +428,8 @@ describe('SHIM: VueTypes', () => {
 
     it('should have a `def` method that sets a `default` property', () => {
       const type = VueTypes.arrayOf()
-      const defValue = 'x'
-      expect(type.def(defValue).default).toBe(defValue)
+      const defValue = ['x']
+      expect(type.def(defValue).default()).toEqual(defValue)
     })
 
     it('should have a `validator` method', () => {
@@ -389,6 +442,10 @@ describe('SHIM: VueTypes', () => {
       expect(VueTypes.objectOf).toBeA(Function)
     })
 
+    it('should have a `type` property', () => {
+      expect(VueTypes.objectOf().type).toBe(Object)
+    })
+
     it('should have a `isRequired` flag that returns the type itself', () => {
       const type = VueTypes.objectOf()
       expect(type.isRequired).toBe(type)
@@ -401,8 +458,8 @@ describe('SHIM: VueTypes', () => {
 
     it('should have a `def` method that sets a `default` property', () => {
       const type = VueTypes.objectOf()
-      const defValue = 'x'
-      expect(type.def(defValue).default).toBe(defValue)
+      const defValue = { key: 'x' }
+      expect(type.def(defValue).default()).toEqual(defValue)
     })
 
     it('should have a `validator` method', () => {
@@ -415,6 +472,10 @@ describe('SHIM: VueTypes', () => {
       expect(VueTypes.shape).toBeA(Function)
     })
 
+    it('should have a `type` property', () => {
+      expect(VueTypes.shape().type).toBe(Object)
+    })
+
     it('should have a `isRequired` flag that returns the type itself', () => {
       const type = VueTypes.shape()
       expect(type.isRequired).toBe(type)
@@ -427,8 +488,8 @@ describe('SHIM: VueTypes', () => {
 
     it('should have a `def` method that sets a `default` property', () => {
       const type = VueTypes.shape()
-      const defValue = 'x'
-      expect(type.def(defValue).default).toBe(defValue)
+      const defValue = { shape: 'x' }
+      expect(type.def(defValue).default()).toEqual(defValue)
     })
 
     it('should have a `validator` method', () => {
@@ -444,6 +505,10 @@ describe('SHIM: VueTypes', () => {
   describe('SHIM: `.oneOfType`', () => {
     it('should exist', () => {
       expect(VueTypes.oneOfType).toBeA(Function)
+    })
+
+    it('should have a `type` property', () => {
+      expect(VueTypes.oneOfType().type).toBe(null)
     })
 
     it('should have a `isRequired` flag that returns the type itself', () => {
