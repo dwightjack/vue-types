@@ -282,6 +282,7 @@ exports.warn = warn;
 if (process.env.NODE_ENV !== 'production') {
   var hasConsole = typeof console !== 'undefined';
   exports.warn = warn = hasConsole ? function (msg) {
+    // eslint-disable-next-line no-console
     _vue.default.config.silent === false && console.warn("[VueTypes warn]: " + msg);
   } : noop;
 }

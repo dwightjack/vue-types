@@ -1,5 +1,5 @@
 
-/*! vue-types - v1.5.4
+/*! vue-types - v1.5.5
  * https://github.com/dwightjack/vue-types
  * Copyright (c) 2019 - Marco Solazzi;
  * Licensed MIT
@@ -28,7 +28,7 @@
     return target;
   }
 
-  var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+  var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
   /** Detect free variable `global` from Node.js. */
   var freeGlobal = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
@@ -44,9 +44,9 @@
   var _root = root;
 
   /** Built-in value references. */
-  var Symbol$1 = _root.Symbol;
+  var Symbol = _root.Symbol;
 
-  var _Symbol = Symbol$1;
+  var _Symbol = Symbol;
 
   /** Used for built-in method references. */
   var objectProto = Object.prototype;
@@ -477,6 +477,7 @@
   {
     var hasConsole = typeof console !== 'undefined';
     warn = hasConsole ? function (msg) {
+      // eslint-disable-next-line no-console
       Vue.config.silent === false && console.warn("[VueTypes warn]: " + msg);
     } : noop;
   }
@@ -672,7 +673,7 @@
       }
 
       var hasCustomValidators = false;
-      var nativeChecks = arr.reduce(function (ret, type, i) {
+      var nativeChecks = arr.reduce(function (ret, type) {
         if (isPlainObject_1(type)) {
           if (type._vueTypes_name === 'oneOf') {
             return ret.concat(type.type || []);

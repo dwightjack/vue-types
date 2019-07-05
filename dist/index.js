@@ -169,7 +169,7 @@ var VueTypes = {
     }
 
     var hasCustomValidators = false;
-    var nativeChecks = arr.reduce(function (ret, type, i) {
+    var nativeChecks = arr.reduce(function (ret, type) {
       if ((0, _isPlainObject.default)(type)) {
         if (type._vueTypes_name === 'oneOf') {
           return ret.concat(type.type || []);
