@@ -71,7 +71,7 @@
     "karma-mocha-reporter": "2.2.5",
     "karma-rollup-preprocessor": "7.0.0",
     "karma-sauce-launcher": "1.2.0",
-    "mocha": "5.2.0",
+    "mocha": "6.1.4",
     "prettier": "1.18.2",
     "puppeteer": "1.18.1",
     "rimraf": "2.6.3",
