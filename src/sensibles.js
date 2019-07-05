@@ -1,4 +1,3 @@
-
 const typeDefaults = () => ({
   func: () => {},
   bool: true,
@@ -6,7 +5,7 @@ const typeDefaults = () => ({
   number: 0,
   array: () => [],
   object: () => ({}),
-  integer: 0
+  integer: 0,
 })
 
 export const setDefaults = (root) => {
@@ -14,7 +13,7 @@ export const setDefaults = (root) => {
 
   return Object.defineProperty(root, 'sensibleDefaults', {
     enumerable: false,
-    set (value) {
+    set(value) {
       if (value === false) {
         currentDefaults = {}
       } else if (value === true) {
@@ -23,8 +22,8 @@ export const setDefaults = (root) => {
         currentDefaults = value
       }
     },
-    get () {
+    get() {
       return currentDefaults
-    }
+    },
   })
 }

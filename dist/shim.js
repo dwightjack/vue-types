@@ -125,10 +125,14 @@ vueTypes.extend = function extend(props) {
     validate: validate ? function () {} : undefined
   });
 };
+/* eslint-disable no-console */
+
 
 if (process.env.NODE_ENV !== 'production') {
   _vue.default.config.silent === false && console.warn('You are using the production shimmed version of VueTypes in a development build. Refer to https://github.com/dwightjack/vue-types#production-build to learn how to configure VueTypes for usage in multiple environments.');
 }
+/* eslint-enable no-console */
+
 
 var _default = vueTypes;
 exports.default = _default;

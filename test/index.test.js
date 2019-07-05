@@ -11,7 +11,7 @@ const checkRequired = (type) => {
   expect(type).toIncludeKey('isRequired')
 
   expect(type.isRequired).toMatch({
-    required: true
+    required: true,
   })
 }
 
@@ -44,7 +44,7 @@ describe('VueTypes', () => {
     })
 
     it('should provide a method to set a custom default', () => {
-      function myFn () {}
+      function myFn() {}
 
       expect(VueTypes.func.def(myFn).default).toBe(myFn)
     })
@@ -54,7 +54,7 @@ describe('VueTypes', () => {
     it('should match an object with methods, type and default', () => {
       const match = {
         type: Boolean,
-        default: true
+        default: true,
       }
 
       expect(VueTypes.bool).toMatch(match)
@@ -73,7 +73,7 @@ describe('VueTypes', () => {
     it('should match an object with methods, type and default', () => {
       const match = {
         type: String,
-        default: ''
+        default: '',
       }
 
       expect(VueTypes.string).toMatch(match)
@@ -92,7 +92,7 @@ describe('VueTypes', () => {
     it('should match an object with methods, type and default', () => {
       const match = {
         type: Number,
-        default: 0
+        default: 0,
       }
 
       expect(VueTypes.number).toMatch(match)
@@ -110,7 +110,7 @@ describe('VueTypes', () => {
   describe('`.array`', () => {
     it('should match an object with methods, type and default', () => {
       const match = {
-        type: Array
+        type: Array,
       }
 
       expect(VueTypes.array).toMatch(match)
@@ -146,7 +146,7 @@ describe('VueTypes', () => {
   describe('`.object`', () => {
     it('should match an object with methods, type and default', () => {
       const match = {
-        type: Object
+        type: Object,
       }
 
       expect(VueTypes.object).toMatch(match)
@@ -187,7 +187,7 @@ describe('VueTypes', () => {
       const match = {
         type: Number,
         default: 0,
-        validator: Function
+        validator: Function,
       }
 
       expect(VueTypes.integer).toMatch(match)
@@ -217,14 +217,14 @@ describe('VueTypes', () => {
     it('should match an object with type and validator, but not default', () => {
       const match = {
         type: null,
-        validator: Function
+        validator: Function,
       }
 
       expect(VueTypes.symbol).toMatch(match)
       expect(VueTypes.symbol.default).toBe(undefined)
     })
 
-    it('should validate symbols', function () {
+    it('should validate symbols', function() {
       if ('Symbol' in window && typeof Symbol() === 'symbol') {
         expect(VueTypes.symbol.validator(Symbol())).toBe(true)
       } else {
@@ -242,7 +242,7 @@ describe('VueTypes', () => {
 
     it('should match an object with a validator method', () => {
       const match = {
-        validator: Function
+        validator: Function,
       }
 
       expect(customType).toMatch(match)
@@ -272,7 +272,7 @@ describe('VueTypes', () => {
 
     it('should match an object with a validator method', () => {
       const match = {
-        validator: Function
+        validator: Function,
       }
 
       expect(customType).toMatch(match)
@@ -314,7 +314,7 @@ describe('VueTypes', () => {
     let customType
 
     class MyClass {
-      constructor (name) {
+      constructor(name) {
         this.name = name
       }
     }
@@ -325,7 +325,7 @@ describe('VueTypes', () => {
 
     it('should match an object with a validator method', () => {
       const match = {
-        type: MyClass
+        type: MyClass,
       }
 
       expect(customType).toMatch(match)
@@ -416,17 +416,23 @@ describe('VueTypes', () => {
 
     it('should validate an object of same-type values', () => {
       const customType = VueTypes.objectOf(Number)
-      expect(forceNoContext(customType.validator)({ id: 10, age: 30 })).toBe(true)
+      expect(forceNoContext(customType.validator)({ id: 10, age: 30 })).toBe(
+        true,
+      )
     })
 
     it('should NOT validate an array of mixed-type values', () => {
       const customType = VueTypes.objectOf(Number)
-      expect(forceNoContext(customType.validator)({ id: '10', age: 30 })).toBe(false)
+      expect(forceNoContext(customType.validator)({ id: '10', age: 30 })).toBe(
+        false,
+      )
     })
 
     it('should allow validation of VuePropTypes native types', () => {
       const customType = VueTypes.objectOf(VueTypes.number)
-      expect(forceNoContext(customType.validator)({ id: 10, age: 30 })).toBe(true)
+      expect(forceNoContext(customType.validator)({ id: 10, age: 30 })).toBe(
+        true,
+      )
     })
 
     it('should allow validation of VuePropTypes custom types', () => {
@@ -444,7 +450,7 @@ describe('VueTypes', () => {
       shape = {
         id: Number,
         name: String,
-        age: VueTypes.integer
+        age: VueTypes.integer,
       }
     })
 
@@ -455,40 +461,48 @@ describe('VueTypes', () => {
 
     it('should validate an object with a given shape', () => {
       const customType = VueTypes.shape(shape)
-      expect(forceNoContext(customType.validator)({
-        id: 10,
-        name: 'John',
-        age: 30
-      })).toBe(true)
+      expect(
+        forceNoContext(customType.validator)({
+          id: 10,
+          name: 'John',
+          age: 30,
+        }),
+      ).toBe(true)
     })
 
     it('should NOT validate an object without a given shape', () => {
       const customType = VueTypes.shape(shape)
-      expect(forceNoContext(customType.validator)({
-        id: '10',
-        name: 'John',
-        age: 30
-      })).toBe(false)
+      expect(
+        forceNoContext(customType.validator)({
+          id: '10',
+          name: 'John',
+          age: 30,
+        }),
+      ).toBe(false)
     })
 
     it('should NOT validate an object with keys NOT present in the shape', () => {
       const customType = VueTypes.shape(shape)
-      expect(forceNoContext(customType.validator)({
-        id: 10,
-        name: 'John',
-        age: 30,
-        nationality: ''
-      })).toBe(false)
+      expect(
+        forceNoContext(customType.validator)({
+          id: 10,
+          name: 'John',
+          age: 30,
+          nationality: '',
+        }),
+      ).toBe(false)
     })
 
     it('should validate an object with keys NOT present in the shape on `loose` mode', () => {
       const customType = VueTypes.shape(shape).loose
-      expect(forceNoContext(customType.validator)({
-        id: 10,
-        name: 'John',
-        age: 30,
-        nationality: ''
-      })).toBe(true)
+      expect(
+        forceNoContext(customType.validator)({
+          id: 10,
+          name: 'John',
+          age: 30,
+          nationality: '',
+        }),
+      ).toBe(true)
     })
 
     it('should NOT validate a value which is NOT an object', () => {
@@ -497,7 +511,7 @@ describe('VueTypes', () => {
       expect(validator('a string')).toBe(false)
 
       class MyClass {
-        constructor () {
+        constructor() {
           this.id = '10'
           this.name = 'John'
           this.age = 30
@@ -512,7 +526,7 @@ describe('VueTypes', () => {
       const defVals = {
         id: 10,
         name: 'John',
-        age: 30
+        age: 30,
       }
       const def = customType.def(defVals).default
       expect(def).toMatch(Function)
@@ -524,7 +538,7 @@ describe('VueTypes', () => {
       const def = {
         id: '10',
         name: 'John',
-        age: 30
+        age: 30,
       }
       expect(customType.def(def)).toExcludeKey('default')
     })
@@ -532,33 +546,41 @@ describe('VueTypes', () => {
     it('should allow required keys in shape (simple)', () => {
       const customType = VueTypes.shape({
         id: VueTypes.integer.isRequired,
-        name: String
+        name: String,
       })
       const validator = forceNoContext(customType.validator)
 
-      expect(validator({
-        name: 'John'
-      })).toBe(false)
+      expect(
+        validator({
+          name: 'John',
+        }),
+      ).toBe(false)
 
-      expect(validator({
-        id: 10
-      })).toBe(true)
+      expect(
+        validator({
+          id: 10,
+        }),
+      ).toBe(true)
     })
 
     it('should allow required keys in shape (with a null type required)', () => {
       const customType = VueTypes.shape({
         myKey: VueTypes.any.isRequired,
-        name: null
+        name: null,
       })
       const validator = forceNoContext(customType.validator)
 
-      expect(validator({
-        name: 'John'
-      })).toBe(false)
+      expect(
+        validator({
+          name: 'John',
+        }),
+      ).toBe(false)
 
-      expect(validator({
-        myKey: null
-      })).toBe(true)
+      expect(
+        validator({
+          myKey: null,
+        }),
+      ).toBe(true)
     })
   })
 
@@ -566,7 +588,7 @@ describe('VueTypes', () => {
     let spy
 
     class MyClass {
-      constructor (name) {
+      constructor(name) {
         this.name = name
       }
     }
@@ -575,7 +597,7 @@ describe('VueTypes', () => {
     const mixedTypes = [Number, VueTypes.array, VueTypes.integer]
     const complexTypes = [
       VueTypes.oneOf([0, 1, 'string']),
-      VueTypes.shape({ id: Number })
+      VueTypes.shape({ id: Number }),
     ]
 
     beforeEach(() => {
@@ -634,13 +656,13 @@ describe('VueTypes', () => {
       const customType = VueTypes.oneOfType([
         VueTypes.shape({
           id: Number,
-          name: VueTypes.string.isRequired
+          name: VueTypes.string.isRequired,
         }),
         VueTypes.shape({
           id: Number,
-          age: VueTypes.integer.isRequired
+          age: VueTypes.integer.isRequired,
         }),
-        VueTypes.shape({})
+        VueTypes.shape({}),
       ])
 
       const validator = forceNoContext(customType.validator)
@@ -663,7 +685,7 @@ describe('VueTypes', () => {
         'number',
         'array',
         'object',
-        'integer'
+        'integer',
       ]
 
       types.forEach((prop) => {
@@ -682,7 +704,7 @@ describe('VueTypes', () => {
         'number',
         'array',
         'object',
-        'integer'
+        'integer',
       ]
 
       types.forEach((prop) => {
@@ -693,16 +715,10 @@ describe('VueTypes', () => {
     it('should allow custom defaults for types', () => {
       VueTypes.sensibleDefaults = {
         func: noop,
-        string: 'test'
+        string: 'test',
       }
 
-      const types = [
-        'bool',
-        'number',
-        'array',
-        'object',
-        'integer'
-      ]
+      const types = ['bool', 'number', 'array', 'object', 'integer']
 
       types.forEach((prop) => {
         expect(VueTypes[prop]).toExcludeKey('default')
@@ -720,7 +736,7 @@ describe('VueTypes', () => {
         name: 'date',
         validator,
         getter: true,
-        type: Date
+        type: Date,
       })
 
       const dateType = VueTypes.date
@@ -733,12 +749,12 @@ describe('VueTypes', () => {
     it('should add a method to the library', () => {
       VueTypes.extend({
         name: 'dateFn',
-        type: Date
+        type: Date,
       })
       expect(VueTypes.dateFn).toBeA(Function)
       expect(VueTypes.dateFn().isRequired).toEqual({
         type: Date,
-        required: true
+        required: true,
       })
     })
 
@@ -747,7 +763,7 @@ describe('VueTypes', () => {
       VueTypes.extend({
         name: 'dateFnArgs',
         type: Date,
-        validator
+        validator,
       })
 
       const dateFnType = VueTypes.dateFnArgs(1, 2)
@@ -760,7 +776,7 @@ describe('VueTypes', () => {
         name: 'stringCustom',
         type: Date,
         getter: true,
-        validate: true
+        validate: true,
       })
       expect(VueTypes.stringCustom.validate).toBeA(Function)
     })
@@ -802,7 +818,7 @@ describe('VueTypes.utils', () => {
     it('should allow custom validator functions', () => {
       const type = {
         type: String,
-        validator: (value) => value.length > 4
+        validator: (value) => value.length > 4,
       }
       expect(_utils.validate('string', type)).toBe(true)
       expect(_utils.validate('s', type)).toBe(false)

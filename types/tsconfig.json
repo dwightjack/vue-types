@@ -1,16 +1,12 @@
 {
   "compilerOptions": {
-      "strict": true,
-      "lib": [
-          "es2015", "dom"
-      ],
-      "noImplicitAny": true,
-      "noImplicitThis": true,
-      "strictNullChecks": true,
-      "noEmit": true,
-      "strictFunctionTypes": true
+    "strict": true,
+    "lib": ["es2015", "dom"],
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "noEmit": true,
+    "strictFunctionTypes": true
   },
-  "include": [
-      "./*.ts"
-  ]
+  "include": ["./*.ts"]
 }

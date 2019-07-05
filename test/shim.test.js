@@ -543,7 +543,7 @@ describe('SHIM: VueTypes', () => {
         'number',
         'array',
         'object',
-        'integer'
+        'integer',
       ]
 
       types.forEach((prop) => {
@@ -562,7 +562,7 @@ describe('SHIM: VueTypes', () => {
         'number',
         'array',
         'object',
-        'integer'
+        'integer',
       ]
 
       types.forEach((prop) => {
@@ -573,16 +573,10 @@ describe('SHIM: VueTypes', () => {
     it('should allow custom defaults for types', () => {
       VueTypes.sensibleDefaults = {
         func: noop,
-        string: 'test'
+        string: 'test',
       }
 
-      const types = [
-        'bool',
-        'number',
-        'array',
-        'object',
-        'integer'
-      ]
+      const types = ['bool', 'number', 'array', 'object', 'integer']
 
       types.forEach((prop) => {
         expect(VueTypes[prop].default).toBe(undefined)
@@ -598,7 +592,7 @@ describe('SHIM: VueTypes', () => {
       VueTypes.extend({
         name: 'date',
         getter: true,
-        type: Date
+        type: Date,
       })
 
       const dateType = VueTypes.date
@@ -608,7 +602,7 @@ describe('SHIM: VueTypes', () => {
     it('should add a method to the library', () => {
       VueTypes.extend({
         name: 'dateFn',
-        type: Date
+        type: Date,
       })
       expect(VueTypes.dateFn).toBeA(Function)
       expect(VueTypes.dateFn().isRequired.required).toBe(true)
@@ -619,7 +613,7 @@ describe('SHIM: VueTypes', () => {
         name: 'stringCustom',
         type: Date,
         getter: true,
-        validate: true
+        validate: true,
       })
       expect(VueTypes.stringCustom.validate).toBeA(Function)
     })

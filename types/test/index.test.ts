@@ -1,93 +1,100 @@
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import VueTypes, { VueTypesInterface, VueTypeValidableDef } from '../index';
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import VueTypes, { VueTypesInterface, VueTypeValidableDef } from '../index'
 
-const noop = () => { };
+const noop = (): void => {}
 
-const anyType = VueTypes.any;
-anyType.def(0);
-anyType.def('string');
+const anyType = VueTypes.any
+anyType.def(0)
+anyType.def('string')
 
-const boolType = VueTypes.bool.def(true).isRequired;
+const boolType = VueTypes.bool.def(true).isRequired
 
-const funcType = VueTypes.func.def(noop).isRequired;
+const funcType = VueTypes.func.def(noop).isRequired
 
-const arrayType = VueTypes.array.def([]).isRequired;
-const arrayType2 = VueTypes.array.def(() => []).isRequired;
+const arrayType = VueTypes.array.def([]).isRequired
+const arrayType2 = VueTypes.array.def(() => []).isRequired
 
-const stringType = VueTypes.string.def('John').isRequired;
-const stringTypeValidate = VueTypes.string.def('John').isRequired.validate((v) => v === 'John');
+const stringType = VueTypes.string.def('John').isRequired
+const stringTypeValidate = VueTypes.string
+  .def('John')
+  .isRequired.validate((v: string): boolean => v === 'John')
 
-const numberType = VueTypes.number.def(0).isRequired;
-const integerType = VueTypes.integer.def(0).isRequired;
+const numberType = VueTypes.number.def(0).isRequired
+const integerType = VueTypes.integer.def(0).isRequired
 
-const objectType = VueTypes.object.def({ demo: true }).isRequired;
-const objectType2 = VueTypes.object.def(() => { }).isRequired;
+const objectType = VueTypes.object.def({ demo: true }).isRequired
+const objectType2 = VueTypes.object.def(() => {}).isRequired
 
-const symbolType = VueTypes.symbol.def(Symbol('foo')).isRequired;
+const symbolType = VueTypes.symbol.def(Symbol('foo')).isRequired
 
-const validator = (v: number) => v > 18;
-const customType = VueTypes.custom(validator).def(0).isRequired;
+const validator = (v: number) => v > 18
+const customType = VueTypes.custom(validator).def(0).isRequired
 
-const customTypeStrict = VueTypes.custom<number>(validator).def(0).isRequired;
+const customTypeStrict = VueTypes.custom<number>(validator).def(0).isRequired
 
-const oneOfType = VueTypes.oneOf([0, 'string', null]).def('test').isRequired;
+const oneOfType = VueTypes.oneOf([0, 'string', null]).def('test').isRequired
 
-const oneOfTypeStrict = VueTypes.oneOf<string | boolean>([true, 'string']).def(true).isRequired;
+const oneOfTypeStrict = VueTypes.oneOf<string | boolean>([true, 'string']).def(
+  true,
+).isRequired
 
 class MyClass {
-  test = 'testProp';
+  public test = 'testProp'
 }
 
-const instance = new MyClass();
+const instance = new MyClass()
 
-const instanceOfType = VueTypes.instanceOf(MyClass).def(instance).isRequired;
-instanceOfType.type = MyClass;
+const instanceOfType = VueTypes.instanceOf(MyClass).def(instance).isRequired
+instanceOfType.type = MyClass
 
 const oneOfTypeType = VueTypes.oneOfType([
   String,
   {
-    type: String
+    type: String,
   },
-  VueTypes.number
-]).def(null).isRequired; // check can be just at runtime
+  VueTypes.number,
+]).def(null).isRequired // check can be just at runtime
 
-const ArrayOfType = VueTypes.arrayOf(VueTypes.string).def(['string', 'string']).isRequired;
+const ArrayOfType = VueTypes.arrayOf(VueTypes.string).def(['string', 'string'])
+  .isRequired
 
-const ObjectOfType = VueTypes.objectOf<string>(VueTypes.string).def({ prop: 'test' }).isRequired;
+const ObjectOfType = VueTypes.objectOf<string>(VueTypes.string).def({
+  prop: 'test',
+}).isRequired
 
 const shapeType = VueTypes.shape({
   name: String,
   surname: { type: String, default: 'Doe' },
   age: VueTypes.number,
   hobbies: VueTypes.array,
-}).def({ name: 'test', age: 100, hobbies: [true] }).isRequired;
+}).def({ name: 'test', age: 100, hobbies: [true] }).isRequired
 
 const shapeTypeLoose = VueTypes.shape({
   name: String,
   surname: { type: String, default: 'Doe' },
   age: VueTypes.number,
-}).loose.def({ nationality: 'unknown' }).isRequired;
+}).loose.def({ nationality: 'unknown' }).isRequired
 
-shapeType.type = Object;
+shapeType.type = Object
 
-VueTypes.sensibleDefaults = {};
-VueTypes.sensibleDefaults = false;
-VueTypes.sensibleDefaults = true;
+VueTypes.sensibleDefaults = {}
+VueTypes.sensibleDefaults = false
+VueTypes.sensibleDefaults = true
 
 interface CustomVueTypes extends VueTypesInterface {
-  readonly test: VueTypeValidableDef<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly test: VueTypeValidableDef<any>
 }
 // extending
 const myTypes = VueTypes.extend<CustomVueTypes>({
   name: 'test',
   validate: true,
-  getter: true
-});
-
-(VueTypes as CustomVueTypes).test.isRequired;
-myTypes.test.isRequired;
-myTypes.test.isRequired;
+  getter: true,
+})
+;(VueTypes as CustomVueTypes).test.isRequired
+myTypes.test.isRequired
+myTypes.test.isRequired
 
 const BaseComponent = Vue.extend({
   props: {
@@ -107,9 +114,9 @@ const BaseComponent = Vue.extend({
     friendsId: VueTypes.arrayOf(VueTypes.number).isRequired,
     simpleObj: ObjectOfType,
     meta: shapeType,
-    extendedMeta: shapeTypeLoose
-  }
-});
+    extendedMeta: shapeTypeLoose,
+  },
+})
 
 @Component({
   props: {
@@ -128,9 +135,9 @@ const BaseComponent = Vue.extend({
     friendsId: VueTypes.arrayOf(VueTypes.number).isRequired,
     simpleObj: ObjectOfType,
     meta: shapeType,
-    extendedMeta: shapeTypeLoose
-  }
+    extendedMeta: shapeTypeLoose,
+  },
 })
 class ClassComponent extends Vue {
-  msg = 10;
+  public msg = 10
 }
