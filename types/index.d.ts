@@ -1,8 +1,8 @@
 // TypeScript Version: 2.8
 
-import { VueTypes } from './vue-types';
+import { VueTypes } from './vue-types'
 
-export default VueTypes; // tslint:disable-line strict-export-declare-modifiers
+export default VueTypes // tslint:disable-line strict-export-declare-modifiers
 
 export {
   VueProp,
@@ -12,9 +12,8 @@ export {
   VueTypeInstanceOf,
   VueTypeShape,
   VueTypeLooseShape,
-  VueTypeArrayOf,
   ValidatorFunction,
   VueTypeCustom,
   VueTypeObjectOf,
-  VueTypesInterface
-} from './vue-types';
+  VueTypesInterface,
+} from './vue-types'

@@ -4,7 +4,7 @@ import {
   stub_validateType,
   reset_validateType,
   stub_isFunction,
-  reset_isFunction
+  reset_isFunction,
 } from '../src/utils'
 
 describe('`withDefault()`', () => {
@@ -29,6 +29,7 @@ describe('`withDefault()`', () => {
 
     try {
       obj.def = 'demo'
+      // eslint-disable-next-line no-empty
     } catch (e) {}
     expect(obj.def).toBeA(Function)
   })
@@ -107,7 +108,7 @@ describe('`withValidate()`', () => {
 
   beforeEach(() => {
     obj = utils.withValidate({
-      _vueTypes_name: 'demo'
+      _vueTypes_name: 'demo',
     })
   })
 
@@ -174,9 +175,9 @@ describe('`toType()`', () => {
 
   it('should bind provided `validator function to the passed in object`', () => {
     const obj = {
-      validator () {
+      validator() {
         return this
-      }
+      },
     }
 
     const type = utils.toType('testType', obj)

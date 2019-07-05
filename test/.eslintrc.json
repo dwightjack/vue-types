@@ -1,0 +1,9 @@
+{
+  "extends": "../src/.eslintrc.json",
+  "env": {
+    "mocha": true
+  },
+  "rules": {
+    "camelcase": "off"
+  }
+}

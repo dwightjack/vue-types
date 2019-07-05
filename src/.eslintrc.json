@@ -1,0 +1,19 @@
+{
+  "root": true,
+  "extends": [
+    "eslint:recommended",
+    "plugin:vue/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "globals": {
+    "process": true
+  },
+  "overrides": [
+    {
+      "files": "index.cjs.js",
+      "env": {
+        "commonjs": true
+      }
+    }
+  ]
+}

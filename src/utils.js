@@ -9,7 +9,7 @@ const FN_MATCH_REGEXP = /^\s*function (\w+)/
 
 // https://github.com/vuejs/vue/blob/dev/src/core/util/props.js#L177
 export const getType = (fn) => {
-  const type = (fn !== null && fn !== undefined) ? (fn.type ? fn.type : fn) : null
+  const type = fn !== null && fn !== undefined ? (fn.type ? fn.type : fn) : null
   const match = type && type.toString().match(FN_MATCH_REGEXP)
   return match && match[1]
 }
@@ -40,9 +40,15 @@ export const has = (obj, prop) => hasOwn.call(obj, prop)
  * @param {*} value - The value to be tested for being an integer.
  * @returns {boolean}
  */
-export const isInteger = Number.isInteger || function (value) {
-  return typeof value === 'number' && isFinite(value) && Math.floor(value) === value
-}
+export const isInteger =
+  Number.isInteger ||
+  function(value) {
+    return (
+      typeof value === 'number' &&
+      isFinite(value) &&
+      Math.floor(value) === value
+    )
+  }
 
 /**
  * Determines whether the passed value is an Array.
@@ -50,9 +56,11 @@ export const isInteger = Number.isInteger || function (value) {
  * @param {*} value - The value to be tested for being an array.
  * @returns {boolean}
  */
-export const isArray = Array.isArray || function (value) {
-  return toString.call(value) === '[object Array]'
-}
+export const isArray =
+  Array.isArray ||
+  function(value) {
+    return toString.call(value) === '[object Array]'
+  }
 
 /**
  * Checks if a value is a function
@@ -60,7 +68,8 @@ export const isArray = Array.isArray || function (value) {
  * @param {any} value - Value to check
  * @returns {boolean}
  */
-export const isFunction = (value) => toString.call(value) === '[object Function]'
+export const isFunction = (value) =>
+  toString.call(value) === '[object Function]'
 
 /**
  * Adds a `def` method to the object returning a new object with passed in argument as `default` property
@@ -68,9 +77,9 @@ export const isFunction = (value) => toString.call(value) === '[object Function]
  * @param {object} type - Object to enhance
  * @returns {object} the passed-in prop type
  */
-export const withDefault = function (type) {
+export const withDefault = function(type) {
   return Object.defineProperty(type, 'def', {
-    value (def) {
+    value(def) {
       if (def === undefined && !this.default) {
         return this
       }
@@ -88,7 +97,7 @@ export const withDefault = function (type) {
       return this
     },
     enumerable: false,
-    writable: false
+    writable: false,
   })
 }
 
@@ -98,13 +107,13 @@ export const withDefault = function (type) {
  * @param {object} type - Object to enhance
  * @returns {object} the passed-in prop type
  */
-export const withRequired = function (type) {
+export const withRequired = function(type) {
   return Object.defineProperty(type, 'isRequired', {
-    get () {
+    get() {
       this.required = true
       return this
     },
-    enumerable: false
+    enumerable: false,
   })
 }
 
@@ -114,13 +123,13 @@ export const withRequired = function (type) {
  * @param {object} type Prop type to extend
  * @returns {object} the passed-in prop type
  */
-export const withValidate = function (type) {
+export const withValidate = function(type) {
   return Object.defineProperty(type, 'validate', {
-    value (fn) {
+    value(fn) {
       this.validator = fn.bind(this)
       return this
     },
-    enumerable: false
+    enumerable: false,
   })
 }
 
@@ -135,7 +144,7 @@ export const toType = (name, obj, validateFn = false) => {
   Object.defineProperty(obj, '_vueTypes_name', {
     enumerable: false,
     writable: false,
-    value: name
+    value: name,
   })
 
   withDefault(withRequired(obj))
@@ -165,7 +174,9 @@ export const validateType = (type, value, silent = false) => {
   if (!isPlainObject(type)) {
     typeToCheck = { type }
   }
-  const namePrefix = typeToCheck._vueTypes_name ? (typeToCheck._vueTypes_name + ' - ') : ''
+  const namePrefix = typeToCheck._vueTypes_name
+    ? typeToCheck._vueTypes_name + ' - '
+    : ''
 
   if (hasOwn.call(typeToCheck, 'type') && typeToCheck.type !== null) {
     if (isArray(typeToCheck.type)) {
@@ -178,7 +189,12 @@ export const validateType = (type, value, silent = false) => {
         valid = isArray(value)
       } else if (expectedType === 'Object') {
         valid = isPlainObject(value)
-      } else if (expectedType === 'String' || expectedType === 'Number' || expectedType === 'Boolean' || expectedType === 'Function') {
+      } else if (
+        expectedType === 'String' ||
+        expectedType === 'Number' ||
+        expectedType === 'Boolean' ||
+        expectedType === 'Function'
+      ) {
         valid = getNativeType(value) === expectedType
       } else {
         valid = value instanceof typeToCheck.type
@@ -187,11 +203,15 @@ export const validateType = (type, value, silent = false) => {
   }
 
   if (!valid) {
-    silent === false && warn(`${namePrefix}value "${value}" should be of type "${expectedType}"`)
+    silent === false &&
+      warn(`${namePrefix}value "${value}" should be of type "${expectedType}"`)
     return false
   }
 
-  if (hasOwn.call(typeToCheck, 'validator') && isFunction(typeToCheck.validator)) {
+  if (
+    hasOwn.call(typeToCheck, 'validator') &&
+    isFunction(typeToCheck.validator)
+  ) {
     // swallow warn
     let oldWarn
     if (silent) {
@@ -202,7 +222,8 @@ export const validateType = (type, value, silent = false) => {
     valid = typeToCheck.validator(value)
     oldWarn && (warn = oldWarn)
 
-    if (!valid && silent === false) warn(`${namePrefix}custom validation failed`)
+    if (!valid && silent === false)
+      warn(`${namePrefix}custom validation failed`)
     return valid
   }
   return valid
@@ -212,9 +233,12 @@ let warn = noop
 
 if (process.env.NODE_ENV !== 'production') {
   const hasConsole = typeof console !== 'undefined'
-  warn = hasConsole ? (msg) => {
-    Vue.config.silent === false && console.warn(`[VueTypes warn]: ${msg}`)
-  } : noop
+  warn = hasConsole
+    ? (msg) => {
+        // eslint-disable-next-line no-console
+        Vue.config.silent === false && console.warn(`[VueTypes warn]: ${msg}`)
+      }
+    : noop
 }
 
 export { warn }
