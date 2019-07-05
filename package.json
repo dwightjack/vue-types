@@ -29,7 +29,9 @@
     "test:types": "tsc -p ./types/test/tsconfig.json",
     "lint": "eslint src/*.js test/*.js && npm run lint:types",
     "lint:types": "dtslint types",
-    "start": "rollup -c ./examples/rollup.config.js -w"
+    "start": "rollup -c ./examples/rollup.config.js -w",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "keywords": [
     "vue",
@@ -84,7 +86,8 @@
     "vue-class-component": "~6.3.2"
   },
   "dependencies": {
-    "lodash": "^4.17.10"
+    "lodash": "^4.17.10",
+    "snyk": "^1.189.0"
   },
   "browserslist": [
     "last 3 versions",
@@ -93,5 +96,6 @@
     "Edge >= 12",
     "iOS >= 10",
     "Android >= 4.4"
-  ]
+  ],
+  "snyk": true
 }
