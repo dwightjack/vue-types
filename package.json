@@ -88,8 +88,8 @@
     "rollup-plugin-stub": "1.2.0",
     "rollup-plugin-uglify": "6.0.2",
     "typescript": "3.5.2",
-    "vue": "~2.5.17",
-    "vue-class-component": "~6.3.2"
+    "vue": "~2.6.10",
+    "vue-class-component": "~7.1.0"
   },
   "dependencies": {
     "lodash": "^4.17.10",
