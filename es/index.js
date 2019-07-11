@@ -82,7 +82,7 @@ var VueTypes = {
     if (getter) {
       descriptor = {
         get: function get() {
-          return toType(name, type, validate);
+          return toType(name, Object.assign({}, type), validate);
         },
         enumerable: true,
         configurable: false
@@ -91,15 +91,17 @@ var VueTypes = {
       var validator = type.validator;
       descriptor = {
         value: function value() {
+          var ret = toType(name, Object.assign({}, type), validate);
+
           if (validator) {
             for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
               args[_key] = arguments[_key];
             }
 
-            type.validator = validator.bind.apply(validator, [this].concat(args));
+            ret.validator = validator.bind.apply(validator, [ret].concat(args));
           }
 
-          return toType(name, type, validate);
+          return ret;
         },
         writable: false,
         enumerable: true,
