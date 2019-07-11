@@ -1,7 +1,6 @@
 // Karma configuration
 // Generated on Wed Oct 26 2016 17:54:27 GMT+0200 (CEST)
 
-const path = require('path')
 const resolve = require('rollup-plugin-node-resolve')
 const commonjs = require('rollup-plugin-commonjs')
 const babel = require('rollup-plugin-babel')
