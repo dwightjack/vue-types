@@ -109,7 +109,7 @@ const VueTypes = {
     if (getter) {
       descriptor = {
         get() {
-          return toType(name, type, validate)
+          return toType(name, Object.assign({}, type), validate)
         },
         enumerable: true,
         configurable: false,
@@ -118,10 +118,11 @@ const VueTypes = {
       const { validator } = type
       descriptor = {
         value(...args) {
+          const ret = toType(name, Object.assign({}, type), validate)
           if (validator) {
-            type.validator = validator.bind(this, ...args)
+            ret.validator = validator.bind(ret, ...args)
           }
-          return toType(name, type, validate)
+          return ret
         },
         writable: false,
         enumerable: true,

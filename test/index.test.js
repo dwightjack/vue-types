@@ -780,6 +780,16 @@ describe('VueTypes', () => {
       })
       expect(VueTypes.stringCustom.validate).toBeA(Function)
     })
+
+    it('should clone the base type definition at each call', () => {
+      VueTypes.extend({
+        name: 'cloneDemo',
+        type: Object,
+        getter: true,
+        validate: true,
+      })
+      expect(VueTypes.cloneDemo).toNotBe(VueTypes.cloneDemo)
+    })
   })
 })
 
