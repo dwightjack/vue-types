@@ -582,6 +582,19 @@ describe('VueTypes', () => {
         }),
       ).toBe(true)
     })
+
+    it('Should accept properties explicitly set to undefined', () => {
+      const customType = VueTypes.shape({
+        message: VueTypes.string,
+      })
+      const validator = forceNoContext(customType.validator)
+
+      expect(
+        validator({
+          message: undefined,
+        }),
+      ).toBe(true)
+    })
   })
 
   describe('`.oneOfType`', () => {

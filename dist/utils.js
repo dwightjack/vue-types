@@ -1,7 +1,15 @@
 "use strict";
 
 exports.__esModule = true;
-exports.warn = exports.validateType = exports.toType = exports.withValidate = exports.withRequired = exports.withDefault = exports.isFunction = exports.isArray = exports.isInteger = exports.has = exports.noop = exports.getNativeType = exports.getType = exports.hasOwn = void 0;
+exports.getType = getType;
+exports.getNativeType = getNativeType;
+exports.noop = noop;
+exports.withDefault = withDefault;
+exports.withRequired = withRequired;
+exports.withValidate = withValidate;
+exports.toType = toType;
+exports.validateType = validateType;
+exports.warn = exports.isFunction = exports.isArray = exports.isInteger = exports.has = exports.hasOwn = void 0;
 
 var _isPlainObject = _interopRequireDefault(require("lodash/isPlainObject"));
 
@@ -15,36 +23,31 @@ var hasOwn = ObjProto.hasOwnProperty;
 exports.hasOwn = hasOwn;
 var FN_MATCH_REGEXP = /^\s*function (\w+)/; // https://github.com/vuejs/vue/blob/dev/src/core/util/props.js#L177
 
-var getType = function getType(fn) {
+function getType(fn) {
   var type = fn !== null && fn !== undefined ? fn.type ? fn.type : fn : null;
   var match = type && type.toString().match(FN_MATCH_REGEXP);
   return match && match[1];
-};
+}
 
-exports.getType = getType;
-
-var getNativeType = function getNativeType(value) {
+function getNativeType(value) {
   if (value === null || value === undefined) return null;
   var match = value.constructor.toString().match(FN_MATCH_REGEXP);
   return match && match[1];
-};
+}
 /**
  * No-op function
  */
 
 
-exports.getNativeType = getNativeType;
-
-var noop = function noop() {};
+function noop() {}
 /**
  * Checks for a own property in an object
  *
  * @param {object} obj - Object
  * @param {string} prop - Property to check
+ * @returns {boolean}
  */
 
-
-exports.noop = noop;
 
 var has = function has(obj, prop) {
   return hasOwn.call(obj, prop);
@@ -60,7 +63,7 @@ var has = function has(obj, prop) {
 
 exports.has = has;
 
-var isInteger = Number.isInteger || function (value) {
+var isInteger = Number.isInteger || function isInteger(value) {
   return typeof value === 'number' && isFinite(value) && Math.floor(value) === value;
 };
 /**
@@ -73,7 +76,7 @@ var isInteger = Number.isInteger || function (value) {
 
 exports.isInteger = isInteger;
 
-var isArray = Array.isArray || function (value) {
+var isArray = Array.isArray || function isArray(value) {
   return toString.call(value) === '[object Array]';
 };
 /**
@@ -99,7 +102,7 @@ var isFunction = function isFunction(value) {
 
 exports.isFunction = isFunction;
 
-var withDefault = function withDefault(type) {
+function withDefault(type) {
   return Object.defineProperty(type, 'def', {
     value: function value(def) {
       if (def === undefined && !this.default) {
@@ -128,7 +131,7 @@ var withDefault = function withDefault(type) {
     enumerable: false,
     writable: false
   });
-};
+}
 /**
  * Adds a `isRequired` getter returning a new object with `required: true` key-value
  *
@@ -137,9 +140,7 @@ var withDefault = function withDefault(type) {
  */
 
 
-exports.withDefault = withDefault;
-
-var withRequired = function withRequired(type) {
+function withRequired(type) {
   return Object.defineProperty(type, 'isRequired', {
     get: function get() {
       this.required = true;
@@ -147,7 +148,7 @@ var withRequired = function withRequired(type) {
     },
     enumerable: false
   });
-};
+}
 /**
  * Adds a validate method useful to set the prop `validator` function.
  *
@@ -156,9 +157,7 @@ var withRequired = function withRequired(type) {
  */
 
 
-exports.withRequired = withRequired;
-
-var withValidate = function withValidate(type) {
+function withValidate(type) {
   return Object.defineProperty(type, 'validate', {
     value: function value(fn) {
       this.validator = fn.bind(this);
@@ -166,7 +165,7 @@ var withValidate = function withValidate(type) {
     },
     enumerable: false
   });
-};
+}
 /**
  * Adds `isRequired` and `def` modifiers to an object
  *
@@ -176,9 +175,7 @@ var withValidate = function withValidate(type) {
  */
 
 
-exports.withValidate = withValidate;
-
-var toType = function toType(name, obj, validateFn) {
+function toType(name, obj, validateFn) {
   if (validateFn === void 0) {
     validateFn = false;
   }
@@ -199,7 +196,7 @@ var toType = function toType(name, obj, validateFn) {
   }
 
   return obj;
-};
+}
 /**
  * Validates a given value against a prop type object
  *
@@ -210,9 +207,7 @@ var toType = function toType(name, obj, validateFn) {
  */
 
 
-exports.toType = toType;
-
-var validateType = function validateType(type, value, silent) {
+function validateType(type, value, silent) {
   if (silent === void 0) {
     silent = false;
   }
@@ -230,6 +225,14 @@ var validateType = function validateType(type, value, silent) {
   var namePrefix = typeToCheck._vueTypes_name ? typeToCheck._vueTypes_name + ' - ' : '';
 
   if (hasOwn.call(typeToCheck, 'type') && typeToCheck.type !== null) {
+    if (typeToCheck.type === undefined) {
+      throw new TypeError("[VueTypes error]: Setting type to undefined is not allowed.");
+    }
+
+    if (!typeToCheck.required && value === undefined) {
+      return valid;
+    }
+
     if (isArray(typeToCheck.type)) {
       valid = typeToCheck.type.some(function (type) {
         return validateType(type, value, true);
@@ -273,15 +276,14 @@ var validateType = function validateType(type, value, silent) {
   }
 
   return valid;
-};
+}
 
-exports.validateType = validateType;
 var warn = noop;
 exports.warn = warn;
 
 if (process.env.NODE_ENV !== 'production') {
   var hasConsole = typeof console !== 'undefined';
-  exports.warn = warn = hasConsole ? function (msg) {
+  exports.warn = warn = hasConsole ? function warn(msg) {
     // eslint-disable-next-line no-console
     _vue.default.config.silent === false && console.warn("[VueTypes warn]: " + msg);
   } : noop;
