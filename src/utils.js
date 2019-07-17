@@ -180,6 +180,14 @@ export function validateType(type, value, silent = false) {
     : ''
 
   if (hasOwn.call(typeToCheck, 'type') && typeToCheck.type !== null) {
+    if (typeToCheck.type === undefined) {
+      throw new TypeError(
+        `[VueTypes error]: Setting type to undefined is not allowed.`,
+      )
+    }
+    if (!typeToCheck.required && value === undefined) {
+      return valid
+    }
     if (isArray(typeToCheck.type)) {
       valid = typeToCheck.type.some((type) => validateType(type, value, true))
       expectedType = typeToCheck.type.map((type) => getType(type)).join(' or ')
@@ -235,7 +243,7 @@ let warn = noop
 if (process.env.NODE_ENV !== 'production') {
   const hasConsole = typeof console !== 'undefined'
   warn = hasConsole
-    ? (msg) => {
+    ? function warn(msg) {
         // eslint-disable-next-line no-console
         Vue.config.silent === false && console.warn(`[VueTypes warn]: ${msg}`)
       }

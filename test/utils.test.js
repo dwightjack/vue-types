@@ -185,4 +185,21 @@ describe('`toType()`', () => {
 
     expect(validator()).toBe(obj)
   })
+
+  describe('`validateType()`', () => {
+    it('should throw when the type is null or undefined', () => {
+      expect(() => {
+        utils.validateType(undefined, 'something')
+      }).toThrow()
+    })
+
+    it('should allow undefined explicit values for non-required types', () => {
+      expect(utils.validateType({ type: String }, undefined)).toBe(true)
+    })
+    it('should NOT allow undefined explicit values for required types', () => {
+      expect(
+        utils.validateType({ type: String, required: true }, undefined),
+      ).toBe(false)
+    })
+  })
 })
