@@ -1,5 +1,5 @@
 
-/*! vue-types - v1.5.6
+/*! vue-types - v1.5.7
  * https://github.com/dwightjack/vue-types
  * Copyright (c) 2019 - Marco Solazzi;
  * Licensed MIT
@@ -256,21 +256,21 @@
   var hasOwn = ObjProto.hasOwnProperty;
   var FN_MATCH_REGEXP = /^\s*function (\w+)/; // https://github.com/vuejs/vue/blob/dev/src/core/util/props.js#L177
 
-  var getType = function getType(fn) {
+  function getType(fn) {
     var type = fn !== null && fn !== undefined ? fn.type ? fn.type : fn : null;
     var match = type && type.toString().match(FN_MATCH_REGEXP);
     return match && match[1];
-  };
-  var getNativeType = function getNativeType(value) {
+  }
+  function getNativeType(value) {
     if (value === null || value === undefined) return null;
     var match = value.constructor.toString().match(FN_MATCH_REGEXP);
     return match && match[1];
-  };
+  }
   /**
    * No-op function
    */
 
-  var noop = function noop() {};
+  function noop() {}
   /**
    * Determines whether the passed value is an integer. Uses `Number.isInteger` if available
    *
@@ -279,7 +279,7 @@
    * @returns {boolean}
    */
 
-  var isInteger = Number.isInteger || function (value) {
+  var isInteger = Number.isInteger || function isInteger(value) {
     return typeof value === 'number' && isFinite(value) && Math.floor(value) === value;
   };
   /**
@@ -289,7 +289,7 @@
    * @returns {boolean}
    */
 
-  var isArray = Array.isArray || function (value) {
+  var isArray = Array.isArray || function isArray(value) {
     return toString.call(value) === '[object Array]';
   };
   /**
@@ -309,7 +309,7 @@
    * @returns {object} the passed-in prop type
    */
 
-  var withDefault = function withDefault(type) {
+  function withDefault(type) {
     return Object.defineProperty(type, 'def', {
       value: function value(def) {
         if (def === undefined && !this.default) {
@@ -338,7 +338,7 @@
       enumerable: false,
       writable: false
     });
-  };
+  }
   /**
    * Adds a `isRequired` getter returning a new object with `required: true` key-value
    *
@@ -346,7 +346,7 @@
    * @returns {object} the passed-in prop type
    */
 
-  var withRequired = function withRequired(type) {
+  function withRequired(type) {
     return Object.defineProperty(type, 'isRequired', {
       get: function get() {
         this.required = true;
@@ -354,7 +354,7 @@
       },
       enumerable: false
     });
-  };
+  }
   /**
    * Adds a validate method useful to set the prop `validator` function.
    *
@@ -362,7 +362,7 @@
    * @returns {object} the passed-in prop type
    */
 
-  var withValidate = function withValidate(type) {
+  function withValidate(type) {
     return Object.defineProperty(type, 'validate', {
       value: function value(fn) {
         this.validator = fn.bind(this);
@@ -370,7 +370,7 @@
       },
       enumerable: false
     });
-  };
+  }
   /**
    * Adds `isRequired` and `def` modifiers to an object
    *
@@ -379,7 +379,7 @@
    * @returns {object}
    */
 
-  var toType = function toType(name, obj, validateFn) {
+  function toType(name, obj, validateFn) {
     if (validateFn === void 0) {
       validateFn = false;
     }
@@ -400,7 +400,7 @@
     }
 
     return obj;
-  };
+  }
   /**
    * Validates a given value against a prop type object
    *
@@ -410,7 +410,7 @@
    * @returns {boolean}
    */
 
-  var validateType = function validateType(type, value, silent) {
+  function validateType(type, value, silent) {
     if (silent === void 0) {
       silent = false;
     }
@@ -428,6 +428,14 @@
     var namePrefix = typeToCheck._vueTypes_name ? typeToCheck._vueTypes_name + ' - ' : '';
 
     if (hasOwn.call(typeToCheck, 'type') && typeToCheck.type !== null) {
+      if (typeToCheck.type === undefined) {
+        throw new TypeError("[VueTypes error]: Setting type to undefined is not allowed.");
+      }
+
+      if (!typeToCheck.required && value === undefined) {
+        return valid;
+      }
+
       if (isArray(typeToCheck.type)) {
         valid = typeToCheck.type.some(function (type) {
           return validateType(type, value, true);
@@ -471,12 +479,12 @@
     }
 
     return valid;
-  };
+  }
   var warn = noop;
 
   {
     var hasConsole = typeof console !== 'undefined';
-    warn = hasConsole ? function (msg) {
+    warn = hasConsole ? function warn(msg) {
       // eslint-disable-next-line no-console
       Vue.config.silent === false && console.warn("[VueTypes warn]: " + msg);
     } : noop;
