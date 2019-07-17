@@ -8,13 +8,13 @@ export const hasOwn = ObjProto.hasOwnProperty
 const FN_MATCH_REGEXP = /^\s*function (\w+)/
 
 // https://github.com/vuejs/vue/blob/dev/src/core/util/props.js#L177
-export const getType = (fn) => {
+export function getType(fn) {
   const type = fn !== null && fn !== undefined ? (fn.type ? fn.type : fn) : null
   const match = type && type.toString().match(FN_MATCH_REGEXP)
   return match && match[1]
 }
 
-export const getNativeType = (value) => {
+export function getNativeType(value) {
   if (value === null || value === undefined) return null
   const match = value.constructor.toString().match(FN_MATCH_REGEXP)
   return match && match[1]
@@ -23,13 +23,14 @@ export const getNativeType = (value) => {
 /**
  * No-op function
  */
-export const noop = () => {}
+export function noop() {}
 
 /**
  * Checks for a own property in an object
  *
  * @param {object} obj - Object
  * @param {string} prop - Property to check
+ * @returns {boolean}
  */
 export const has = (obj, prop) => hasOwn.call(obj, prop)
 
@@ -42,7 +43,7 @@ export const has = (obj, prop) => hasOwn.call(obj, prop)
  */
 export const isInteger =
   Number.isInteger ||
-  function(value) {
+  function isInteger(value) {
     return (
       typeof value === 'number' &&
       isFinite(value) &&
@@ -58,7 +59,7 @@ export const isInteger =
  */
 export const isArray =
   Array.isArray ||
-  function(value) {
+  function isArray(value) {
     return toString.call(value) === '[object Array]'
   }
 
@@ -77,7 +78,7 @@ export const isFunction = (value) =>
  * @param {object} type - Object to enhance
  * @returns {object} the passed-in prop type
  */
-export const withDefault = function(type) {
+export function withDefault(type) {
   return Object.defineProperty(type, 'def', {
     value(def) {
       if (def === undefined && !this.default) {
@@ -107,7 +108,7 @@ export const withDefault = function(type) {
  * @param {object} type - Object to enhance
  * @returns {object} the passed-in prop type
  */
-export const withRequired = function(type) {
+export function withRequired(type) {
   return Object.defineProperty(type, 'isRequired', {
     get() {
       this.required = true
@@ -123,7 +124,7 @@ export const withRequired = function(type) {
  * @param {object} type Prop type to extend
  * @returns {object} the passed-in prop type
  */
-export const withValidate = function(type) {
+export function withValidate(type) {
   return Object.defineProperty(type, 'validate', {
     value(fn) {
       this.validator = fn.bind(this)
@@ -140,7 +141,7 @@ export const withValidate = function(type) {
  * @param {object} obj - Object to enhance
  * @returns {object}
  */
-export const toType = (name, obj, validateFn = false) => {
+export function toType(name, obj, validateFn = false) {
   Object.defineProperty(obj, '_vueTypes_name', {
     enumerable: false,
     writable: false,
@@ -167,7 +168,7 @@ export const toType = (name, obj, validateFn = false) => {
  * @param {boolean} silent - Silence warnings
  * @returns {boolean}
  */
-export const validateType = (type, value, silent = false) => {
+export function validateType(type, value, silent = false) {
   let typeToCheck = type
   let valid = true
   let expectedType
@@ -179,6 +180,14 @@ export const validateType = (type, value, silent = false) => {
     : ''
 
   if (hasOwn.call(typeToCheck, 'type') && typeToCheck.type !== null) {
+    if (typeToCheck.type === undefined) {
+      throw new TypeError(
+        `[VueTypes error]: Setting type to undefined is not allowed.`,
+      )
+    }
+    if (!typeToCheck.required && value === undefined) {
+      return valid
+    }
     if (isArray(typeToCheck.type)) {
       valid = typeToCheck.type.some((type) => validateType(type, value, true))
       expectedType = typeToCheck.type.map((type) => getType(type)).join(' or ')
@@ -234,7 +243,7 @@ let warn = noop
 if (process.env.NODE_ENV !== 'production') {
   const hasConsole = typeof console !== 'undefined'
   warn = hasConsole
-    ? (msg) => {
+    ? function warn(msg) {
         // eslint-disable-next-line no-console
         Vue.config.silent === false && console.warn(`[VueTypes warn]: ${msg}`)
       }

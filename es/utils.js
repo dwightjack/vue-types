@@ -5,26 +5,27 @@ var toString = ObjProto.toString;
 export var hasOwn = ObjProto.hasOwnProperty;
 var FN_MATCH_REGEXP = /^\s*function (\w+)/; // https://github.com/vuejs/vue/blob/dev/src/core/util/props.js#L177
 
-export var getType = function getType(fn) {
+export function getType(fn) {
   var type = fn !== null && fn !== undefined ? fn.type ? fn.type : fn : null;
   var match = type && type.toString().match(FN_MATCH_REGEXP);
   return match && match[1];
-};
-export var getNativeType = function getNativeType(value) {
+}
+export function getNativeType(value) {
   if (value === null || value === undefined) return null;
   var match = value.constructor.toString().match(FN_MATCH_REGEXP);
   return match && match[1];
-};
+}
 /**
  * No-op function
  */
 
-export var noop = function noop() {};
+export function noop() {}
 /**
  * Checks for a own property in an object
  *
  * @param {object} obj - Object
  * @param {string} prop - Property to check
+ * @returns {boolean}
  */
 
 export var has = function has(obj, prop) {
@@ -38,7 +39,7 @@ export var has = function has(obj, prop) {
  * @returns {boolean}
  */
 
-export var isInteger = Number.isInteger || function (value) {
+export var isInteger = Number.isInteger || function isInteger(value) {
   return typeof value === 'number' && isFinite(value) && Math.floor(value) === value;
 };
 /**
@@ -48,7 +49,7 @@ export var isInteger = Number.isInteger || function (value) {
  * @returns {boolean}
  */
 
-export var isArray = Array.isArray || function (value) {
+export var isArray = Array.isArray || function isArray(value) {
   return toString.call(value) === '[object Array]';
 };
 /**
@@ -68,7 +69,7 @@ export var isFunction = function isFunction(value) {
  * @returns {object} the passed-in prop type
  */
 
-export var withDefault = function withDefault(type) {
+export function withDefault(type) {
   return Object.defineProperty(type, 'def', {
     value: function value(def) {
       if (def === undefined && !this.default) {
@@ -97,7 +98,7 @@ export var withDefault = function withDefault(type) {
     enumerable: false,
     writable: false
   });
-};
+}
 /**
  * Adds a `isRequired` getter returning a new object with `required: true` key-value
  *
@@ -105,7 +106,7 @@ export var withDefault = function withDefault(type) {
  * @returns {object} the passed-in prop type
  */
 
-export var withRequired = function withRequired(type) {
+export function withRequired(type) {
   return Object.defineProperty(type, 'isRequired', {
     get: function get() {
       this.required = true;
@@ -113,7 +114,7 @@ export var withRequired = function withRequired(type) {
     },
     enumerable: false
   });
-};
+}
 /**
  * Adds a validate method useful to set the prop `validator` function.
  *
@@ -121,7 +122,7 @@ export var withRequired = function withRequired(type) {
  * @returns {object} the passed-in prop type
  */
 
-export var withValidate = function withValidate(type) {
+export function withValidate(type) {
   return Object.defineProperty(type, 'validate', {
     value: function value(fn) {
       this.validator = fn.bind(this);
@@ -129,7 +130,7 @@ export var withValidate = function withValidate(type) {
     },
     enumerable: false
   });
-};
+}
 /**
  * Adds `isRequired` and `def` modifiers to an object
  *
@@ -138,7 +139,7 @@ export var withValidate = function withValidate(type) {
  * @returns {object}
  */
 
-export var toType = function toType(name, obj, validateFn) {
+export function toType(name, obj, validateFn) {
   if (validateFn === void 0) {
     validateFn = false;
   }
@@ -159,7 +160,7 @@ export var toType = function toType(name, obj, validateFn) {
   }
 
   return obj;
-};
+}
 /**
  * Validates a given value against a prop type object
  *
@@ -169,7 +170,7 @@ export var toType = function toType(name, obj, validateFn) {
  * @returns {boolean}
  */
 
-export var validateType = function validateType(type, value, silent) {
+export function validateType(type, value, silent) {
   if (silent === void 0) {
     silent = false;
   }
@@ -187,6 +188,14 @@ export var validateType = function validateType(type, value, silent) {
   var namePrefix = typeToCheck._vueTypes_name ? typeToCheck._vueTypes_name + ' - ' : '';
 
   if (hasOwn.call(typeToCheck, 'type') && typeToCheck.type !== null) {
+    if (typeToCheck.type === undefined) {
+      throw new TypeError("[VueTypes error]: Setting type to undefined is not allowed.");
+    }
+
+    if (!typeToCheck.required && value === undefined) {
+      return valid;
+    }
+
     if (isArray(typeToCheck.type)) {
       valid = typeToCheck.type.some(function (type) {
         return validateType(type, value, true);
@@ -230,12 +239,12 @@ export var validateType = function validateType(type, value, silent) {
   }
 
   return valid;
-};
+}
 var warn = noop;
 
 if (process.env.NODE_ENV !== 'production') {
   var hasConsole = typeof console !== 'undefined';
-  warn = hasConsole ? function (msg) {
+  warn = hasConsole ? function warn(msg) {
     // eslint-disable-next-line no-console
     Vue.config.silent === false && console.warn("[VueTypes warn]: " + msg);
   } : noop;
