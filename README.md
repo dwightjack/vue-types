@@ -28,6 +28,8 @@
 
 `vue-types` is a collection of configurable [prop type](http://vuejs.org/guide/components.html#Props) definitions for Vue.js components, inspired by React's `prop-types`.
 
+[Try it now!](https://codesandbox.io/embed/vue-types-template-khfk4)
+
 ### When to use
 
 While basic prop type definition in Vue is simple and convenient, detailed prop validation can become verbose on complex components.
