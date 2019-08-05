@@ -5,7 +5,7 @@ exports.default = void 0;
 
 var _vue = _interopRequireDefault(require("vue"));
 
-var _isPlainObject = _interopRequireDefault(require("lodash/isPlainObject"));
+var _isPlainObject = _interopRequireDefault(require("is-plain-object"));
 
 var _sensibles = require("./sensibles");
 

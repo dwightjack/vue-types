@@ -31,9 +31,7 @@
     "test:saucelab": "cross-env BABEL_ENV=rollup karma start karma-sauce.conf.js --single-run",
     "test:types": "tsc --noEmit -p ./types/test/",
     "lint": "eslint src/*.js test/*.js types/**/*.ts types/**/*.d.ts",
-    "start": "rollup -c ./examples/rollup.config.js -w",
-    "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "start": "rollup -c ./examples/rollup.config.js -w"
   },
   "keywords": [
     "vue",
@@ -51,7 +49,6 @@
     "@babel/cli": "7.5.0",
     "@babel/core": "7.5.0",
     "@babel/preset-env": "7.5.0",
-    "@types/lodash": "4.14.135",
     "@types/node": "12.0.12",
     "@typescript-eslint/eslint-plugin": "1.11.0",
     "@typescript-eslint/parser": "1.11.0",
@@ -92,8 +89,7 @@
     "vue-class-component": "~7.1.0"
   },
   "dependencies": {
-    "lodash": "^4.17.10",
-    "snyk": "^1.192.0"
+    "is-plain-object": "3.0.0"
   },
   "browserslist": [
     "last 3 versions",
@@ -102,6 +98,5 @@
     "Edge >= 12",
     "iOS >= 10",
     "Android >= 4.4"
-  ],
-  "snyk": true
+  ]
 }

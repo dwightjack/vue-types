@@ -506,25 +506,27 @@ describe('VueTypes', () => {
     })
 
     it('should validate an objects shape on `loose` mode and respect flags', () => {
-
       const customType = VueTypes.shape(shape).loose.isRequired
-      expect(forceNoContext(customType.validator)({
-        id: 10,
-        name: 'John',
-        age: 30,
-        nationality: ''
-      })).toBe(true)
+      expect(
+        forceNoContext(customType.validator)({
+          id: 10,
+          name: 'John',
+          age: 30,
+          nationality: '',
+        }),
+      ).toBe(true)
     })
 
     it('should validate an objects shape on `loose` mode and respect flags in different order', () => {
-
       const customType = VueTypes.shape(shape).isRequired.loose
-      expect(forceNoContext(customType.validator)({
-        id: 10,
-        name: 'John',
-        age: 30,
-        nationality: ''
-      })).toBe(true)
+      expect(
+        forceNoContext(customType.validator)({
+          id: 10,
+          name: 'John',
+          age: 30,
+          nationality: '',
+        }),
+      ).toBe(true)
     })
 
     it('should NOT validate a value which is NOT an object', () => {

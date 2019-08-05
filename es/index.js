@@ -1,6 +1,6 @@
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
-import isPlainObject from 'lodash/isPlainObject';
+import isPlainObject from 'is-plain-object';
 import { toType, getType, isFunction, validateType, isInteger, isArray, warn } from './utils';
 import { setDefaults } from './sensibles';
 var VueTypes = {
