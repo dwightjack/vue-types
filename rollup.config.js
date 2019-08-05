@@ -31,6 +31,19 @@ const baseOutputConfig = {
   globals: { vue: 'Vue' }
 }
 
+const productionPlugins = [replace({
+  'process.env.NODE_ENV': JSON.stringify('production')
+}), ...plugins, uglify({
+  warnings: false,
+  mangle: true,
+  compress: {
+    pure_funcs: ['warn']
+  },
+  output: {
+    comments: /^!/
+  }
+}), filesize()]
+
 export default [
   {
     input: 'src/index.js',
@@ -44,17 +57,12 @@ export default [
     input: 'src/index.js',
     output: Object.assign({ file: 'umd/vue-types.min.js' }, baseOutputConfig),
     external: ['vue'],
-    plugins: [replace({
-      'process.env.NODE_ENV': JSON.stringify('production')
-    }), ...plugins, uglify({
-      warnings: false,
-      mangle: true,
-      compress: {
-        pure_funcs: ['warn']
-      },
-      output: {
-        comments: /^!/
-      }
-    }), filesize()]
+    plugins: productionPlugins
+  },
+  {
+    input: 'src/shim.js',
+    output: Object.assign({ file: 'umd/vue-types.shim.min.js' }, baseOutputConfig),
+    external: ['vue'],
+    plugins: productionPlugins
   }
 ]

@@ -11,7 +11,7 @@ exports.toType = toType;
 exports.validateType = validateType;
 exports.warn = exports.isFunction = exports.isArray = exports.isInteger = exports.has = exports.hasOwn = void 0;
 
-var _isPlainObject = _interopRequireDefault(require("lodash/isPlainObject"));
+var _isPlainObject = _interopRequireDefault(require("is-plain-object"));
 
 var _vue = _interopRequireDefault(require("vue"));
 

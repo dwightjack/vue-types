@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import isPlainObject from 'lodash/isPlainObject';
+import isPlainObject from 'is-plain-object';
 import { setDefaults } from './sensibles';
 
 var isArray = Array.isArray || function (value) {

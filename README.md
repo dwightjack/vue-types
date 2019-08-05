@@ -110,6 +110,19 @@ To prevent that error use [eslint-plugin-vue-types](https://github.com/dwightjac
 
 Vue.js does not validate components' props when used in a production build. If you're using a bundler such as Webpack or rollup you can shrink vue-types filesize by around **70%** (minified and gzipped) by removing the validation logic while preserving the library's API methods. To achieve that result setup an alias to `vue-types/es/shim.js` (`vue-types/dist/shim.js` if you're using CommonJS modules).
 
+If you're including the library via a `script` tag use the dedicated shim build file:
+
+```html
+<script src="https://unpkg.com/vue-types@latest/umd/vue-types.shim.min.js"></script>
+```
+
+**Note:** In order to use a specific version of the library change `@latest` with `@<version-number>`:
+
+```html
+<!-- use the shim from version 1.6.0 -->
+<script src="https://unpkg.com/vue-types@1.6.0/umd/vue-types.shim.min.js"></script>
+```
+
 ### Webpack
 
 The following example will shim the module in Webpack by adding an [alias field](https://webpack.js.org/configuration/resolve/#resolve-alias) to the configuration when `NODE_ENV` is set to `"production"`:

@@ -3,7 +3,7 @@
 exports.__esModule = true;
 exports.default = void 0;
 
-var _isPlainObject = _interopRequireDefault(require("lodash/isPlainObject"));
+var _isPlainObject = _interopRequireDefault(require("is-plain-object"));
 
 var _utils = require("./utils");
 
