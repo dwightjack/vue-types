@@ -827,6 +827,22 @@ describe('VueTypes', () => {
       })
       expect(VueTypes.cloneDemo).toNotBe(VueTypes.cloneDemo)
     })
+
+    it('should inherit from vue-types types', () => {
+      const parent = VueTypes.string.isRequired.def('parent')
+
+      VueTypes.extend({
+        name: 'stringAlias',
+        type: parent,
+        getter: true,
+      })
+      expect(VueTypes.stringAlias).toMatch({
+        type: String,
+        required: true,
+        validate: undefined,
+        default: 'parent',
+      })
+    })
   })
 })
 

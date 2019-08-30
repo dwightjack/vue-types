@@ -26,6 +26,11 @@ export function getNativeType(value) {
 export function noop() {}
 
 /**
+ * A function that always returns true
+ */
+export const stubTrue = () => true
+
+/**
  * Checks for a own property in an object
  *
  * @param {object} obj - Object

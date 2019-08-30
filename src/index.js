@@ -7,6 +7,8 @@ import {
   isInteger,
   isArray,
   warn,
+  has,
+  stubTrue,
 } from './utils'
 import { setDefaults } from './sensibles'
 
@@ -104,21 +106,35 @@ const VueTypes = {
   },
 
   extend(props = {}) {
-    const { name, validate = false, getter = false, ...type } = props
+    let { name, validate = false, getter = false, ...opts } = props
+
+    if (has(VueTypes, name)) {
+      throw new TypeError(`[VueTypes error]: Type "${name}" already defined`)
+    }
+
+    const { type, validator = stubTrue } = opts
+    if (type && type._vueTypes_name) {
+      // we are using as base type a vue-type object
+      opts.type = type.type // inherit the base types
+      opts.required = type.required // inherit the required flag
+      opts.default = type.default // inherit the default flag
+      validate = false // we don't allow validate method on this kind of types
+      opts.validator = (v) => validateType(type, v, true) && validator(v)
+    }
     let descriptor
     if (getter) {
       descriptor = {
         get() {
-          return toType(name, Object.assign({}, type), validate)
+          return toType(name, Object.assign({}, opts), validate)
         },
         enumerable: true,
         configurable: false,
       }
     } else {
-      const { validator } = type
+      const { validator } = opts
       descriptor = {
         value(...args) {
-          const ret = toType(name, Object.assign({}, type), validate)
+          const ret = toType(name, Object.assign({}, opts), validate)
           if (validator) {
             ret.validator = validator.bind(ret, ...args)
           }
