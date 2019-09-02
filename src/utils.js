@@ -157,6 +157,14 @@ export function toType(name, obj, validateFn = false) {
 
   if (validateFn) {
     withValidate(obj)
+  } else {
+    Object.defineProperty(obj, 'validate', {
+      value() {
+        warn(`${name} - "validate" method not supported on this type`)
+        return this
+      },
+      enumerable: false,
+    })
   }
 
   if (isFunction(obj.validator)) {
