@@ -159,18 +159,27 @@ describe('`toType()`', () => {
     expect(obj.def).toBeA(Function)
   })
 
-  it('should NOT add a `validate` method by default', () => {
+  it('should add a noop `validate` method by default', () => {
     const obj = {}
 
     utils.toType('testType', obj)
-    expect(obj.validate).toBe(undefined)
+    expect(obj.validate).toBeA(Function)
+
+    obj.validate()
+    expect(obj.validator).toBe(undefined)
   })
 
-  it('should add a `validate` method with a flag', () => {
+  it('should add a working `validate` method with a flag', () => {
     const obj = {}
+    const spy = expect.createSpy().andReturn(true)
 
     utils.toType('testType', obj, true)
+
     expect(obj.validate).toBeA(Function)
+
+    obj.validate(spy)
+    expect(obj.validator('string')).toBe(true)
+    expect(spy).toHaveBeenCalledWith('string')
   })
 
   it('should bind provided `validator function to the passed in object`', () => {

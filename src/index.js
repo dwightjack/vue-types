@@ -119,7 +119,11 @@ const VueTypes = {
       opts.required = type.required // inherit the required flag
       opts.default = type.default // inherit the default flag
       validate = false // we don't allow validate method on this kind of types
-      opts.validator = (v) => validateType(type, v, true) && validator(v)
+      if (isFunction(type.validator)) {
+        opts.validator = function(...args) {
+          return type.validator.apply(type, args) && validator.apply(this, args)
+        }
+      }
     }
     let descriptor
     if (getter) {
