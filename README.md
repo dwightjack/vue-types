@@ -2,24 +2,23 @@
 
 > Prop type definitions for [Vue.js](http://vuejs.org). Compatible with both Vue 1.x and 2.x
 
-
 <!-- TOC depthTo:3 -->
 
 - [Introduction](#introduction)
-    - [When to use](#when-to-use)
+  - [When to use](#when-to-use)
 - [Installation](#installation)
-    - [NPM package](#npm-package)
-    - [CDN delivered `<script>`](#cdn-delivered-script)
+  - [NPM package](#npm-package)
+  - [CDN delivered `<script>`](#cdn-delivered-script)
 - [Usage with `eslint-plugin-vue`](#usage-with-eslint-plugin-vue)
 - [Production build](#production-build)
-    - [Webpack](#webpack)
-    - [Rollup](#rollup)
+  - [Webpack](#webpack)
+  - [Rollup](#rollup)
 - [Documentation](#documentation)
-    - [Native Types](#native-types)
-    - [Native Types Configuration](#native-types-configuration)
-    - [Custom Types](#custom-types)
-    - [Extending VueTypes](#extending-vuetypes)
-    - [Utilities](#utilities)
+  - [Native Types](#native-types)
+  - [Native Types Configuration](#native-types-configuration)
+  - [Custom Types](#custom-types)
+  - [Extending VueTypes](#extending-vuetypes)
+  - [Utilities](#utilities)
 - [License](#license)
 
 <!-- /TOC -->
@@ -42,31 +41,30 @@ export default {
   props: {
     id: {
       type: Number,
-      default: 10
+      default: 10,
     },
     name: {
       type: String,
-      required: true
+      required: true,
     },
     age: {
       type: Number,
       validator(value) {
         return Number.isInteger(value)
-      }
+      },
     },
-    nationality: String
+    nationality: String,
   },
   methods: {
     // ...
-  }
-};
+  },
+}
 ```
 
 You may write:
 
 ```js
-
-import VueTypes from 'vue-types';
+import VueTypes from 'vue-types'
 
 export default {
   props: {
@@ -74,20 +72,19 @@ export default {
     name: VueTypes.string.isRequired,
     age: VueTypes.integer,
     // No need for `default` or `required` key, so keep it simple
-    nationality: String
+    nationality: String,
   },
   methods: {
     // ...
-  }
+  },
 }
 ```
-
 
 ## Installation
 
 ### NPM package
 
-``` bash
+```bash
 npm install vue-types --save
 # or
 yarn add vue-types
@@ -96,6 +93,7 @@ yarn add vue-types
 ### CDN delivered `<script>`
 
 add the following script tags before your code
+
 ```html
 <script src="https://unpkg.com/vue-types"></script>
 ```
@@ -134,9 +132,12 @@ return {
   // ... configuration
   resolve: {
     alias: {
-      'vue-types': process.env.NODE_ENV === 'production' ? 'vue-types/es/shim.js' : undefined
-    }
-  }
+      // ... other aliases
+      ...(process.env.NODE_ENV === 'production' && {
+        'vue-types': require.resolve('vue-types/es/shim.js'),
+      }),
+    },
+  },
 }
 ```
 
@@ -146,15 +147,18 @@ The following example will shim the module in rollup using [rollup-plugin-alias]
 
 ```js
 // rollup.config.js
-import alias from 'rollup-plugin-alias';
+import alias from 'rollup-plugin-alias'
 
 return {
   // ... configuration
   plugins: [
-    process.env.NODE_ENV === 'production' ? alias({
-      'vue-types': './node_modules/vue-types/es/shim.js'
-    })
-  ]
+    // ...other plugins
+    ...(process.env.NODE_ENV === 'production' && [
+      alias({
+        'vue-types': require.resolve('vue-types/es/shim.js'),
+      }),
+    ]),
+  ],
 }
 ```
 
@@ -166,10 +170,10 @@ Note: If you are using [rollup-plugin-node-resolve](https://github.com/rollup/ro
 
 Most native types come with:
 
-* a default value (not available in `.any` and `.symbol`).
-* a `.def(any)` method to reassign the default value for the current prop. The passed-in value will be validated against the type configuration in order to prevent invalid values.
-* a `isRequired` flag to set the `required: true` key.
-* a `validate(function)` method to set a custom validator function (not available in `.integer`).
+- a default value (not available in `.any` and `.symbol`).
+- a `.def(any)` method to reassign the default value for the current prop. The passed-in value will be validated against the type configuration in order to prevent invalid values.
+- a `isRequired` flag to set the `required: true` key.
+- a `validate(function)` method to set a custom validator function (not available in `.integer`).
 
 ```js
 const numProp = VueTypes.number
@@ -197,7 +201,7 @@ Validates any type of value and **has no default value**.
 
 Validates that a prop is an array primitive.
 
-* default: an empty array
+- default: an empty array
 
 _Note: [Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) requires Array definitions to provide default value as a factory function. `VueTypes.array.def()` accepts both factory functions and arrays. In the latter case, VueTypes will convert the value to a factory function for you._
 
@@ -205,31 +209,31 @@ _Note: [Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Pr
 
 Validates boolean props.
 
-* default: `true`
+- default: `true`
 
 #### `VueTypes.func`
 
 Validates that a prop is a function.
 
-* default: an empty function
+- default: an empty function
 
 #### `VueTypes.number`
 
 Validates that a prop is a number.
 
-* default: `0`
+- default: `0`
 
 #### `VueTypes.integer`
 
 Validates that a prop is an integer.
 
-* default: `0`
+- default: `0`
 
 #### `VueTypes.object`
 
 Validates that a prop is an object.
 
-* default: an empty object
+- default: an empty object
 
 _Note: [Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) requires Object definitions to provide default value as a factory function. `VueTypes.object.def()` accepts both factory functions and plain objects. In the latter case, VueTypes will convert the value to a factory function for you._
 
@@ -237,7 +241,7 @@ _Note: [Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Pr
 
 Validates that a prop is a string.
 
-* default: `''`
+- default: `''`
 
 #### `VueTypes.symbol`
 
@@ -247,7 +251,7 @@ VueTypes.symbol
 
 Validates that a prop is a Symbol.
 
-* default: none
+- default: none
 
 ### Native Types Configuration
 
@@ -263,7 +267,7 @@ VueTypes.sensibleDefaults = false
 
 //assign an object in order to specify custom defaults
 VueTypes.sensibleDefaults = {
-  string: 'mystringdefault'
+  string: 'mystringdefault',
   //...
 }
 ```
@@ -291,10 +295,10 @@ console.log(VueTypes.bool.default)
 
 Custom types are a special kind of types useful to describe complex validation requirements. By design each custom type:
 
-* **doesn't have** any sensible default value
-* **doesn't have** a `validate` method
-* has a `.def()` method to assign a default value on the current prop
-* has an `isRequired` flag to set the `required: true` key
+- **doesn't have** any sensible default value
+- **doesn't have** a `validate` method
+- has a `.def()` method to assign a default value on the current prop
+- has an `isRequired` flag to set the `required: true` key
 
 ```js
 const oneOfPropDefault = VueTypes.oneOf([0, 1]).def(1)
@@ -317,8 +321,8 @@ class Person {
 
 export default {
   props: {
-    user: VueTypes.instanceOf(Person)
-  }
+    user: VueTypes.instanceOf(Person),
+  },
 }
 ```
 
@@ -331,8 +335,8 @@ Validates that a prop is one of the provided values.
 ```js
 export default {
   props: {
-    genre: VueTypes.oneOf(['action', 'thriller'])
-  }
+    genre: VueTypes.oneOf(['action', 'thriller']),
+  },
 }
 ```
 
@@ -346,9 +350,9 @@ export default {
     theProp: VueTypes.oneOfType([
       String,
       VueTypes.integer,
-      VueTypes.instanceOf(Person)
-    ])
-  }
+      VueTypes.instanceOf(Person),
+    ]),
+  },
 }
 ```
 
@@ -359,8 +363,8 @@ Validates that a prop is an array of a certain type.
 ```js
 export default {
   props: {
-    theProp: VueTypes.arrayOf(String)
-  }
+    theProp: VueTypes.arrayOf(String),
+  },
 }
 
 //accepts: ['my', 'string']
@@ -374,8 +378,8 @@ Validates that a prop is an object with values of a certain type.
 ```js
 export default {
   props: {
-    userData: VueTypes.objectOf(String)
-  }
+    userData: VueTypes.objectOf(String),
+  },
 }
 
 //accepts: userData = {name: 'John', surname: 'Doe'}
@@ -384,7 +388,7 @@ export default {
 
 #### `VueTypes.shape()`
 
-Validates that a prop is an object taking on a particular shape. Accepts both simple and `vue-types` types. You can set shape's properties as `required` but (obviously) you cannot use `.def()`. On the other hand you can use `def()` to set a default value for the shape itself. Like `VueTypes.array` and `VueTypes.object`, you can pass to `.def()` either a factory function returning an object or a plain  object.
+Validates that a prop is an object taking on a particular shape. Accepts both simple and `vue-types` types. You can set shape's properties as `required` but (obviously) you cannot use `.def()`. On the other hand you can use `def()` to set a default value for the shape itself. Like `VueTypes.array` and `VueTypes.object`, you can pass to `.def()` either a factory function returning an object or a plain object.
 
 ```js
 export default {
@@ -392,9 +396,9 @@ export default {
     userData: VueTypes.shape({
       name: String,
       age: VueTypes.integer,
-      id: VueTypes.integer.isRequired
-    }).def(() => ({ name: 'John' }))
-  }
+      id: VueTypes.integer.isRequired,
+    }).def(() => ({ name: 'John' })),
+  },
 }
 
 // default value = {name: 'John'}
@@ -410,13 +414,13 @@ export default {
   props: {
     userData: VueTypes.shape({
       name: String,
-      id: VueTypes.integer.isRequired
+      id: VueTypes.integer.isRequired,
     }),
     userDataLoose: VueTypes.shape({
       name: String,
-      id: VueTypes.integer.isRequired
-    }).loose
-  }
+      id: VueTypes.integer.isRequired,
+    }).loose,
+  },
 }
 
 //accepts: userData = {name: 'John', id: 1}
@@ -429,15 +433,14 @@ export default {
 Validates prop values against a custom validator function.
 
 ```js
-
 function minLength(value) {
-    return typeof value === 'string' && value.length >= 6
-  }
+  return typeof value === 'string' && value.length >= 6
+}
 
 export default {
   props: {
-    theProp: VueTypes.custom(minLength)
-  }
+    theProp: VueTypes.custom(minLength),
+  },
 }
 
 //accepts: 'string'
@@ -450,16 +453,16 @@ You can pass a validation error message as second argument as well:
 
 ```js
 function minLength(value) {
-    return typeof value === 'string' && value.length >= 6
-  }
+  return typeof value === 'string' && value.length >= 6
+}
 
 export default {
   props: {
     theProp: VueTypes.custom(
       minLength,
-      'theProp is not a string or is too short'
-    )
-  }
+      'theProp is not a string or is too short',
+    ),
+  },
 }
 ```
 
@@ -472,13 +475,14 @@ You can extend VueTypes with your own types via `VueTypes.extend({...})`. The me
 - `getter`: (boolean, default: `false`) If `true` will setup the type as an accessor property (like, for example `VueTypes.string`) else will setup the type as a configurable method (like, for example `VueTypes.arrayOf`).
 
 Examples:
+
 ```js
 // as an accessor type
 VueTypes.extend({
   name: 'negative',
   getter: true,
   type: Number,
-  validator: (v) => v < 0
+  validator: (v) => v < 0,
 })
 
 const negativeProp = VueTypes.negative
@@ -487,7 +491,7 @@ const negativeProp = VueTypes.negative
 VueTypes.extend({
   name: 'negativeFn',
   type: Number,
-  validator: (v) => v < 0
+  validator: (v) => v < 0,
 })
 
 const negativeProp2 = VueTypes.negativeFn() // <-- we need to call it
@@ -500,7 +504,7 @@ VueTypes.extend({
   name: 'maxLength',
   // getter: false, this is the default
   type: String,
-  validator: (max, v) => v.length <= max
+  validator: (max, v) => v.length <= max,
 })
 
 const maxLengthType = VueTypes.maxLength(2)
@@ -530,7 +534,7 @@ interface ProjectTypes extends VueTypesInterface {
 VueTypes.extend({
   name: 'maxLength',
   type: String,
-  validator: (max: number, v: string) => v.length <= max
+  validator: (max: number, v: string) => v.length <= max,
 })
 
 export default VueTypes as ProjectTypes
@@ -541,18 +545,18 @@ Then import the newly created `propTypes.ts` instead of `vue-types`:
 ```html
 <!-- MyComponent.vue -->
 <template>
-<!-- template here -->
+  <!-- template here -->
 </template>
 <script lang="ts">
-import Vue from "vue";
-import VueTypes from "./prop-types";
+  import Vue from 'vue'
+  import VueTypes from './prop-types'
 
-export default Vue.extend({
-  name: "MyComponent",
-  props: {
-    msg: VueTypes.maxLength(2)
-  }
-});
+  export default Vue.extend({
+    name: 'MyComponent',
+    props: {
+      msg: VueTypes.maxLength(2),
+    },
+  })
 </script>
 ```
 
@@ -577,7 +581,7 @@ const isJohn = {
   type: String,
   validator(value) {
     return value.length === 'John'
-  }
+  },
 }
 
 VueTypes.utils.validate('John', isJohn) //true
@@ -594,21 +598,20 @@ const password = {
   validator(value) {
     //very raw!
     return value.length > 10
-  }
+  },
 }
 
 const passwordType = VueTypes.utils.toType('password', password)
 
 export default {
   props: {
-    password: passwordType.isRequired
-  }
+    password: passwordType.isRequired,
+  },
 }
-
 ```
 
 ## License
 
 [MIT](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2018 Marco Solazzi
+Copyright (c) 2019 Marco Solazzi
