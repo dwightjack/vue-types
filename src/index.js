@@ -115,9 +115,20 @@ const VueTypes = {
     const { type, validator = stubTrue } = opts
     if (type && type._vueTypes_name) {
       // we are using as base type a vue-type object
-      opts.type = type.type // inherit the base types
-      opts.required = type.required // inherit the required flag
-      opts.default = type.default // inherit the default flag
+
+      // detach the original type
+      // we are going to inherit the parent data.
+      delete opts.type
+
+      // inherit base types, required flag and default flag if set
+      const keys = ['type', 'required', 'default']
+      for (let i = 0; i < keys.length; i += 1) {
+        const key = keys[i]
+        if (type[key] !== undefined) {
+          opts[key] = type[key]
+        }
+      }
+
       validate = false // we don't allow validate method on this kind of types
       if (isFunction(type.validator)) {
         opts.validator = function(...args) {
@@ -213,12 +224,15 @@ const VueTypes = {
         if (type._vueTypes_name === 'oneOf') {
           return ret.concat(type.type || [])
         }
-        if (type.type && !isFunction(type.validator)) {
+        if (isFunction(type.validator)) {
+          hasCustomValidators = true
+          return ret
+        }
+        if (type.type) {
           if (isArray(type.type)) return ret.concat(type.type)
           ret.push(type.type)
-        } else if (isFunction(type.validator)) {
-          hasCustomValidators = true
         }
+
         return ret
       }
       ret.push(type)

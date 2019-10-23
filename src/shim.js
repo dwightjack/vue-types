@@ -108,8 +108,10 @@ Object.defineProperty(vueTypes, 'shape', {
 
 vueTypes.extend = function extend(props) {
   const { name, validate, getter = false, type = null } = props
+  // If we are inheriting from a custom type, let's ignore the type property
+  const extType = isPlainObject(type) && type.type ? null : type
   return createValidator(vueTypes, name, getter, {
-    type,
+    type: extType,
     validate: validate ? () => {} : undefined,
   })
 }

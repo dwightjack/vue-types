@@ -911,6 +911,36 @@ describe('VueTypes', () => {
       expect(type.validator(fail)).toBe(false)
     })
 
+    it('should inherit from other extended types', () => {
+      VueTypes.extend({
+        name: 'routerLocation',
+        getter: true,
+        type: VueTypes.oneOfType([
+          VueTypes.shape({
+            path: VueTypes.string.isRequired,
+            query: VueTypes.object,
+          }).loose,
+          VueTypes.shape({
+            name: VueTypes.string.isRequired,
+            params: VueTypes.object,
+          }).loose,
+        ]),
+      })
+
+      VueTypes.extend({
+        name: 'routerTo',
+        getter: true,
+        type: VueTypes.oneOfType([String, VueTypes.routerLocation]),
+      })
+
+      const type = VueTypes.routerTo
+
+      // validate as string
+      expect(type.validator('/url')).toBe(true)
+      // validate as custom type
+      expect(type.validator({ path: '/url' })).toBe(true)
+    })
+
     it('should inherit from vue-types type (oneOf parent)', () => {
       const parent = VueTypes.oneOfType([Number, VueTypes.string])
 
