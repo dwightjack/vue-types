@@ -77,7 +77,7 @@ export interface ExtendProps extends PropOptions {
 
 export interface VueTypesInterface {
   sensibleDefaults: TypeDefaults | boolean
-  extend<T extends VueTypesInterface>(props: ExtendProps): T
+  extend<T extends VueTypesInterface>(props: ExtendProps | ExtendProps[]): T
   utils: VueTypesUtils
   readonly any: VueTypeValidableDef
   readonly bool: VueTypeValidableDef<boolean>

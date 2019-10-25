@@ -828,6 +828,23 @@ describe('VueTypes', () => {
       expect(VueTypes.cloneDemo).toNotBe(VueTypes.cloneDemo)
     })
 
+    it('should accept multiple types as array', () => {
+      VueTypes.extend([
+        {
+          name: 'type1',
+          type: String,
+          getter: true,
+        },
+        {
+          name: 'type2',
+          type: Number,
+          getter: true,
+        },
+      ])
+      expect(VueTypes.type1.type).toBe(String)
+      expect(VueTypes.type2.type).toBe(Number)
+    })
+
     it('should inherit from vue-types types', () => {
       const parent = VueTypes.string.isRequired.def('parent')
 

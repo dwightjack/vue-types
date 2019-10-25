@@ -5,20 +5,20 @@
 <!-- TOC depthTo:3 -->
 
 - [Introduction](#introduction)
-  - [When to use](#when-to-use)
+    - [When to use](#when-to-use)
 - [Installation](#installation)
-  - [NPM package](#npm-package)
-  - [CDN delivered `<script>`](#cdn-delivered-script)
+    - [NPM package](#npm-package)
+    - [CDN delivered `<script>`](#cdn-delivered-script)
 - [Usage with `eslint-plugin-vue`](#usage-with-eslint-plugin-vue)
 - [Production build](#production-build)
-  - [Webpack](#webpack)
-  - [Rollup](#rollup)
+    - [Webpack](#webpack)
+    - [Rollup](#rollup)
 - [Documentation](#documentation)
-  - [Native Types](#native-types)
-  - [Native Types Configuration](#native-types-configuration)
-  - [Custom Types](#custom-types)
-  - [Extending VueTypes](#extending-vuetypes)
-  - [Utilities](#utilities)
+    - [Native Types](#native-types)
+    - [Native Types Configuration](#native-types-configuration)
+    - [Custom Types](#custom-types)
+    - [Extending VueTypes](#extending-vuetypes)
+    - [Utilities](#utilities)
 - [License](#license)
 
 <!-- /TOC -->
@@ -548,6 +548,28 @@ console.log(VueTypes.utils.validate(data, VueTypes.userDoe)) // false
 
 **Note:** Types created with this method don't support the `validate` method even if their parent type supports it (like `VueTypes.string` or `VueTypes.number`).
 
+#### Define multiple types
+
+To define multiple types at once pass an array of definitions as first argument:
+
+```js
+// ...
+VueTypes.extend([
+  {
+    name: 'negative',
+    getter: true,
+    type: Number,
+    validator: (v) => v < 0,
+  },
+  {
+    name: 'positive',
+    getter: true,
+    type: Number,
+    validator: (v) => v > 0,
+  },
+])
+```
+
 #### Typescript
 
 When used in a TypeScript project, types added via `.extend()` might fail type checking. In order to instruct TypeScript about your custom types you can use the following pattern:
@@ -558,8 +580,12 @@ When used in a TypeScript project, types added via `.extend()` might fail type c
 // import
 // - VueTypes library
 // - validation object interface (VueTypeDef)
+//   -  use VueTypeValidableDef if the new type is going to support the `validate` method.
 // - the default VueType interface (VueTypesInterface)
-import VueTypes, { VueTypeDef, VueTypesInterface } from 'vue-types'
+import VueTypes, {
+  VueTypeDef /* or VueTypeValidableDef */,
+  VueTypesInterface,
+} from 'vue-types'
 
 interface ProjectTypes extends VueTypesInterface {
   //VueTypeDef accepts the prop expected type as argument

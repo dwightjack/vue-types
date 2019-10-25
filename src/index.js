@@ -106,6 +106,11 @@ const VueTypes = {
   },
 
   extend(props = {}) {
+    if (isArray(props)) {
+      props.forEach((p) => VueTypes.extend(p))
+      return this
+    }
+
     let { name, validate = false, getter = false, ...opts } = props
 
     if (has(VueTypes, name)) {
