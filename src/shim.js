@@ -2,16 +2,21 @@ import Vue from 'vue'
 import isPlainObject from 'is-plain-object'
 import { setDefaults } from './sensibles'
 
+const dfn = Object.defineProperty
+
 const isArray =
   Array.isArray ||
   function(value) {
     return Object.prototype.toString.call(value) === '[object Array]'
   }
 
-const type = (props) =>
-  Object.assign(
-    {
-      def(v) {
+function type(name, props, validable = false) {
+  const descriptors = {
+    _vueTypes_name: {
+      value: name,
+    },
+    def: {
+      value(v) {
         if (v === undefined && !this.default) {
           return this
         }
@@ -24,16 +29,30 @@ const type = (props) =>
         }
         return this
       },
-      get isRequired() {
+    },
+    isRequired: {
+      get() {
         this.required = true
         return this
       },
-      validator() {
-        return true
-      },
     },
+  }
+
+  if (validable) {
+    descriptors.validate = {
+      value() {},
+    }
+  }
+  return Object.assign(
+    Object.defineProperties(
+      {
+        validator: () => true,
+      },
+      descriptors,
+    ),
     props,
   )
+}
 
 const vueTypes = setDefaults({
   utils: {
@@ -74,44 +93,47 @@ const methods = [
   'objectOf',
 ]
 
-function createValidator(root, name, getter = false, props) {
+function createValidator(root, name, props, getter = false, validable = false) {
   const prop = getter ? 'get' : 'value'
   const descr = {
     [prop]: () =>
-      type(props).def(getter ? vueTypes.sensibleDefaults[name] : undefined),
+      type(name, props, validable).def(
+        getter ? vueTypes.sensibleDefaults[name] : undefined,
+      ),
   }
 
-  return Object.defineProperty(root, name, descr)
+  return dfn(root, name, descr)
 }
 
-getters.forEach((p) =>
-  createValidator(vueTypes, p, true, {
-    type: typeMap[p] || null,
-    validate() {},
-  }),
-)
-methods.forEach((p) =>
-  createValidator(vueTypes, p, false, { type: typeMap[p] || null }),
-)
-createValidator(vueTypes, 'integer', true, { type: Number }) // does not have a validate method
+function recurseValidator(root, getter, validable) {
+  return (name) =>
+    createValidator(
+      root,
+      name,
+      { type: typeMap[name] || null },
+      getter,
+      validable,
+    )
+}
 
-Object.defineProperty(vueTypes, 'shape', {
+getters.forEach(recurseValidator(vueTypes, true, true))
+methods.forEach(recurseValidator(vueTypes, false))
+
+createValidator(vueTypes, 'integer', { type: Number }, true) // does not have a validate method
+
+dfn(vueTypes, 'shape', {
   value() {
-    return Object.defineProperty(type({ type: Object }), 'loose', {
+    return dfn(type('shape', { type: Object }), 'loose', {
       get() {
         return this
       },
-      enumerable: false,
     })
   },
 })
 
 vueTypes.extend = function extend(props) {
   const { name, validate, getter = false, type = null } = props
-  return createValidator(vueTypes, name, getter, {
-    type,
-    validate: validate ? () => {} : undefined,
-  })
+  return createValidator(vueTypes, name, { type }, getter, !!validate)
 }
 
 /* eslint-disable no-console */
