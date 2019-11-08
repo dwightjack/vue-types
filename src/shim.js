@@ -66,7 +66,6 @@ const typeMap = {
   bool: Boolean,
   string: String,
   number: Number,
-  integer: Number,
   array: Array,
   object: Object,
   arrayOf: Array,
