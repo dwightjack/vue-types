@@ -92,7 +92,7 @@ export interface VueTypesInterface {
     fn: ValidatorFunction<T>,
     warnMsg?: string,
   ): VueTypeCustom<T, ValidatorFunction<T>>
-  oneOf<T = any>(arr: T[]): VueTypeDef<T[], T>
+  oneOf<T = any>(arr: T[]): VueTypeDef<T>
   instanceOf<C extends Constructor>(
     instanceConstructor: C,
   ): VueTypeInstanceOf<C>
