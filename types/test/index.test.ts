@@ -33,10 +33,10 @@ const customType = VueTypes.custom(validator).def(0).isRequired
 
 const customTypeStrict = VueTypes.custom<number>(validator).def(0).isRequired
 
-const oneOfType = VueTypes.oneOf([0, 'string', null]).def('test').isRequired
+const oneOf = VueTypes.oneOf([0, 'string', null]).def(1).isRequired
 
-const oneOfTypeStrict = VueTypes.oneOf<string | boolean>([true, 'string']).def(
-  true,
+const oneOfStrict = VueTypes.oneOf<true | 'string'>([true, 'string']).def(
+  'string',
 ).isRequired
 
 class MyClass {
