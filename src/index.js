@@ -7,6 +7,8 @@ import {
   isInteger,
   isArray,
   warn,
+  has,
+  stubTrue,
 } from './utils'
 import { setDefaults } from './sensibles'
 
@@ -104,21 +106,55 @@ const VueTypes = {
   },
 
   extend(props = {}) {
-    const { name, validate = false, getter = false, ...type } = props
+    if (isArray(props)) {
+      props.forEach((p) => VueTypes.extend(p))
+      return this
+    }
+
+    let { name, validate = false, getter = false, ...opts } = props
+
+    if (has(VueTypes, name)) {
+      throw new TypeError(`[VueTypes error]: Type "${name}" already defined`)
+    }
+
+    const { type, validator = stubTrue } = opts
+    if (type && type._vueTypes_name) {
+      // we are using as base type a vue-type object
+
+      // detach the original type
+      // we are going to inherit the parent data.
+      delete opts.type
+
+      // inherit base types, required flag and default flag if set
+      const keys = ['type', 'required', 'default']
+      for (let i = 0; i < keys.length; i += 1) {
+        const key = keys[i]
+        if (type[key] !== undefined) {
+          opts[key] = type[key]
+        }
+      }
+
+      validate = false // we don't allow validate method on this kind of types
+      if (isFunction(type.validator)) {
+        opts.validator = function(...args) {
+          return type.validator.apply(type, args) && validator.apply(this, args)
+        }
+      }
+    }
     let descriptor
     if (getter) {
       descriptor = {
         get() {
-          return toType(name, Object.assign({}, type), validate)
+          return toType(name, Object.assign({}, opts), validate)
         },
         enumerable: true,
         configurable: false,
       }
     } else {
-      const { validator } = type
+      const { validator } = opts
       descriptor = {
         value(...args) {
-          const ret = toType(name, Object.assign({}, type), validate)
+          const ret = toType(name, Object.assign({}, opts), validate)
           if (validator) {
             ret.validator = validator.bind(ret, ...args)
           }
@@ -193,12 +229,15 @@ const VueTypes = {
         if (type._vueTypes_name === 'oneOf') {
           return ret.concat(type.type || [])
         }
-        if (type.type && !isFunction(type.validator)) {
+        if (isFunction(type.validator)) {
+          hasCustomValidators = true
+          return ret
+        }
+        if (type.type) {
           if (isArray(type.type)) return ret.concat(type.type)
           ret.push(type.type)
-        } else if (isFunction(type.validator)) {
-          hasCustomValidators = true
         }
+
         return ret
       }
       ret.push(type)

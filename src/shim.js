@@ -132,7 +132,9 @@ dfn(vueTypes, 'shape', {
 
 vueTypes.extend = function extend(props) {
   const { name, validate, getter = false, type = null } = props
-  return createValidator(vueTypes, name, { type }, getter, !!validate)
+  // If we are inheriting from a custom type, let's ignore the type property
+  const extType = isPlainObject(type) && type.type ? null : type
+  return createValidator(vueTypes, name, { type: extType }, getter, !!validate)
 }
 
 /* eslint-disable no-console */

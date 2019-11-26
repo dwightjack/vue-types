@@ -1,5 +1,5 @@
 // TypeScript Version: 2.8
-import { Prop, PropOptions } from 'vue/types/options'
+import { Prop, PropOptions, PropType } from 'vue/types/options'
 
 export type Constructor = new (...args: any[]) => any
 
@@ -69,15 +69,19 @@ export interface TypeDefaults {
   integer?: number
 }
 
-export interface ExtendProps extends PropOptions {
+export interface ExtendProps<T = any> {
   name: string
   getter?: boolean
   validate?: boolean
+  type?: PropType<T> | VueTypeDef<T>
+  required?: boolean
+  default?: T | null | undefined | (() => T | null | undefined)
+  validator?(value: T): boolean
 }
 
 export interface VueTypesInterface {
   sensibleDefaults: TypeDefaults | boolean
-  extend<T extends VueTypesInterface>(props: ExtendProps): T
+  extend<T extends VueTypesInterface>(props: ExtendProps | ExtendProps[]): T
   utils: VueTypesUtils
   readonly any: VueTypeValidableDef
   readonly bool: VueTypeValidableDef<boolean>

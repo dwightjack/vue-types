@@ -85,30 +85,59 @@ var VueTypes = {
         validate = _props$validate === void 0 ? false : _props$validate,
         _props$getter = _props.getter,
         getter = _props$getter === void 0 ? false : _props$getter,
-        type = _objectWithoutPropertiesLoose(_props, ["name", "validate", "getter"]);
+        opts = _objectWithoutPropertiesLoose(_props, ["name", "validate", "getter"]);
+
+    if ((0, _utils.has)(VueTypes, name)) {
+      throw new TypeError("[VueTypes error]: Type \"" + name + "\" already defined");
+    }
+
+    var type = opts.type,
+        _opts$validator = opts.validator,
+        validator = _opts$validator === void 0 ? _utils.stubTrue : _opts$validator;
+
+    if (type && type._vueTypes_name) {
+      // we are using as base type a vue-type object
+      opts.type = type.type; // inherit the base types
+
+      opts.required = type.required; // inherit the required flag
+
+      opts.default = type.default; // inherit the default flag
+
+      validate = false; // we don't allow validate method on this kind of types
+
+      if ((0, _utils.isFunction)(type.validator)) {
+        opts.validator = function () {
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+
+          return type.validator.apply(type, args) && validator.apply(this, args);
+        };
+      }
+    }
 
     var descriptor;
 
     if (getter) {
       descriptor = {
         get: function get() {
-          return (0, _utils.toType)(name, Object.assign({}, type), validate);
+          return (0, _utils.toType)(name, Object.assign({}, opts), validate);
         },
         enumerable: true,
         configurable: false
       };
     } else {
-      var validator = type.validator;
+      var _validator = opts.validator;
       descriptor = {
         value: function value() {
-          var ret = (0, _utils.toType)(name, Object.assign({}, type), validate);
+          var ret = (0, _utils.toType)(name, Object.assign({}, opts), validate);
 
-          if (validator) {
-            for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-              args[_key] = arguments[_key];
+          if (_validator) {
+            for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+              args[_key2] = arguments[_key2];
             }
 
-            ret.validator = validator.bind.apply(validator, [ret].concat(args));
+            ret.validator = _validator.bind.apply(_validator, [ret].concat(args));
           }
 
           return ret;
