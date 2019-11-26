@@ -827,6 +827,170 @@ describe('VueTypes', () => {
       })
       expect(VueTypes.cloneDemo).toNotBe(VueTypes.cloneDemo)
     })
+
+    it('should accept multiple types as array', () => {
+      VueTypes.extend([
+        {
+          name: 'type1',
+          type: String,
+          getter: true,
+        },
+        {
+          name: 'type2',
+          type: Number,
+          getter: true,
+        },
+      ])
+      expect(VueTypes.type1.type).toBe(String)
+      expect(VueTypes.type2.type).toBe(Number)
+    })
+
+    it('should inherit from vue-types types', () => {
+      const parent = VueTypes.string.isRequired.def('parent')
+
+      VueTypes.extend({
+        name: 'stringAlias',
+        type: parent,
+        getter: true,
+      })
+      expect(VueTypes.stringAlias).toMatch({
+        type: String,
+        required: true,
+        default: 'parent',
+      })
+
+      expect(VueTypes.stringAlias.validate).toBeA(Function)
+    })
+
+    it('should inherit from vue-types type and add custom validation', () => {
+      const parent = VueTypes.string
+      const validator = expect.createSpy().andReturn(true)
+
+      VueTypes.extend({
+        name: 'stringValidationAlias',
+        type: parent,
+        getter: true,
+        validator,
+      })
+
+      const type = VueTypes.stringValidationAlias
+
+      expect(type.type).toBe(String)
+      expect(type.validator('a')).toBe(true)
+      expect(validator).toHaveBeenCalledWith('a')
+      expect(validator.calls[0].context).toBe(type)
+    })
+
+    it('should inherit from vue-types (complex types)', () => {
+      const parent = VueTypes.shape({
+        name: VueTypes.string.isRequired,
+        number: VueTypes.oneOf([1, 2, 3]),
+      }).isRequired.loose
+
+      const spy = expect.spyOn(parent, 'validator').andCallThrough()
+
+      VueTypes.extend({
+        name: 'shapeAlias',
+        type: parent,
+        getter: true,
+      })
+
+      const type = VueTypes.shapeAlias
+
+      expect(type).toInclude({
+        type: Object,
+        required: true,
+      })
+
+      expect(type.validator).toBeA(Function)
+      expect(type.validate).toBeA(Function)
+
+      const pass = {
+        name: 'John',
+        number: 1,
+      }
+
+      const passLoose = {
+        ...pass,
+        other: true,
+      }
+
+      const fail = {
+        ...pass,
+        number: 4,
+      }
+
+      expect(type.validator(pass)).toBe(true)
+      expect(spy).toHaveBeenCalledWith(pass)
+      expect(spy.calls[0].context).toBe(parent)
+
+      expect(type.validator(passLoose)).toBe(true)
+      expect(type.validator(fail)).toBe(false)
+    })
+
+    it('should inherit from other extended types', () => {
+      VueTypes.extend({
+        name: 'routerLocation',
+        getter: true,
+        type: VueTypes.oneOfType([
+          VueTypes.shape({
+            path: VueTypes.string.isRequired,
+            query: VueTypes.object,
+          }).loose,
+          VueTypes.shape({
+            name: VueTypes.string.isRequired,
+            params: VueTypes.object,
+          }).loose,
+        ]),
+      })
+
+      VueTypes.extend({
+        name: 'routerTo',
+        getter: true,
+        type: VueTypes.oneOfType([String, VueTypes.routerLocation]),
+      })
+
+      const type = VueTypes.routerTo
+
+      // validate as string
+      expect(type.validator('/url')).toBe(true)
+      // validate as custom type
+      expect(type.validator({ path: '/url' })).toBe(true)
+    })
+
+    it('should inherit from vue-types type (oneOf parent)', () => {
+      const parent = VueTypes.oneOfType([Number, VueTypes.string])
+
+      VueTypes.extend({
+        name: 'aliasOneOf',
+        getter: true,
+        type: parent,
+      })
+
+      const type = VueTypes.aliasOneOf
+
+      expect(type.type).toBe(parent.type)
+      expect(VueTypes.utils.validate(1, type)).toBe(true)
+      expect(VueTypes.utils.validate(false, type)).toBe(false)
+    })
+
+    it('should inherit from vue-types type (non-getter types)', () => {
+      const parent = VueTypes.string
+      const validator = expect.createSpy()
+
+      VueTypes.extend({
+        name: 'aliasMinLength',
+        type: parent,
+        validator,
+      })
+
+      const type = VueTypes.aliasMinLength(3)
+
+      expect(type.type).toBe(String)
+      type.validator('a')
+      expect(validator).toHaveBeenCalledWith(3, 'a')
+      expect(validator.calls[0].context).toBe(type)
+    })
   })
 })
 

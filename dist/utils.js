@@ -9,7 +9,7 @@ exports.withRequired = withRequired;
 exports.withValidate = withValidate;
 exports.toType = toType;
 exports.validateType = validateType;
-exports.warn = exports.isFunction = exports.isArray = exports.isInteger = exports.has = exports.hasOwn = void 0;
+exports.warn = exports.isFunction = exports.isArray = exports.isInteger = exports.has = exports.stubTrue = exports.hasOwn = void 0;
 
 var _isPlainObject = _interopRequireDefault(require("is-plain-object"));
 
@@ -41,6 +41,14 @@ function getNativeType(value) {
 
 function noop() {}
 /**
+ * A function that always returns true
+ */
+
+
+var stubTrue = function stubTrue() {
+  return true;
+};
+/**
  * Checks for a own property in an object
  *
  * @param {object} obj - Object
@@ -48,6 +56,8 @@ function noop() {}
  * @returns {boolean}
  */
 
+
+exports.stubTrue = stubTrue;
 
 var has = function has(obj, prop) {
   return hasOwn.call(obj, prop);
@@ -171,6 +181,7 @@ function withValidate(type) {
  *
  * @param {string} name - Type internal name
  * @param {object} obj - Object to enhance
+ * @param {boolean} [validateFn=false] - add the `validate()` method to the type object
  * @returns {object}
  */
 
@@ -189,6 +200,14 @@ function toType(name, obj, validateFn) {
 
   if (validateFn) {
     withValidate(obj);
+  } else {
+    Object.defineProperty(obj, 'validate', {
+      value: function value() {
+        warn(name + " - \"validate\" method not supported on this type");
+        return this;
+      },
+      enumerable: false
+    });
   }
 
   if (isFunction(obj.validator)) {

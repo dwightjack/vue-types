@@ -1,5 +1,5 @@
 
-/*! vue-types - v1.6.0
+/*! vue-types - v1.7.0
  * https://github.com/dwightjack/vue-types
  * Copyright (c) 2019 - Marco Solazzi;
  * Licensed MIT
@@ -93,6 +93,24 @@
    */
 
   function noop() {}
+  /**
+   * A function that always returns true
+   */
+
+  var stubTrue = function stubTrue() {
+    return true;
+  };
+  /**
+   * Checks for a own property in an object
+   *
+   * @param {object} obj - Object
+   * @param {string} prop - Property to check
+   * @returns {boolean}
+   */
+
+  var has = function has(obj, prop) {
+    return hasOwn.call(obj, prop);
+  };
   /**
    * Determines whether the passed value is an integer. Uses `Number.isInteger` if available
    *
@@ -198,6 +216,7 @@
    *
    * @param {string} name - Type internal name
    * @param {object} obj - Object to enhance
+   * @param {boolean} [validateFn=false] - add the `validate()` method to the type object
    * @returns {object}
    */
 
@@ -215,6 +234,14 @@
 
     if (validateFn) {
       withValidate(obj);
+    } else {
+      Object.defineProperty(obj, 'validate', {
+        value: function value() {
+          warn(name + " - \"validate\" method not supported on this type");
+          return this;
+        },
+        enumerable: false
+      });
     }
 
     if (isFunction(obj.validator)) {
@@ -413,36 +440,80 @@
         props = {};
       }
 
+      if (isArray(props)) {
+        props.forEach(function (p) {
+          return VueTypes.extend(p);
+        });
+        return this;
+      }
+
       var _props = props,
           name = _props.name,
           _props$validate = _props.validate,
           validate = _props$validate === void 0 ? false : _props$validate,
           _props$getter = _props.getter,
           getter = _props$getter === void 0 ? false : _props$getter,
-          type = _objectWithoutPropertiesLoose(_props, ["name", "validate", "getter"]);
+          opts = _objectWithoutPropertiesLoose(_props, ["name", "validate", "getter"]);
+
+      if (has(VueTypes, name)) {
+        throw new TypeError("[VueTypes error]: Type \"" + name + "\" already defined");
+      }
+
+      var type = opts.type,
+          _opts$validator = opts.validator,
+          validator = _opts$validator === void 0 ? stubTrue : _opts$validator;
+
+      if (type && type._vueTypes_name) {
+        // we are using as base type a vue-type object
+        // detach the original type
+        // we are going to inherit the parent data.
+        delete opts.type; // inherit base types, required flag and default flag if set
+
+        var keys = ['type', 'required', 'default'];
+
+        for (var i = 0; i < keys.length; i += 1) {
+          var key = keys[i];
+
+          if (type[key] !== undefined) {
+            opts[key] = type[key];
+          }
+        }
+
+        validate = false; // we don't allow validate method on this kind of types
+
+        if (isFunction(type.validator)) {
+          opts.validator = function () {
+            for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+              args[_key] = arguments[_key];
+            }
+
+            return type.validator.apply(type, args) && validator.apply(this, args);
+          };
+        }
+      }
 
       var descriptor;
 
       if (getter) {
         descriptor = {
           get: function get() {
-            return toType(name, Object.assign({}, type), validate);
+            return toType(name, Object.assign({}, opts), validate);
           },
           enumerable: true,
           configurable: false
         };
       } else {
-        var validator = type.validator;
+        var _validator = opts.validator;
         descriptor = {
           value: function value() {
-            var ret = toType(name, Object.assign({}, type), validate);
+            var ret = toType(name, Object.assign({}, opts), validate);
 
-            if (validator) {
-              for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-                args[_key] = arguments[_key];
+            if (_validator) {
+              for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                args[_key2] = arguments[_key2];
               }
 
-              ret.validator = validator.bind.apply(validator, [ret].concat(args));
+              ret.validator = _validator.bind.apply(_validator, [ret].concat(args));
             }
 
             return ret;
@@ -511,11 +582,14 @@
             return ret.concat(type.type || []);
           }
 
-          if (type.type && !isFunction(type.validator)) {
+          if (isFunction(type.validator)) {
+            hasCustomValidators = true;
+            return ret;
+          }
+
+          if (type.type) {
             if (isArray(type.type)) return ret.concat(type.type);
             ret.push(type.type);
-          } else if (isFunction(type.validator)) {
-            hasCustomValidators = true;
           }
 
           return ret;

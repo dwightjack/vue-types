@@ -21,6 +21,13 @@ export function getNativeType(value) {
 
 export function noop() {}
 /**
+ * A function that always returns true
+ */
+
+export var stubTrue = function stubTrue() {
+  return true;
+};
+/**
  * Checks for a own property in an object
  *
  * @param {object} obj - Object
@@ -136,6 +143,7 @@ export function withValidate(type) {
  *
  * @param {string} name - Type internal name
  * @param {object} obj - Object to enhance
+ * @param {boolean} [validateFn=false] - add the `validate()` method to the type object
  * @returns {object}
  */
 
@@ -153,6 +161,14 @@ export function toType(name, obj, validateFn) {
 
   if (validateFn) {
     withValidate(obj);
+  } else {
+    Object.defineProperty(obj, 'validate', {
+      value: function value() {
+        warn(name + " - \"validate\" method not supported on this type");
+        return this;
+      },
+      enumerable: false
+    });
   }
 
   if (isFunction(obj.validator)) {

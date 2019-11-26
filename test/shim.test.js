@@ -617,6 +617,16 @@ describe('SHIM: VueTypes', () => {
       })
       expect(VueTypes.stringCustom.validate).toBeA(Function)
     })
+
+    it('should ignore the type property when inheriting from a custom type', () => {
+      VueTypes.extend({
+        name: 'customTypeChild',
+        type: VueTypes.string,
+        getter: true,
+        validate: true,
+      })
+      expect(VueTypes.customTypeChild.type).toBe(null)
+    })
   })
 })
 

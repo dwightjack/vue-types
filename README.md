@@ -513,6 +513,66 @@ maxLengthType.validator('ab') // true
 maxLengthType.validator('abcd') // false
 ```
 
+#### Inherit from VueTypes types
+
+You can set a previously set type as _parent_ for a new one by setting it as the new type's `type` property. This feature can be useful to create named aliases:
+
+```js
+const shape = VueTypes.shape({ name: String, age: Number })
+
+VueTypes.extend({
+  name: 'user',
+  getter: true,
+  type: shape,
+})
+
+console.log(VueTypes.user.type) // Object
+
+const data = { name: 'John', surname: 'Doe' }
+console.log(VueTypes.utils.validate(data, VueTypes.user)) // true
+```
+
+Custom validators will be executed before the parent's one:
+
+```js
+// ...
+VueTypes.extend({
+  name: 'userDoe',
+  getter: true,
+  type: shape,
+  validator(value) {
+    return value && value.surname === 'Doe'
+  },
+})
+
+const data = { name: 'John', surname: 'Smith' }
+console.log(VueTypes.utils.validate(data, VueTypes.userDoe)) // false
+```
+
+**Note:** Types created with this method don't support the `validate` method even if their parent type supports it (like `VueTypes.string` or `VueTypes.number`).
+
+#### Define multiple types
+
+To define multiple types at once pass an array of definitions as first argument:
+
+```js
+// ...
+VueTypes.extend([
+  {
+    name: 'negative',
+    getter: true,
+    type: Number,
+    validator: (v) => v < 0,
+  },
+  {
+    name: 'positive',
+    getter: true,
+    type: Number,
+    validator: (v) => v > 0,
+  },
+])
+```
+
 #### Typescript
 
 When used in a TypeScript project, types added via `.extend()` might fail type checking. In order to instruct TypeScript about your custom types you can use the following pattern:
@@ -523,8 +583,12 @@ When used in a TypeScript project, types added via `.extend()` might fail type c
 // import
 // - VueTypes library
 // - validation object interface (VueTypeDef)
+//   -  use VueTypeValidableDef if the new type is going to support the `validate` method.
 // - the default VueType interface (VueTypesInterface)
-import VueTypes, { VueTypeDef, VueTypesInterface } from 'vue-types'
+import VueTypes, {
+  VueTypeDef /* or VueTypeValidableDef */,
+  VueTypesInterface,
+} from 'vue-types'
 
 interface ProjectTypes extends VueTypesInterface {
   //VueTypeDef accepts the prop expected type as argument
