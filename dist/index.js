@@ -79,6 +79,13 @@ var VueTypes = {
       props = {};
     }
 
+    if ((0, _utils.isArray)(props)) {
+      props.forEach(function (p) {
+        return VueTypes.extend(p);
+      });
+      return this;
+    }
+
     var _props = props,
         name = _props.name,
         _props$validate = _props.validate,
@@ -97,11 +104,19 @@ var VueTypes = {
 
     if (type && type._vueTypes_name) {
       // we are using as base type a vue-type object
-      opts.type = type.type; // inherit the base types
+      // detach the original type
+      // we are going to inherit the parent data.
+      delete opts.type; // inherit base types, required flag and default flag if set
 
-      opts.required = type.required; // inherit the required flag
+      var keys = ['type', 'required', 'default'];
 
-      opts.default = type.default; // inherit the default flag
+      for (var i = 0; i < keys.length; i += 1) {
+        var key = keys[i];
+
+        if (type[key] !== undefined) {
+          opts[key] = type[key];
+        }
+      }
 
       validate = false; // we don't allow validate method on this kind of types
 
@@ -206,11 +221,14 @@ var VueTypes = {
           return ret.concat(type.type || []);
         }
 
-        if (type.type && !(0, _utils.isFunction)(type.validator)) {
+        if ((0, _utils.isFunction)(type.validator)) {
+          hasCustomValidators = true;
+          return ret;
+        }
+
+        if (type.type) {
           if ((0, _utils.isArray)(type.type)) return ret.concat(type.type);
           ret.push(type.type);
-        } else if ((0, _utils.isFunction)(type.validator)) {
-          hasCustomValidators = true;
         }
 
         return ret;

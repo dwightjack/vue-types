@@ -1,5 +1,5 @@
 
-/*! vue-types - v1.7.0-beta.1
+/*! vue-types - v1.7.0
  * https://github.com/dwightjack/vue-types
  * Copyright (c) 2019 - Marco Solazzi;
  * Licensed MIT
@@ -216,6 +216,7 @@
    *
    * @param {string} name - Type internal name
    * @param {object} obj - Object to enhance
+   * @param {boolean} [validateFn=false] - add the `validate()` method to the type object
    * @returns {object}
    */
 
@@ -439,6 +440,13 @@
         props = {};
       }
 
+      if (isArray(props)) {
+        props.forEach(function (p) {
+          return VueTypes.extend(p);
+        });
+        return this;
+      }
+
       var _props = props,
           name = _props.name,
           _props$validate = _props.validate,
@@ -457,11 +465,19 @@
 
       if (type && type._vueTypes_name) {
         // we are using as base type a vue-type object
-        opts.type = type.type; // inherit the base types
+        // detach the original type
+        // we are going to inherit the parent data.
+        delete opts.type; // inherit base types, required flag and default flag if set
 
-        opts.required = type.required; // inherit the required flag
+        var keys = ['type', 'required', 'default'];
 
-        opts.default = type.default; // inherit the default flag
+        for (var i = 0; i < keys.length; i += 1) {
+          var key = keys[i];
+
+          if (type[key] !== undefined) {
+            opts[key] = type[key];
+          }
+        }
 
         validate = false; // we don't allow validate method on this kind of types
 
@@ -566,11 +582,14 @@
             return ret.concat(type.type || []);
           }
 
-          if (type.type && !isFunction(type.validator)) {
+          if (isFunction(type.validator)) {
+            hasCustomValidators = true;
+            return ret;
+          }
+
+          if (type.type) {
             if (isArray(type.type)) return ret.concat(type.type);
             ret.push(type.type);
-          } else if (isFunction(type.validator)) {
-            hasCustomValidators = true;
           }
 
           return ret;

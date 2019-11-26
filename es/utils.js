@@ -143,6 +143,7 @@ export function withValidate(type) {
  *
  * @param {string} name - Type internal name
  * @param {object} obj - Object to enhance
+ * @param {boolean} [validateFn=false] - add the `validate()` method to the type object
  * @returns {object}
  */
 

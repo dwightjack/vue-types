@@ -1,43 +1,62 @@
 import Vue from 'vue';
 import isPlainObject from 'is-plain-object';
 import { setDefaults } from './sensibles';
+var dfn = Object.defineProperty;
 
 var isArray = Array.isArray || function (value) {
   return Object.prototype.toString.call(value) === '[object Array]';
 };
 
-var type = function type(props) {
-  return Object.assign({
-    def: function def(v) {
-      if (v === undefined && !this.default) {
+function type(name, props, validable) {
+  if (validable === void 0) {
+    validable = false;
+  }
+
+  var descriptors = {
+    _vueTypes_name: {
+      value: name
+    },
+    def: {
+      value: function value(v) {
+        if (v === undefined && !this.default) {
+          return this;
+        }
+
+        if (isArray(v)) {
+          this.default = function () {
+            return [].concat(v);
+          };
+        } else if (isPlainObject(v)) {
+          this.default = function () {
+            return Object.assign({}, v);
+          };
+        } else {
+          this.default = v;
+        }
+
         return this;
       }
-
-      if (isArray(v)) {
-        this.default = function () {
-          return [].concat(v);
-        };
-      } else if (isPlainObject(v)) {
-        this.default = function () {
-          return Object.assign({}, v);
-        };
-      } else {
-        this.default = v;
+    },
+    isRequired: {
+      get: function get() {
+        this.required = true;
+        return this;
       }
+    }
+  };
 
-      return this;
-    },
+  if (validable) {
+    descriptors.validate = {
+      value: function value() {}
+    };
+  }
 
-    get isRequired() {
-      this.required = true;
-      return this;
-    },
-
+  return Object.assign(Object.defineProperties({
     validator: function validator() {
       return true;
     }
-  }, props);
-};
+  }, descriptors), props);
+}
 
 var vueTypes = setDefaults({
   utils: {
@@ -52,7 +71,6 @@ var typeMap = {
   bool: Boolean,
   string: String,
   number: Number,
-  integer: Number,
   array: Array,
   object: Object,
   arrayOf: Array,
@@ -62,44 +80,46 @@ var typeMap = {
 var getters = ['any', 'func', 'bool', 'string', 'number', 'array', 'object', 'symbol'];
 var methods = ['oneOf', 'custom', 'instanceOf', 'oneOfType', 'arrayOf', 'objectOf'];
 
-function createValidator(root, name, getter, props) {
+function createValidator(root, name, props, getter, validable) {
   var _descr;
 
   if (getter === void 0) {
     getter = false;
   }
 
+  if (validable === void 0) {
+    validable = false;
+  }
+
   var prop = getter ? 'get' : 'value';
   var descr = (_descr = {}, _descr[prop] = function () {
-    return type(props).def(getter ? vueTypes.sensibleDefaults[name] : undefined);
+    return type(name, props, validable).def(getter ? vueTypes.sensibleDefaults[name] : undefined);
   }, _descr);
-  return Object.defineProperty(root, name, descr);
+  return dfn(root, name, descr);
 }
 
-getters.forEach(function (p) {
-  return createValidator(vueTypes, p, true, {
-    type: typeMap[p] || null,
-    validate: function validate() {}
-  });
-});
-methods.forEach(function (p) {
-  return createValidator(vueTypes, p, false, {
-    type: typeMap[p] || null
-  });
-});
-createValidator(vueTypes, 'integer', true, {
-  type: Number
-}); // does not have a validate method
+function recurseValidator(root, getter, validable) {
+  return function (name) {
+    return createValidator(root, name, {
+      type: typeMap[name] || null
+    }, getter, validable);
+  };
+}
 
-Object.defineProperty(vueTypes, 'shape', {
+getters.forEach(recurseValidator(vueTypes, true, true));
+methods.forEach(recurseValidator(vueTypes, false));
+createValidator(vueTypes, 'integer', {
+  type: Number
+}, true); // does not have a validate method
+
+dfn(vueTypes, 'shape', {
   value: function value() {
-    return Object.defineProperty(type({
+    return dfn(type('shape', {
       type: Object
     }), 'loose', {
       get: function get() {
         return this;
-      },
-      enumerable: false
+      }
     });
   }
 });
@@ -110,11 +130,12 @@ vueTypes.extend = function extend(props) {
       _props$getter = props.getter,
       getter = _props$getter === void 0 ? false : _props$getter,
       _props$type = props.type,
-      type = _props$type === void 0 ? null : _props$type;
-  return createValidator(vueTypes, name, getter, {
-    type: type,
-    validate: validate ? function () {} : undefined
-  });
+      type = _props$type === void 0 ? null : _props$type; // If we are inheriting from a custom type, let's ignore the type property
+
+  var extType = isPlainObject(type) && type.type ? null : type;
+  return createValidator(vueTypes, name, {
+    type: extType
+  }, getter, !!validate);
 };
 /* eslint-disable no-console */
 
