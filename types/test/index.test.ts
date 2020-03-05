@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue, { CreateElement } from 'vue'
 import Component from 'vue-class-component'
 import VueTypes, {
   VueTypesInterface,
@@ -16,7 +16,9 @@ const boolType = VueTypes.bool.def(true).isRequired
 
 const funcType = VueTypes.func.def(noop).isRequired
 
-const arrayType = VueTypes.array.def([]).isRequired
+const arrayType = (VueTypes.array as VueTypeValidableDef<string[]>).def([
+  'hello',
+]).isRequired
 const arrayType2 = VueTypes.array.def(() => []).isRequired
 
 const stringType = VueTypes.string.def('John').isRequired
@@ -29,6 +31,16 @@ const integerType = VueTypes.integer.def(0).isRequired
 
 const objectType = VueTypes.object.def({ demo: true }).isRequired
 const objectType2 = VueTypes.object.def(() => {}).isRequired
+
+interface User {
+  name: string
+  ID: number
+}
+
+const userType = (VueTypes.object as VueTypeValidableDef<User>).def({
+  ID: 1,
+  name: 'me',
+})
 
 const symbolType = VueTypes.symbol.def(Symbol('foo')).isRequired
 
@@ -120,6 +132,7 @@ const BaseComponent = Vue.extend({
     age: integerType,
     obj: objectType,
     obj2: objectType2,
+    user: userType,
     uniqueSym: symbolType,
     ageLimit: customTypeStrict,
     colors: VueTypes.oneOf(['red', 'blue']),
@@ -132,26 +145,17 @@ const BaseComponent = Vue.extend({
   },
 })
 
-@Component({
-  props: {
-    verified: boolType,
-    funcProp: funcType,
-    hobbies: arrayType,
-    name: stringType,
-    height: numberType,
-    age: integerType,
-    obj: objectType,
-    uniqueSym: symbolType,
-    ageLimit: customTypeStrict,
-    colors: VueTypes.oneOf(['red', 'blue']),
-    userType: instanceOfType,
-    fieldWithText: VueTypes.oneOfType([String, VueTypes.string]),
-    friendsId: VueTypes.arrayOf(VueTypes.number).isRequired,
-    simpleObj: ObjectOfType,
-    meta: shapeType,
-    extendedMeta: shapeTypeLoose,
-  },
-})
-class ClassComponent extends Vue {
+@Component
+class ClassComponent extends BaseComponent {
   public msg = 10
 }
+
+new Vue({
+  render: (h: CreateElement) =>
+    h(ClassComponent, {
+      props: {
+        verified: true,
+        user: { ID: 10, name: 'me' },
+      },
+    }),
+})
