@@ -89,7 +89,7 @@ export interface VueTypesInterface {
   readonly array: VueTypeValidableDef<any[]>
   readonly string: VueTypeValidableDef<string>
   readonly number: VueTypeValidableDef<number>
-  readonly object: VueTypeValidableDef<{ [key: string]: any }>
+  readonly object: VueTypeValidableDef<object>
   readonly integer: VueTypeDef<number>
   readonly symbol: VueTypeValidableDef<symbol>
   custom<T = any>(
