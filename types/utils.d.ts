@@ -1,4 +1,3 @@
-// TypeScript Version: 2.8
 import { Prop, PropOptions } from 'vue/types/options'
 import { Constructor, VueTypeDef } from './index'
 
