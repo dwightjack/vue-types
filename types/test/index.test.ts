@@ -16,9 +16,7 @@ const boolType = VueTypes.bool.def(true).isRequired
 
 const funcType = VueTypes.func.def(noop).isRequired
 
-const arrayType = (VueTypes.array as VueTypeValidableDef<string[]>).def([
-  'hello',
-]).isRequired
+const arrayType = VueTypes.array.def([]).isRequired
 const arrayType2 = VueTypes.array.def(() => []).isRequired
 
 const stringType = VueTypes.string.def('John').isRequired
@@ -32,12 +30,12 @@ const integerType = VueTypes.integer.def(0).isRequired
 const objectType = VueTypes.object.def({ demo: true }).isRequired
 const objectType2 = VueTypes.object.def(() => {}).isRequired
 
-interface User {
+interface Account {
   name: string
   ID: number
 }
 
-const userType = (VueTypes.object as VueTypeValidableDef<User>).def({
+const userType = (VueTypes.object as VueTypeValidableDef<Account>).def({
   ID: 1,
   name: 'me',
 })
@@ -79,7 +77,14 @@ const ObjectOfType = VueTypes.objectOf<string>(VueTypes.string).def({
   prop: 'test',
 }).isRequired
 
-const shapeType = VueTypes.shape({
+interface User {
+  name: string
+  surname: string
+  age: number
+  hobbies: any[]
+}
+
+const shapeType = VueTypes.shape<User>({
   name: String,
   surname: { type: String, default: 'Doe' },
   age: VueTypes.number,
@@ -127,6 +132,7 @@ const BaseComponent = Vue.extend({
     verified: boolType,
     funcProp: funcType,
     hobbies: arrayType,
+    friends: ArrayOfType,
     name: stringType,
     height: numberType,
     age: integerType,
