@@ -149,6 +149,7 @@ describe('`toType()`', () => {
     const obj = {}
 
     utils.toType('testType', obj)
+    // eslint-disable-next-line
     expect(obj.hasOwnProperty('isRequired')).toBe(true)
   })
 

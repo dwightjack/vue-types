@@ -136,7 +136,7 @@ const VueTypes = {
 
       validate = false // we don't allow validate method on this kind of types
       if (isFunction(type.validator)) {
-        opts.validator = function(...args) {
+        opts.validator = function (...args) {
           return type.validator.apply(type, args) && validator.apply(this, args)
         }
       }

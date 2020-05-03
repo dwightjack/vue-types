@@ -6,7 +6,7 @@ const dfn = Object.defineProperty
 
 const isArray =
   Array.isArray ||
-  function(value) {
+  function (value) {
     return Object.prototype.toString.call(value) === '[object Array]'
   }
 

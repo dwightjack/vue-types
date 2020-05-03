@@ -224,7 +224,7 @@ describe('VueTypes', () => {
       expect(VueTypes.symbol.default).toBe(undefined)
     })
 
-    it('should validate symbols', function() {
+    it('should validate symbols', function () {
       if ('Symbol' in window && typeof Symbol() === 'symbol') {
         expect(VueTypes.symbol.validator(Symbol())).toBe(true)
       } else {

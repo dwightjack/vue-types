@@ -6,7 +6,7 @@ import VueTypes, {
   VueTypeShape,
 } from '../index'
 
-const noop = (): void => {}
+const noop = (): void => undefined
 
 const anyType = VueTypes.any
 anyType.def(0)
@@ -28,7 +28,7 @@ const numberType = VueTypes.number.def(0).isRequired
 const integerType = VueTypes.integer.def(0).isRequired
 
 const objectType = VueTypes.object.def({ demo: true }).isRequired
-const objectType2 = VueTypes.object.def(() => {}).isRequired
+const objectType2 = VueTypes.object.def(() => undefined).isRequired
 
 interface Account {
   name: string
@@ -50,6 +50,17 @@ const customTypeStrict = VueTypes.custom<number>(validator).def(0).isRequired
 const oneOf = VueTypes.oneOf([0, 'string', null]).def(1).isRequired
 
 const oneOfStrict = VueTypes.oneOf<true | 'string'>([true, 'string']).def(
+  'string',
+).isRequired
+
+enum Demo {
+  Name = 'hello',
+  Text = 'text',
+}
+
+type EnumValues<K> = K[keyof K]
+
+const oneOfEnum = VueTypes.oneOf<EnumValues<Demo>>(['sss', 'string']).def(
   'string',
 ).isRequired
 

@@ -1,7 +1,7 @@
 
-/*! vue-types - v1.7.0
+/*! vue-types - v1.8.0
  * https://github.com/dwightjack/vue-types
- * Copyright (c) 2019 - Marco Solazzi;
+ * Copyright (c) 2020 - Marco Solazzi;
  * Licensed MIT
  */
 
@@ -9,9 +9,9 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('vue')) :
   typeof define === 'function' && define.amd ? define(['vue'], factory) :
   (global = global || self, global.VueTypes = factory(global.Vue));
-}(this, function (Vue) { 'use strict';
+}(this, (function (Vue) { 'use strict';
 
-  Vue = Vue && Vue.hasOwnProperty('default') ? Vue['default'] : Vue;
+  Vue = Vue && Object.prototype.hasOwnProperty.call(Vue, 'default') ? Vue['default'] : Vue;
 
   function _objectWithoutPropertiesLoose(source, excluded) {
     if (source == null) return {};
@@ -712,5 +712,5 @@
 
   return VueTypes;
 
-}));
+})));
 //# sourceMappingURL=vue-types.js.map
