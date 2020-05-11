@@ -7,19 +7,23 @@ export type ValidatorFunction<T = any> = (value: T) => boolean
 
 export type DefaultFactory<T> = (() => T) | T
 
-export type defaultType<T> = T extends any[]
-  ? DefaultFactory<T>
-  : T extends object
-  ? DefaultFactory<T>
-  : T
+export type defaultType<T> = T extends
+  | string
+  | boolean
+  | number
+  | null
+  | undefined
+  ? T
+  : DefaultFactory<T>
 export interface VueTypeDef<T = any, D = defaultType<T>>
   extends PropOptions<T> {
   readonly _vueTypes_name: string
-  readonly def: (def: D) => this & { default: D }
+  readonly def: (def?: D) => this & { default: D }
   readonly isRequired: this & { required: true }
 }
 
-export interface VueTypeValidableDef<T = any> extends VueTypeDef<T> {
+export interface VueTypeValidableDef<T = any, D = defaultType<T>>
+  extends VueTypeDef<T, D> {
   readonly validate: (
     fn: ValidatorFunction<T>,
   ) => this & { validator: ValidatorFunction<T> }
@@ -64,8 +68,8 @@ export interface TypeDefaults {
   bool?: boolean
   string?: string
   number?: number
-  array?: any[]
-  object?: () => Record<string, any>
+  array?: () => any[]
+  object?: () => { [key: string]: any }
   integer?: number
 }
 
@@ -73,7 +77,7 @@ export interface ExtendProps<T = any> {
   name: string
   getter?: boolean
   validate?: boolean
-  type?: PropType<T> | VueTypeDef<T>
+  type?: PropType<T> | VueTypeDef<T> | VueTypeValidableDef<T>
   required?: boolean
   default?: T | null | undefined | (() => T | null | undefined)
   validator?(value: T): boolean

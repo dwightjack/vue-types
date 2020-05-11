@@ -1,10 +1,7 @@
 import Vue, { CreateElement } from 'vue'
 import Component from 'vue-class-component'
-import VueTypes, {
-  VueTypesInterface,
-  VueTypeValidableDef,
-  VueTypeShape,
-} from '../index'
+import VueTypes from '../../src/index'
+import { VueTypesInterface, VueTypeValidableDef } from '../vue-types'
 
 const noop = (): void => undefined
 

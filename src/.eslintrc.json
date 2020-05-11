@@ -7,13 +7,5 @@
   ],
   "globals": {
     "process": true
-  },
-  "overrides": [
-    {
-      "files": "index.cjs.js",
-      "env": {
-        "commonjs": true
-      }
-    }
-  ]
+  }
 }

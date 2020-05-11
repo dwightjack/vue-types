@@ -1,5 +1,5 @@
 import { Prop, PropOptions } from 'vue/types/options'
-import { Constructor, VueTypeDef } from './index'
+import { Constructor, VueTypeDef } from './vue-types'
 
 export function hasOwn(v: string | PropertyKey): boolean
 

@@ -1,16 +1,8 @@
-
-/*! vue-types - v1.8.0
- * https://github.com/dwightjack/vue-types
- * Copyright (c) 2020 - Marco Solazzi;
- * Licensed MIT
- */
-
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('vue')) :
   typeof define === 'function' && define.amd ? define(['vue'], factory) :
-  (global = global || self, global.VueTypes = factory(global.Vue));
-}(this, (function (Vue) { 'use strict';
-
+  (global = global || self, global.vueTypes = factory(global.Vue));
+}(this, (function (Vue) {
   Vue = Vue && Object.prototype.hasOwnProperty.call(Vue, 'default') ? Vue['default'] : Vue;
 
   function _objectWithoutPropertiesLoose(source, excluded) {
@@ -76,8 +68,7 @@
   var ObjProto = Object.prototype;
   var toString = ObjProto.toString;
   var hasOwn = ObjProto.hasOwnProperty;
-  var FN_MATCH_REGEXP = /^\s*function (\w+)/; // https://github.com/vuejs/vue/blob/dev/src/core/util/props.js#L177
-
+  var FN_MATCH_REGEXP = /^\s*function (\w+)/;
   function getType(fn) {
     var type = fn !== null && fn !== undefined ? fn.type ? fn.type : fn : null;
     var match = type && type.toString().match(FN_MATCH_REGEXP);
@@ -88,67 +79,22 @@
     var match = value.constructor.toString().match(FN_MATCH_REGEXP);
     return match && match[1];
   }
-  /**
-   * No-op function
-   */
-
   function noop() {}
-  /**
-   * A function that always returns true
-   */
-
   var stubTrue = function stubTrue() {
     return true;
   };
-  /**
-   * Checks for a own property in an object
-   *
-   * @param {object} obj - Object
-   * @param {string} prop - Property to check
-   * @returns {boolean}
-   */
-
   var has = function has(obj, prop) {
     return hasOwn.call(obj, prop);
   };
-  /**
-   * Determines whether the passed value is an integer. Uses `Number.isInteger` if available
-   *
-   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger
-   * @param {*} value - The value to be tested for being an integer.
-   * @returns {boolean}
-   */
-
   var isInteger = Number.isInteger || function isInteger(value) {
     return typeof value === 'number' && isFinite(value) && Math.floor(value) === value;
   };
-  /**
-   * Determines whether the passed value is an Array.
-   *
-   * @param {*} value - The value to be tested for being an array.
-   * @returns {boolean}
-   */
-
   var isArray = Array.isArray || function isArray(value) {
     return toString.call(value) === '[object Array]';
   };
-  /**
-   * Checks if a value is a function
-   *
-   * @param {any} value - Value to check
-   * @returns {boolean}
-   */
-
   var isFunction = function isFunction(value) {
     return toString.call(value) === '[object Function]';
   };
-  /**
-   * Adds a `def` method to the object returning a new object with passed in argument as `default` property
-   *
-   * @param {object} type - Object to enhance
-   * @returns {object} the passed-in prop type
-   */
-
   function withDefault(type) {
     return Object.defineProperty(type, 'def', {
       value: function value(def) {
@@ -179,13 +125,6 @@
       writable: false
     });
   }
-  /**
-   * Adds a `isRequired` getter returning a new object with `required: true` key-value
-   *
-   * @param {object} type - Object to enhance
-   * @returns {object} the passed-in prop type
-   */
-
   function withRequired(type) {
     return Object.defineProperty(type, 'isRequired', {
       get: function get() {
@@ -195,13 +134,6 @@
       enumerable: false
     });
   }
-  /**
-   * Adds a validate method useful to set the prop `validator` function.
-   *
-   * @param {object} type Prop type to extend
-   * @returns {object} the passed-in prop type
-   */
-
   function withValidate(type) {
     return Object.defineProperty(type, 'validate', {
       value: function value(fn) {
@@ -211,15 +143,6 @@
       enumerable: false
     });
   }
-  /**
-   * Adds `isRequired` and `def` modifiers to an object
-   *
-   * @param {string} name - Type internal name
-   * @param {object} obj - Object to enhance
-   * @param {boolean} [validateFn=false] - add the `validate()` method to the type object
-   * @returns {object}
-   */
-
   function toType(name, obj, validateFn) {
     if (validateFn === void 0) {
       validateFn = false;
@@ -250,15 +173,6 @@
 
     return obj;
   }
-  /**
-   * Validates a given value against a prop type object
-   *
-   * @param {Object|*} type - Type to use for validation. Either a type object or a constructor
-   * @param {*} value - Value to check
-   * @param {boolean} silent - Silence warnings
-   * @returns {boolean}
-   */
-
   function validateType(type, value, silent) {
     if (silent === void 0) {
       silent = false;
@@ -313,7 +227,6 @@
     }
 
     if (hasOwn.call(typeToCheck, 'validator') && isFunction(typeToCheck.validator)) {
-      // swallow warn
       var oldWarn;
 
       if (silent) {
@@ -331,10 +244,9 @@
   }
   var warn = noop;
 
-  {
+  if (process.env.NODE_ENV !== 'production') {
     var hasConsole = typeof console !== 'undefined';
     warn = hasConsole ? function warn(msg) {
-      // eslint-disable-next-line no-console
       Vue.config.silent === false && console.warn("[VueTypes warn]: " + msg);
     } : noop;
   }
@@ -464,11 +376,7 @@
           validator = _opts$validator === void 0 ? stubTrue : _opts$validator;
 
       if (type && type._vueTypes_name) {
-        // we are using as base type a vue-type object
-        // detach the original type
-        // we are going to inherit the parent data.
-        delete opts.type; // inherit base types, required flag and default flag if set
-
+        delete opts.type;
         var keys = ['type', 'required', 'default'];
 
         for (var i = 0; i < keys.length; i += 1) {
@@ -479,7 +387,7 @@
           }
         }
 
-        validate = false; // we don't allow validate method on this kind of types
+        validate = false;
 
         if (isFunction(type.validator)) {
           opts.validator = function () {
@@ -600,8 +508,6 @@
       }, []);
 
       if (!hasCustomValidators) {
-        // we got just native objects (ie: Array, Object)
-        // delegate to Vue native prop check
         return toType('oneOfType', {
           type: nativeChecks
         });
@@ -666,7 +572,7 @@
             return false;
           }
 
-          var valueKeys = Object.keys(value); // check for required keys (if any)
+          var valueKeys = Object.keys(value);
 
           if (requiredKeys.length > 0 && requiredKeys.some(function (req) {
             return valueKeys.indexOf(req) === -1;
@@ -713,4 +619,4 @@
   return VueTypes;
 
 })));
-//# sourceMappingURL=vue-types.js.map
+//# sourceMappingURL=vue-types.umd.js.map

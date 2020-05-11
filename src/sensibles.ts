@@ -1,4 +1,6 @@
-const typeDefaults = () => ({
+import { TypeDefaults } from '../types/vue-types'
+
+export const typeDefaults = (): TypeDefaults => ({
   func: () => {},
   bool: true,
   string: '',
@@ -8,11 +10,10 @@ const typeDefaults = () => ({
   integer: 0,
 })
 
-export const setDefaults = (root) => {
+export const setDefaults = (root: any) => {
   let currentDefaults = typeDefaults()
 
   return Object.defineProperty(root, 'sensibleDefaults', {
-    enumerable: false,
     set(value) {
       if (value === false) {
         currentDefaults = {}
