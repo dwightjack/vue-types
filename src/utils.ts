@@ -5,7 +5,7 @@ import {
   Constructor,
   VueTypeDef,
   VueTypeValidableDef,
-  defaultType,
+  DefaultType,
   VueProp,
 } from '../types/vue-types'
 
@@ -108,8 +108,8 @@ export const isComplexType = (value: any): value is VueProp<any> =>
  * @param {object} obj - Object to enhance
  * @returns {object}
  */
-export function toType<T = any, D = defaultType<T>>(
-  name: String,
+export function toType<T = any, D = DefaultType<T>>(
+  name: string,
   obj: PropOptions<T>,
 ) {
   const type = Object.defineProperties(obj, {
@@ -130,7 +130,7 @@ export function toType<T = any, D = defaultType<T>>(
       configurable: true,
     },
     def: {
-      value(def: any) {
+      value(def?: any) {
         if (def === undefined && !this.default) {
           return this
         }
@@ -164,8 +164,8 @@ export function toType<T = any, D = defaultType<T>>(
  * @param {object} obj - Object to enhance
  * @returns {object}
  */
-export function toValidableType<T = any, D = defaultType<T>>(
-  name: String,
+export function toValidableType<T = any, D = DefaultType<T>>(
+  name: string,
   obj: PropOptions<T>,
 ) {
   const type = toType<T, D>(name, obj)

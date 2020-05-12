@@ -8,7 +8,12 @@ import {
   has,
   stubTrue,
 } from './utils'
-import { TypeDefaults, ExtendProps, defaultType } from '../types/vue-types'
+import {
+  VueTypesDefaults,
+  ExtendProps,
+  DefaultType,
+  VueTypeDef,
+} from '../types/vue-types'
 import { typeDefaults } from './sensibles'
 import { PropOptions } from 'vue/types/umd'
 import {
@@ -30,8 +35,27 @@ import instanceOf from './validators/instanceof'
 import objectOf from './validators/objectof'
 import shape from './validators/shape'
 
-function createTypes(defaults: Partial<TypeDefaults> = typeDefaults()) {
+function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
+  // create a local copy
+  let defaults = { ...defs }
+
   class VueTypes {
+    static get sensibleDefaults() {
+      return defaults
+    }
+
+    static set sensibleDefaults(v: boolean | Partial<VueTypesDefaults>) {
+      if (v === false) {
+        defaults = {}
+        return
+      }
+      if (v === true) {
+        defaults = { ...defs }
+        return
+      }
+      defaults = { ...v }
+    }
+
     static get any() {
       return any()
     }
@@ -51,7 +75,7 @@ function createTypes(defaults: Partial<TypeDefaults> = typeDefaults()) {
       return array().def(defaults.array)
     }
     static get object() {
-      return object<object>().def(defaults.object)
+      return object().def(defaults.object)
     }
     static get integer() {
       return integer().def(defaults.integer)
@@ -68,10 +92,12 @@ function createTypes(defaults: Partial<TypeDefaults> = typeDefaults()) {
     static readonly objectOf = objectOf
     static readonly shape = shape
 
-    static extend<T = any>(props: ExtendProps<T> | ExtendProps<T>[]) {
+    static extend<T extends typeof VueTypes>(
+      props: ExtendProps<any> | ExtendProps<any>[],
+    ): T {
       if (isArray(props)) {
         props.forEach((p) => this.extend(p))
-        return this
+        return this as T
       }
 
       let { name, validate = false, getter = false, ...opts } = props
@@ -110,23 +136,31 @@ function createTypes(defaults: Partial<TypeDefaults> = typeDefaults()) {
           }
         }
       }
-      let descriptor: unknown
-      const typeFn = validate ? toValidableType : toType
+
+      let descriptor: any
       if (getter) {
         descriptor = {
           get() {
-            return typeFn<T>(name, Object.assign({}, opts as PropOptions<T>))
+            const typeOptions = Object.assign({}, opts as PropOptions<T>)
+            if (validate) {
+              return toValidableType<T>(name, typeOptions)
+            }
+            return toType<T>(name, typeOptions)
           },
           enumerable: true,
         }
       } else {
         const { validator } = opts
         descriptor = {
-          value(...args: unknown[]) {
-            const ret = typeFn<T>(
-              name,
-              Object.assign({}, opts as PropOptions<T>),
-            )
+          value(...args: T[]) {
+            const typeOptions = Object.assign({}, opts as PropOptions<T>)
+            let ret: VueTypeDef<T>
+            if (validate) {
+              ret = toValidableType<T>(name, typeOptions)
+            } else {
+              ret = toType<T>(name, typeOptions)
+            }
+
             if (validator) {
               ret.validator = validator.bind(ret, ...args)
             }
@@ -143,7 +177,7 @@ function createTypes(defaults: Partial<TypeDefaults> = typeDefaults()) {
       validate(value: unknown, type: unknown) {
         return validateType(type, value, true)
       },
-      toType<T = any, D = defaultType<T>>(
+      toType<T = any, D = DefaultType<T>>(
         name: string,
         obj: PropOptions<T>,
         validable = false,

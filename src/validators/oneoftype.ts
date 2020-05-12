@@ -22,9 +22,9 @@ export default function oneOfType<T extends VueProp<any> | Prop<any>>(
 
   let hasCustomValidators = false
 
-  const nativeChecks = arr.reduce((ret, type) => {
+  const nativeChecks = arr.reduce<Prop<any>[]>((ret, type) => {
     if (isComplexType(type)) {
-      if (type.type && isVueTypeDef(type) && type._vueTypes_name === 'oneOf') {
+      if (isVueTypeDef(type) && type._vueTypes_name === 'oneOf' && type.type) {
         return ret.concat(type.type)
       }
       if (isFunction(type.validator)) {
@@ -37,7 +37,7 @@ export default function oneOfType<T extends VueProp<any> | Prop<any>>(
 
       return ret
     }
-    ret.push(type)
+    ret.push(type as Prop<any>)
     return ret
   }, [])
 
@@ -50,7 +50,7 @@ export default function oneOfType<T extends VueProp<any> | Prop<any>>(
   }
 
   const typesStr = arr
-    .reduce(
+    .reduce<string[]>(
       (ret, type) =>
         ret.concat(
           isComplexType(type) && isArray(type.type)
@@ -62,7 +62,6 @@ export default function oneOfType<T extends VueProp<any> | Prop<any>>(
     .join('", "')
 
   return toType<T>('oneOfType', {
-    type: null,
     validator(value) {
       const valid = arr.some((type) => {
         if (isVueTypeDef(type) && type._vueTypes_name === 'oneOf') {

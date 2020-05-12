@@ -1,19 +1,19 @@
 import isPlainObject from 'is-plain-object'
 import { Prop } from 'vue/types/options'
-import { VueProp, VueTypeShape } from '../../types/vue-types'
-import { toType, validateType, warn } from '../utils'
+import { VueProp, VueTypeShape, VueTypeLooseShape } from '../../types/vue-types'
+import { toType, validateType, warn, has } from '../utils'
 
 export default function shape<T>(
   obj: { [K in keyof T]?: Prop<T[K]> | VueProp<T[K], any> },
 ): VueTypeShape<T> {
   const keys = Object.keys(obj)
   const requiredKeys = keys.filter(
-    (key) => obj[key] && obj[key].required === true,
+    (key) => (obj as any)[key] && (obj as any)[key].required === true,
   )
 
   const type = toType('shape', {
     type: Object,
-    validator(value) {
+    validator(this: VueTypeShape<T> | VueTypeLooseShape<T>, value) {
       if (!isPlainObject(value)) {
         return false
       }
@@ -34,11 +34,12 @@ export default function shape<T>(
 
       return valueKeys.every((key) => {
         if (keys.indexOf(key) === -1) {
-          if (this._vueTypes_isLoose === true) return true
+          if ((this as VueTypeLooseShape<T>)._vueTypes_isLoose === true)
+            return true
           warn(`shape - object is missing "${key}" property`)
           return false
         }
-        const type = obj[key]
+        const type = (obj as any)[key]
         return validateType(type, value[key])
       })
     },

@@ -17,17 +17,18 @@ function type(name, props, validable = false) {
     },
     def: {
       value(v) {
-        if (v === undefined && !this.default) {
-          return this
+        const t = this
+        if (v === undefined && !t.default) {
+          return t
         }
         if (isArray(v)) {
-          this.default = () => [].concat(v)
+          t.default = () => [].concat(v)
         } else if (isPlainObject(v)) {
-          this.default = () => Object.assign({}, v)
+          t.default = () => Object.assign({}, v)
         } else {
-          this.default = v
+          t.default = v
         }
-        return this
+        return t
       },
     },
     isRequired: {

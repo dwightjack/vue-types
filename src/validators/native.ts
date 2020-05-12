@@ -1,6 +1,7 @@
 import { toType, toValidableType, isInteger } from '../utils'
+import { DefaultFactory } from '../../types/vue-types'
 
-export const any = () => toValidableType('any', { type: null })
+export const any = () => toValidableType('any', {})
 
 export const func = () =>
   toValidableType('function', {
@@ -27,8 +28,8 @@ export const array = () =>
     type: Array,
   })
 
-export const object = <T>() =>
-  toValidableType<T>('object', {
+export const object = <T = object>() =>
+  toValidableType<T, DefaultFactory<T>>('object', {
     type: Object,
   })
 
@@ -42,7 +43,6 @@ export const integer = () =>
 
 export const symbol = () =>
   toValidableType<symbol>('symbol', {
-    type: null,
     validator(value) {
       return typeof value === 'symbol'
     },

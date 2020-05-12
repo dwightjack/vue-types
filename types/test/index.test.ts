@@ -1,7 +1,7 @@
 import Vue, { CreateElement } from 'vue'
 import Component from 'vue-class-component'
 import VueTypes from '../../src/index'
-import { VueTypesInterface, VueTypeValidableDef } from '../vue-types'
+import { VueTypeValidableDef } from '../vue-types'
 
 const noop = (): void => undefined
 
@@ -76,7 +76,7 @@ const oneOfTypeType = VueTypes.oneOfType([
     type: String,
   },
   VueTypes.number,
-]).def(null).isRequired // check can be just at runtime
+]).def(undefined).isRequired // check can be just at runtime
 
 const ArrayOfType = VueTypes.arrayOf(VueTypes.string).def(['string', 'string'])
   .isRequired
@@ -111,11 +111,13 @@ VueTypes.sensibleDefaults = {}
 VueTypes.sensibleDefaults = false
 VueTypes.sensibleDefaults = true
 
-interface CustomVueTypes extends VueTypesInterface {
+type VueTypeType = typeof VueTypes
+interface CustomVueTypes extends VueTypeType {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly test: VueTypeValidableDef<any>
   readonly user: typeof shapeType
 }
+
 // extending
 const myTypes = VueTypes.extend<CustomVueTypes>([
   {
@@ -135,19 +137,24 @@ myTypes.test.isRequired
 
 myTypes.user.def({ name: 'xxx' })
 
-const BaseComponent = Vue.extend({
+const NativeComponent = Vue.extend({
   props: {
     verified: boolType,
     funcProp: funcType,
     hobbies: arrayType,
-    friends: ArrayOfType,
     name: stringType,
     height: numberType,
     age: integerType,
     obj: objectType,
     obj2: objectType2,
-    user: userType,
     uniqueSym: symbolType,
+  },
+})
+
+const OtherTypesComponent = Vue.extend({
+  props: {
+    friends: ArrayOfType,
+    user: userType,
     ageLimit: customTypeStrict,
     colors: VueTypes.oneOf(['red', 'blue']),
     userType: instanceOfType,
@@ -159,8 +166,10 @@ const BaseComponent = Vue.extend({
   },
 })
 
+new Vue({ render: (h) => h(OtherTypesComponent) })
+
 @Component
-class ClassComponent extends BaseComponent {
+class ClassComponent extends NativeComponent {
   public msg = 10
 }
 

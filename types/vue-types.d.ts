@@ -7,7 +7,7 @@ export type ValidatorFunction<T = any> = (value: T) => boolean
 
 export type DefaultFactory<T> = (() => T) | T
 
-export type defaultType<T> = T extends
+export type DefaultType<T> = T extends
   | string
   | boolean
   | number
@@ -15,21 +15,21 @@ export type defaultType<T> = T extends
   | undefined
   ? T
   : DefaultFactory<T>
-export interface VueTypeDef<T = any, D = defaultType<T>>
+export interface VueTypeDef<T = any, D = DefaultType<T>>
   extends PropOptions<T> {
   readonly _vueTypes_name: string
-  readonly def: (def?: D) => this & { default: D }
+  readonly def: (def?: D | undefined) => this & { default: D }
   readonly isRequired: this & { required: true }
 }
 
-export interface VueTypeValidableDef<T = any, D = defaultType<T>>
+export interface VueTypeValidableDef<T = any, D = DefaultType<T>>
   extends VueTypeDef<T, D> {
   readonly validate: (
     fn: ValidatorFunction<T>,
   ) => this & { validator: ValidatorFunction<T> }
 }
 
-export type VueProp<T, D = defaultType<T>> =
+export type VueProp<T, D = DefaultType<T>> =
   | VueTypeValidableDef<T>
   | VueTypeDef<T, D>
   | PropOptions<T>
@@ -63,7 +63,7 @@ export interface VueTypesUtils {
   toType(name: string, obj: PropOptions): VueTypeDef
 }
 
-export interface TypeDefaults {
+export interface VueTypesDefaults {
   func?: () => any
   bool?: boolean
   string?: string
@@ -84,7 +84,7 @@ export interface ExtendProps<T = any> {
 }
 
 export interface VueTypesInterface {
-  sensibleDefaults: TypeDefaults | boolean
+  sensibleDefaults: VueTypesDefaults | boolean
   extend<T extends VueTypesInterface>(props: ExtendProps | ExtendProps[]): T
   utils: VueTypesUtils
   readonly any: VueTypeValidableDef
@@ -105,7 +105,7 @@ export interface VueTypesInterface {
     instanceConstructor: C,
   ): VueTypeInstanceOf<C>
   oneOfType(arr: (Prop<any> | VueProp<any>)[]): VueTypeDef
-  arrayOf<V extends any, D = defaultType<V>>(
+  arrayOf<V extends any, D = DefaultType<V>>(
     type: VueTypeValidableDef<V> | VueTypeDef<V, D> | Prop<V>,
   ): VueTypeDef<V[]>
   objectOf<T extends any>(type: Prop<T> | VueProp<T>): VueTypeObjectOf<T>
