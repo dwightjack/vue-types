@@ -28,7 +28,7 @@ export const array = () =>
     type: Array,
   })
 
-export const object = <T = object>() =>
+export const object = <T extends { [key: string]: any }>() =>
   toValidableType<T, DefaultFactory<T>>('object', {
     type: Object,
   })

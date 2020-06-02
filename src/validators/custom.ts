@@ -1,7 +1,7 @@
 import { toType, warn } from '../utils'
 import { ValidatorFunction, VueTypeDef } from '../../types/vue-types'
 
-export default function custom<T = any>(
+export default function custom<T>(
   validatorFn: ValidatorFunction<T>,
   warnMsg = 'custom validation failed',
 ) {
@@ -12,9 +12,9 @@ export default function custom<T = any>(
   }
 
   return toType<T>(validatorFn.name || '<<anonymous function>>', {
-    validator(value) {
+    validator(this: VueTypeDef<T>, value) {
       const valid = validatorFn(value)
-      if (!valid) warn(`${(this as VueTypeDef<T>)._vueTypes_name} - ${warnMsg}`)
+      if (!valid) warn(`${this._vueTypes_name} - ${warnMsg}`)
       return valid
     },
   })

@@ -1,5 +1,5 @@
 import { Prop } from 'vue/types/options'
-import { VueProp } from '../../types/vue-types'
+import { VueProp, InferType } from '../../types/vue-types'
 import {
   isArray,
   isComplexType,
@@ -11,9 +11,10 @@ import {
   warn,
 } from '../utils'
 
-export default function oneOfType<T extends VueProp<any> | Prop<any>>(
-  arr: T[],
-) {
+export default function oneOfType<
+  U extends VueProp<any> | Prop<any>,
+  V = InferType<U>
+>(arr: U[]) {
   if (!isArray(arr)) {
     throw new TypeError(
       '[VueTypes error]: You must provide an array as argument',
@@ -22,9 +23,13 @@ export default function oneOfType<T extends VueProp<any> | Prop<any>>(
 
   let hasCustomValidators = false
 
-  const nativeChecks = arr.reduce<Prop<any>[]>((ret, type) => {
-    if (isComplexType(type)) {
-      if (isVueTypeDef(type) && type._vueTypes_name === 'oneOf' && type.type) {
+  const nativeChecks = arr.reduce<Prop<V>[]>((ret, type) => {
+    if (isComplexType<V>(type)) {
+      if (
+        isVueTypeDef<V>(type) &&
+        type._vueTypes_name === 'oneOf' &&
+        type.type
+      ) {
         return ret.concat(type.type)
       }
       if (isFunction(type.validator)) {
@@ -37,14 +42,14 @@ export default function oneOfType<T extends VueProp<any> | Prop<any>>(
 
       return ret
     }
-    ret.push(type as Prop<any>)
+    ret.push(type as any)
     return ret
   }, [])
 
   if (!hasCustomValidators) {
     // we got just native objects (ie: Array, Object)
     // delegate to Vue native prop check
-    return toType<T>('oneOfType', {
+    return toType<V>('oneOfType', {
       type: nativeChecks,
     })
   }
@@ -53,15 +58,15 @@ export default function oneOfType<T extends VueProp<any> | Prop<any>>(
     .reduce<string[]>(
       (ret, type) =>
         ret.concat(
-          isComplexType(type) && isArray(type.type)
-            ? type.type.map(getType)
+          isComplexType<V>(type) && isArray((type as any).type)
+            ? (type as any).type.map(getType)
             : getType(type),
         ),
       [],
     )
     .join('", "')
 
-  return toType<T>('oneOfType', {
+  return toType<V>('oneOfType', {
     validator(value) {
       const valid = arr.some((type) => {
         if (isVueTypeDef(type) && type._vueTypes_name === 'oneOf') {

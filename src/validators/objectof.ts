@@ -3,7 +3,7 @@ import { VueProp } from '../../types/vue-types'
 import { getType, toType, validateType, warn } from '../utils'
 
 export default function objectOf<T>(type: Prop<T> | VueProp<T>) {
-  return toType<Record<string, T>>('objectOf', {
+  return toType<{ [key: string]: T }>('objectOf', {
     type: Object,
     validator(obj) {
       const valid = Object.keys(obj).every((key) =>

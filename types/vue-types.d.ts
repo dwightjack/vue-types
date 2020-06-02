@@ -1,9 +1,24 @@
 // TypeScript Version: 2.8
-import { Prop, PropOptions, PropType } from 'vue/types/options'
+import { PropOptions, PropType, Prop } from 'vue/types/options'
 
 export type Constructor = new (...args: any[]) => any
 
-export type ValidatorFunction<T = any> = (value: T) => boolean
+// see https://github.com/vuejs/vue-next/blob/22717772dd83b67ffaa6ad9805c6269e184c7e41/packages/runtime-core/src/componentProps.ts#L67
+export type InferType<T> = T extends { type: null | true }
+  ? any
+  : T extends ObjectConstructor | { type: ObjectConstructor }
+  ? { [key: string]: any }
+  : T extends Prop<infer V>
+  ? V
+  : T extends PropOptions<infer V>
+  ? V
+  : T extends VueTypeDef<infer V>
+  ? V
+  : T extends VueTypeValidableDef<infer V>
+  ? V
+  : T
+
+export type ValidatorFunction<T> = (value: T) => boolean
 
 export type DefaultFactory<T> = (() => T) | T
 
@@ -13,31 +28,24 @@ export type DefaultType<T> = T extends
   | number
   | null
   | undefined
+  | Function
   ? T
   : DefaultFactory<T>
-export interface VueTypeDef<T = any, D = DefaultType<T>>
+export interface VueTypeDef<T = unknown, D = DefaultType<T>>
   extends PropOptions<T> {
   readonly _vueTypes_name: string
-  readonly def: (def?: D | undefined) => this & { default: D }
+  readonly def: (def?: D) => this & { default: D }
   readonly isRequired: this & { required: true }
 }
 
-export interface VueTypeValidableDef<T = any, D = DefaultType<T>>
+export interface VueTypeValidableDef<T = unknown, D = DefaultType<T>>
   extends VueTypeDef<T, D> {
   readonly validate: (
     fn: ValidatorFunction<T>,
   ) => this & { validator: ValidatorFunction<T> }
 }
 
-export type VueProp<T, D = DefaultType<T>> =
-  | VueTypeValidableDef<T>
-  | VueTypeDef<T, D>
-  | PropOptions<T>
-
-export interface VueTypeInstanceOf<T extends Constructor>
-  extends VueTypeDef<InstanceType<T>> {
-  type: T
-}
+export type VueProp<T> = VueTypeValidableDef<T> | VueTypeDef<T> | PropOptions<T>
 
 export interface VueTypeShape<T, D = DefaultFactory<Partial<T>>>
   extends VueTypeDef<T, D> {
@@ -51,29 +59,17 @@ export interface VueTypeLooseShape<
   readonly _vueTypes_isLoose: true
 }
 
-export interface VueTypeCustom<T, F extends ValidatorFunction<T>>
-  extends VueTypeDef<T> {
-  validator(value: T): ReturnType<F>
-}
-
-export type VueTypeObjectOf<T> = VueTypeDef<Record<string, T>>
-
-export interface VueTypesUtils {
-  validate(value: any, type: VueProp<any> | Prop<any> | Prop<any>[]): boolean
-  toType(name: string, obj: PropOptions): VueTypeDef
-}
-
 export interface VueTypesDefaults {
-  func?: () => any
-  bool?: boolean
-  string?: string
-  number?: number
-  array?: () => any[]
-  object?: () => { [key: string]: any }
-  integer?: number
+  func: Function
+  bool: boolean
+  string: string
+  number: number
+  array: () => any[]
+  object: () => { [key: string]: any }
+  integer: number
 }
 
-export interface ExtendProps<T = any> {
+export interface ExtendProps<T> {
   name: string
   getter?: boolean
   validate?: boolean
@@ -82,36 +78,3 @@ export interface ExtendProps<T = any> {
   default?: T | null | undefined | (() => T | null | undefined)
   validator?(value: T): boolean
 }
-
-export interface VueTypesInterface {
-  sensibleDefaults: VueTypesDefaults | boolean
-  extend<T extends VueTypesInterface>(props: ExtendProps | ExtendProps[]): T
-  utils: VueTypesUtils
-  readonly any: VueTypeValidableDef
-  readonly bool: VueTypeValidableDef<boolean>
-  readonly func: VueTypeValidableDef<() => any>
-  readonly array: VueTypeValidableDef<any[]>
-  readonly string: VueTypeValidableDef<string>
-  readonly number: VueTypeValidableDef<number>
-  readonly object: VueTypeValidableDef<object>
-  readonly integer: VueTypeDef<number>
-  readonly symbol: VueTypeValidableDef<symbol>
-  custom<T = any>(
-    fn: ValidatorFunction<T>,
-    warnMsg?: string,
-  ): VueTypeCustom<T, ValidatorFunction<T>>
-  oneOf<T = any>(arr: T[]): VueTypeDef<T>
-  instanceOf<C extends Constructor>(
-    instanceConstructor: C,
-  ): VueTypeInstanceOf<C>
-  oneOfType(arr: (Prop<any> | VueProp<any>)[]): VueTypeDef
-  arrayOf<V extends any, D = DefaultType<V>>(
-    type: VueTypeValidableDef<V> | VueTypeDef<V, D> | Prop<V>,
-  ): VueTypeDef<V[]>
-  objectOf<T extends any>(type: Prop<T> | VueProp<T>): VueTypeObjectOf<T>
-  shape<T>(
-    obj: { [K in keyof T]?: Prop<T[K]> | VueProp<T[K], any> },
-  ): VueTypeShape<T>
-}
-
-export const VueTypes: VueTypesInterface

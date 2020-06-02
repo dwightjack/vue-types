@@ -9,7 +9,7 @@ interface User {
 const MyTypes = createTypes({})
 
 const userType = MyTypes.object.def({ ID: 1, name: 'John' })
-const ageType = MyTypes.number
+const ageType = MyTypes.number.def(2)
 
 const userAsShape = MyTypes.shape<User>({}).def({ ID: 1 })
 

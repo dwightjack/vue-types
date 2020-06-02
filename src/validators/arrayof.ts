@@ -2,7 +2,7 @@ import { Prop } from 'vue/types/options'
 import { VueProp } from '../../types/vue-types'
 import { getType, toType, validateType, warn } from '../utils'
 
-export default function arrayOf<T = any>(type: VueProp<T> | Prop<T>) {
+export default function arrayOf<T>(type: VueProp<T> | Prop<T>) {
   return toType<T[]>('arrayOf', {
     type: Array,
     validator(values) {

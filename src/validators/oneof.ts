@@ -1,7 +1,7 @@
 import { Prop } from 'vue/types/options'
 import { toType, warn, isArray } from '../utils'
 
-export default function oneOf<T = unknown>(arr: T[]) {
+export default function oneOf<T>(arr: T[]) {
   if (!isArray(arr)) {
     throw new TypeError(
       '[VueTypes error]: You must provide an array as argument',

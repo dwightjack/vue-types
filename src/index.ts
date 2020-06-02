@@ -15,7 +15,7 @@ import {
   VueTypeDef,
 } from '../types/vue-types'
 import { typeDefaults } from './sensibles'
-import { PropOptions } from 'vue/types/umd'
+import { PropOptions } from 'vue/types/options'
 import {
   any,
   func,
@@ -36,49 +36,48 @@ import objectOf from './validators/objectof'
 import shape from './validators/shape'
 
 function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
-  // create a local copy
-  let defaults = { ...defs }
-
   class VueTypes {
+    private static defaults = { ...defs }
+
     static get sensibleDefaults() {
-      return defaults
+      return { ...this.defaults }
     }
 
     static set sensibleDefaults(v: boolean | Partial<VueTypesDefaults>) {
       if (v === false) {
-        defaults = {}
+        this.defaults = {}
         return
       }
       if (v === true) {
-        defaults = { ...defs }
+        this.defaults = { ...defs }
         return
       }
-      defaults = { ...v }
+      this.defaults = { ...v }
     }
 
     static get any() {
       return any()
     }
     static get func() {
-      return func().def(defaults.func)
+      return func().def(this.defaults.func)
     }
     static get bool() {
-      return bool().def(defaults.bool)
+      return bool().def(this.defaults.bool)
     }
     static get string() {
-      return string().def(defaults.string)
+      return string().def(this.defaults.string)
     }
     static get number() {
-      return number().def(defaults.number)
+      return number().def(this.defaults.number)
     }
     static get array() {
-      return array().def(defaults.array)
+      return array().def(this.defaults.array)
     }
     static get object() {
-      return object().def(defaults.object)
+      return object().def(this.defaults.object)
     }
     static get integer() {
-      return integer().def(defaults.integer)
+      return integer().def(this.defaults.integer)
     }
     static get symbol() {
       return symbol()
@@ -97,12 +96,12 @@ function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
     ): T {
       if (isArray(props)) {
         props.forEach((p) => this.extend(p))
-        return this as T
+        return this as any
       }
 
       let { name, validate = false, getter = false, ...opts } = props
 
-      if (has(VueTypes, name)) {
+      if (has(this, name as any)) {
         throw new TypeError(`[VueTypes error]: Type "${name}" already defined`)
       }
 
@@ -174,8 +173,8 @@ function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
     }
 
     static utils = {
-      validate(value: unknown, type: unknown) {
-        return validateType(type, value, true)
+      validate<T, U>(value: T, type: U) {
+        return validateType<U, T>(type, value, true)
       },
       toType<T = any, D = DefaultType<T>>(
         name: string,

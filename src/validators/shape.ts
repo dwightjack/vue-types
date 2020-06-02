@@ -1,15 +1,12 @@
-import isPlainObject from 'is-plain-object'
 import { Prop } from 'vue/types/options'
 import { VueProp, VueTypeShape, VueTypeLooseShape } from '../../types/vue-types'
-import { toType, validateType, warn, has } from '../utils'
+import { toType, validateType, warn, isPlainObject } from '../utils'
 
-export default function shape<T>(
-  obj: { [K in keyof T]?: Prop<T[K]> | VueProp<T[K], any> },
+export default function shape<T extends object>(
+  obj: { [K in keyof T]?: Prop<T[K]> | VueProp<T[K]> },
 ): VueTypeShape<T> {
   const keys = Object.keys(obj)
-  const requiredKeys = keys.filter(
-    (key) => (obj as any)[key] && (obj as any)[key].required === true,
-  )
+  const requiredKeys = keys.filter((key) => !!(obj as any)[key]?.required)
 
   const type = toType('shape', {
     type: Object,

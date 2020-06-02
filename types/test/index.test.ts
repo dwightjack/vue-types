@@ -50,17 +50,6 @@ const oneOfStrict = VueTypes.oneOf<true | 'string'>([true, 'string']).def(
   'string',
 ).isRequired
 
-enum Demo {
-  Name = 'hello',
-  Text = 'text',
-}
-
-type EnumValues<K> = K[keyof K]
-
-const oneOfEnum = VueTypes.oneOf<EnumValues<Demo>>(['sss', 'string']).def(
-  'string',
-).isRequired
-
 class MyClass {
   public test = 'testProp'
 }
@@ -70,13 +59,13 @@ const instance = new MyClass()
 const instanceOfType = VueTypes.instanceOf(MyClass).def(instance).isRequired
 instanceOfType.type = MyClass
 
-const oneOfTypeType = VueTypes.oneOfType([
+const oneOfTypeType = VueTypes.oneOfType<string | number>([
   String,
   {
     type: String,
   },
   VueTypes.number,
-]).def(undefined).isRequired // check can be just at runtime
+]) // check can be just at runtime
 
 const ArrayOfType = VueTypes.arrayOf(VueTypes.string).def(['string', 'string'])
   .isRequired
@@ -131,7 +120,9 @@ const myTypes = VueTypes.extend<CustomVueTypes>([
     getter: true,
   },
 ])
+
 ;(VueTypes as CustomVueTypes).test.isRequired
+
 myTypes.test.isRequired
 myTypes.test.isRequired
 

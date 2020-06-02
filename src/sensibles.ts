@@ -1,7 +1,7 @@
 import { VueTypesDefaults } from '../types/vue-types'
 
 export const typeDefaults = (): VueTypesDefaults => ({
-  func: () => {},
+  func() {},
   bool: true,
   string: '',
   number: 0,
@@ -11,7 +11,7 @@ export const typeDefaults = (): VueTypesDefaults => ({
 })
 
 export const setDefaults = (root: any) => {
-  let currentDefaults = typeDefaults()
+  let currentDefaults: Partial<VueTypesDefaults> = typeDefaults()
 
   return Object.defineProperty(root, 'sensibleDefaults', {
     set(value) {
@@ -20,7 +20,7 @@ export const setDefaults = (root: any) => {
       } else if (value === true) {
         currentDefaults = typeDefaults()
       } else {
-        currentDefaults = value
+        currentDefaults = { ...value }
       }
     },
     get() {
