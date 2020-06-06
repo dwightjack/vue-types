@@ -3,8 +3,8 @@ import { DefaultFactory } from '../../types/vue-types'
 
 export const any = () => toValidableType('any', {})
 
-export const func = () =>
-  toValidableType('function', {
+export const func = <T extends Function>() =>
+  toValidableType<T>('function', {
     type: Function,
   })
 
@@ -23,8 +23,8 @@ export const number = () =>
     type: Number,
   })
 
-export const array = () =>
-  toValidableType('array', {
+export const array = <T>() =>
+  toValidableType<T[]>('array', {
     type: Array,
   })
 

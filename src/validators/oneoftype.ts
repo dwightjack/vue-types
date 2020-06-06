@@ -23,28 +23,30 @@ export default function oneOfType<
 
   let hasCustomValidators = false
 
-  const nativeChecks = arr.reduce<Prop<V>[]>((ret, type) => {
+  let nativeChecks: Prop<V>[] = []
+
+  for (let i = 0; i < arr.length; i += 1) {
+    const type = arr[i]
     if (isComplexType<V>(type)) {
       if (
         isVueTypeDef<V>(type) &&
         type._vueTypes_name === 'oneOf' &&
         type.type
       ) {
-        return ret.concat(type.type)
+        nativeChecks = nativeChecks.concat(type.type)
+        continue
       }
       if (isFunction(type.validator)) {
         hasCustomValidators = true
-        return ret
+        continue
       }
       if (type.type) {
-        return ret.concat(type.type)
+        nativeChecks = nativeChecks.concat(type.type)
+        continue
       }
-
-      return ret
     }
-    ret.push(type as any)
-    return ret
-  }, [])
+    nativeChecks.push(type as Prop<V>)
+  }
 
   if (!hasCustomValidators) {
     // we got just native objects (ie: Array, Object)

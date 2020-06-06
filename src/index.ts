@@ -213,4 +213,5 @@ export {
   createTypes,
   toType,
   toValidableType,
+  validateType,
 }

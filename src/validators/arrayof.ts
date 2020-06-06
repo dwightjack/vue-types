@@ -1,9 +1,12 @@
 import { Prop } from 'vue/types/options'
-import { VueProp } from '../../types/vue-types'
+import { VueProp, InferType } from '../../types/vue-types'
 import { getType, toType, validateType, warn } from '../utils'
 
-export default function arrayOf<T>(type: VueProp<T> | Prop<T>) {
-  return toType<T[]>('arrayOf', {
+export default function arrayOf<
+  T extends VueProp<any> | Prop<any>,
+  U = InferType<T>
+>(type: T) {
+  return toType<U[]>('arrayOf', {
     type: Array,
     validator(values) {
       const valid = values.every((value) => validateType(type, value))

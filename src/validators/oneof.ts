@@ -1,7 +1,7 @@
 import { Prop } from 'vue/types/options'
 import { toType, warn, isArray } from '../utils'
 
-export default function oneOf<T>(arr: T[]) {
+export default function oneOf<T extends readonly any[], U = T[number]>(arr: T) {
   if (!isArray(arr)) {
     throw new TypeError(
       '[VueTypes error]: You must provide an array as argument',
@@ -14,9 +14,9 @@ export default function oneOf<T>(arr: T[]) {
       ret.indexOf(constr) === -1 && ret.push(constr)
     }
     return ret
-  }, [] as Prop<T>[])
+  }, [] as Prop<U>[])
 
-  return toType<T>('oneOf', {
+  return toType<U>('oneOf', {
     type: allowedTypes.length > 0 ? allowedTypes : undefined,
     validator(value) {
       const valid = arr.indexOf(value) !== -1

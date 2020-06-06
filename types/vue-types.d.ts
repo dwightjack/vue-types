@@ -31,6 +31,7 @@ export type DefaultType<T> = T extends
   | Function
   ? T
   : DefaultFactory<T>
+
 export interface VueTypeDef<T = unknown, D = DefaultType<T>>
   extends PropOptions<T> {
   readonly _vueTypes_name: string

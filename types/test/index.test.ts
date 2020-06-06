@@ -25,14 +25,14 @@ const numberType = VueTypes.number.def(0).isRequired
 const integerType = VueTypes.integer.def(0).isRequired
 
 const objectType = VueTypes.object.def({ demo: true }).isRequired
-const objectType2 = VueTypes.object.def(() => undefined).isRequired
+const objectType2 = VueTypes.object.def(() => true).isRequired
 
 interface Account {
   name: string
   ID: number
 }
 
-const userType = (VueTypes.object as VueTypeValidableDef<Account>).def({
+const userType = VueTypes.object.def({
   ID: 1,
   name: 'me',
 })
@@ -46,9 +46,8 @@ const customTypeStrict = VueTypes.custom<number>(validator).def(0).isRequired
 
 const oneOf = VueTypes.oneOf([0, 'string', null]).def(1).isRequired
 
-const oneOfStrict = VueTypes.oneOf<true | 'string'>([true, 'string']).def(
-  'string',
-).isRequired
+const oneOfStrict = VueTypes.oneOf([true, 'string'] as const).def('string')
+  .isRequired
 
 class MyClass {
   public test = 'testProp'
@@ -59,18 +58,18 @@ const instance = new MyClass()
 const instanceOfType = VueTypes.instanceOf(MyClass).def(instance).isRequired
 instanceOfType.type = MyClass
 
-const oneOfTypeType = VueTypes.oneOfType<string | number>([
+const oneOfTypeType = VueTypes.oneOfType([
   String,
   {
     type: String,
   },
   VueTypes.number,
-]) // check can be just at runtime
+])
 
 const ArrayOfType = VueTypes.arrayOf(VueTypes.string).def(['string', 'string'])
   .isRequired
 
-const ObjectOfType = VueTypes.objectOf<string>(VueTypes.string).def({
+const ObjectOfType = VueTypes.objectOf(VueTypes.string).def({
   prop: 'test',
 }).isRequired
 
@@ -126,7 +125,7 @@ const myTypes = VueTypes.extend<CustomVueTypes>([
 myTypes.test.isRequired
 myTypes.test.isRequired
 
-myTypes.user.def({ name: 'xxx' })
+const a = myTypes.user.def({ name: 'xxx' })
 
 const NativeComponent = Vue.extend({
   props: {
