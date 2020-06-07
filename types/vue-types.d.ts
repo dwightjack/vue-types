@@ -34,7 +34,7 @@ export type DefaultType<T> = T extends
 
 export interface VueTypeDef<T = unknown, D = DefaultType<T>>
   extends PropOptions<T> {
-  readonly _vueTypes_name: string
+  _vueTypes_name: string
   readonly def: (def?: D) => this & { default: D }
   readonly isRequired: this & { required: true }
 }
@@ -70,7 +70,7 @@ export interface VueTypesDefaults {
   integer: number
 }
 
-export interface ExtendProps<T> {
+export interface ExtendProps<T = any> {
   name: string
   getter?: boolean
   validate?: boolean

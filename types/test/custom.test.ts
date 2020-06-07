@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { createTypes, object } from '../../src/index'
+import { createTypes, object, toValidableType, fromType } from '../../src/index'
 import { VueTypeValidableDef } from '../vue-types'
 
 interface User {
@@ -28,6 +28,7 @@ const MyTypes = createTypes({}).extend<CustomVueTypes>([
 
 const userType = MyTypes.object.def({ ID: 1, name: 'John' })
 const ageType = MyTypes.number.def(2)
+const strType = MyTypes.string
 
 const userAsShape = MyTypes.shape<User>({}).def({ ID: 1 })
 
@@ -35,6 +36,17 @@ const userGetterType = MyTypes.user.isRequired
 const customTestType = MyTypes.test.def('aaa')
 
 const messageType = MyTypes.string
+
+class MyTypesClass extends createTypes({}) {
+  static get test() {
+    return toValidableType('test', {})
+  }
+  static get user() {
+    return fromType('user', userShape)
+  }
+}
+
+const userGetter2 = MyTypesClass.user.isRequired
 
 const UserComponent = Vue.extend({
   props: {

@@ -6,6 +6,7 @@ import {
   VueTypeValidableDef,
   DefaultType,
   VueProp,
+  InferType,
 } from '../types/vue-types'
 
 const ObjProto = Object.prototype
@@ -113,6 +114,7 @@ export function toType<T = any, D = DefaultType<T>>(
   const type: VueTypeDef<T, D> = Object.defineProperties(obj, {
     _vueTypes_name: {
       value: name,
+      writable: true,
     },
     isRequired: {
       get() {
@@ -172,6 +174,42 @@ export function toValidableType<T = any, D = DefaultType<T>>(
       return this
     },
   }) as VueTypeValidableDef<T, D>
+}
+
+export function clone<T extends object>(type: T): T {
+  const descriptors = {} as { [P in keyof T]: any }
+  Object.getOwnPropertyNames(type).forEach((key) => {
+    descriptors[key as keyof T] = Object.getOwnPropertyDescriptor(type, key)
+  })
+  return Object.defineProperties({}, descriptors)
+}
+
+export function fromType<T extends VueTypeDef<any>, U = InferType<T>>(
+  name: string,
+  source: T,
+  props = {} as PropOptions<U>,
+): VueTypeDef<U> {
+  const { validator, ...rest } = props
+
+  // 1. create an exact copy of the source type
+  let copy = clone<VueTypeDef<U>>(source)
+
+  // 2. give it a new name
+  copy._vueTypes_name = name
+
+  // 3. compose the validator function
+  // with the one on the source (if present)
+  // and ensure it is bound to the copy
+  if (isFunction(validator)) {
+    const { validator: prevValidator } = copy
+    copy.validator = prevValidator
+      ? function (this: VueTypeDef<U>, value: any) {
+          return prevValidator.call(this, value) && validator.call(this, value)
+        }
+      : validator.bind(copy)
+  }
+  // 4. overwrite the rest, if present
+  return Object.assign(copy, rest)
 }
 
 /**

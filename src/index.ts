@@ -7,6 +7,7 @@ import {
   isVueTypeDef,
   has,
   stubTrue,
+  fromType,
 } from './utils'
 import {
   VueTypesDefaults,
@@ -92,7 +93,7 @@ function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
     static readonly shape = shape
 
     static extend<T extends typeof VueTypes>(
-      props: ExtendProps<any> | ExtendProps<any>[],
+      props: ExtendProps | ExtendProps[],
     ): T {
       if (isArray(props)) {
         props.forEach((p) => this.extend(p))
@@ -105,7 +106,7 @@ function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
         throw new TypeError(`[VueTypes error]: Type "${name}" already defined`)
       }
 
-      const { type, validator = stubTrue } = opts
+      const { type } = opts
       if (isVueTypeDef(type)) {
         // we are using as base type a vue-type object
 
@@ -113,27 +114,22 @@ function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
         // we are going to inherit the parent data.
         delete opts.type
 
-        // inherit base types, required flag and default flag if set
-        const keys = ['type', 'required', 'default'] as (keyof Omit<
-          PropOptions,
-          'validator'
-        >)[]
-        for (let i = 0; i < keys.length; i += 1) {
-          const key = keys[i]
-          if (type[key] !== undefined) {
-            opts[key] = type[key]
-          }
-        }
+        opts = fromType(name, type, opts as Omit<ExtendProps, 'type'>)
 
-        validate = false // we don't allow validate method on this kind of types
-        if (isFunction(type.validator)) {
-          opts.validator = function (...args) {
-            return (
-              (type.validator as any).apply(type, args) &&
-              validator.apply(this, args)
-            )
-          }
+        if (getter) {
+          return Object.defineProperty(this, name, {
+            get: () => fromType(name, type, opts as Omit<ExtendProps, 'type'>),
+          })
         }
+        return Object.defineProperty(this, name, {
+          value(...args: any[]) {
+            const t = fromType(name, type, opts as Omit<ExtendProps, 'type'>)
+            if (t.validator) {
+              t.validator = t.validator.bind(t, ...args)
+            }
+            return t
+          },
+        })
       }
 
       let descriptor: any
@@ -149,7 +145,6 @@ function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
           enumerable: true,
         }
       } else {
-        const { validator } = opts
         descriptor = {
           value(...args: T[]) {
             const typeOptions = Object.assign({}, opts as PropOptions<T>)
@@ -160,8 +155,8 @@ function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
               ret = toType<T>(name, typeOptions)
             }
 
-            if (validator) {
-              ret.validator = validator.bind(ret, ...args)
+            if (typeOptions.validator) {
+              ret.validator = typeOptions.validator.bind(ret, ...args)
             }
             return ret
           },
@@ -214,4 +209,5 @@ export {
   toType,
   toValidableType,
   validateType,
+  fromType,
 }
