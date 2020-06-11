@@ -36,20 +36,26 @@ class Demo {
 }
 
 const instanceOfDemo = instanceOf(Demo).def(() => new Demo())
+const instanceOfDemo2 = instanceOf(Demo).def(new Demo())
 
 type OnClick = (e: MouseEvent) => void
-const funcType = func<OnClick>().def((e) => {
+const funcType = func<OnClick>().def((e: Event) => {
   e.target
 })
 
 const anyType = any()
 
 const userType = object<User>().def({ ID: 1, name: 'John' })
-const ageType = number().isRequired
+const ageType = number().isRequired.def(20).def(10)
 
 const customType = custom<string>((v) => typeof v === 'string' && v.length > 0)
 
 const userAsShape = shape<User>({}).def({ ID: 1, name: 'aaa' })
+const userAsLooseShape = shape<User>({}).loose.def({
+  ID: 1,
+  name: 'aaa',
+  ops: true,
+})
 
 const messageType = string().isRequired
 
@@ -74,7 +80,7 @@ const tupleType = custom<Pair>(
 )
 const objectOfTuple = objectOf(tupleType)
 
-const oneOfTuple = oneOf([1, 2, 'string'] as const).def(2)
+const oneOfTuple = oneOf([1, 2, 'string'] as const).def(1)
 
 const UserComponent = Vue.extend({
   props: {

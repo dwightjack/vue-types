@@ -27,8 +27,9 @@ const MyTypes = createTypes({}).extend<CustomVueTypes>([
 ])
 
 const userType = MyTypes.object.def({ ID: 1, name: 'John' })
-const ageType = MyTypes.number.def(2)
-const strType = MyTypes.string
+const userType2 = MyTypes.object.def(() => ({ ID: 1, name: 'John' }))
+const ageType = MyTypes.number.def(2).isRequired
+const strType = MyTypes.string.def('a')
 
 const userAsShape = MyTypes.shape<User>({}).def({ ID: 1 })
 

@@ -1,5 +1,4 @@
 import { toType, toValidableType, isInteger } from '../utils'
-import { DefaultFactory } from '../../types/vue-types'
 
 export const any = () => toValidableType('any', {})
 
@@ -29,7 +28,7 @@ export const array = <T>() =>
   })
 
 export const object = <T extends { [key: string]: any }>() =>
-  toValidableType<T, DefaultFactory<T>>('object', {
+  toValidableType<T>('object', {
     type: Object,
   })
 

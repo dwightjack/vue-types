@@ -13,7 +13,7 @@ const boolType = VueTypes.bool.def(true).isRequired
 
 const funcType = VueTypes.func.def(noop).isRequired
 
-const arrayType = VueTypes.array.def([]).isRequired
+const arrayType = VueTypes.array.def().isRequired
 const arrayType2 = VueTypes.array.def(() => []).isRequired
 
 const stringType = VueTypes.string.def('John').isRequired
@@ -25,7 +25,7 @@ const numberType = VueTypes.number.def(0).isRequired
 const integerType = VueTypes.integer.def(0).isRequired
 
 const objectType = VueTypes.object.def({ demo: true }).isRequired
-const objectType2 = VueTypes.object.def(() => true).isRequired
+const objectType2 = VueTypes.object.def(() => true).isRequired //FIXME: why this does not break?
 
 interface Account {
   name: string
@@ -44,7 +44,7 @@ const customType = VueTypes.custom(validator).def(0).isRequired
 
 const customTypeStrict = VueTypes.custom<number>(validator).def(0).isRequired
 
-const oneOf = VueTypes.oneOf([0, 'string', null]).def(1).isRequired
+const oneOf = VueTypes.oneOf([0, 'string', null]).def(2).isRequired
 
 const oneOfStrict = VueTypes.oneOf([true, 'string'] as const).def('string')
   .isRequired

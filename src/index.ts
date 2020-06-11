@@ -1,12 +1,10 @@
 import {
   toType,
   toValidableType,
-  isFunction,
   validateType,
   isArray,
   isVueTypeDef,
   has,
-  stubTrue,
   fromType,
 } from './utils'
 import {
@@ -16,7 +14,7 @@ import {
   VueTypeDef,
 } from '../types/vue-types'
 import { typeDefaults } from './sensibles'
-import { PropOptions } from 'vue/types/options'
+import { PropOptions } from 'vue'
 import {
   any,
   func,
@@ -171,14 +169,8 @@ function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
       validate<T, U>(value: T, type: U) {
         return validateType<U, T>(type, value, true)
       },
-      toType<T = any, D = DefaultType<T>>(
-        name: string,
-        obj: PropOptions<T>,
-        validable = false,
-      ) {
-        return validable
-          ? toValidableType<T, D>(name, obj)
-          : toType<T, D>(name, obj)
+      toType<T = any>(name: string, obj: PropOptions<T>, validable = false) {
+        return validable ? toValidableType<T>(name, obj) : toType<T>(name, obj)
       },
     }
   }

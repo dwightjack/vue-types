@@ -1,6 +1,6 @@
 import _isPlainObject from 'is-plain-object'
 import Vue from 'vue'
-import { PropOptions } from 'vue/types/options'
+import { PropOptions } from 'vue'
 import {
   VueTypeDef,
   VueTypeValidableDef,
@@ -39,7 +39,7 @@ export const isPlainObject = _isPlainObject as (obj: any) => obj is PlainObject
 /**
  * No-op function
  */
-function noop() {}
+export function noop() {}
 
 /**
  * A function that always returns true
@@ -107,11 +107,8 @@ export const isComplexType = <T>(value: any): value is VueProp<T> =>
  * @param {string} name - Type internal name
  * @param {object} obj - Object to enhance
  */
-export function toType<T = any, D = DefaultType<T>>(
-  name: string,
-  obj: PropOptions<T>,
-) {
-  const type: VueTypeDef<T, D> = Object.defineProperties(obj, {
+export function toType<T = any>(name: string, obj: PropOptions<T>) {
+  const type: VueTypeDef<T> = Object.defineProperties(obj, {
     _vueTypes_name: {
       value: name,
       writable: true,
@@ -163,17 +160,14 @@ export function toType<T = any, D = DefaultType<T>>(
  * @param {string} name - Type internal name
  * @param {object} obj - Object to enhance
  */
-export function toValidableType<T = any, D = DefaultType<T>>(
-  name: string,
-  obj: PropOptions<T>,
-) {
-  const type = toType<T, D>(name, obj)
+export function toValidableType<T = any>(name: string, obj: PropOptions<T>) {
+  const type = toType<T>(name, obj)
   return Object.defineProperty(type, 'validate', {
     value(fn: (value: T) => boolean) {
       this.validator = fn.bind(this)
       return this
     },
-  }) as VueTypeValidableDef<T, D>
+  }) as VueTypeValidableDef<T>
 }
 
 export function clone<T extends object>(type: T): T {

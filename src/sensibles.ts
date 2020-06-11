@@ -10,15 +10,17 @@ export const typeDefaults = (): VueTypesDefaults => ({
   integer: 0,
 })
 
-export const setDefaults = (root: any) => {
-  let currentDefaults: Partial<VueTypesDefaults> = typeDefaults()
-
+export const setDefaults = (
+  root: any,
+  defs: Partial<VueTypesDefaults> = typeDefaults(),
+) => {
+  let currentDefaults = { ...defs }
   return Object.defineProperty(root, 'sensibleDefaults', {
     set(value) {
       if (value === false) {
         currentDefaults = {}
       } else if (value === true) {
-        currentDefaults = typeDefaults()
+        currentDefaults = { ...defs }
       } else {
         currentDefaults = { ...value }
       }

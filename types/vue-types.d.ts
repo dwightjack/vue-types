@@ -1,6 +1,8 @@
 // TypeScript Version: 2.8
 import { PropOptions, PropType, Prop } from 'vue/types/options'
 
+type NativeType = string | boolean | number | null | undefined | Function
+
 export type Constructor = new (...args: any[]) => any
 
 // see https://github.com/vuejs/vue-next/blob/22717772dd83b67ffaa6ad9805c6269e184c7e41/packages/runtime-core/src/componentProps.ts#L67
@@ -22,41 +24,44 @@ export type ValidatorFunction<T> = (value: T) => boolean
 
 export type DefaultFactory<T> = (() => T) | T
 
-export type DefaultType<T> = T extends
-  | string
-  | boolean
-  | number
-  | null
-  | undefined
-  | Function
-  ? T
-  : DefaultFactory<T>
+export type DefaultType<T> = T extends NativeType ? T : DefaultFactory<T>
 
-export interface VueTypeDef<T = unknown, D = DefaultType<T>>
-  extends PropOptions<T> {
+export interface VueTypeBaseDef<
+  T = unknown,
+  D = DefaultType<T>,
+  U = T extends NativeType ? T : () => T
+> extends PropOptions<T> {
   _vueTypes_name: string
-  readonly def: (def?: D) => this & { default: D }
+  readonly def: (
+    def?: D,
+  ) => this & {
+    default: U
+  }
   readonly isRequired: this & { required: true }
 }
 
-export interface VueTypeValidableDef<T = unknown, D = DefaultType<T>>
-  extends VueTypeDef<T, D> {
+export type VueTypeDef<T = unknown> = VueTypeBaseDef<T>
+
+export interface VueTypeValidableDef<T = unknown> extends VueTypeBaseDef<T> {
   readonly validate: (
     fn: ValidatorFunction<T>,
   ) => this & { validator: ValidatorFunction<T> }
 }
 
-export type VueProp<T> = VueTypeValidableDef<T> | VueTypeDef<T> | PropOptions<T>
+export type VueProp<T> = VueTypeBaseDef<T> | PropOptions<T>
 
-export interface VueTypeShape<T, D = DefaultFactory<Partial<T>>>
-  extends VueTypeDef<T, D> {
+export interface VueTypeShape<T>
+  extends VueTypeBaseDef<T, DefaultType<Partial<T>>, () => Partial<T>> {
   readonly loose: VueTypeLooseShape<T>
 }
 
-export interface VueTypeLooseShape<
-  T,
-  D = DefaultFactory<Partial<T & { [key: string]: any }>>
-> extends VueTypeShape<T, D> {
+export interface VueTypeLooseShape<T>
+  extends VueTypeBaseDef<
+    T,
+    DefaultFactory<Partial<T & { [key: string]: any }>>,
+    () => Partial<T> & { [key: string]: any }
+  > {
+  readonly loose: VueTypeLooseShape<T>
   readonly _vueTypes_isLoose: true
 }
 

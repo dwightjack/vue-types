@@ -2,10 +2,13 @@ import expect from 'expect'
 import Vue from 'vue'
 
 import { noop, toType } from '../src/utils'
+import { VueTypeValidableDef, VueTypeDef } from '../types/vue-types'
 import VueTypes from '../src/index'
 
 Vue.config.productionTip = false
 Vue.config.silent = true
+
+type VueTypesType = typeof VueTypes
 
 const checkRequired = (type) => {
   expect(type).toIncludeKey('isRequired')
@@ -314,9 +317,7 @@ describe('VueTypes', () => {
     let customType
 
     class MyClass {
-      constructor(name) {
-        this.name = name
-      }
+      constructor(public name = name) {}
     }
 
     beforeEach(() => {
@@ -365,7 +366,7 @@ describe('VueTypes', () => {
 
     it('should NOT accept default values out of the allowed one', () => {
       const customType = VueTypes.arrayOf(Number)
-      expect(customType.def(['test', 1])).toExcludeKey('default')
+      expect(customType.def(['test' as any, 1])).toExcludeKey('default')
     })
 
     it('should validate an array of same-type values', () => {
@@ -411,7 +412,9 @@ describe('VueTypes', () => {
 
     it('should NOT accept default values out of the allowed one', () => {
       const customType = VueTypes.objectOf(Number)
-      expect(customType.def({ id: '10', age: 30 })).toExcludeKey('default')
+      expect(customType.def({ id: '10', age: 30 } as any)).toExcludeKey(
+        'default',
+      )
     })
 
     it('should validate an object of same-type values', () => {
@@ -535,6 +538,9 @@ describe('VueTypes', () => {
       expect(validator('a string')).toBe(false)
 
       class MyClass {
+        id: string
+        name: string
+        age: number
         constructor() {
           this.id = '10'
           this.name = 'John'
@@ -622,12 +628,10 @@ describe('VueTypes', () => {
   })
 
   describe('`.oneOfType`', () => {
-    let spy
+    let spy: any
 
     class MyClass {
-      constructor(name) {
-        this.name = name
-      }
+      constructor(public name = name) {}
     }
 
     const nativeTypes = [Number, Array, MyClass]
@@ -657,7 +661,7 @@ describe('VueTypes', () => {
 
     it('should NOT accept default values out of the allowed ones', () => {
       const customType = VueTypes.oneOfType(nativeTypes)
-      expect(customType.def('test')).toExcludeKey('default')
+      expect(customType.def('test' as any)).toExcludeKey('default')
     })
 
     it('should return a prop object with `type` as an array', () => {
@@ -769,27 +773,34 @@ describe('VueTypes', () => {
   describe('`.extend` helper', () => {
     it('should add getter prop to the library', () => {
       const validator = expect.createSpy()
-      VueTypes.extend({
+      interface VueTypesDate extends VueTypesType {
+        date: VueTypeDef<Date>
+      }
+      VueTypes.extend<VueTypesDate>({
         name: 'date',
         validator,
         getter: true,
         type: Date,
       })
 
-      const dateType = VueTypes.date
+      const dateType = (VueTypes as VueTypesDate).date
 
       expect(dateType).toNotBe(undefined)
-      dateType.validator('v')
-      expect(validator).toHaveBeenCalledWith('v')
+      const date = new Date()
+      dateType.validator(date)
+      expect(validator).toHaveBeenCalledWith(date)
     })
 
     it('should add a method to the library', () => {
-      VueTypes.extend({
+      interface VueTypesDateFn extends VueTypesType {
+        dateFn: () => VueTypeDef<Date>
+      }
+      VueTypes.extend<VueTypesDateFn>({
         name: 'dateFn',
         type: Date,
       })
-      expect(VueTypes.dateFn).toBeA(Function)
-      expect(VueTypes.dateFn().isRequired).toEqual({
+      expect((VueTypes as VueTypesDateFn).dateFn).toBeA(Function)
+      expect((VueTypes as VueTypesDateFn).dateFn().isRequired).toEqual({
         type: Date,
         required: true,
       })
@@ -797,39 +808,55 @@ describe('VueTypes', () => {
 
     it('should pass configuration params to the validator method', () => {
       const validator = expect.createSpy()
-      VueTypes.extend({
+      interface VueTypesDateFnArgs extends VueTypesType {
+        dateFnArgs: (...args: any[]) => VueTypeDef<Date>
+      }
+      VueTypes.extend<VueTypesDateFnArgs>({
         name: 'dateFnArgs',
         type: Date,
         validator,
       })
 
-      const dateFnType = VueTypes.dateFnArgs(1, 2)
-      dateFnType.validator(3)
-      expect(validator).toHaveBeenCalledWith(1, 2, 3)
+      const dateFnType = (VueTypes as VueTypesDateFnArgs).dateFnArgs(1, 2)
+      const date = new Date()
+      dateFnType.validator(date)
+      expect(validator).toHaveBeenCalledWith(1, 2, date)
     })
 
     it('should add a validate method to the prop', () => {
-      VueTypes.extend({
+      interface VueTypesString extends VueTypesType {
+        stringCustom: VueTypeValidableDef<String>
+      }
+      VueTypes.extend<VueTypesString>({
         name: 'stringCustom',
-        type: Date,
+        type: String,
         getter: true,
         validate: true,
       })
-      expect(VueTypes.stringCustom.validate).toBeA(Function)
+      expect((VueTypes as VueTypesString).stringCustom.validate).toBeA(Function)
     })
 
     it('should clone the base type definition at each call', () => {
-      VueTypes.extend({
+      interface VueTypesClone extends VueTypesType {
+        cloneDemo: VueTypeValidableDef<object>
+      }
+      VueTypes.extend<VueTypesClone>({
         name: 'cloneDemo',
         type: Object,
         getter: true,
         validate: true,
       })
-      expect(VueTypes.cloneDemo).toNotBe(VueTypes.cloneDemo)
+      expect((VueTypes as VueTypesClone).cloneDemo).toNotBe(
+        (VueTypes as VueTypesClone).cloneDemo,
+      )
     })
 
     it('should accept multiple types as array', () => {
-      VueTypes.extend([
+      interface VueTypesMulti extends VueTypesType {
+        type1: VueTypeValidableDef<string>
+        type2: VueTypeValidableDef<string>
+      }
+      VueTypes.extend<VueTypesMulti>([
         {
           name: 'type1',
           type: String,
@@ -841,30 +868,38 @@ describe('VueTypes', () => {
           getter: true,
         },
       ])
-      expect(VueTypes.type1.type).toBe(String)
-      expect(VueTypes.type2.type).toBe(Number)
+      expect((VueTypes as VueTypesMulti).type1.type).toBe(String)
+      expect((VueTypes as VueTypesMulti).type2.type).toBe(Number)
     })
 
     it('should inherit from vue-types types', () => {
       const parent = VueTypes.string.isRequired.def('parent')
+
+      interface VueTypesAlias extends VueTypesType {
+        stringAlias: VueTypeValidableDef<string>
+      }
 
       VueTypes.extend({
         name: 'stringAlias',
         type: parent,
         getter: true,
       })
-      expect(VueTypes.stringAlias).toMatch({
+      expect((VueTypes as VueTypesAlias).stringAlias).toMatch({
         type: String,
         required: true,
         default: 'parent',
       })
 
-      expect(VueTypes.stringAlias.validate).toBeA(Function)
+      expect((VueTypes as VueTypesAlias).stringAlias.validate).toBeA(Function)
     })
 
     it('should inherit from vue-types type and add custom validation', () => {
       const parent = VueTypes.string
       const validator = expect.createSpy().andReturn(true)
+
+      interface VueTypesAliasValidate extends VueTypesType {
+        stringValidationAlias: VueTypeValidableDef<string>
+      }
 
       VueTypes.extend({
         name: 'stringValidationAlias',
@@ -873,7 +908,7 @@ describe('VueTypes', () => {
         validator,
       })
 
-      const type = VueTypes.stringValidationAlias
+      const type = (VueTypes as VueTypesAliasValidate).stringValidationAlias
 
       expect(type.type).toBe(String)
       expect(type.validator('a')).toBe(true)
@@ -895,7 +930,7 @@ describe('VueTypes', () => {
         getter: true,
       })
 
-      const type = VueTypes.shapeAlias
+      const type = (VueTypes as any).shapeAlias
 
       expect(type).toInclude({
         type: Object,
@@ -947,10 +982,10 @@ describe('VueTypes', () => {
       VueTypes.extend({
         name: 'routerTo',
         getter: true,
-        type: VueTypes.oneOfType([String, VueTypes.routerLocation]),
+        type: VueTypes.oneOfType([String, (VueTypes as any).routerLocation]),
       })
 
-      const type = VueTypes.routerTo
+      const type = (VueTypes as any).routerTo
 
       // validate as string
       expect(type.validator('/url')).toBe(true)
@@ -967,7 +1002,7 @@ describe('VueTypes', () => {
         type: parent,
       })
 
-      const type = VueTypes.aliasOneOf
+      const type = (VueTypes as any).aliasOneOf
 
       expect(type.type).toBe(parent.type)
       expect(VueTypes.utils.validate(1, type)).toBe(true)
@@ -984,7 +1019,7 @@ describe('VueTypes', () => {
         validator,
       })
 
-      const type = VueTypes.aliasMinLength(3)
+      const type = (VueTypes as any).aliasMinLength(3)
 
       expect(type.type).toBe(String)
       type.validator('a')

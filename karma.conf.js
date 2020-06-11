@@ -1,20 +1,10 @@
 // Karma configuration
 // Generated on Wed Oct 26 2016 17:54:27 GMT+0200 (CEST)
 
-const resolve = require('rollup-plugin-node-resolve')
-const commonjs = require('rollup-plugin-commonjs')
-const babel = require('rollup-plugin-babel')
-const replace = require('rollup-plugin-replace')
-const stub = require('rollup-plugin-stub')
-const globals = require('rollup-plugin-node-globals')
-const builtins = require('rollup-plugin-node-builtins')
-
 process.env.CHROME_BIN = require('puppeteer').executablePath()
 
-const production = process.env.PRODUCTION === 'true'
-
 //fixing mocha bug: https://github.com/karma-runner/karma-mocha/issues/203
-const fixMocha = function(files) {
+const fixMocha = function (files) {
   files.unshift({
     pattern: 'https://unpkg.com/core-js-bundle@3.0.1/minified.js',
     included: true,
@@ -39,7 +29,7 @@ module.exports = (config) => {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'inline-mocha-fix'],
+    frameworks: ['mocha', 'inline-mocha-fix', 'karma-typescript'],
 
     plugins: [
       'karma-*',
@@ -49,7 +39,7 @@ module.exports = (config) => {
     ],
 
     // list of files / patterns to load in the browser
-    files: [{ pattern: 'src/*.js', included: false }, 'test/**/*.test.js'],
+    files: [{ pattern: 'src/**/*.ts', included: false }, 'test/**/*.test.ts'],
 
     // list of files to exclude
     exclude: [],
@@ -58,37 +48,40 @@ module.exports = (config) => {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       // add webpack as preprocessor
-      'src/**/*.js': ['rollup'],
-      'test/**/*.test.js': ['rollup'],
+      '**/*.ts': 'karma-typescript',
+      'test/**/*.test.ts': 'karma-typescript',
     },
 
-    rollupPreprocessor: {
-      plugins: [
-        resolve({
-          preferBuiltins: true,
-        }),
-        commonjs(),
-        babel({
-          exclude: 'node_modules/**',
-        }),
-        replace({
-          'process.env.NODE_DEBUG': !production,
-        }),
-        stub(),
-        globals(),
-        builtins(),
-      ],
-      output: {
-        format: 'iife',
-        name: 'VueTypes',
-        sourcemap: 'inline',
+    karmaTypescriptConfig: {
+      reports: process.env.CIRCLECI
+        ? {
+            lcovonly: {
+              directory: 'coverage',
+              subdirectory: () => '',
+              filename: 'lcov.info',
+            },
+          }
+        : {
+            text: '',
+          },
+      compilerOptions: {
+        target: 'ES5',
+        sourceMap: true,
+        module: 'commonjs',
+      },
+      coverageOptions: {
+        instrumentation: true,
+      },
+      bundlerOptions: {
+        transforms: [require('karma-typescript-es6-transform')()],
+        entrypoints: /\.test\.ts$/,
       },
     },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha'],
+    reporters: ['mocha', 'karma-typescript'],
 
     // web server port
     port: 9876,
