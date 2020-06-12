@@ -1,7 +1,7 @@
 import { VueTypesDefaults } from '../types/vue-types'
 
 export const typeDefaults = (): VueTypesDefaults => ({
-  func() {},
+  func: () => undefined,
   bool: true,
   string: '',
   number: 0,

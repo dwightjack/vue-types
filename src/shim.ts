@@ -13,11 +13,13 @@ const isArray =
 
 function type(name: string, props: PropOptions<any>, validable = false) {
   const descriptors = {
+    // eslint-disable-next-line @typescript-eslint/camelcase
     _vueTypes_name: {
       value: name,
     },
     def: {
       value(v) {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const t = this
         if (v === undefined && !t.default) {
           return t
@@ -42,6 +44,7 @@ function type(name: string, props: PropOptions<any>, validable = false) {
 
   if (validable) {
     ;(descriptors as any).validate = {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       value() {},
     }
   }
@@ -87,6 +90,8 @@ const methods = [
   'objectOf',
 ]
 
+class VueTypes {}
+
 export function createTypes(defs = typeDefaults()) {
   function createValidator(
     root: any,
@@ -120,8 +125,6 @@ export function createTypes(defs = typeDefaults()) {
         validable,
       )
   }
-
-  class VueTypes {}
 
   Object.assign(setDefaults(VueTypes, defs), {
     extend(props: any) {

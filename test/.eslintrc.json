@@ -4,6 +4,7 @@
     "mocha": true
   },
   "rules": {
-    "camelcase": "off"
+    "camelcase": "off",
+    "@typescript-eslint/no-empty-function": 0
   }
 }

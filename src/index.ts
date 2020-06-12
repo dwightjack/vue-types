@@ -7,12 +7,8 @@ import {
   has,
   fromType,
 } from './utils'
-import {
-  VueTypesDefaults,
-  ExtendProps,
-  DefaultType,
-  VueTypeDef,
-} from '../types/vue-types'
+
+import { VueTypesDefaults, ExtendProps, VueTypeDef } from '../types/vue-types'
 import { typeDefaults } from './sensibles'
 import { PropOptions } from 'vue'
 import {
@@ -98,7 +94,7 @@ function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
         return this as any
       }
 
-      let { name, validate = false, getter = false, ...opts } = props
+      const { name, validate = false, getter = false, ...opts } = props
 
       if (has(this, name as any)) {
         throw new TypeError(`[VueTypes error]: Type "${name}" already defined`)
@@ -112,15 +108,13 @@ function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
         // we are going to inherit the parent data.
         delete opts.type
 
-        opts = fromType(name, type, opts as Omit<ExtendProps, 'type'>)
-
         if (getter) {
           return Object.defineProperty(this, name, {
             get: () => fromType(name, type, opts as Omit<ExtendProps, 'type'>),
           })
         }
         return Object.defineProperty(this, name, {
-          value(...args: any[]) {
+          value(...args: unknown[]) {
             const t = fromType(name, type, opts as Omit<ExtendProps, 'type'>)
             if (t.validator) {
               t.validator = t.validator.bind(t, ...args)
@@ -130,7 +124,7 @@ function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
         })
       }
 
-      let descriptor: any
+      let descriptor: PropertyDescriptor
       if (getter) {
         descriptor = {
           get() {
@@ -169,7 +163,11 @@ function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
       validate<T, U>(value: T, type: U) {
         return validateType<U, T>(type, value, true)
       },
-      toType<T = any>(name: string, obj: PropOptions<T>, validable = false) {
+      toType<T = unknown>(
+        name: string,
+        obj: PropOptions<T>,
+        validable = false,
+      ) {
         return validable ? toValidableType<T>(name, obj) : toType<T>(name, obj)
       },
     }

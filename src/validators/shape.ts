@@ -49,6 +49,7 @@ export default function shape<T extends object>(
 
   Object.defineProperty(type, 'loose', {
     get() {
+      // eslint-disable-next-line @typescript-eslint/camelcase
       this._vueTypes_isLoose = true
       return this
     },

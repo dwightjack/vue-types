@@ -317,7 +317,7 @@ describe('VueTypes', () => {
     let customType
 
     class MyClass {
-      constructor(public name = name) {}
+      constructor(public name: string) {}
     }
 
     beforeEach(() => {
@@ -631,7 +631,7 @@ describe('VueTypes', () => {
     let spy: any
 
     class MyClass {
-      constructor(public name = name) {}
+      constructor(public name: string) {}
     }
 
     const nativeTypes = [Number, Array, MyClass]
@@ -825,7 +825,7 @@ describe('VueTypes', () => {
 
     it('should add a validate method to the prop', () => {
       interface VueTypesString extends VueTypesType {
-        stringCustom: VueTypeValidableDef<String>
+        stringCustom: VueTypeValidableDef<string>
       }
       VueTypes.extend<VueTypesString>({
         name: 'stringCustom',
@@ -1064,7 +1064,7 @@ describe('VueTypes.utils', () => {
     it('should allow custom validator functions', () => {
       const type = {
         type: String,
-        validator: (value) => value.length > 4,
+        validator: (value: string) => value.length > 4,
       }
       expect(_utils.validate('string', type)).toBe(true)
       expect(_utils.validate('s', type)).toBe(false)
