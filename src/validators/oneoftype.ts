@@ -1,5 +1,4 @@
-import { Prop } from 'vue/types/options'
-import { VueProp, InferType } from '../../types/vue-types'
+import { Prop, VueProp, InferType } from '../../types/vue-types'
 import {
   isArray,
   isComplexType,

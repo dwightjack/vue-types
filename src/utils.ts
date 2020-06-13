@@ -113,7 +113,11 @@ export const isVueTypeDef = <T>(
   isPlainObject(value) && has(value, '_vueTypes_name')
 
 export const isComplexType = <T>(value: any): value is VueProp<T> =>
-  isPlainObject(value) && has(value, 'type')
+  isPlainObject(value) &&
+  (has(value, 'type') ||
+    ['_vueTypes_name', 'validator', 'default', 'required'].some((k) =>
+      has(value, k),
+    ))
 
 /**
  * Validates a given value against a prop type object
@@ -137,14 +141,14 @@ export function validateType<T, U>(type: T, value: U, silent = false) {
 
   if (isComplexType(typeToCheck) && typeToCheck.type !== null) {
     if (typeToCheck.type === undefined) {
-      throw new TypeError(
-        `[VueTypes error]: Setting type to undefined is not allowed.`,
-      )
+      return valid
     }
     if (!typeToCheck.required && value === undefined) {
       return valid
     }
-    if (isArray(typeToCheck.type)) {
+    if (typeToCheck.type === undefined) {
+      expectedType = 'any'
+    } else if (isArray(typeToCheck.type)) {
       valid = typeToCheck.type.some((type: any) =>
         validateType(type, value, true),
       )
@@ -213,13 +217,6 @@ export function toType<T = any>(name: string, obj: PropOptions<T>) {
         this.required = true
         return this
       },
-    },
-    validate: {
-      value() {
-        warn(`${name} - "validate" method not supported on this type`)
-        return this
-      },
-      configurable: true,
     },
     def: {
       value(def?: any) {

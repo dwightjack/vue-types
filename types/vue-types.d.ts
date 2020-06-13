@@ -1,5 +1,21 @@
-// TypeScript Version: 2.8
-import { PropOptions, PropType, Prop } from 'vue/types/options'
+/**
+ * `Prop`, `PropType` and `PropOptions` are from vue@2x
+ *
+ * Not importing them because in vue 3 they are going to change a little bit.
+ */
+export type Prop<T> =
+  | { (): T }
+  | { new (...args: never[]): T & object }
+  | { new (...args: string[]): Function }
+
+export type PropType<T> = Prop<T> | Prop<T>[]
+
+export interface PropOptions<T = any> {
+  type?: PropType<T>
+  required?: boolean
+  default?: T | (() => T | null | undefined) | null | undefined
+  validator?(value: unknown): boolean
+}
 
 type NativeType = string | boolean | number | null | undefined | Function
 

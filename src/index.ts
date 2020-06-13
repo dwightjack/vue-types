@@ -8,7 +8,12 @@ import {
   fromType,
 } from './utils'
 
-import { VueTypesDefaults, ExtendProps, VueTypeDef } from '../types/vue-types'
+import {
+  VueTypesDefaults,
+  ExtendProps,
+  VueTypeDef,
+  VueTypeValidableDef,
+} from '../types/vue-types'
 import { typeDefaults } from './sensibles'
 import { PropOptions } from 'vue'
 import {
@@ -167,7 +172,7 @@ function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
         name: string,
         obj: PropOptions<T>,
         validable = false,
-      ) {
+      ): VueTypeDef<T> | VueTypeValidableDef<T> {
         return validable ? toValidableType<T>(name, obj) : toType<T>(name, obj)
       },
     }

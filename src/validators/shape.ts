@@ -1,5 +1,9 @@
-import { Prop } from 'vue/types/options'
-import { VueProp, VueTypeShape, VueTypeLooseShape } from '../../types/vue-types'
+import {
+  Prop,
+  VueProp,
+  VueTypeShape,
+  VueTypeLooseShape,
+} from '../../types/vue-types'
 import { toType, validateType, warn, isPlainObject } from '../utils'
 
 export default function shape<T extends object>(

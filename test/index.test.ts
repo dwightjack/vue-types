@@ -1,7 +1,7 @@
 import expect from 'expect'
 import Vue from 'vue'
 
-import { noop, toType } from '../src/utils'
+import { noop } from '../src/utils'
 import { VueTypeValidableDef, VueTypeDef } from '../types/vue-types'
 import VueTypes from '../src/index'
 
@@ -23,8 +23,8 @@ const forceNoContext = (validator) => validator.bind(undefined)
 
 describe('VueTypes', () => {
   describe('`.any`', () => {
-    it('should have a `null` type', () => {
-      expect(VueTypes.any.type).toBe(null)
+    it('should NOT have a type', () => {
+      expect(VueTypes.any.type).toBe(undefined)
     })
 
     it('should add a `required` flag', () => {
@@ -309,7 +309,7 @@ describe('VueTypes', () => {
       expect(myType.type).toEqual([String, Number])
 
       const myType2 = VueTypes.oneOf([null])
-      expect(myType2.type).toBe(null)
+      expect(myType2.type).toBe(undefined)
     })
   })
 
@@ -628,8 +628,6 @@ describe('VueTypes', () => {
   })
 
   describe('`.oneOfType`', () => {
-    let spy: any
-
     class MyClass {
       constructor(public name: string) {}
     }
@@ -640,14 +638,6 @@ describe('VueTypes', () => {
       VueTypes.oneOf([0, 1, 'string']),
       VueTypes.shape({ id: Number }),
     ]
-
-    beforeEach(() => {
-      spy = expect.spyOn(VueTypes, 'custom').andCallThrough()
-    })
-
-    afterEach(() => {
-      spy.restore()
-    })
 
     it('should add a `required` flag', () => {
       const customType = VueTypes.oneOfType(nativeTypes)
@@ -667,17 +657,6 @@ describe('VueTypes', () => {
     it('should return a prop object with `type` as an array', () => {
       const customType = VueTypes.oneOfType(nativeTypes)
       expect(customType.type).toMatch(Array)
-    })
-
-    it('should NOT use the `custom` type creator', () => {
-      expect(spy.calls.length).toBe(0)
-    })
-
-    it('should use the custom type creator for mixed (native, VuePropTypes) options', () => {
-      const customType = VueTypes.oneOfType(mixedTypes)
-
-      expect(spy).toHaveBeenCalled()
-      expect(customType).toExcludeKey('type')
     })
 
     it('should validate custom types with complex shapes', () => {
@@ -938,7 +917,6 @@ describe('VueTypes', () => {
       })
 
       expect(type.validator).toBeA(Function)
-      expect(type.validate).toBeA(Function)
 
       const pass = {
         name: 'John',
@@ -957,7 +935,7 @@ describe('VueTypes', () => {
 
       expect(type.validator(pass)).toBe(true)
       expect(spy).toHaveBeenCalledWith(pass)
-      expect(spy.calls[0].context).toBe(parent)
+      expect(spy.calls[0].context).toBe(type)
 
       expect(type.validator(passLoose)).toBe(true)
       expect(type.validator(fail)).toBe(false)
@@ -1041,8 +1019,16 @@ describe('VueTypes.utils', () => {
       expect(_utils.toType).toBeA(Function)
     })
 
-    it('proxes to `toType` internal utility function', () => {
-      expect(_utils.toType).toBe(toType)
+    it('returns a validable type by default', () => {
+      expect((_utils.toType('demo', { type: String }) as any).validate).toBe(
+        undefined,
+      )
+    })
+
+    it('returns a validable type is 3rd argument is true', () => {
+      expect(
+        (_utils.toType('demo', { type: String }, true) as any).validate,
+      ).toBeA(Function)
     })
   })
 

@@ -39,7 +39,7 @@ module.exports = (config) => {
     ],
 
     // list of files / patterns to load in the browser
-    files: [{ pattern: 'src/**/*.ts', included: false }, 'test/**/*.test.ts'],
+    files: ['src/**/*.ts', 'test/**/*.test.ts'],
 
     // list of files to exclude
     exclude: [],
@@ -47,7 +47,6 @@ module.exports = (config) => {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      // add webpack as preprocessor
       '**/*.ts': 'karma-typescript',
       'test/**/*.test.ts': 'karma-typescript',
     },
@@ -76,6 +75,8 @@ module.exports = (config) => {
         transforms: [require('karma-typescript-es6-transform')()],
         entrypoints: /\.test\.ts$/,
       },
+      include: ['**/*.ts'],
+      exclude: ['node_modules'],
     },
 
     // test results reporter to use
