@@ -41,11 +41,6 @@ export const isPlainObject = _isPlainObject as (obj: any) => obj is PlainObject
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export function noop() {}
 
-/**
- * A function that always returns true
- */
-export const stubTrue = () => true
-
 let warn: (msg: string) => void = noop
 
 if (process.env.NODE_ENV !== 'production') {
@@ -118,6 +113,21 @@ export const isComplexType = <T>(value: any): value is VueProp<T> =>
     ['_vueTypes_name', 'validator', 'default', 'required'].some((k) =>
       has(value, k),
     ))
+
+export interface WrappedFn {
+  (...args: any[]): any
+  __original: (...args: any[]) => any
+}
+
+export function bindTo(fn: (...args: any[]) => any, ctx: any): WrappedFn {
+  return Object.defineProperty(fn.bind(ctx), '__original', {
+    value: fn,
+  })
+}
+
+export function unwrap<T extends WrappedFn | Function>(fn: T) {
+  return (fn as WrappedFn).__original ?? fn
+}
 
 /**
  * Validates a given value against a prop type object
@@ -239,8 +249,9 @@ export function toType<T = any>(name: string, obj: PropOptions<T>) {
     },
   })
 
-  if (isFunction(type.validator)) {
-    type.validator = type.validator.bind(type)
+  const { validator } = type
+  if (isFunction(validator)) {
+    type.validator = bindTo(validator, type)
   }
 
   return type
@@ -256,7 +267,7 @@ export function toValidableType<T = any>(name: string, obj: PropOptions<T>) {
   const type = toType<T>(name, obj)
   return Object.defineProperty(type, 'validate', {
     value(fn: (value: T) => boolean) {
-      this.validator = fn.bind(this)
+      this.validator = bindTo(fn, this)
       return this
     },
   }) as VueTypeValidableDef<T>
@@ -288,12 +299,22 @@ export function fromType<T extends VueTypeDef<any>, U = InferType<T>>(
   // with the one on the source (if present)
   // and ensure it is bound to the copy
   if (isFunction(validator)) {
-    const { validator: prevValidator } = copy
-    copy.validator = prevValidator
-      ? function (this: VueTypeDef<U>, value: any) {
-          return prevValidator.call(this, value) && validator.call(this, value)
-        }
-      : validator.bind(copy)
+    let { validator: prevValidator } = copy
+
+    if (prevValidator) {
+      prevValidator = unwrap(prevValidator)
+    }
+
+    copy.validator = bindTo(
+      prevValidator
+        ? function (this: VueTypeDef<U>, value: any) {
+            return (
+              prevValidator.call(this, value) && validator.call(this, value)
+            )
+          }
+        : validator,
+      copy,
+    )
   }
   // 4. overwrite the rest, if present
   return Object.assign(copy, rest)
