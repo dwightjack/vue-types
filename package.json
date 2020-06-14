@@ -32,7 +32,9 @@
     "test:saucelab": "karma start karma-sauce.conf.js --single-run",
     "test:types": "tsc --noEmit -p ./examples/kitchensink/",
     "lint": "eslint src/*.ts test/*.ts",
-    "server": "sirv examples"
+    "build:examples": "node ./examples/build.js",
+    "server": "sirv",
+    "examples": "run-s build:examples server"
   },
   "keywords": [
     "vue",
