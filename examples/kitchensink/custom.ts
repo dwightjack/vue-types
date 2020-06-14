@@ -1,6 +1,11 @@
 import Vue from 'vue'
-import { createTypes, object, toValidableType, fromType } from '../../src/index'
-import { VueTypeValidableDef } from '../vue-types'
+import {
+  createTypes,
+  object,
+  toValidableType,
+  fromType,
+  VueTypeValidableDef,
+} from 'vue-types'
 
 interface User {
   ID: number
@@ -48,12 +53,14 @@ class MyTypesClass extends createTypes({}) {
 }
 
 const userGetter2 = MyTypesClass.user.isRequired
+const stringT = MyTypesClass.string.isRequired
 
 const UserComponent = Vue.extend({
   props: {
     user: userGetterType,
     message: messageType,
     age: ageType,
+    msg: stringT,
   },
 })
 

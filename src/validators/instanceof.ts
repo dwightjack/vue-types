@@ -1,5 +1,5 @@
 import { toType } from '../utils'
-import { Constructor } from '../../types/vue-types'
+import { Constructor } from '../types'
 
 export default function instanceOf<C extends Constructor>(
   instanceConstructor: C,

@@ -1,4 +1,4 @@
-import { VueTypesDefaults } from '../types/vue-types'
+import { VueTypesDefaults } from './types'
 
 export const typeDefaults = (): VueTypesDefaults => ({
   func: () => undefined,

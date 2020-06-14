@@ -1,7 +1,6 @@
 import Vue, { CreateElement } from 'vue'
 import Component from 'vue-class-component'
-import VueTypes from '../../src/index'
-import { VueTypeValidableDef } from '../vue-types'
+import VueTypes, { VueTypeValidableDef } from 'vue-types'
 
 const noop = (): void => undefined
 
@@ -99,8 +98,8 @@ VueTypes.sensibleDefaults = {}
 VueTypes.sensibleDefaults = false
 VueTypes.sensibleDefaults = true
 
-type VueTypeType = typeof VueTypes
-interface CustomVueTypes extends VueTypeType {
+type VueTypeD = typeof VueTypes
+interface CustomVueTypes extends VueTypeD {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly test: VueTypeValidableDef<any>
   readonly user: typeof shapeType
@@ -126,7 +125,7 @@ myTypes.test.isRequired
 myTypes.test.isRequired
 
 const a = myTypes.user.def({ name: 'xxx' })
-
+const str = myTypes.string
 const NativeComponent = Vue.extend({
   props: {
     verified: boolType,

@@ -1,4 +1,4 @@
-import { Prop } from '../../types/vue-types'
+import { Prop } from '../types'
 import { toType, warn, isArray } from '../utils'
 
 export default function oneOf<T extends readonly any[], U = T[number]>(arr: T) {

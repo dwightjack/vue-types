@@ -13,9 +13,10 @@ import {
   ExtendProps,
   VueTypeDef,
   VueTypeValidableDef,
-} from '../types/vue-types'
+} from './types'
 import { typeDefaults } from './sensibles'
 import { PropOptions } from 'vue'
+
 import {
   any,
   func,
@@ -35,24 +36,8 @@ import instanceOf from './validators/instanceof'
 import objectOf from './validators/objectof'
 import shape from './validators/shape'
 
-export default class VueTypes {
-  static defaults: Partial<VueTypesDefaults> = typeDefaults()
-
-  static get sensibleDefaults() {
-    return { ...this.defaults }
-  }
-
-  static set sensibleDefaults(v: boolean | Partial<VueTypesDefaults>) {
-    if (v === false) {
-      this.defaults = {}
-      return
-    }
-    if (v === true) {
-      this.defaults = typeDefaults()
-      return
-    }
-    this.defaults = { ...v }
-  }
+class BaseVueTypes {
+  static defaults: Partial<VueTypesDefaults> = {}
 
   static get any() {
     return any()
@@ -90,9 +75,7 @@ export default class VueTypes {
   static readonly objectOf = objectOf
   static readonly shape = shape
 
-  static extend<T extends typeof VueTypes>(
-    props: ExtendProps | ExtendProps[],
-  ): T {
+  static extend<T>(props: ExtendProps | ExtendProps[]): T {
     if (isArray(props)) {
       props.forEach((p) => this.extend(p))
       return this as any
@@ -178,7 +161,7 @@ export default class VueTypes {
 }
 
 function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
-  return class extends VueTypes {
+  return class extends BaseVueTypes {
     static defaults: Partial<VueTypesDefaults> = { ...defs }
 
     static get sensibleDefaults() {
@@ -198,6 +181,8 @@ function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
     }
   }
 }
+
+export default class VueTypes extends createTypes() {}
 
 export {
   any,
@@ -222,3 +207,5 @@ export {
   validateType,
   fromType,
 }
+
+export { VueTypeDef, VueTypeValidableDef }

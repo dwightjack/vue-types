@@ -1,12 +1,12 @@
 import _isPlainObject from 'is-plain-object'
 import Vue from 'vue'
-import { PropOptions } from 'vue'
 import {
   VueTypeDef,
   VueTypeValidableDef,
   VueProp,
   InferType,
-} from '../types/vue-types'
+  PropOptions,
+} from './types'
 
 const ObjProto = Object.prototype
 const toString = ObjProto.toString
@@ -18,7 +18,7 @@ const FN_MATCH_REGEXP = /^\s*function (\w+)/
 export function getType(
   fn: VueProp<any> | (() => any) | (new (...args: any[]) => any),
 ): string {
-  const type = (fn && (fn as VueProp<any>).type) || fn
+  const type = (fn as VueProp<any>)?.type ?? fn
   if (type) {
     const match = type.toString().match(FN_MATCH_REGEXP)
     return match ? match[1] : ''

@@ -1,4 +1,4 @@
-import { Prop, VueProp, InferType } from '../../types/vue-types'
+import { Prop, VueProp, InferType } from '../types'
 import {
   isArray,
   isComplexType,

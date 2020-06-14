@@ -1,4 +1,4 @@
-import { Prop, VueProp, InferType } from '../../types/vue-types'
+import { Prop, VueProp, InferType } from '../types'
 import { getType, toType, validateType, warn } from '../utils'
 
 export default function objectOf<
