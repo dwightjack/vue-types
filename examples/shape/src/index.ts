@@ -6,14 +6,14 @@ var Model = {
   props: {
     model: VueTypes.shape({
       id: VueTypes.string.isRequired,
-      isNew: VueTypes.bool
-    }).isRequired
+      isNew: VueTypes.bool,
+    }).isRequired,
   },
   computed: {
-    isNew () {
+    isNew() {
       return this.model.isNew ? '- new' : ''
-    }
-  }
+    },
+  },
 }
 
 new Vue({
@@ -25,21 +25,21 @@ new Vue({
     </section>
   `,
   data: {
-    models: []
+    models: [],
   },
   components: {
-    Model
+    Model,
   },
   methods: {
-    addModel () {
+    addModel() {
       const newId = 'model-' + this.models.length
       this.models.forEach((model) => {
         model.isNew = false
       })
       this.models.push({
         id: newId,
-        isNew: true
+        isNew: true,
       })
-    }
-  }
+    },
+  },
 }).$mount('#app')
