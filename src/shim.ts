@@ -1,7 +1,13 @@
 import Vue from 'vue'
 import isPlainObject from 'is-plain-object'
-import { setDefaults, typeDefaults } from './sensibles'
-import { PropOptions } from 'vue'
+import { typeDefaults } from './sensibles'
+import {
+  PropOptions,
+  VueTypeDef,
+  VueTypeShape,
+  VueTypeValidableDef,
+  VueTypesDefaults,
+} from '../types/vue-types'
 
 const dfn = Object.defineProperty
 
@@ -12,10 +18,11 @@ const isArray =
   }
 
 function type(name: string, props: PropOptions<any>, validable = false) {
-  const descriptors = {
+  const descriptors: PropertyDescriptorMap = {
     // eslint-disable-next-line @typescript-eslint/camelcase
     _vueTypes_name: {
       value: name,
+      writable: true,
     },
     def: {
       value(v) {
@@ -90,9 +97,50 @@ const methods = [
   'objectOf',
 ]
 
-class VueTypes {}
+export function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
+  class VueTypes {
+    private static defaults = { ...defs }
 
-export function createTypes(defs = typeDefaults()) {
+    static get sensibleDefaults() {
+      return { ...this.defaults }
+    }
+
+    static set sensibleDefaults(v: boolean | Partial<VueTypesDefaults>) {
+      if (v === false) {
+        this.defaults = {}
+        return
+      }
+      if (v === true) {
+        this.defaults = { ...defs }
+        return
+      }
+      this.defaults = { ...v }
+    }
+    static any: VueTypeValidableDef<any>
+    static func: VueTypeValidableDef<Function>
+    static bool: VueTypeValidableDef<boolean>
+    static string: VueTypeValidableDef<string>
+    static number: VueTypeValidableDef<number>
+    static array: VueTypeValidableDef<unknown[]>
+    static object: VueTypeValidableDef<{ [key: string]: any }>
+    static symbol: VueTypeValidableDef<symbol>
+    static integer: VueTypeDef<number>
+    static oneOf: (arr: any[]) => VueTypeDef<any>
+    static custom: (fn: (v: any) => boolean) => VueTypeDef<any>
+    static instanceOf: (i: any) => VueTypeDef<any>
+    static oneOfType: (arr: any[]) => VueTypeDef<any>
+    static arrayOf: (t: any) => VueTypeDef<any>
+    static objectOf: (t: any) => VueTypeDef<any>
+    static shape: (o: any) => VueTypeShape<any>
+    static extend: (props: any) => any
+    static utils = {
+      toType: type as (
+        ...args: any[]
+      ) => VueTypeDef<any> | VueTypeValidableDef<any>,
+      validate: (...args: any[]) => !!args,
+    }
+  }
+
   function createValidator(
     root: any,
     name: string,
@@ -116,7 +164,7 @@ export function createTypes(defs = typeDefaults()) {
     getter: boolean,
     validable = false,
   ) {
-    return (name) =>
+    return (name: string) =>
       createValidator(
         root,
         name,
@@ -126,18 +174,12 @@ export function createTypes(defs = typeDefaults()) {
       )
   }
 
-  Object.assign(setDefaults(VueTypes, defs), {
-    extend(props: any) {
-      const { name, validate, getter = false, type = null } = props
-      // If we are inheriting from a custom type, let's ignore the type property
-      const extType = isPlainObject(type) && type.type ? null : type
-      return createValidator(this, name, { type: extType }, getter, !!validate)
-    },
-    utils: {
-      toType: type,
-      validate: () => true,
-    },
-  })
+  VueTypes.extend = function extend(props) {
+    const { name, validate, getter = false, type = null } = props
+    // If we are inheriting from a custom type, let's ignore the type property
+    const extType = isPlainObject(type) && type.type ? null : type
+    return createValidator(this, name, { type: extType }, getter, !!validate)
+  }
 
   getters.forEach(recurseValidator(VueTypes, true, true))
   methods.forEach(recurseValidator(VueTypes, false))
