@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES5",
     "baseUrl": "./",
     "paths": {
       "vue-types": ["../dist/vue-types.m.js"],
       "vue-types/*": ["../dist/*"]
     },
     "esModuleInterop": true,
-    "moduleResolution": "Node",
-    "experimentalDecorators": true
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "declaration": false
   },
   "include": ["**/*.ts", "../dist/**/*.ts"]
 }

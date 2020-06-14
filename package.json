@@ -10,6 +10,7 @@
     "src/index.ts",
     "src/shim.ts"
   ],
+  "amdName": "VueTypes",
   "unpkg": "dist/vue-types.umd.js",
   "umd:main": "dist/vue-types.umd.js",
   "module": "dist/vue-types.m.js",

@@ -41,19 +41,13 @@ export const isPlainObject = _isPlainObject as (obj: any) => obj is PlainObject
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export function noop() {}
 
-let warn: (msg: string) => void = noop
-
-if (process.env.NODE_ENV !== 'production') {
-  const hasConsole = typeof console !== 'undefined'
-  warn = hasConsole
-    ? function warn(msg) {
-        // eslint-disable-next-line no-console
-        Vue.config.silent === false && console.warn(`[VueTypes warn]: ${msg}`)
-      }
-    : noop
-}
-
-export { warn }
+const hasConsole = typeof console !== 'undefined'
+export let warn = hasConsole
+  ? function warn(msg: string) {
+      // eslint-disable-next-line no-console
+      Vue.config.silent === false && console.warn(`[VueTypes warn]: ${msg}`)
+    }
+  : noop
 
 /**
  * Checks for a own property in an object

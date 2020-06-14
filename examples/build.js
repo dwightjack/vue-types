@@ -1,12 +1,15 @@
+const { join } = require('path')
 const microbundle = require('microbundle')
 
 ;(async function () {
   await microbundle({
-    input: './userlist/src/index.js',
-    name: 'userlist',
+    entries: [join(__dirname, './userlist/src/index.ts')],
     output: './userlist/dist',
-    tsconfig: './tsconfig.json',
+    tsconfig: join(__dirname, './tsconfig.json'),
     cwd: __dirname,
     format: 'iife',
+    compress: false,
+    external: 'vue,vue-types',
+    globals: 'vue=Vue,vue-types=VueTypes',
   })
 })()
