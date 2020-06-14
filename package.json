@@ -10,21 +10,20 @@
   "unpkg": "dist/vue-types.umd.js",
   "umd:main": "dist/vue-types.umd.js",
   "module": "dist/vue-types.m.js",
+  "esmodule": "dist/vue-types.modern.js",
   "types": "types/index.d.ts",
   "engines": {
     "node": ">=10.15.0"
   },
   "files": [
     "dist",
-    "es",
     "src",
-    "umd",
     "types/*.d.ts"
   ],
   "scripts": {
     "prepublishOnly": "npm run build",
     "build": "npm run lint && npm run test:types && npm test && npm run build:cjs && npm run build:es && npm run build:umd",
-    "build:cjs": "rimraf dist && cross-env BABEL_ENV=cjs babel ./src -d dist",
+    "build:ts": "rimraf dist && microbundle build",
     "build:es": "rimraf es && cross-env BABEL_ENV=es babel ./src -d es",
     "build:umd": "rimraf umd && cross-env BABEL_ENV=rollup rollup -c rollup.config.js",
     "test": "cross-env BABEL_ENV=rollup karma start karma.conf.js --single-run --browsers ChromeHeadless",
@@ -73,7 +72,7 @@
     "karma-sauce-launcher": "4.1.4",
     "karma-typescript": "5.0.3",
     "karma-typescript-es6-transform": "5.0.3",
-    "microbundle": "0.12.0-next.9",
+    "microbundle": "0.12.0",
     "mocha": "7.1.2",
     "prettier": "2.0.5",
     "puppeteer": "3.0.2",
@@ -90,7 +89,7 @@
     "rollup-plugin-serve": "1.0.1",
     "rollup-plugin-stub": "1.2.0",
     "rollup-plugin-uglify": "6.0.4",
-    "typescript": "3.8.3",
+    "typescript": "3.9.5",
     "vue": "2.6.11",
     "vue-class-component": "7.2.3"
   },

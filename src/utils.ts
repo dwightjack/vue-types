@@ -18,7 +18,7 @@ const FN_MATCH_REGEXP = /^\s*function (\w+)/
 export function getType(
   fn: VueProp<any> | (() => any) | (new (...args: any[]) => any),
 ): string {
-  const type = (fn as VueProp<any>)?.type ?? fn
+  const type = (fn && (fn as VueProp<any>).type) || fn
   if (type) {
     const match = type.toString().match(FN_MATCH_REGEXP)
     return match ? match[1] : ''
