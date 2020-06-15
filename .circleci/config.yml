@@ -7,7 +7,7 @@ executors:
 
 jobs:
   install:
-    executor: default
+    executor: node
     steps:
       - checkout
       - restore_cache:
@@ -27,7 +27,7 @@ jobs:
           paths:
             - .
   build:
-    executor: default
+    executor: node
     steps:
       - checkout
       - attach_workspace:
@@ -37,7 +37,7 @@ jobs:
           command: npm run build
 
   test:
-    executor: default
+    executor: node
     steps:
       - attach_workspace:
           at: ~/repo
