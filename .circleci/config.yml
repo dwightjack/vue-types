@@ -54,7 +54,10 @@ jobs:
           command: |
             ./cc-test-reporter before-build
             npm test -- --browsers ChromeHeadlessCI
-            ./cc-test-reporter after-build --exit-code $? --debug
+            ./cc-test-reporter after-build -t lcov
+      - store_artifacts: # upload test coverage as artifact
+          path: ./coverage/lcov.info
+          prefix: tests
 
 workflows:
   version: 2
