@@ -76,7 +76,7 @@ module.exports = (config) => {
         entrypoints: /\.test\.ts$/,
       },
       include: ['**/*.ts'],
-      exclude: ['node_modules'],
+      exclude: ['node_modules', 'examples/**/*.ts'],
     },
 
     // test results reporter to use
