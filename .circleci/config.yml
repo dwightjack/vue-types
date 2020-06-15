@@ -1,0 +1,69 @@
+version: 2.1
+executors:
+  node:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:10
+
+jobs:
+  install:
+    executor: default
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-cache-{{ arch }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - npm-cache-{{ arch }}-{{ .Branch }}
+            - npm-cache
+      - run:
+          name: Setup Dependencies
+          command: npm ci
+      - save_cache:
+          key: npm-cache-{{ arch }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
+  build:
+    executor: default
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Build
+          command: npm run build
+
+  test:
+    executor: default
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: ESLint
+          command: npm run lint
+      - run:
+          name: Setup Code Climate test-reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run:
+          name: Run Tests
+          command: |
+            ./cc-test-reporter before-build
+            npm test -- --browsers ChromeHeadlessCI
+            ./cc-test-reporter after-build --exit-code $? --debug
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - install
+      - test:
+          requires:
+            - install
+      - build:
+          requires:
+            - install
