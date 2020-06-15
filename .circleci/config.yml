@@ -3,7 +3,7 @@ executors:
   node:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:10-browsers
 
 jobs:
   install:
