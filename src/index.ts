@@ -15,7 +15,7 @@ import {
   VueTypeValidableDef,
 } from './types'
 import { typeDefaults } from './sensibles'
-import { PropOptions } from 'vue'
+import { PropOptions } from './types'
 
 import {
   any,

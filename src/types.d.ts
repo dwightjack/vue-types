@@ -1,10 +1,11 @@
 import { PropOptions, PropType } from 'vue'
+
+export { PropType, PropOptions }
+
 export type Prop<T> =
   | { (): T }
   | { new (...args: never[]): T & object }
   | { new (...args: string[]): Function }
-
-export { PropOptions, PropType }
 
 export type NativeType = string | boolean | number | null | undefined | Function
 
@@ -49,8 +50,8 @@ export type VueTypeDef<T = unknown> = VueTypeBaseDef<T>
 
 export interface VueTypeValidableDef<T = unknown> extends VueTypeBaseDef<T> {
   readonly validate: (
-    fn: ValidatorFunction<T>,
-  ) => this & { validator: ValidatorFunction<T> }
+    fn: ValidatorFunction<T | unknown>,
+  ) => this & { validator: ValidatorFunction<T | unknown> }
 }
 
 export type VueProp<T> = VueTypeBaseDef<T> | PropOptions<T>
