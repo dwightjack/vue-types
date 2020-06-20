@@ -2,7 +2,7 @@ import expect from 'expect'
 import Vue from 'vue'
 
 import { noop } from '../src/utils'
-import { VueTypeValidableDef, VueTypeDef } from '../types/vue-types'
+import { VueTypeValidableDef, VueTypeDef } from '../src/types'
 import VueTypes from '../src/index'
 
 Vue.config.productionTip = false
@@ -633,7 +633,6 @@ describe('VueTypes', () => {
     }
 
     const nativeTypes = [Number, Array, MyClass]
-    const mixedTypes = [Number, VueTypes.array, VueTypes.integer]
     const complexTypes = [
       VueTypes.oneOf([0, 1, 'string']),
       VueTypes.shape({ id: Number }),

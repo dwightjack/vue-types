@@ -1,6 +1,6 @@
 import expect from 'expect'
 import * as utils from '../src/utils'
-import { VueTypeDef } from '../types/vue-types'
+import { VueTypeDef } from '../src/types'
 
 describe('`getType()`', () => {
   it('return the type constructor as a string', () => {

@@ -16,16 +16,18 @@ const fixMocha = function (files) {
 fixMocha.$inject = ['config.files']
 
 module.exports = (config) => {
-  if (
-    Array.isArray(config.browsers) &&
-    config.browsers[0] === 'ChromeHeadless'
-  ) {
-    process.env.CHROME_BIN = require('puppeteer').executablePath()
-  }
-
   config.set({
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
+
+    browsers: ['ChromeHeadless'],
+
+    customLaunchers: {
+      ChromeHeadlessCI: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox', '–disable-setuid-sandbox'],
+      },
+    },
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
@@ -76,7 +78,7 @@ module.exports = (config) => {
         entrypoints: /\.test\.ts$/,
       },
       include: ['**/*.ts'],
-      exclude: ['node_modules'],
+      exclude: ['node_modules', 'examples/**/*.ts'],
     },
 
     // test results reporter to use
