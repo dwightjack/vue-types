@@ -1,10 +1,11 @@
 import { toType, toValidableType, isInteger } from '../utils'
+import { PropType } from '../types'
 
 export const any = () => toValidableType('any', {})
 
-export const func = <T extends Function>() =>
+export const func = <T extends (...args: any[]) => any>() =>
   toValidableType<T>('function', {
-    type: Function,
+    type: Function as PropType<T>,
   })
 
 export const bool = () =>

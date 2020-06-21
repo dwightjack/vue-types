@@ -28,13 +28,13 @@
     "prepublishOnly": "npm run build",
     "build": "run-s build:clean build:ts build:umd",
     "build:clean": "del dist",
-    "build:ts": "microbundle --external=vue --tsconfig=./tsconfig.build.json --format=modern,esm,cjs",
+    "build:ts": "microbundle --external=vue --tsconfig=./tsconfig.build.json --format=modern,es,cjs",
     "build:umd": "cross-env NODE_ENV=production microbundle --external=vue --tsconfig=./tsconfig.build.json --format=umd",
     "test": "karma start karma.conf.js --single-run --browsers ChromeHeadless",
     "test:saucelab": "karma start karma-sauce.conf.js --single-run",
     "lint": "eslint src/*.ts test/*.ts",
-    "build:examples": "node ./scripts/build-examples.js",
-    "serve": "sirv",
+    "build:examples": "cross-env NODE_ENV=production node ./scripts/build-examples.js",
+    "serve": "sirv examples",
     "examples": "run-s build:examples serve"
   },
   "keywords": [
