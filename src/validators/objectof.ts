@@ -1,11 +1,8 @@
 import { Prop, VueProp, InferType } from '../types'
 import { getType, toType, validateType, warn } from '../utils'
 
-export default function objectOf<
-  T extends VueProp<any> | Prop<any>,
-  U = InferType<T>
->(type: T) {
-  return toType<{ [key: string]: U }>('objectOf', {
+export default function objectOf<T extends VueProp<any> | Prop<any>>(type: T) {
+  return toType<{ [key: string]: InferType<T> }>('objectOf', {
     type: Object,
     validator(obj) {
       const valid = Object.keys(obj).every((key) =>

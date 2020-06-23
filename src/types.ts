@@ -72,7 +72,7 @@ export interface VueTypeLooseShape<T>
 }
 
 export interface VueTypesDefaults {
-  func: Function
+  func: (...args: any[]) => any
   bool: boolean
   string: string
   number: number

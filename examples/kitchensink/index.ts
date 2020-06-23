@@ -72,6 +72,12 @@ const ObjectOfType = VueTypes.objectOf(VueTypes.string).def({
   prop: 'test',
 }).isRequired
 
+const ObjectOfType2 = VueTypes.objectOf(VueTypes.oneOf([1, 2, 3] as const)).def(
+  {
+    prop: 1,
+  },
+).isRequired
+
 interface User {
   name: string
   surname: string
@@ -90,6 +96,7 @@ const shapeTypeLoose = VueTypes.shape({
   name: String,
   surname: { type: String, default: 'Doe' },
   age: VueTypes.number,
+  hobby: VueTypes.oneOf(['climbing', 'coding'] as const),
 }).loose.def({ nationality: 'unknown' }).isRequired
 
 shapeType.type = Object
