@@ -37,11 +37,11 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `validator` method', () => {
-      expect(VueTypes.any.validator).toBeA(Function)
+      expect(VueTypes.any.validator).toBeInstanceOf(Function)
     })
 
     it('should have a `validate` method', () => {
-      expect(VueTypes.any.validate).toBeA(Function)
+      expect(VueTypes.any.validate).toBeInstanceOf(Function)
     })
   })
 
@@ -71,11 +71,11 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `validator` method', () => {
-      expect(VueTypes.func.validator).toBeA(Function)
+      expect(VueTypes.func.validator).toBeInstanceOf(Function)
     })
 
     it('should have a `validate` method', () => {
-      expect(VueTypes.func.validate).toBeA(Function)
+      expect(VueTypes.func.validate).toBeInstanceOf(Function)
     })
   })
 
@@ -105,11 +105,11 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `validator` method', () => {
-      expect(VueTypes.bool.validator).toBeA(Function)
+      expect(VueTypes.bool.validator).toBeInstanceOf(Function)
     })
 
     it('should have a `validate` method', () => {
-      expect(VueTypes.bool.validate).toBeA(Function)
+      expect(VueTypes.bool.validate).toBeInstanceOf(Function)
     })
   })
 
@@ -139,11 +139,11 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `validator` method', () => {
-      expect(VueTypes.string.validator).toBeA(Function)
+      expect(VueTypes.string.validator).toBeInstanceOf(Function)
     })
 
     it('should have a `validate` method', () => {
-      expect(VueTypes.string.validate).toBeA(Function)
+      expect(VueTypes.string.validate).toBeInstanceOf(Function)
     })
   })
 
@@ -173,11 +173,11 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `validator` method', () => {
-      expect(VueTypes.number.validator).toBeA(Function)
+      expect(VueTypes.number.validator).toBeInstanceOf(Function)
     })
 
     it('should have a `validate` method', () => {
-      expect(VueTypes.number.validate).toBeA(Function)
+      expect(VueTypes.number.validate).toBeInstanceOf(Function)
     })
   })
 
@@ -207,11 +207,11 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `validator` method', () => {
-      expect(VueTypes.array.validator).toBeA(Function)
+      expect(VueTypes.array.validator).toBeInstanceOf(Function)
     })
 
     it('should have a `validate` method', () => {
-      expect(VueTypes.array.validate).toBeA(Function)
+      expect(VueTypes.array.validate).toBeInstanceOf(Function)
     })
   })
 
@@ -241,11 +241,11 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `validator` method', () => {
-      expect(VueTypes.object.validator).toBeA(Function)
+      expect(VueTypes.object.validator).toBeInstanceOf(Function)
     })
 
     it('should have a `validate` method', () => {
-      expect(VueTypes.object.validate).toBeA(Function)
+      expect(VueTypes.object.validate).toBeInstanceOf(Function)
     })
   })
 
@@ -279,7 +279,7 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `validator` method', () => {
-      expect(VueTypes.integer.validator).toBeA(Function)
+      expect(VueTypes.integer.validator).toBeInstanceOf(Function)
     })
   })
 
@@ -309,17 +309,17 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `validator` method', () => {
-      expect(VueTypes.symbol.validator).toBeA(Function)
+      expect(VueTypes.symbol.validator).toBeInstanceOf(Function)
     })
 
     it('should have a `validate` method', () => {
-      expect(VueTypes.symbol.validate).toBeA(Function)
+      expect(VueTypes.symbol.validate).toBeInstanceOf(Function)
     })
   })
 
   describe('SHIM: `.custom`', () => {
     it('should exist', () => {
-      expect(VueTypes.custom).toBeA(Function)
+      expect(VueTypes.custom).toBeInstanceOf(Function)
     })
 
     it('should have a `type` property', () => {
@@ -343,13 +343,13 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `validator` method', () => {
-      expect(VueTypes.custom(() => true).validator).toBeA(Function)
+      expect(VueTypes.custom(() => true).validator).toBeInstanceOf(Function)
     })
   })
 
   describe('SHIM: `.oneOf`', () => {
     it('should exist', () => {
-      expect(VueTypes.oneOf).toBeA(Function)
+      expect(VueTypes.oneOf).toBeInstanceOf(Function)
     })
 
     it('should have a `type` property', () => {
@@ -373,13 +373,13 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `validator` method', () => {
-      expect(VueTypes.oneOf([]).validator).toBeA(Function)
+      expect(VueTypes.oneOf([]).validator).toBeInstanceOf(Function)
     })
   })
 
   describe('SHIM: `.instanceOf`', () => {
     it('should exist', () => {
-      expect(VueTypes.instanceOf).toBeA(Function)
+      expect(VueTypes.instanceOf).toBeInstanceOf(Function)
     })
 
     it('should have a `type` property', () => {
@@ -403,13 +403,13 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `validator` method', () => {
-      expect(VueTypes.instanceOf(Object).validator).toBeA(Function)
+      expect(VueTypes.instanceOf(Object).validator).toBeInstanceOf(Function)
     })
   })
 
   describe('SHIM: `.arrayOf`', () => {
     it('should exist', () => {
-      expect(VueTypes.arrayOf).toBeA(Function)
+      expect(VueTypes.arrayOf).toBeInstanceOf(Function)
     })
 
     it('should have a `type` property', () => {
@@ -433,13 +433,13 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `validator` method', () => {
-      expect(VueTypes.arrayOf(String).validator).toBeA(Function)
+      expect(VueTypes.arrayOf(String).validator).toBeInstanceOf(Function)
     })
   })
 
   describe('SHIM: `.objectOf`', () => {
     it('should exist', () => {
-      expect(VueTypes.objectOf).toBeA(Function)
+      expect(VueTypes.objectOf).toBeInstanceOf(Function)
     })
 
     it('should have a `type` property', () => {
@@ -463,13 +463,13 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `validator` method', () => {
-      expect(VueTypes.objectOf(String).validator).toBeA(Function)
+      expect(VueTypes.objectOf(String).validator).toBeInstanceOf(Function)
     })
   })
 
   describe('SHIM: `.shape`', () => {
     it('should exist', () => {
-      expect(VueTypes.shape).toBeA(Function)
+      expect(VueTypes.shape).toBeInstanceOf(Function)
     })
 
     it('should have a `type` property', () => {
@@ -493,7 +493,7 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `validator` method', () => {
-      expect(VueTypes.shape({}).validator).toBeA(Function)
+      expect(VueTypes.shape({}).validator).toBeInstanceOf(Function)
     })
 
     it('should have a `loose` flag that returns the type itself', () => {
@@ -504,7 +504,7 @@ describe('SHIM: VueTypes', () => {
 
   describe('SHIM: `.oneOfType`', () => {
     it('should exist', () => {
-      expect(VueTypes.oneOfType).toBeA(Function)
+      expect(VueTypes.oneOfType).toBeInstanceOf(Function)
     })
 
     it('should have a `type` property', () => {
@@ -528,7 +528,7 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `validator` method', () => {
-      expect(VueTypes.oneOfType([String]).validator).toBeA(Function)
+      expect(VueTypes.oneOfType([String]).validator).toBeInstanceOf(Function)
     })
   })
 
@@ -604,7 +604,7 @@ describe('SHIM: VueTypes', () => {
         name: 'dateFn',
         type: Date,
       })
-      expect((VueTypes as any).dateFn).toBeA(Function)
+      expect((VueTypes as any).dateFn).toBeInstanceOf(Function)
       expect((VueTypes as any).dateFn().isRequired.required).toBe(true)
     })
 
@@ -615,7 +615,7 @@ describe('SHIM: VueTypes', () => {
         getter: true,
         validate: true,
       })
-      expect((VueTypes as any).stringCustom.validate).toBeA(Function)
+      expect((VueTypes as any).stringCustom.validate).toBeInstanceOf(Function)
     })
 
     it('should ignore the type property when inheriting from a custom type', () => {
@@ -632,22 +632,22 @@ describe('SHIM: VueTypes', () => {
 
 describe('SHIM: VueTypes.utils', () => {
   it('should be defined', () => {
-    expect(VueTypes.utils).toBeA(Object)
+    expect(VueTypes.utils).toBeInstanceOf(Object)
   })
 
   describe('SHIM: .toType', () => {
     it('should be a function', () => {
-      expect(VueTypes.utils.toType).toBeA(Function)
+      expect(VueTypes.utils.toType).toBeInstanceOf(Function)
     })
 
     it('returns an object', () => {
-      expect(VueTypes.utils.toType()).toBeA(Object)
+      expect(VueTypes.utils.toType()).toBeInstanceOf(Object)
     })
   })
 
   describe('SHIM: .validate', () => {
     it('should be a function', () => {
-      expect(VueTypes.utils.validate).toBeA(Function)
+      expect(VueTypes.utils.validate).toBeInstanceOf(Function)
     })
 
     it('returns true', () => {

@@ -1,4 +1,3 @@
-import expect from 'expect'
 import Vue from 'vue'
 
 import { noop } from '../src/utils'
@@ -10,12 +9,12 @@ Vue.config.silent = true
 
 type VueTypesType = typeof VueTypes
 
-const checkRequired = (type) => {
-  expect(type).toIncludeKey('isRequired')
-
-  expect(type.isRequired).toMatch({
-    required: true,
-  })
+const checkRequired = (type: any) => {
+  expect(type.isRequired).toEqual(
+    jasmine.objectContaining({
+      required: true,
+    }),
+  )
 }
 
 // Vue.js does keep the context for validators, so there is no `this`
@@ -39,7 +38,7 @@ describe('VueTypes', () => {
   describe('`.func`', () => {
     it('should match an object with methods, type and default function', () => {
       expect(VueTypes.func.type).toBe(Function)
-      expect(VueTypes.func.default).toBeA(Function)
+      expect(VueTypes.func.default).toBeInstanceOf(Function)
     })
 
     it('should add a `required` flag', () => {
@@ -55,12 +54,12 @@ describe('VueTypes', () => {
 
   describe('`.bool`', () => {
     it('should match an object with methods, type and default', () => {
-      const match = {
+      const match = jasmine.objectContaining({
         type: Boolean,
         default: true,
-      }
+      })
 
-      expect(VueTypes.bool).toMatch(match)
+      expect(VueTypes.bool).toEqual(match)
     })
 
     it('should add a `required` flag', () => {
@@ -74,12 +73,12 @@ describe('VueTypes', () => {
 
   describe('`.string`', () => {
     it('should match an object with methods, type and default', () => {
-      const match = {
+      const match = jasmine.objectContaining({
         type: String,
         default: '',
-      }
+      })
 
-      expect(VueTypes.string).toMatch(match)
+      expect(VueTypes.string).toEqual(match)
     })
 
     it('should add a `required` flag', () => {
@@ -93,12 +92,12 @@ describe('VueTypes', () => {
 
   describe('`.number`', () => {
     it('should match an object with methods, type and default', () => {
-      const match = {
+      const match = jasmine.objectContaining({
         type: Number,
         default: 0,
-      }
+      })
 
-      expect(VueTypes.number).toMatch(match)
+      expect(VueTypes.number).toEqual(match)
     })
 
     it('should add a `required` flag', () => {
@@ -112,20 +111,20 @@ describe('VueTypes', () => {
 
   describe('`.array`', () => {
     it('should match an object with methods, type and default', () => {
-      const match = {
+      const match = jasmine.objectContaining({
         type: Array,
-      }
+      })
 
-      expect(VueTypes.array).toMatch(match)
-      expect(VueTypes.array.default()).toBeA(Array)
+      expect(VueTypes.array).toEqual(match)
+      expect(VueTypes.array.default()).toBeInstanceOf(Array)
     })
 
     it('should have default as a function', () => {
-      expect(VueTypes.array.default).toBeA(Function)
+      expect(VueTypes.array.default).toBeInstanceOf(Function)
     })
 
     it('should return an array as default value', () => {
-      expect(VueTypes.array.default()).toBeA(Array)
+      expect(VueTypes.array.default()).toBeInstanceOf(Array)
     })
 
     it('should add a `required` flag', () => {
@@ -135,7 +134,7 @@ describe('VueTypes', () => {
     it('should provide a method to set a custom default. `default` value must be a function', () => {
       const arr = [0, 1]
       const def = VueTypes.array.def(arr).default
-      expect(def).toMatch(Function)
+      expect(def).toEqual(jasmine.any(Function))
       expect(def()).toEqual(arr)
     })
 
@@ -148,19 +147,19 @@ describe('VueTypes', () => {
 
   describe('`.object`', () => {
     it('should match an object with methods, type and default', () => {
-      const match = {
+      const match = jasmine.objectContaining({
         type: Object,
-      }
+      })
 
-      expect(VueTypes.object).toMatch(match)
+      expect(VueTypes.object).toEqual(match)
     })
 
     it('should have default as a function', () => {
-      expect(VueTypes.array.default).toBeA(Function)
+      expect(VueTypes.array.default).toBeInstanceOf(Function)
     })
 
     it('should return an object as default value', () => {
-      expect(VueTypes.array.default()).toBeA(Object)
+      expect(VueTypes.array.default()).toBeInstanceOf(Object)
     })
 
     it('should add a `required` flag', () => {
@@ -170,7 +169,7 @@ describe('VueTypes', () => {
     it('should provide a method to set a custom default. `default` value must be a function', () => {
       const obj = { test: 'test' }
       const def = VueTypes.object.def(obj).default
-      expect(def).toMatch(Function)
+      expect(def).toEqual(jasmine.any(Function))
       expect(def()).toEqual(obj)
     })
 
@@ -187,13 +186,13 @@ describe('VueTypes', () => {
 
   describe('`.integer`', () => {
     it('should match an object with methods, type and default', () => {
-      const match = {
-        type: Number,
-        default: 0,
-        validator: Function,
-      }
-
-      expect(VueTypes.integer).toMatch(match)
+      expect(VueTypes.integer).toEqual(
+        jasmine.objectContaining({
+          type: Number,
+          default: 0,
+          validator: jasmine.any(Function),
+        }),
+      )
     })
 
     it('should add a `required` flag', () => {
@@ -205,7 +204,7 @@ describe('VueTypes', () => {
     })
 
     it('should NOT allow float custom default', () => {
-      expect(VueTypes.integer.def(0.1).default).toNotBe(0.1)
+      expect(VueTypes.integer.def(0.1).default).not.toBe(0.1)
     })
 
     it('should provide a validator function that returns true on integer values', () => {
@@ -218,12 +217,12 @@ describe('VueTypes', () => {
 
   describe('symbol', () => {
     it('should match an object with type and validator, but not default', () => {
-      const match = {
-        type: null,
-        validator: Function,
-      }
-
-      expect(VueTypes.symbol).toMatch(match)
+      expect(VueTypes.symbol).toEqual(
+        jasmine.objectContaining({
+          type: null,
+          validator: jasmine.any(Function),
+        }),
+      )
       expect(VueTypes.symbol.default).toBe(undefined)
     })
 
@@ -244,11 +243,11 @@ describe('VueTypes', () => {
     })
 
     it('should match an object with a validator method', () => {
-      const match = {
-        validator: Function,
-      }
-
-      expect(customType).toMatch(match)
+      expect(customType).toEqual(
+        jasmine.objectContaining({
+          validator: jasmine.any(Function),
+        }),
+      )
     })
 
     it('should add a `required` flag', () => {
@@ -274,15 +273,15 @@ describe('VueTypes', () => {
     })
 
     it('should match an object with a validator method', () => {
-      const match = {
-        validator: Function,
-      }
-
-      expect(customType).toMatch(match)
+      expect(customType).toEqual(
+        jasmine.objectContaining({
+          validator: jasmine.any(Function),
+        }),
+      )
     })
 
     it('should have a valid array `type` property', () => {
-      expect(customType.type).toBeA(Array)
+      expect(customType.type).toBeInstanceOf(Array)
       expect(customType.type[0]).toBe(Number)
     })
 
@@ -295,7 +294,11 @@ describe('VueTypes', () => {
     })
 
     it('should NOT allow default values other than the provided ones', () => {
-      expect(customType.def('not this')).toExcludeKey('default')
+      expect(customType.def('not this')).not.toEqual(
+        jasmine.objectContaining({
+          default: jasmine.anything(),
+        }),
+      )
     })
 
     it('should provide a custom validator function', () => {
@@ -325,11 +328,11 @@ describe('VueTypes', () => {
     })
 
     it('should match an object with a validator method', () => {
-      const match = {
-        type: MyClass,
-      }
-
-      expect(customType).toMatch(match)
+      expect(customType).toEqual(
+        jasmine.objectContaining({
+          type: MyClass,
+        }),
+      )
     })
 
     it('should add a `required` flag', () => {
@@ -342,7 +345,7 @@ describe('VueTypes', () => {
     })
 
     it('should NOT allow default values other than the provided ones', () => {
-      expect(customType.def(new Date())).toExcludeKey('default')
+      expect(customType.def(new Date()).default).toBeUndefined()
     })
   })
 
@@ -360,13 +363,13 @@ describe('VueTypes', () => {
     it('should provide a method to set a custom default. `default` value must be a function', () => {
       const customType = VueTypes.arrayOf(Number)
       const def = customType.def([0, 1]).default
-      expect(def).toMatch(Function)
+      expect(def).toBeInstanceOf(Function)
       expect(def()).toEqual([0, 1])
     })
 
     it('should NOT accept default values out of the allowed one', () => {
       const customType = VueTypes.arrayOf(Number)
-      expect(customType.def(['test' as any, 1])).toExcludeKey('default')
+      expect(customType.def(['test' as any, 1]).default).toBeUndefined()
     })
 
     it('should validate an array of same-type values', () => {
@@ -406,15 +409,15 @@ describe('VueTypes', () => {
     it('should provide a method to set a custom default. `default` value must be a function', () => {
       const customType = VueTypes.objectOf(Number)
       const def = customType.def({ id: 10, age: 30 }).default
-      expect(def).toMatch(Function)
+      expect(def).toBeInstanceOf(Function)
       expect(def()).toEqual({ id: 10, age: 30 })
     })
 
     it('should NOT accept default values out of the allowed one', () => {
       const customType = VueTypes.objectOf(Number)
-      expect(customType.def({ id: '10', age: 30 } as any)).toExcludeKey(
-        'default',
-      )
+      expect(
+        customType.def({ id: '10', age: 30 } as any).default,
+      ).toBeUndefined()
     })
 
     it('should validate an object of same-type values', () => {
@@ -559,7 +562,7 @@ describe('VueTypes', () => {
         age: 30,
       }
       const def = customType.def(defVals).default
-      expect(def).toMatch(Function)
+      expect(def).toBeInstanceOf(Function)
       expect(def()).toEqual(defVals)
     })
 
@@ -570,7 +573,7 @@ describe('VueTypes', () => {
         name: 'John',
         age: 30,
       }
-      expect(customType.def(def)).toExcludeKey('default')
+      expect(customType.def(def).default).toBeUndefined()
     })
 
     it('should allow required keys in shape (simple)', () => {
@@ -650,12 +653,12 @@ describe('VueTypes', () => {
 
     it('should NOT accept default values out of the allowed ones', () => {
       const customType = VueTypes.oneOfType(nativeTypes)
-      expect(customType.def('test' as any)).toExcludeKey('default')
+      expect(customType.def('test' as any).default).toBeUndefined()
     })
 
     it('should return a prop object with `type` as an array', () => {
       const customType = VueTypes.oneOfType(nativeTypes)
-      expect(customType.type).toMatch(Array)
+      expect(customType.type).toBe(Array)
     })
 
     it('should validate custom types with complex shapes', () => {
@@ -708,7 +711,7 @@ describe('VueTypes', () => {
       ]
 
       types.forEach((prop) => {
-        expect(VueTypes[prop]).toExcludeKey('default')
+        expect(VueTypes[prop].default).toBeUndefined()
       })
     })
 
@@ -727,7 +730,7 @@ describe('VueTypes', () => {
       ]
 
       types.forEach((prop) => {
-        expect(VueTypes[prop]).toIncludeKey('default')
+        expect(VueTypes[prop].default).toBeDefined()
       })
     })
 
@@ -740,7 +743,7 @@ describe('VueTypes', () => {
       const types = ['bool', 'number', 'array', 'object', 'integer']
 
       types.forEach((prop) => {
-        expect(VueTypes[prop]).toExcludeKey('default')
+        expect(VueTypes[prop].default).toBeUndefined()
       })
 
       expect(VueTypes.func.default).toBe(noop)
@@ -750,7 +753,7 @@ describe('VueTypes', () => {
 
   describe('`.extend` helper', () => {
     it('should add getter prop to the library', () => {
-      const validator = expect.createSpy()
+      const validator = jasmine.createSpy()
       interface VueTypesDate extends VueTypesType {
         date: VueTypeDef<Date>
       }
@@ -763,7 +766,7 @@ describe('VueTypes', () => {
 
       const dateType = (VueTypes as VueTypesDate).date
 
-      expect(dateType).toNotBe(undefined)
+      expect(dateType).toBeDefined()
       const date = new Date()
       dateType.validator(date)
       expect(validator).toHaveBeenCalledWith(date)
@@ -777,15 +780,17 @@ describe('VueTypes', () => {
         name: 'dateFn',
         type: Date,
       })
-      expect((VueTypes as VueTypesDateFn).dateFn).toBeA(Function)
-      expect((VueTypes as VueTypesDateFn).dateFn().isRequired).toEqual({
-        type: Date,
-        required: true,
-      })
+      expect((VueTypes as VueTypesDateFn).dateFn).toBeInstanceOf(Function)
+      expect((VueTypes as VueTypesDateFn).dateFn().isRequired).toEqual(
+        jasmine.objectContaining({
+          type: Date,
+          required: true,
+        }),
+      )
     })
 
     it('should pass configuration params to the validator method', () => {
-      const validator = expect.createSpy()
+      const validator = jasmine.createSpy()
       interface VueTypesDateFnArgs extends VueTypesType {
         dateFnArgs: (...args: any[]) => VueTypeDef<Date>
       }
@@ -811,7 +816,9 @@ describe('VueTypes', () => {
         getter: true,
         validate: true,
       })
-      expect((VueTypes as VueTypesString).stringCustom.validate).toBeA(Function)
+      expect((VueTypes as VueTypesString).stringCustom.validate).toBeInstanceOf(
+        Function,
+      )
     })
 
     it('should clone the base type definition at each call', () => {
@@ -824,7 +831,7 @@ describe('VueTypes', () => {
         getter: true,
         validate: true,
       })
-      expect((VueTypes as VueTypesClone).cloneDemo).toNotBe(
+      expect((VueTypes as VueTypesClone).cloneDemo).not.toBe(
         (VueTypes as VueTypesClone).cloneDemo,
       )
     })
@@ -862,18 +869,22 @@ describe('VueTypes', () => {
         type: parent,
         getter: true,
       })
-      expect((VueTypes as VueTypesAlias).stringAlias).toMatch({
-        type: String,
-        required: true,
-        default: 'parent',
-      })
+      expect((VueTypes as VueTypesAlias).stringAlias).toEqual(
+        jasmine.objectContaining({
+          type: String,
+          required: true,
+          default: 'parent',
+        }),
+      )
 
-      expect((VueTypes as VueTypesAlias).stringAlias.validate).toBeA(Function)
+      expect((VueTypes as VueTypesAlias).stringAlias.validate).toBeInstanceOf(
+        Function,
+      )
     })
 
     it('should inherit from vue-types type and add custom validation', () => {
       const parent = VueTypes.string
-      const validator = expect.createSpy().andReturn(true)
+      const validator = jasmine.createSpy().and.returnValue(true)
 
       interface VueTypesAliasValidate extends VueTypesType {
         stringValidationAlias: VueTypeValidableDef<string>
@@ -897,10 +908,11 @@ describe('VueTypes', () => {
     it('should inherit from vue-types (complex types)', () => {
       const parent = VueTypes.shape({
         name: VueTypes.string.isRequired,
-        number: VueTypes.oneOf([1, 2, 3]),
+        number: VueTypes.oneOf([1, 2, 3] as const),
+        a: { type: String },
       }).isRequired.loose
 
-      const spy = expect.spyOn(parent, 'validator').andCallThrough()
+      const spy = spyOn(parent, 'validator').and.callThrough()
 
       VueTypes.extend({
         name: 'shapeAlias',
@@ -910,12 +922,14 @@ describe('VueTypes', () => {
 
       const type = (VueTypes as any).shapeAlias
 
-      expect(type).toInclude({
-        type: Object,
-        required: true,
-      })
+      expect(type).toEqual(
+        jasmine.objectContaining({
+          type: Object,
+          required: true,
+        }),
+      )
 
-      expect(type.validator).toBeA(Function)
+      expect(type.validator).toBeInstanceOf(Function)
 
       const pass = {
         name: 'John',
@@ -1010,12 +1024,12 @@ describe('VueTypes.utils', () => {
   const _utils = VueTypes.utils
 
   it('should be defined', () => {
-    expect(VueTypes.utils).toBeA(Object)
+    expect(VueTypes.utils).toBeInstanceOf(Object)
   })
 
   describe('.toType', () => {
     it('should be a function', () => {
-      expect(_utils.toType).toBeA(Function)
+      expect(_utils.toType).toBeInstanceOf(Function)
     })
 
     it('returns a validable type by default', () => {
@@ -1027,13 +1041,13 @@ describe('VueTypes.utils', () => {
     it('returns a validable type is 3rd argument is true', () => {
       expect(
         (_utils.toType('demo', { type: String }, true) as any).validate,
-      ).toBeA(Function)
+      ).toBeInstanceOf(Function)
     })
   })
 
   describe('.validate', () => {
     it('should be a function', () => {
-      expect(_utils.validate).toBeA(Function)
+      expect(_utils.validate).toBeInstanceOf(Function)
     })
 
     it('should succeed with VueTypes types', () => {

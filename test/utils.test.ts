@@ -173,7 +173,7 @@ describe('`toType()`', () => {
       const obj = {} as VueTypeDef
 
       utils.toType('testType', obj)
-      expect(obj.def).toBeA(Function)
+      expect(obj.def).toBeInstanceOf(Function)
     })
 
     it('`def` should NOT be enumerable', () => {
@@ -188,7 +188,7 @@ describe('`toType()`', () => {
         ;(type as any).def = 'demo'
         // eslint-disable-next-line no-empty
       } catch (e) {}
-      expect(type.def).toBeA(Function)
+      expect(type.def).toBeInstanceOf(Function)
     })
 
     it('should not set invalid values as default', () => {
@@ -220,7 +220,7 @@ describe('`toType()`', () => {
     it('sets a factory function if value is an array', () => {
       const arr = [1, 2]
       const type = utils.toType('testType', { type: Array }).def(arr)
-      expect(type.default).toBeA(Function)
+      expect(type.default).toBeInstanceOf(Function)
       expect(type.default()).toNotBe(arr)
       expect(type.default()).toEqual(arr)
     })
@@ -228,7 +228,7 @@ describe('`toType()`', () => {
     it('sets a factory function if value is an object', () => {
       const obj = { a: 'hello' }
       const type = utils.toType('testType', { type: Object }).def(obj)
-      expect(type.default).toBeA(Function)
+      expect(type.default).toBeInstanceOf(Function)
       expect(type.default()).toNotBe(obj)
       expect(type.default()).toEqual(obj)
     })
@@ -246,14 +246,14 @@ describe('`toValidableType()`', () => {
   })
   it('adds a validate function', () => {
     const type = utils.toValidableType('testType', { type: String })
-    expect(type.validate).toBeA(Function)
+    expect(type.validate).toBeInstanceOf(Function)
   })
   it('the validate function sets a custom validator', () => {
     const fn = expect.createSpy()
     const type = utils
       .toValidableType('testType', { type: String })
       .validate(fn)
-    expect(type.validator).toBeA(Function)
+    expect(type.validator).toBeInstanceOf(Function)
 
     type.validator('demo')
     expect(fn).toHaveBeenCalledWith('demo')
