@@ -47,7 +47,7 @@
   },
   "bugs": "https://github.com/dwightjack/vue-types/issues",
   "peerDependencies": {
-    "vue": "*"
+    "vue": "^2.0.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "7.10.1",
@@ -81,7 +81,7 @@
     "puppeteer": "3.0.2",
     "sirv-cli": "1.0.0",
     "typescript": "3.9.5",
-    "vue": "2.6.11",
+    "vue": "^2.0.0",
     "vue-class-component": "7.2.3"
   },
   "dependencies": {
