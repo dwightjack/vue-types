@@ -19,7 +19,8 @@ const del = require('del')
       cwd: ROOT_DIR,
       format: 'iife',
       compress: false,
-      define: 'process.env.NODE_ENV="production"',
+      define: 'process.env.NODE_ENV="development"',
+      alias: 'vue=vue/dist/vue.esm.js',
     })
   })
 

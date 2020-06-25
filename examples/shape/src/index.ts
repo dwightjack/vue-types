@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import VueTypes from 'vue-types'
 
-var Model = {
+Vue.config.silent = false
+
+const Model = Vue.extend({
   template: '<li>{{ model.id }} {{ isNew }}</li>',
   props: {
     model: VueTypes.shape({
       id: VueTypes.string.isRequired,
+      pet: VueTypes.oneOf(['dog', 'cat']).isRequired,
       isNew: VueTypes.bool,
     }).isRequired,
   },
@@ -14,9 +17,9 @@ var Model = {
       return this.model.isNew ? '- new' : ''
     },
   },
-}
+})
 
-new Vue({
+const App = Vue.extend({
   template: `
     <section>
       <h1>A list of models</h1>
@@ -24,9 +27,9 @@ new Vue({
       <ul><Model v-for="model in models" :model="model" :key="model.id" /></ul>
     </section>
   `,
-  data: {
+  data: () => ({
     models: [],
-  },
+  }),
   components: {
     Model,
   },
@@ -38,8 +41,11 @@ new Vue({
       })
       this.models.push({
         id: newId,
+        pet: 'parrot',
         isNew: true,
       })
     },
   },
-}).$mount('#app')
+})
+
+new Vue({ render: (h) => h(App) }).$mount("#app")
