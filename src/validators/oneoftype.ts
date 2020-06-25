@@ -27,25 +27,23 @@ export default function oneOfType<
   for (let i = 0; i < arr.length; i += 1) {
     const type = arr[i]
     if (isComplexType<V>(type)) {
-      if (
-        isVueTypeDef<V>(type) &&
-        type._vueTypes_name === 'oneOf' &&
-        type.type
-      ) {
-        nativeChecks = nativeChecks.concat(type.type)
+      if (isVueTypeDef<V>(type) && type._vueTypes_name === 'oneOf') {
+        nativeChecks = nativeChecks.concat(type.type || [])
         continue
       }
       if (isFunction(type.validator)) {
         hasCustomValidators = true
-        continue
       }
-      if (type.type) {
+      if (typeof type.type !== 'undefined') {
         nativeChecks = nativeChecks.concat(type.type)
         continue
       }
     }
     nativeChecks.push(type as Prop<V>)
   }
+
+  // filter duplicates
+  nativeChecks = nativeChecks.filter((t, i) => nativeChecks.indexOf(t) === i)
 
   if (!hasCustomValidators) {
     // we got just native objects (ie: Array, Object)
@@ -55,27 +53,20 @@ export default function oneOfType<
     })
   }
 
-  const typesStr = arr
-    .reduce<string[]>(
-      (ret, type) =>
-        ret.concat(
-          isComplexType<V>(type) && isArray((type as any).type)
-            ? (type as any).type.map(getType)
-            : getType(type),
-        ),
-      [],
-    )
-    .join('", "')
-
   return toType<V>('oneOfType', {
+    type: nativeChecks,
     validator(value) {
       const valid = arr.some((type) => {
-        if (isVueTypeDef(type) && type._vueTypes_name === 'oneOf') {
-          return type.type ? validateType(type.type, value, true) : true
-        }
-        return validateType(type, value, true)
+        const t =
+          isVueTypeDef(type) && type._vueTypes_name === 'oneOf'
+            ? type.type || null
+            : type
+        return validateType(t, value, true) === true
       })
-      if (!valid) warn(`oneOfType - value type should be one of "${typesStr}".`)
+      if (!valid)
+        warn(
+          `oneOfType - value "${value}" does not match any of the passed-in validators.`,
+        )
       return valid
     },
   })

@@ -148,7 +148,7 @@ class BaseVueTypes {
 
   static utils = {
     validate<T, U>(value: T, type: U) {
-      return validateType<U, T>(type, value, true)
+      return validateType<U, T>(type, value, true) === true
     },
     toType<T = unknown>(
       name: string,

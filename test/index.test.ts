@@ -219,7 +219,6 @@ describe('VueTypes', () => {
     it('should match an object with type and validator, but not default', () => {
       expect(VueTypes.symbol).toEqual(
         jasmine.objectContaining({
-          type: null,
           validator: jasmine.any(Function),
         }),
       )
@@ -658,7 +657,7 @@ describe('VueTypes', () => {
 
     it('should return a prop object with `type` as an array', () => {
       const customType = VueTypes.oneOfType(nativeTypes)
-      expect(customType.type).toBe(Array)
+      expect(customType.type).toBeInstanceOf(Array)
     })
 
     it('should validate custom types with complex shapes', () => {
@@ -748,6 +747,8 @@ describe('VueTypes', () => {
 
       expect(VueTypes.func.default).toBe(noop)
       expect(VueTypes.string.default).toBe('test')
+
+      VueTypes.sensibleDefaults = true
     })
   })
 
@@ -902,14 +903,13 @@ describe('VueTypes', () => {
       expect(type.type).toBe(String)
       expect(type.validator('a')).toBe(true)
       expect(validator).toHaveBeenCalledWith('a')
-      expect(validator.calls[0].context).toBe(type)
+      expect(validator.calls.first().object).toBe(type)
     })
 
     it('should inherit from vue-types (complex types)', () => {
       const parent = VueTypes.shape({
         name: VueTypes.string.isRequired,
         number: VueTypes.oneOf([1, 2, 3] as const),
-        a: { type: String },
       }).isRequired.loose
 
       const spy = spyOn(parent, 'validator').and.callThrough()
@@ -933,7 +933,7 @@ describe('VueTypes', () => {
 
       const pass = {
         name: 'John',
-        number: 1,
+        number: 1 as const,
       }
 
       const passLoose = {
@@ -948,7 +948,7 @@ describe('VueTypes', () => {
 
       expect(type.validator(pass)).toBe(true)
       expect(spy).toHaveBeenCalledWith(pass)
-      expect(spy.calls[0].context).toBe(type)
+      expect(spy.calls.first().object).toBe(type)
 
       expect(type.validator(passLoose)).toBe(true)
       expect(type.validator(fail)).toBe(false)
@@ -1002,7 +1002,7 @@ describe('VueTypes', () => {
 
     it('should inherit from vue-types type (non-getter types)', () => {
       const parent = VueTypes.string
-      const validator = expect.createSpy()
+      const validator = jasmine.createSpy()
 
       VueTypes.extend({
         name: 'aliasMinLength',
@@ -1015,7 +1015,7 @@ describe('VueTypes', () => {
       expect(type.type).toBe(String)
       type.validator('a')
       expect(validator).toHaveBeenCalledWith(3, 'a')
-      expect(validator.calls[0].context).toBe(type)
+      expect(validator.calls.first().object).toBe(type)
     })
   })
 })

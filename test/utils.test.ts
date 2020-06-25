@@ -1,4 +1,3 @@
-import expect from 'expect'
 import * as utils from '../src/utils'
 import { VueTypeDef } from '../src/types'
 
@@ -82,13 +81,13 @@ describe('`isComplexType()`', () => {
 
 describe('`bindTo()`', () => {
   it('binds a function and store its original value', () => {
-    const fn = expect.createSpy()
+    const fn = jasmine.createSpy()
     const ctx = {}
     const bound = utils.bindTo(fn, ctx)
 
     bound()
 
-    expect(fn.calls[0].context).toBe(ctx)
+    expect(fn.calls.first().object).toBe(ctx)
     expect(bound.__original).toBe(fn)
   })
 })
@@ -124,26 +123,26 @@ describe('`toType()`', () => {
     const obj = {}
 
     const type = utils.toType('testType', obj)
-    expect(type).toBe(obj)
+    expect(type).toBe(obj as any)
   })
 
   it('should bind provided `validator function to the passed in object`', () => {
+    const spy = jasmine.createSpy()
     const obj = {
-      validator() {
-        return this
-      },
+      validator: spy,
     }
 
     const type = utils.toType('testType', obj)
     const { validator } = type
+    validator(true)
 
-    expect(validator(true)).toBe(obj)
+    expect(spy.calls.first().object).toBe(type)
   })
 
   it('should add a non-enumerable name property', () => {
     const type = utils.toType('demo', {})
     expect(type._vueTypes_name).toBe('demo')
-    expect(Object.keys(type)).toExclude('_vueTypes_name')
+    expect(Object.keys(type)).not.toContain('_vueTypes_name')
   })
 
   it('should allow the name property to be writtable', () => {
@@ -178,7 +177,7 @@ describe('`toType()`', () => {
 
     it('`def` should NOT be enumerable', () => {
       const type = utils.toType('testType', {})
-      expect(Object.keys(type)).toExclude('def')
+      expect(Object.keys(type)).not.toContain('def')
     })
 
     it('`def` should NOT be writtable', () => {
@@ -221,7 +220,7 @@ describe('`toType()`', () => {
       const arr = [1, 2]
       const type = utils.toType('testType', { type: Array }).def(arr)
       expect(type.default).toBeInstanceOf(Function)
-      expect(type.default()).toNotBe(arr)
+      expect(type.default()).not.toBe(arr)
       expect(type.default()).toEqual(arr)
     })
 
@@ -229,7 +228,7 @@ describe('`toType()`', () => {
       const obj = { a: 'hello' }
       const type = utils.toType('testType', { type: Object }).def(obj)
       expect(type.default).toBeInstanceOf(Function)
-      expect(type.default()).toNotBe(obj)
+      expect(type.default()).not.toBe(obj)
       expect(type.default()).toEqual(obj)
     })
   })
@@ -249,7 +248,7 @@ describe('`toValidableType()`', () => {
     expect(type.validate).toBeInstanceOf(Function)
   })
   it('the validate function sets a custom validator', () => {
-    const fn = expect.createSpy()
+    const fn = jasmine.createSpy()
     const type = utils
       .toValidableType('testType', { type: String })
       .validate(fn)
@@ -259,12 +258,12 @@ describe('`toValidableType()`', () => {
     expect(fn).toHaveBeenCalledWith('demo')
   })
   it('binds the validate function to the type object', () => {
-    const fn = expect.createSpy()
+    const fn = jasmine.createSpy()
     const type = utils
       .toValidableType('testType', { type: String })
       .validate(fn)
     type.validator('')
-    expect(fn.calls[0].context).toBe(type)
+    expect(fn.calls.first().object).toBe(type)
   })
 })
 
@@ -276,12 +275,12 @@ describe('`clone()`', () => {
       enumerable: false,
     })
 
-    expect(utils.clone(obj)).toNotBe(obj)
+    expect(utils.clone(obj)).not.toBe(obj)
     expect(utils.clone(obj)).toEqual(obj)
 
     expect(utils.clone(nonEnum)).toEqual(nonEnum)
     expect(utils.clone(nonEnum).demo).toBe(true)
-    expect(Object.keys(utils.clone(nonEnum))).toExclude('demo')
+    expect(Object.keys(utils.clone(nonEnum))).not.toContain('demo')
   })
 })
 
@@ -290,7 +289,7 @@ describe('`fromType()`', () => {
     const base = utils.toType('a', { type: String }).isRequired
     const copy = utils.fromType('b', base)
 
-    expect(copy).toNotBe(base)
+    expect(copy).not.toBe(base)
     expect(copy._vueTypes_name).toBe('b')
     expect(copy.type).toBe(base.type)
     expect(copy.required).toBe(base.required)
@@ -305,8 +304,8 @@ describe('`fromType()`', () => {
   })
 
   it('composes validator functions', () => {
-    const validator = expect.createSpy().andReturn(true)
-    const validatorCopy = expect.createSpy().andReturn(false)
+    const validator = jasmine.createSpy().and.returnValue(true)
+    const validatorCopy = jasmine.createSpy().and.returnValue(false)
     const base = utils.toType('a', {
       type: String,
       validator,
@@ -318,7 +317,7 @@ describe('`fromType()`', () => {
 
     expect(validator).toHaveBeenCalledWith('')
     expect(validatorCopy).toHaveBeenCalledWith('')
-    expect(validator.calls[0].context).toBe(copy)
-    expect(validatorCopy.calls[0].context).toBe(copy)
+    expect(validator.calls.first().object).toBe(copy)
+    expect(validatorCopy.calls.first().object).toBe(copy)
   })
 })

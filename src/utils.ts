@@ -173,8 +173,8 @@ export function validateType<T, U>(
     if (typeToCheck.type === undefined) {
       expectedType = 'any'
     } else if (isArray(typeToCheck.type)) {
-      valid = typeToCheck.type.some((type: any) =>
-        validateType(type, value, true),
+      valid = typeToCheck.type.some(
+        (type: any) => validateType(type, value, true) === true,
       )
       expectedType = typeToCheck.type
         .map((type: any) => getType(type))
@@ -201,7 +201,10 @@ export function validateType<T, U>(
 
   if (!valid) {
     const msg = `${namePrefix}value "${value}" should be of type "${expectedType}"`
-    silent === false && warn(msg)
+    if (silent === false) {
+      warn(msg)
+      return false
+    }
     return msg
   }
 
@@ -216,7 +219,7 @@ export function validateType<T, U>(
     warn = oldWarn
 
     if (!valid) {
-      const msg = '* ' + warnLog.join('\n * ')
+      const msg = '* ' + warnLog.join('\n* ')
       warnLog.length = 0
       if (silent === false) {
         warn(msg)
@@ -252,7 +255,7 @@ export function toType<T = any>(name: string, obj: PropOptions<T>) {
         if (def === undefined && !this.default) {
           return this
         }
-        if (!isFunction(def) && !validateType(this, def)) {
+        if (!isFunction(def) && validateType(this, def, true) !== true) {
           warn(`${this._vueTypes_name} - invalid default value: "${def}"`)
           return this
         }
