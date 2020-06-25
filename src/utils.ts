@@ -41,7 +41,14 @@ export const isPlainObject = _isPlainObject as (obj: any) => obj is PlainObject
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export function noop() {}
 
-let warn: (msg: string) => void = noop
+/**
+ * A function that returns its first argument
+ *
+ * @param arg
+ */
+export const identity = (arg: any) => arg
+
+let warn: (msg: string) => string | void = identity
 
 if (process.env.NODE_ENV !== 'production') {
   const hasConsole = typeof console !== 'undefined'
@@ -50,7 +57,7 @@ if (process.env.NODE_ENV !== 'production') {
         // eslint-disable-next-line no-console
         Vue.config.silent === false && console.warn(`[VueTypes warn]: ${msg}`)
       }
-    : noop
+    : identity
 }
 
 export { warn }
@@ -130,13 +137,20 @@ export function unwrap<T extends WrappedFn | Function>(fn: T) {
 }
 
 /**
- * Validates a given value against a prop type object
+ * Validates a given value against a prop type object.
+ *
+ * If `silent` is `false` (default) will return a boolean. If it is set to `true`
+ * it will return `true` on success or a string error message on failure
  *
  * @param {Object|*} type - Type to use for validation. Either a type object or a constructor
  * @param {*} value - Value to check
  * @param {boolean} silent - Silence warnings
  */
-export function validateType<T, U>(type: T, value: U, silent = false) {
+export function validateType<T, U>(
+  type: T,
+  value: U,
+  silent = false,
+): string | boolean {
   let typeToCheck: { [key: string]: any }
   let valid = true
   let expectedType = ''
@@ -186,25 +200,30 @@ export function validateType<T, U>(type: T, value: U, silent = false) {
   }
 
   if (!valid) {
-    silent === false &&
-      warn(`${namePrefix}value "${value}" should be of type "${expectedType}"`)
-    return false
+    const msg = `${namePrefix}value "${value}" should be of type "${expectedType}"`
+    silent === false && warn(msg)
+    return msg
   }
 
   if (has(typeToCheck, 'validator') && isFunction(typeToCheck.validator)) {
-    // swallow warn
-    let oldWarn: any
-    if (silent) {
-      oldWarn = warn
-      warn = noop
+    const oldWarn = warn
+    const warnLog = []
+    warn = (msg) => {
+      warnLog.push(msg)
     }
 
     valid = typeToCheck.validator(value)
-    oldWarn && (warn = oldWarn)
+    warn = oldWarn
 
-    if (!valid && silent === false)
-      warn(`${namePrefix}custom validation failed`)
-    return valid
+    if (!valid) {
+      const msg = '* ' + warnLog.join('\n * ')
+      warnLog.length = 0
+      if (silent === false) {
+        warn(msg)
+        return valid
+      }
+      return msg
+    }
   }
   return valid
 }

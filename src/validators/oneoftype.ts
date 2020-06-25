@@ -75,7 +75,7 @@ export default function oneOfType<
         }
         return validateType(type, value, true)
       })
-      if (!valid) warn(`oneOfType - value type should be one of "${typesStr}"`)
+      if (!valid) warn(`oneOfType - value type should be one of "${typesStr}".`)
       return valid
     },
   })

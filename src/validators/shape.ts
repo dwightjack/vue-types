@@ -20,11 +20,19 @@ export default function shape<T extends object>(
         requiredKeys.length > 0 &&
         requiredKeys.some((req) => valueKeys.indexOf(req) === -1)
       ) {
-        warn(
-          `shape - at least one of required properties "${requiredKeys.join(
-            '", "',
-          )}" is not present`,
+        const missing = requiredKeys.filter(
+          (req) => valueKeys.indexOf(req) === -1,
         )
+        if (missing.length === 1) {
+          warn(`shape - required property "${missing[0]}" is not defined.`)
+        } else {
+          warn(
+            `shape - required properties "${missing.join(
+              '", "',
+            )}" are not defined.`,
+          )
+        }
+
         return false
       }
 
@@ -32,11 +40,19 @@ export default function shape<T extends object>(
         if (keys.indexOf(key) === -1) {
           if ((this as VueTypeLooseShape<T>)._vueTypes_isLoose === true)
             return true
-          warn(`shape - object is missing "${key}" property`)
+          warn(
+            `shape - shape definition does not include a "${key}" property. Allowed keys: "${keys.join(
+              '", "',
+            )}".`,
+          )
           return false
         }
         const type = (obj as any)[key]
-        return validateType(type, value[key])
+        const valid = validateType(type, value[key], true)
+        if (typeof valid === 'string') {
+          warn(`shape - "${key}" property validation error:\n${valid}`)
+        }
+        return valid === true
       })
     },
   }) as VueTypeShape<T>
