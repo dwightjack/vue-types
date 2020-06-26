@@ -1,92 +1,51 @@
 import Vue from 'vue'
 
 import { noop } from '../src/utils'
+import * as native from '../src/validators/native'
 import { VueTypeValidableDef, VueTypeDef } from '../src/types'
 import VueTypes from '../src/index'
+import { forceNoContext, checkRequired, getDescriptors } from './helpers'
 
 Vue.config.productionTip = false
 Vue.config.silent = true
 
 type VueTypesType = typeof VueTypes
 
-const checkRequired = (type: any) => {
-  expect(type.isRequired).toEqual(
-    jasmine.objectContaining({
-      required: true,
-    }),
-  )
-}
-
-// Vue.js does keep the context for validators, so there is no `this`
-const forceNoContext = (validator) => validator.bind(undefined)
-
 describe('VueTypes', () => {
   describe('`.any`', () => {
-    it('should NOT have a type', () => {
-      expect(VueTypes.any.type).toBe(undefined)
-    })
-
-    it('should add a `required` flag', () => {
-      checkRequired(VueTypes.any)
-    })
-
-    it('should provide a method to set a custom default', () => {
-      expect(VueTypes.any.def('test').default).toBe('test')
+    it('should proxy the `any` validator', () => {
+      const expected = getDescriptors(native.any())
+      expect(getDescriptors(VueTypes.any)).toEqual(expected)
     })
   })
 
   describe('`.func`', () => {
-    it('should match an object with methods, type and default function', () => {
-      expect(VueTypes.func.type).toBe(Function)
+    it('should proxy the `func` validator with a sensible default', () => {
+      const expected = getDescriptors(native.func())
+      expect(getDescriptors(VueTypes.func)).toEqual(
+        jasmine.objectContaining(expected),
+      )
       expect(VueTypes.func.default).toBeInstanceOf(Function)
-    })
-
-    it('should add a `required` flag', () => {
-      checkRequired(VueTypes.func)
-    })
-
-    it('should provide a method to set a custom default', () => {
-      function myFn() {}
-
-      expect(VueTypes.func.def(myFn).default).toBe(myFn)
     })
   })
 
   describe('`.bool`', () => {
-    it('should match an object with methods, type and default', () => {
-      const match = jasmine.objectContaining({
-        type: Boolean,
-        default: true,
-      })
-
-      expect(VueTypes.bool).toEqual(match)
-    })
-
-    it('should add a `required` flag', () => {
-      checkRequired(VueTypes.bool)
-    })
-
-    it('should provide a method to set a custom default', () => {
-      expect(VueTypes.bool.def(false).default).toBe(false)
+    it('should proxy the `bool` validator with a sensible default', () => {
+      const expected = getDescriptors(native.bool())
+      expect(getDescriptors(VueTypes.bool)).toEqual(
+        jasmine.objectContaining(expected),
+      )
+      expect(VueTypes.bool.default).toBe(true)
     })
   })
 
   describe('`.string`', () => {
-    it('should match an object with methods, type and default', () => {
-      const match = jasmine.objectContaining({
-        type: String,
-        default: '',
-      })
-
-      expect(VueTypes.string).toEqual(match)
-    })
-
-    it('should add a `required` flag', () => {
-      checkRequired(VueTypes.string)
-    })
-
-    it('should provide a method to set a custom default', () => {
-      expect(VueTypes.string.def('test').default).toBe('test')
+    it('should proxy the `string` validator with a sensible default', () => {
+      const expected = getDescriptors(native.string())
+      expect(getDescriptors(VueTypes.string)).toEqual(
+        jasmine.objectContaining(expected),
+      )
+      expect(VueTypes.string.default).toBe('')
     })
   })
 
@@ -155,11 +114,11 @@ describe('VueTypes', () => {
     })
 
     it('should have default as a function', () => {
-      expect(VueTypes.array.default).toBeInstanceOf(Function)
+      expect(VueTypes.object.default).toBeInstanceOf(Function)
     })
 
     it('should return an object as default value', () => {
-      expect(VueTypes.array.default()).toBeInstanceOf(Object)
+      expect(VueTypes.object.default()).toBeInstanceOf(Object)
     })
 
     it('should add a `required` flag', () => {

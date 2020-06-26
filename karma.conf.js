@@ -24,7 +24,7 @@ module.exports = (config) => {
     plugins: ['karma-*'],
 
     // list of files / patterns to load in the browser
-    files: ['src/**/*.ts', 'test/**/*.test.ts'],
+    files: ['src/**/*.ts', 'test/**/*.ts'],
 
     // list of files to exclude
     exclude: [],
@@ -33,7 +33,7 @@ module.exports = (config) => {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       '**/*.ts': 'karma-typescript',
-      'test/**/*.test.ts': 'karma-typescript',
+      'test/**/*.ts': 'karma-typescript',
     },
 
     karmaTypescriptConfig: {
