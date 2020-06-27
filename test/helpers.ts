@@ -16,3 +16,18 @@ export function getDescriptors<T extends object>(type: T): T {
   })
   return descriptors
 }
+
+export function getExpectDescriptors<T extends object>(type: T): any {
+  const descriptors = {} as { [P in keyof T]: any }
+  Object.getOwnPropertyNames(type).forEach((key) => {
+    const descr = Object.getOwnPropertyDescriptor(type, key)
+    if (typeof descr.get === 'function') {
+      descr.get = jasmine.any(Function) as any
+    }
+    if (typeof descr.value === 'function') {
+      descr.value = jasmine.any(Function) as any
+    }
+    descriptors[key as keyof T] = descr
+  })
+  return descriptors
+}

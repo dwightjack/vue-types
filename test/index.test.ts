@@ -1,10 +1,21 @@
 import Vue from 'vue'
-
 import { noop } from '../src/utils'
 import * as native from '../src/validators/native'
+import custom from '../src/validators/custom'
+import oneOf from '../src/validators/oneof'
+import oneOfType from '../src/validators/oneoftype'
+import arrayOf from '../src/validators/arrayof'
+import objectOf from '../src/validators/objectof'
+import instanceOf from '../src/validators/instanceof'
+import shape from '../src/validators/shape'
 import { VueTypeValidableDef, VueTypeDef } from '../src/types'
 import VueTypes from '../src/index'
-import { forceNoContext, checkRequired, getDescriptors } from './helpers'
+import {
+  forceNoContext,
+  checkRequired,
+  getDescriptors,
+  getExpectDescriptors,
+} from './helpers'
 
 Vue.config.productionTip = false
 Vue.config.silent = true
@@ -14,128 +25,58 @@ type VueTypesType = typeof VueTypes
 describe('VueTypes', () => {
   describe('`.any`', () => {
     it('should proxy the `any` validator', () => {
-      const expected = getDescriptors(native.any())
+      const expected = getExpectDescriptors(native.any())
       expect(getDescriptors(VueTypes.any)).toEqual(expected)
     })
   })
 
   describe('`.func`', () => {
     it('should proxy the `func` validator with a sensible default', () => {
-      const expected = getDescriptors(native.func())
-      expect(getDescriptors(VueTypes.func)).toEqual(
-        jasmine.objectContaining(expected),
-      )
+      const expected = getExpectDescriptors(native.func().def(() => {}))
+      expect(getDescriptors(VueTypes.func)).toEqual(expected)
       expect(VueTypes.func.default).toBeInstanceOf(Function)
     })
   })
 
   describe('`.bool`', () => {
     it('should proxy the `bool` validator with a sensible default', () => {
-      const expected = getDescriptors(native.bool())
-      expect(getDescriptors(VueTypes.bool)).toEqual(
-        jasmine.objectContaining(expected),
-      )
+      const expected = getExpectDescriptors(native.bool().def(true))
+      expect(getDescriptors(VueTypes.bool)).toEqual(expected)
       expect(VueTypes.bool.default).toBe(true)
     })
   })
 
   describe('`.string`', () => {
     it('should proxy the `string` validator with a sensible default', () => {
-      const expected = getDescriptors(native.string())
-      expect(getDescriptors(VueTypes.string)).toEqual(
-        jasmine.objectContaining(expected),
-      )
+      const expected = getExpectDescriptors(native.string().def(''))
+      expect(getDescriptors(VueTypes.string)).toEqual(expected)
       expect(VueTypes.string.default).toBe('')
     })
   })
 
   describe('`.number`', () => {
-    it('should match an object with methods, type and default', () => {
-      const match = jasmine.objectContaining({
-        type: Number,
-        default: 0,
-      })
-
-      expect(VueTypes.number).toEqual(match)
-    })
-
-    it('should add a `required` flag', () => {
-      checkRequired(VueTypes.number)
-    })
-
-    it('should provide a method to set a custom default', () => {
-      expect(VueTypes.number.def(100).default).toBe(100)
+    it('should proxy the `number` validator with a sensible default', () => {
+      const expected = getExpectDescriptors(native.number().def(0))
+      expect(getDescriptors(VueTypes.number)).toEqual(expected)
+      expect(VueTypes.number.default).toBe(0)
     })
   })
 
   describe('`.array`', () => {
-    it('should match an object with methods, type and default', () => {
-      const match = jasmine.objectContaining({
-        type: Array,
-      })
-
-      expect(VueTypes.array).toEqual(match)
-      expect(VueTypes.array.default()).toBeInstanceOf(Array)
-    })
-
-    it('should have default as a function', () => {
+    it('should proxy the `array` validator with a sensible default', () => {
+      const expected = getExpectDescriptors(native.array().def([]))
+      expect(getDescriptors(VueTypes.array)).toEqual(expected)
       expect(VueTypes.array.default).toBeInstanceOf(Function)
-    })
-
-    it('should return an array as default value', () => {
-      expect(VueTypes.array.default()).toBeInstanceOf(Array)
-    })
-
-    it('should add a `required` flag', () => {
-      checkRequired(VueTypes.array)
-    })
-
-    it('should provide a method to set a custom default. `default` value must be a function', () => {
-      const arr = [0, 1]
-      const def = VueTypes.array.def(arr).default
-      expect(def).toEqual(jasmine.any(Function))
-      expect(def()).toEqual(arr)
-    })
-
-    it('should provide a method to set a custom default. If default value is a function it will be used as factory function', () => {
-      const arrFactory = () => [0, 1]
-      const def = VueTypes.array.def(arrFactory).default
-      expect(def).toBe(arrFactory)
+      expect(VueTypes.array.default()).toEqual([])
     })
   })
 
   describe('`.object`', () => {
-    it('should match an object with methods, type and default', () => {
-      const match = jasmine.objectContaining({
-        type: Object,
-      })
-
-      expect(VueTypes.object).toEqual(match)
-    })
-
-    it('should have default as a function', () => {
+    it('should proxy the `object` validator with a sensible default', () => {
+      const expected = getExpectDescriptors(native.object().def({}))
+      expect(getDescriptors(VueTypes.object)).toEqual(expected)
       expect(VueTypes.object.default).toBeInstanceOf(Function)
-    })
-
-    it('should return an object as default value', () => {
-      expect(VueTypes.object.default()).toBeInstanceOf(Object)
-    })
-
-    it('should add a `required` flag', () => {
-      checkRequired(VueTypes.object)
-    })
-
-    it('should provide a method to set a custom default. `default` value must be a function', () => {
-      const obj = { test: 'test' }
-      const def = VueTypes.object.def(obj).default
-      expect(def).toEqual(jasmine.any(Function))
-      expect(def()).toEqual(obj)
-    })
-
-    it('should provide a method to set a custom default. If default value is a function it will be used as factory function', () => {
-      const objFactory = () => ({ test: 'test' })
-      const def = VueTypes.object.def(objFactory).default
-      expect(def).toBe(objFactory)
+      expect(VueTypes.object.default()).toEqual({})
     })
   })
 
@@ -144,513 +85,71 @@ describe('VueTypes', () => {
    */
 
   describe('`.integer`', () => {
-    it('should match an object with methods, type and default', () => {
-      expect(VueTypes.integer).toEqual(
-        jasmine.objectContaining({
-          type: Number,
-          default: 0,
-          validator: jasmine.any(Function),
-        }),
-      )
-    })
-
-    it('should add a `required` flag', () => {
-      checkRequired(VueTypes.integer)
-    })
-
-    it('should provide a method to set a custom default', () => {
-      expect(VueTypes.integer.def(100).default).toBe(100)
-    })
-
-    it('should NOT allow float custom default', () => {
-      expect(VueTypes.integer.def(0.1).default).not.toBe(0.1)
-    })
-
-    it('should provide a validator function that returns true on integer values', () => {
-      const validator = forceNoContext(VueTypes.integer.validator)
-      expect(validator(100)).toBe(true)
-      expect(validator(Infinity)).toBe(false)
-      expect(validator(0.1)).toBe(false)
+    it('should proxy the `integer` validator with a sensible default', () => {
+      const expected = getExpectDescriptors(native.integer().def(0))
+      expect(getDescriptors(VueTypes.integer)).toEqual(expected)
+      expect(VueTypes.integer.default).toBe(0)
     })
   })
 
-  describe('symbol', () => {
-    it('should match an object with type and validator, but not default', () => {
-      expect(VueTypes.symbol).toEqual(
-        jasmine.objectContaining({
-          validator: jasmine.any(Function),
-        }),
-      )
-      expect(VueTypes.symbol.default).toBe(undefined)
-    })
-
-    it('should validate symbols', function () {
-      if ('Symbol' in window && typeof Symbol() === 'symbol') {
-        expect(VueTypes.symbol.validator(Symbol())).toBe(true)
-      } else {
-        this.skip()
-      }
+  describe('`.symbol`', () => {
+    it('should proxy the `symbol` validator', () => {
+      const expected = getExpectDescriptors(native.symbol())
+      expect(getDescriptors(VueTypes.symbol)).toEqual(expected)
     })
   })
 
   describe('`.custom`', () => {
-    let customType
-
-    beforeEach(() => {
-      customType = VueTypes.custom((val) => typeof val === 'string')
-    })
-
-    it('should match an object with a validator method', () => {
-      expect(customType).toEqual(
-        jasmine.objectContaining({
-          validator: jasmine.any(Function),
-        }),
-      )
-    })
-
-    it('should add a `required` flag', () => {
-      checkRequired(customType)
-    })
-
-    it('should provide a method to set a custom default', () => {
-      expect(customType.def('test').default).toBe('test')
-    })
-
-    it('should provide a custom validator function', () => {
-      const validator = forceNoContext(customType.validator)
-      expect(validator('mytest')).toBe(true)
-      expect(validator(0)).toBe(false)
+    it('should proxy the `custom` validator', () => {
+      const fn = () => true
+      const expected = getExpectDescriptors(custom(fn))
+      expect(getDescriptors(VueTypes.custom(fn))).toEqual(expected)
     })
   })
 
   describe('`.oneOf`', () => {
-    let customType
-
-    beforeEach(() => {
-      customType = VueTypes.oneOf([0, 1, 'string'])
-    })
-
-    it('should match an object with a validator method', () => {
-      expect(customType).toEqual(
-        jasmine.objectContaining({
-          validator: jasmine.any(Function),
-        }),
-      )
-    })
-
-    it('should have a valid array `type` property', () => {
-      expect(customType.type).toBeInstanceOf(Array)
-      expect(customType.type[0]).toBe(Number)
-    })
-
-    it('should add a `required` flag', () => {
-      checkRequired(customType)
-    })
-
-    it('should provide a method to set a custom default', () => {
-      expect(customType.def(1).default).toBe(1)
-    })
-
-    it('should NOT allow default values other than the provided ones', () => {
-      expect(customType.def('not this')).not.toEqual(
-        jasmine.objectContaining({
-          default: jasmine.anything(),
-        }),
-      )
-    })
-
-    it('should provide a custom validator function', () => {
-      const validator = forceNoContext(customType.validator)
-      expect(validator(0)).toBe(true)
-      expect(validator(5)).toBe(false)
-    })
-
-    it('should filter `null` values type checking', () => {
-      const myType = VueTypes.oneOf([null, undefined, 'string', 2])
-      expect(myType.type).toEqual([String, Number])
-
-      const myType2 = VueTypes.oneOf([null])
-      expect(myType2.type).toBe(undefined)
+    it('should proxy the `oneOf` validator', () => {
+      const arr = [1, 2, 'demo'] as const
+      const expected = getExpectDescriptors(oneOf(arr))
+      expect(getDescriptors(VueTypes.oneOf(arr))).toEqual(expected)
     })
   })
 
   describe('`.instanceOf`', () => {
-    let customType
-
-    class MyClass {
-      constructor(public name: string) {}
-    }
-
-    beforeEach(() => {
-      customType = VueTypes.instanceOf(MyClass)
-    })
-
-    it('should match an object with a validator method', () => {
-      expect(customType).toEqual(
-        jasmine.objectContaining({
-          type: MyClass,
-        }),
-      )
-    })
-
-    it('should add a `required` flag', () => {
-      checkRequired(customType)
-    })
-
-    it('should provide a method to set a custom default', () => {
-      const obj = new MyClass('john')
-      expect(customType.def(obj).default).toBe(obj)
-    })
-
-    it('should NOT allow default values other than the provided ones', () => {
-      expect(customType.def(new Date()).default).toBeUndefined()
+    it('should proxy the `instanceOf` validator', () => {
+      class Demo {}
+      const expected = getExpectDescriptors(instanceOf(Demo))
+      expect(getDescriptors(VueTypes.instanceOf(Demo))).toEqual(expected)
     })
   })
 
   describe('`.arrayOf`', () => {
-    it('should have a type `Array`', () => {
-      const customType = VueTypes.arrayOf(Number)
-      expect(customType.type).toBe(Array)
-    })
-
-    it('should add a `required` flag', () => {
-      const customType = VueTypes.arrayOf(Number)
-      checkRequired(customType)
-    })
-
-    it('should provide a method to set a custom default. `default` value must be a function', () => {
-      const customType = VueTypes.arrayOf(Number)
-      const def = customType.def([0, 1]).default
-      expect(def).toBeInstanceOf(Function)
-      expect(def()).toEqual([0, 1])
-    })
-
-    it('should NOT accept default values out of the allowed one', () => {
-      const customType = VueTypes.arrayOf(Number)
-      expect(customType.def(['test' as any, 1]).default).toBeUndefined()
-    })
-
-    it('should validate an array of same-type values', () => {
-      const customType = VueTypes.arrayOf(Number)
-      expect(forceNoContext(customType.validator)([0, 1, 2])).toBe(true)
-    })
-
-    it('should NOT validate an array of mixed-type values', () => {
-      const customType = VueTypes.arrayOf(Number)
-      expect(forceNoContext(customType.validator)([0, 1, 'string'])).toBe(false)
-    })
-
-    it('should allow validation of VuePropTypes native types', () => {
-      const customType = VueTypes.arrayOf(VueTypes.number)
-      expect(forceNoContext(customType.validator)([0, 1, 2])).toBe(true)
-    })
-
-    it('should allow validation of VuePropTypes custom types', () => {
-      const customType = VueTypes.arrayOf(VueTypes.integer)
-      const validator = forceNoContext(customType.validator)
-      expect(validator([0, 1, 2])).toBe(true)
-      expect(validator([0, 1.2, 2])).toBe(false)
+    it('should proxy the `arrayOf` validator', () => {
+      const expected = getExpectDescriptors(arrayOf(String))
+      expect(getDescriptors(VueTypes.arrayOf(String))).toEqual(expected)
     })
   })
 
   describe('`.objectOf`', () => {
-    it('should have a type `Object`', () => {
-      const customType = VueTypes.objectOf(Number)
-      expect(customType.type).toBe(Object)
-    })
-
-    it('should add a `required` flag', () => {
-      const customType = VueTypes.objectOf(Number)
-      checkRequired(customType)
-    })
-
-    it('should provide a method to set a custom default. `default` value must be a function', () => {
-      const customType = VueTypes.objectOf(Number)
-      const def = customType.def({ id: 10, age: 30 }).default
-      expect(def).toBeInstanceOf(Function)
-      expect(def()).toEqual({ id: 10, age: 30 })
-    })
-
-    it('should NOT accept default values out of the allowed one', () => {
-      const customType = VueTypes.objectOf(Number)
-      expect(
-        customType.def({ id: '10', age: 30 } as any).default,
-      ).toBeUndefined()
-    })
-
-    it('should validate an object of same-type values', () => {
-      const customType = VueTypes.objectOf(Number)
-      expect(forceNoContext(customType.validator)({ id: 10, age: 30 })).toBe(
-        true,
-      )
-    })
-
-    it('should NOT validate an array of mixed-type values', () => {
-      const customType = VueTypes.objectOf(Number)
-      expect(forceNoContext(customType.validator)({ id: '10', age: 30 })).toBe(
-        false,
-      )
-    })
-
-    it('should allow validation of VuePropTypes native types', () => {
-      const customType = VueTypes.objectOf(VueTypes.number)
-      expect(forceNoContext(customType.validator)({ id: 10, age: 30 })).toBe(
-        true,
-      )
-    })
-
-    it('should allow validation of VuePropTypes custom types', () => {
-      const customType = VueTypes.objectOf(VueTypes.integer)
-      const validator = forceNoContext(customType.validator)
-      expect(validator({ id: 10, age: 30 })).toBe(true)
-      expect(validator({ id: 10.2, age: 30 })).toBe(false)
+    it('should proxy the `objectOf` validator', () => {
+      const expected = getExpectDescriptors(objectOf(String))
+      expect(getDescriptors(VueTypes.objectOf(String))).toEqual(expected)
     })
   })
 
   describe('`.shape`', () => {
-    let shape
-
-    beforeEach(() => {
-      shape = {
-        id: Number,
-        name: String,
-        age: VueTypes.integer,
-      }
-    })
-
-    it('should add a `required` flag', () => {
-      const customType = VueTypes.shape(shape)
-      checkRequired(customType)
-    })
-
-    it('should validate an object with a given shape', () => {
-      const customType = VueTypes.shape(shape)
-      expect(
-        forceNoContext(customType.validator)({
-          id: 10,
-          name: 'John',
-          age: 30,
-        }),
-      ).toBe(true)
-    })
-
-    it('should NOT validate an object without a given shape', () => {
-      const customType = VueTypes.shape(shape)
-      expect(
-        forceNoContext(customType.validator)({
-          id: '10',
-          name: 'John',
-          age: 30,
-        }),
-      ).toBe(false)
-    })
-
-    it('should NOT validate an object with keys NOT present in the shape', () => {
-      const customType = VueTypes.shape(shape)
-      expect(
-        forceNoContext(customType.validator)({
-          id: 10,
-          name: 'John',
-          age: 30,
-          nationality: '',
-        }),
-      ).toBe(false)
-    })
-
-    it('should validate an object with keys NOT present in the shape on `loose` mode', () => {
-      const customType = VueTypes.shape(shape).loose
-      expect(
-        forceNoContext(customType.validator)({
-          id: 10,
-          name: 'John',
-          age: 30,
-          nationality: '',
-        }),
-      ).toBe(true)
-    })
-
-    it('should validate an objects shape on `loose` mode and respect flags', () => {
-      const customType = VueTypes.shape(shape).loose.isRequired
-      expect(
-        forceNoContext(customType.validator)({
-          id: 10,
-          name: 'John',
-          age: 30,
-          nationality: '',
-        }),
-      ).toBe(true)
-    })
-
-    it('should validate an objects shape on `loose` mode and respect flags in different order', () => {
-      const customType = VueTypes.shape(shape).isRequired.loose
-      expect(
-        forceNoContext(customType.validator)({
-          id: 10,
-          name: 'John',
-          age: 30,
-          nationality: '',
-        }),
-      ).toBe(true)
-    })
-
-    it('should NOT validate a value which is NOT an object', () => {
-      const customType = VueTypes.shape(shape)
-      const validator = forceNoContext(customType.validator)
-      expect(validator('a string')).toBe(false)
-
-      class MyClass {
-        id: string
-        name: string
-        age: number
-        constructor() {
-          this.id = '10'
-          this.name = 'John'
-          this.age = 30
-        }
-      }
-
-      expect(validator(new MyClass())).toBe(false)
-    })
-
-    it('should provide a method to set a custom default', () => {
-      const customType = VueTypes.shape(shape)
-      const defVals = {
-        id: 10,
-        name: 'John',
-        age: 30,
-      }
-      const def = customType.def(defVals).default
-      expect(def).toBeInstanceOf(Function)
-      expect(def()).toEqual(defVals)
-    })
-
-    it('should NOT accept default values with an incorrect shape', () => {
-      const customType = VueTypes.shape(shape)
-      const def = {
-        id: '10',
-        name: 'John',
-        age: 30,
-      }
-      expect(customType.def(def).default).toBeUndefined()
-    })
-
-    it('should allow required keys in shape (simple)', () => {
-      const customType = VueTypes.shape({
-        id: VueTypes.integer.isRequired,
-        name: String,
-      })
-      const validator = forceNoContext(customType.validator)
-
-      expect(
-        validator({
-          name: 'John',
-        }),
-      ).toBe(false)
-
-      expect(
-        validator({
-          id: 10,
-        }),
-      ).toBe(true)
-    })
-
-    it('should allow required keys in shape (with a null type required)', () => {
-      const customType = VueTypes.shape({
-        myKey: VueTypes.any.isRequired,
-        name: null,
-      })
-      const validator = forceNoContext(customType.validator)
-
-      expect(
-        validator({
-          name: 'John',
-        }),
-      ).toBe(false)
-
-      expect(
-        validator({
-          myKey: null,
-        }),
-      ).toBe(true)
-    })
-
-    it('Should accept properties explicitly set to undefined', () => {
-      const customType = VueTypes.shape({
-        message: VueTypes.string,
-      })
-      const validator = forceNoContext(customType.validator)
-
-      expect(
-        validator({
-          message: undefined,
-        }),
-      ).toBe(true)
+    it('should proxy the `shape` validator', () => {
+      const expected = getExpectDescriptors(shape({}))
+      expect(getDescriptors(VueTypes.shape({}))).toEqual(expected)
     })
   })
 
   describe('`.oneOfType`', () => {
-    class MyClass {
-      constructor(public name: string) {}
-    }
-
-    const nativeTypes = [Number, Array, MyClass]
-    const complexTypes = [
-      VueTypes.oneOf([0, 1, 'string']),
-      VueTypes.shape({ id: Number }),
-    ]
-
-    it('should add a `required` flag', () => {
-      const customType = VueTypes.oneOfType(nativeTypes)
-      checkRequired(customType)
-    })
-
-    it('should provide a method to set a custom default', () => {
-      const customType = VueTypes.oneOfType(nativeTypes)
-      expect(customType.def(1).default).toBe(1)
-    })
-
-    it('should NOT accept default values out of the allowed ones', () => {
-      const customType = VueTypes.oneOfType(nativeTypes)
-      expect(customType.def('test' as any).default).toBeUndefined()
-    })
-
-    it('should return a prop object with `type` as an array', () => {
-      const customType = VueTypes.oneOfType(nativeTypes)
-      expect(customType.type).toBeInstanceOf(Array)
-    })
-
-    it('should validate custom types with complex shapes', () => {
-      const customType = VueTypes.oneOfType(complexTypes)
-      const validator = forceNoContext(customType.validator)
-
-      expect(validator(1)).toBe(true)
-
-      // validates types not values!
-      expect(validator(5)).toBe(true)
-
-      expect(validator({ id: 10 })).toBe(true)
-      expect(validator({ id: '10' })).toBe(false)
-    })
-
-    it('should validate multiple shapes', () => {
-      const customType = VueTypes.oneOfType([
-        VueTypes.shape({
-          id: Number,
-          name: VueTypes.string.isRequired,
-        }),
-        VueTypes.shape({
-          id: Number,
-          age: VueTypes.integer.isRequired,
-        }),
-        VueTypes.shape({}),
-      ])
-
-      const validator = forceNoContext(customType.validator)
-      expect(validator({ id: 1, name: 'John' })).toBe(true)
-      expect(validator({ id: 2, age: 30 })).toBe(true)
-      expect(validator({})).toBe(true)
-
-      expect(validator({ id: 2 })).toBe(false)
+    it('should proxy the `oneOfType` validator', () => {
+      const expected = getExpectDescriptors(oneOfType([Number, Array]))
+      expect(getDescriptors(VueTypes.oneOfType([Number, Array]))).toEqual(
+        expected,
+      )
     })
   })
 

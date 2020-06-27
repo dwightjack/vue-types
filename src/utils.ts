@@ -44,7 +44,7 @@ export function noop() {}
 /**
  * A function that returns its first argument
  *
- * @param arg
+ * @param arg - Any argument
  */
 export const identity = (arg: any) => arg
 
@@ -109,11 +109,19 @@ export const isArray =
 export const isFunction = (value: unknown): value is Function =>
   toString.call(value) === '[object Function]'
 
+/**
+ * Checks if the passed-in value is a VueTypes type
+ * @param value - The value to check
+ */
 export const isVueTypeDef = <T>(
   value: any,
 ): value is VueTypeDef<T> | VueTypeValidableDef<T> =>
   isPlainObject(value) && has(value, '_vueTypes_name')
 
+/**
+ * Checks if the passed-in value is a Vue prop definition object or a VueTypes type
+ * @param value - The value to check
+ */
 export const isComplexType = <T>(value: any): value is VueProp<T> =>
   isPlainObject(value) &&
   (has(value, 'type') ||
@@ -126,12 +134,24 @@ export interface WrappedFn {
   __original: (...args: any[]) => any
 }
 
+/**
+ * Binds a function to a context and saves a reference to the original.
+ *
+ * @param fn - Target function
+ * @param ctx - New function context
+ */
 export function bindTo(fn: (...args: any[]) => any, ctx: any): WrappedFn {
   return Object.defineProperty(fn.bind(ctx), '__original', {
     value: fn,
   })
 }
 
+/**
+ * Returns the original function bounded with `bindTo`. If the passed-in function
+ * has not be bound, the function itself will be returned instead.
+ *
+ * @param fn - Function to unwrap
+ */
 export function unwrap<T extends WrappedFn | Function>(fn: T) {
   return (fn as WrappedFn).__original ?? fn
 }
@@ -295,14 +315,29 @@ export function toValidableType<T = any>(name: string, obj: PropOptions<T>) {
   }) as VueTypeValidableDef<T>
 }
 
-export function clone<T extends object>(type: T): T {
+/**
+ *  Clones an object preserving all of it's own keys.
+ *
+ * @param obj - Object to clone
+ */
+export function clone<T extends object>(obj: T): T {
   const descriptors = {} as { [P in keyof T]: any }
-  Object.getOwnPropertyNames(type).forEach((key) => {
-    descriptors[key as keyof T] = Object.getOwnPropertyDescriptor(type, key)
+  Object.getOwnPropertyNames(obj).forEach((key) => {
+    descriptors[key as keyof T] = Object.getOwnPropertyDescriptor(obj, key)
   })
   return Object.defineProperties({}, descriptors)
 }
 
+/**
+ * Return a new VueTypes type using another type as base.
+ *
+ * Properties in the `props` object will overwrite those defined in the source one
+ * expect for the `validator` function. In that case both functions will be executed in series.
+ *
+ * @param name - Name of the new type
+ * @param source - Source type
+ * @param props - Custom type properties
+ */
 export function fromType<T extends VueTypeDef<any>, U = InferType<T>>(
   name: string,
   source: T,
