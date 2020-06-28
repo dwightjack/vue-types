@@ -42,7 +42,7 @@ export const integer = () =>
   })
 
 export const symbol = () =>
-  toValidableType<symbol>('symbol', {
+  toType<symbol>('symbol', {
     validator(value) {
       return typeof value === 'symbol'
     },
