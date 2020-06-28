@@ -35,7 +35,9 @@
     "lint": "eslint src/*.ts test/*.ts",
     "build:examples": "cross-env NODE_ENV=production node ./scripts/build-examples.js",
     "serve": "sirv examples",
-    "examples": "run-s build:examples serve"
+    "examples": "run-s build:examples serve",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "keywords": [
     "vue",
@@ -80,7 +82,8 @@
     "sirv-cli": "1.0.0",
     "typescript": "3.9.5",
     "vue": "^2.0.0",
-    "vue-class-component": "7.2.3"
+    "vue-class-component": "7.2.3",
+    "vuepress": "1.5.2"
   },
   "dependencies": {
     "is-plain-object": "3.0.0"
