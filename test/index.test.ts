@@ -9,13 +9,8 @@ import objectOf from '../src/validators/objectof'
 import instanceOf from '../src/validators/instanceof'
 import shape from '../src/validators/shape'
 import { VueTypeValidableDef, VueTypeDef } from '../src/types'
-import VueTypes from '../src/index'
-import {
-  forceNoContext,
-  checkRequired,
-  getDescriptors,
-  getExpectDescriptors,
-} from './helpers'
+import VueTypes, { createTypes } from '../src/index'
+import { getDescriptors, getExpectDescriptors } from './helpers'
 
 Vue.config.productionTip = false
 Vue.config.silent = true
@@ -526,5 +521,31 @@ describe('VueTypes.utils', () => {
       expect(_utils.validate('string', type)).toBe(true)
       expect(_utils.validate('s', type)).toBe(false)
     })
+  })
+})
+
+describe('`createTypes()`', () => {
+  it('creates a custom VueTypes class', () => {
+    const MyClass = createTypes()
+
+    expect(MyClass.string).toEqual(
+      jasmine.objectContaining({
+        type: String,
+      }),
+    )
+  })
+
+  it('accepts custom defaults', () => {
+    const MyClass = createTypes({ string: 'hello world' })
+
+    console.log(VueTypes.defaults)
+    console.log(MyClass.defaults)
+
+    expect(MyClass.string).toEqual(
+      jasmine.objectContaining({
+        type: String,
+        default: 'hello world',
+      }),
+    )
   })
 })
