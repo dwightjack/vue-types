@@ -1,14 +1,8 @@
 import Vue from 'vue'
 import isPlainObject from 'is-plain-object'
 import { typeDefaults } from './sensibles'
-import {
-  PropOptions,
-  VueTypeDef,
-  VueTypeShape,
-  VueTypeValidableDef,
-  VueTypesDefaults,
-} from './types'
-
+import { VueTypesDefaults } from './types'
+export { VueTypeDef, VueTypeValidableDef } from './types'
 const dfn = Object.defineProperty
 
 const isArray =
@@ -17,7 +11,7 @@ const isArray =
     return Object.prototype.toString.call(value) === '[object Array]'
   }
 
-function type(name: string, props: PropOptions<any>, validable = false) {
+function type<T = any>(name: string, props: any = {}, validable = false): T {
   const descriptors: PropertyDescriptorMap = {
     // eslint-disable-next-line @typescript-eslint/camelcase
     _vueTypes_name: {
@@ -66,145 +60,123 @@ function type(name: string, props: PropOptions<any>, validable = false) {
   )
 }
 
-const typeMap = {
-  func: Function,
-  bool: Boolean,
-  string: String,
-  number: Number,
-  array: Array,
-  object: Object,
-  arrayOf: Array,
-  objectOf: Object,
-  shape: Object,
-}
+export const any = () => type('any', {}, true)
+export const func = <T = any>() => type<T>('func', { type: Function }, true)
+export const bool = () => type('bool', { type: Boolean }, true)
+export const string = () => type('string', { type: String }, true)
+export const number = () => type('number', { type: Number }, true)
+export const array = <T = any>() => type<T>('array', { type: Array }, true)
+export const object = <T = any>() => type<T>('object', { type: Object }, true)
+export const symbol = () => type('symbol')
+export const integer = () => type('integer', { type: Number })
 
-const getters = [
-  'any',
-  'func',
-  'bool',
-  'string',
-  'number',
-  'array',
-  'object',
-  'symbol',
-]
-const methods = [
-  'oneOf',
-  'custom',
-  'instanceOf',
-  'oneOfType',
-  'arrayOf',
-  'objectOf',
-]
+export const oneOf = <T = any>() => type<T>('oneOf')
+export const custom = <T = any>() => type<T>('custom')
+export const instanceOf = <T = any>(Constr: any) =>
+  type<T>('instanceOf', { type: Constr })
+export const oneOfType = <T = any>() => type<T>('oneOfType')
+export const arrayOf = <T = any>() => type<T>('arrayOf', { type: Array })
+export const objectOf = <T = any>() => type<T>('objectOf', { type: Object })
+export const shape = <T = any>() =>
+  dfn(
+    type<T>('shape', { type: Object }),
+    'loose',
+    {
+      get() {
+        return this
+      },
+    },
+  )
+
+function createValidator(
+  root: any,
+  name: string,
+  props: any,
+  getter = false,
+  validable = false,
+) {
+  const prop = getter ? 'get' : 'value'
+  const descr = {
+    [prop]: () =>
+      type(name, props, validable).def(
+        getter ? root.defaults[name] : undefined,
+      ),
+  }
+
+  return dfn(root, name, descr)
+}
 
 class BaseVueTypes {
   static defaults: Partial<VueTypesDefaults> = {}
 
-  static any: VueTypeValidableDef<any>
-  static func: VueTypeValidableDef<Function>
-  static bool: VueTypeValidableDef<boolean>
-  static string: VueTypeValidableDef<string>
-  static number: VueTypeValidableDef<number>
-  static array: VueTypeValidableDef<unknown[]>
-  static object: VueTypeValidableDef<{ [key: string]: any }>
-  static symbol: VueTypeValidableDef<symbol>
-  static integer: VueTypeDef<number>
-  static oneOf: (arr: any[]) => VueTypeDef<any>
-  static custom: (fn: (v: any) => boolean) => VueTypeDef<any>
-  static instanceOf: (i: any) => VueTypeDef<any>
-  static oneOfType: (arr: any[]) => VueTypeDef<any>
-  static arrayOf: (t: any) => VueTypeDef<any>
-  static objectOf: (t: any) => VueTypeDef<any>
-  static shape: (o: any) => VueTypeShape<any>
-  static extend: (props: any) => any
-  static utils = {
-    toType: type as (
-      ...args: any[]
-    ) => VueTypeDef<any> | VueTypeValidableDef<any>,
-    validate: (...args: any[]) => !!args,
+  static sensibleDefaults: Partial<VueTypesDefaults> | boolean
+
+  static get any() {
+    return any()
   }
-}
-
-function enhanceClass(vueTypeClass: typeof BaseVueTypes) {
-  function createValidator(
-    root: any,
-    name: string,
-    props: PropOptions<any>,
-    getter = false,
-    validable = false,
-  ) {
-    const prop = getter ? 'get' : 'value'
-    const descr = {
-      [prop]: () =>
-        type(name, props, validable).def(
-          getter ? (vueTypeClass as any).sensibleDefaults[name] : undefined,
-        ),
-    }
-
-    return dfn(root, name, descr)
+  static get func() {
+    return func().def(this.defaults.func)
   }
-
-  function recurseValidator(
-    root: typeof vueTypeClass,
-    getter: boolean,
-    validable = false,
-  ) {
-    return (name: string) =>
-      createValidator(
-        root,
-        name,
-        { type: typeMap[name] || null },
-        getter,
-        validable,
-      )
+  static get bool() {
+    return bool().def(this.defaults.bool)
   }
-
-  vueTypeClass.extend = function extend(props) {
+  static get string() {
+    return string().def(this.defaults.string)
+  }
+  static get number() {
+    return number().def(this.defaults.number)
+  }
+  static get array() {
+    return array().def(this.defaults.array)
+  }
+  static get object() {
+    return object().def(this.defaults.object)
+  }
+  static get symbol() {
+    return symbol()
+  }
+  static get integer() {
+    return integer().def(this.defaults.integer)
+  }
+  static oneOf = oneOf
+  static custom = custom
+  static instanceOf = instanceOf
+  static oneOfType = oneOfType
+  static arrayOf = arrayOf
+  static objectOf = objectOf
+  static shape = shape
+  static extend<T = any>(props): T {
     const { name, validate, getter = false, type = null } = props
     // If we are inheriting from a custom type, let's ignore the type property
     const extType = isPlainObject(type) && type.type ? null : type
     return createValidator(this, name, { type: extType }, getter, !!validate)
   }
-
-  getters.forEach(recurseValidator(vueTypeClass, true, true))
-  methods.forEach(recurseValidator(vueTypeClass, false))
-
-  createValidator(vueTypeClass, 'integer', { type: Number }, true) // does not have a validate method
-
-  dfn(vueTypeClass, 'shape', {
-    value() {
-      return dfn(type('shape', { type: Object }), 'loose', {
-        get() {
-          return this
-        },
-      })
-    },
-  })
-  return vueTypeClass
+  static utils = {
+    toType: type as (...args: any[]) => any,
+    validate: (...args: any[]) => !!args,
+  }
 }
 
 export function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
-  return enhanceClass(
-    class extends BaseVueTypes {
-      static defaults = { ...defs }
+  return class extends BaseVueTypes {
+    static defaults = { ...defs }
 
-      static get sensibleDefaults() {
-        return { ...this.defaults }
-      }
+    static get sensibleDefaults() {
+      return { ...this.defaults }
+    }
 
-      static set sensibleDefaults(v: boolean | Partial<VueTypesDefaults>) {
-        if (v === false) {
-          this.defaults = {}
-          return
-        }
-        if (v === true) {
-          this.defaults = { ...defs }
-          return
-        }
-        this.defaults = { ...v }
+    static set sensibleDefaults(v: boolean | Partial<VueTypesDefaults>) {
+      if (v === false) {
+        this.defaults = {}
+        return
       }
-    },
-  )
+      if (v === true) {
+        this.defaults = { ...defs }
+        return
+      }
+      this.defaults = { ...v }
+    }
+  }
 }
 
 /* eslint-disable no-console */
@@ -216,26 +188,4 @@ if (process.env.NODE_ENV !== 'production') {
 }
 /* eslint-enable no-console */
 
-class VueTypes extends BaseVueTypes {
-  static defaults: Partial<VueTypesDefaults> = typeDefaults()
-
-  static get sensibleDefaults() {
-    return { ...this.defaults }
-  }
-
-  static set sensibleDefaults(v: boolean | Partial<VueTypesDefaults>) {
-    if (v === false) {
-      this.defaults = {}
-      return
-    }
-    if (v === true) {
-      this.defaults = typeDefaults()
-      return
-    }
-    this.defaults = { ...v }
-  }
-}
-
-enhanceClass(VueTypes)
-
-export default VueTypes
+export default class VueTypes extends createTypes() {}
