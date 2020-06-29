@@ -1,15 +1,18 @@
-# Introduction
+# VueTypes
 
-`vue-types` is a collection of configurable [prop type](http://vuejs.org/guide/components.html#Props) definitions for Vue.js components, inspired by React `prop-types`.
+`vue-types` is a collection of configurable [prop type](http://vuejs.org/guide/components.html#Props) definitions for Vue.js, inspired by React `prop-types`.
 
 [Try it now!](https://codesandbox.io/embed/vue-types-template-khfk4)
 
 ## When to use
 
-While basic prop type definition in Vue is simple and convenient, detailed prop validation can become verbose on complex components.
-This is the case for `vue-types`.
+While basic prop type definition in Vue.js is straight-forward and convenient, fine-grained prop validation can become verbose on complex components.
 
-Instead of:
+`vue-types` offers a compact and fluent interface to define your project's props.
+
+## Usage example
+
+Imagine a typical Vue-js component with a set of props:
 
 ```js
 export default {
@@ -27,6 +30,7 @@ export default {
       validator(value) {
         return Number.isInteger(value)
       },
+      default: 0
     },
     nationality: String,
   },
@@ -36,7 +40,9 @@ export default {
 }
 ```
 
-You may write:
+While this component works perfectly fine, writing a lot of prop validation objects can become repetitive.
+
+With `vue-types` you could rewrite the same props like this:
 
 ```js
 import VueTypes from 'vue-types'
@@ -46,8 +52,27 @@ export default {
     id: VueTypes.number.def(10),
     name: VueTypes.string.isRequired,
     age: VueTypes.integer,
-    // No need for `default` or `required` key, so keep it simple
-    nationality: String,
+    nationality: VueTypes.string,
+  },
+  methods: {
+    // ...
+  },
+}
+```
+
+### Individual validators import
+
+Starting from version 2.0.0, you can import individual validators for an even more concise syntax:
+
+```js
+import { number, string, integer } from 'vue-types'
+
+export default {
+  props: {
+    id: number().def(10),
+    name: string().isRequired,
+    age: integer().def(0),
+    nationality: string(),
   },
   methods: {
     // ...
