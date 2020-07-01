@@ -12,7 +12,7 @@ const boolType = VueTypes.bool.def(true).isRequired
 
 const funcType = VueTypes.func.def(noop).isRequired
 
-const arrayType = VueTypes.array.def().isRequired
+const arrayType = VueTypes.array.def([]).isRequired
 const arrayType2 = VueTypes.array.def(() => []).isRequired
 
 const stringType = VueTypes.string.def('John').isRequired
@@ -96,7 +96,7 @@ const shapeTypeLoose = VueTypes.shape({
   name: String,
   surname: { type: String, default: 'Doe' },
   age: VueTypes.number,
-  hobby: VueTypes.oneOf(['climbing', 'coding'] as const),
+  hobbies: VueTypes.oneOf(['climbing', 'coding'] as const),
 }).loose.def({ nationality: 'unknown' }).isRequired
 
 shapeType.type = Object
