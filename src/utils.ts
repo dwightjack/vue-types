@@ -309,6 +309,15 @@ export function toValidableType<T = any>(name: string, obj: PropOptions<T>) {
   const type = toType<T>(name, obj)
   return Object.defineProperty(type, 'validate', {
     value(fn: (value: T) => boolean) {
+      if (isFunction(this.validator)) {
+        warn(
+          `${
+            this._vueTypes_name
+          } - calling .validate() will overwrite the current custom validator function. Validator info:\n${JSON.stringify(
+            this,
+          )}`,
+        )
+      }
       this.validator = bindTo(fn, this)
       return this
     },
