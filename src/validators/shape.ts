@@ -2,7 +2,7 @@ import { Prop, VueProp, VueTypeShape, VueTypeLooseShape } from '../types'
 import { toType, validateType, warn, isPlainObject } from '../utils'
 
 export default function shape<T extends object>(
-  obj: { [K in keyof T]?: Prop<T[K]> | VueProp<T[K]> },
+  obj: { [K in keyof T]: Prop<T[K]> | VueProp<T[K]> },
 ): VueTypeShape<T> {
   const keys = Object.keys(obj)
   const requiredKeys = keys.filter((key) => !!(obj as any)[key]?.required)
