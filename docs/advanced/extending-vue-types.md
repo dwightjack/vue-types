@@ -1,12 +1,10 @@
-# Advanced usage
+# Extending VueTypes
 
-## Extending VueTypes
+You can extend VueTypes with your own validators via `VueTypes.extend({...})`. The method accepts an object with every key supported by [Vue prop validation objects](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) plus the following custom properties:
 
-You can extend VueTypes with your own types via `VueTypes.extend({...})`. The method accepts an object with every key supported by [Vue prop validation objects](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) plus the following custom properties:
-
-- `name`: (string, required) The type name. Will be exposed as VueType.{name}
-- `validate`: (boolean, default: `false`) If `true` the type will have a `validate` method like native types.
-- `getter`: (boolean, default: `false`) If `true` will setup the type as an accessor property (like, for example `VueTypes.string`) else will setup the type as a configurable method (like, for example `VueTypes.arrayOf`).
+- **name**: (string, required) The type name. Will be exposed as VueType.{name}
+- **validate**: (boolean, default: `false`) If `true` the type will have a `validate` method like native types.
+- **getter**: (boolean, default: `false`) If `true` will setup the type as an accessor property (like, for example `VueTypes.string`) else will setup the type as a configurable method (like, for example `VueTypes.arrayOf`).
 
 Examples:
 
@@ -47,9 +45,9 @@ maxLengthType.validator('ab') // true
 maxLengthType.validator('abcd') // false
 ```
 
-### Inherit from VueTypes types
+## Inherit from VueTypes validators
 
-You can set a previously set type as _parent_ for a new one by setting it as the new type's `type` property. This feature can be useful to create named aliases:
+You can set another validator as _parent_ for a new one by setting it as the `type` property. This feature can be useful to create named aliases:
 
 ```js
 const shape = VueTypes.shape({ name: String, age: Number })
@@ -83,11 +81,13 @@ const data = { name: 'John', surname: 'Smith' }
 console.log(VueTypes.utils.validate(data, VueTypes.userDoe)) // false
 ```
 
-**Note:** Types created with this method don't support the `validate` method even if their parent type supports it (like `VueTypes.string` or `VueTypes.number`).
+::: warning
+Validators created with this method don't support the `validate` method even if their parent supports it (like `VueTypes.string` or `VueTypes.number`).
+:::
 
-### Define multiple types
+## Define multiple validators
 
-To define multiple types at once pass an array of definitions as first argument:
+To define multiple validators at once pass an array of definitions as first argument:
 
 ```js
 // ...
@@ -107,12 +107,14 @@ VueTypes.extend([
 ])
 ```
 
-### Typescript
+## Typescript
 
-When used in a TypeScript project, types added via `.extend()` might fail type checking. In order to instruct TypeScript about your custom types you can use the following pattern:
+When used in a TypeScript project, validators added via `.extend()` might fail type checking. In order to instruct TypeScript about your custom validators you can use the following pattern:
+
+1. First create a module to host your extended VueTypes object:
 
 ```ts
-// propTypes.ts
+// prop-types.ts
 
 // import
 // - VueTypes library
@@ -145,7 +147,7 @@ VueTypes.extend([
 export default VueTypes as ProjectTypes
 ```
 
-Then import the newly created `prop-types.ts` instead of `vue-types`:
+2. Then import the newly created `prop-types.ts` instead of `vue-types`:
 
 ```vue
 <!-- MyComponent.vue -->
@@ -166,16 +168,17 @@ export default Vue.extend({
 </script>
 ```
 
-### Extending in ES6+
+## Extending in ES6+
 
-If your source code supports ES6 or newer, you can use the native ES `extends` feature with the `toType` and `toValidableType` to add custom types.
+If your source code supports ES6 or newer, you can use the native ES `extends` feature with the `toType` and `toValidableType` utility functions.
 
 For example you could create a `prop-types.js` file in your project and export there the extended VueTypes class:
 
 ```js
+// prop-types.ts
 import VueTypes, { toType, toValidableType } from 'vue-types'
 export default class ProjectTypes extends VueTypes {
-  // define a custom type that accepts configuration parameters
+  // define a custom validator that accepts configuration parameters
   static maxLength(max: number) {
     return toType('maxLength', {
       type: String,
@@ -183,7 +186,7 @@ export default class ProjectTypes extends VueTypes {
     })
   }
 
-  // a native-like type that supports the `.validable` method
+  // a native-like validator that supports the `.validable` method
   static get positive() {
     return toValidableType('positive', {
       type: Number,
@@ -213,3 +216,7 @@ export default {
 }
 </script>
 ```
+
+### Standalone custom validators
+
+The `toType` and `toValidableType` utility functions

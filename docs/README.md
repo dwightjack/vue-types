@@ -1,6 +1,6 @@
 # VueTypes
 
-`vue-types` is a collection of configurable [prop type](http://vuejs.org/guide/components.html#Props) validators for Vue.js, inspired by React `prop-types`.
+`vue-types` is a collection of configurable [prop validators](http://vuejs.org/guide/components.html#Props) for Vue.js, inspired by React `prop-types`.
 
 [Try it now!](https://codesandbox.io/embed/vue-types-template-khfk4)
 
@@ -30,7 +30,7 @@ export default {
       validator(value) {
         return Number.isInteger(value)
       },
-      default: 0
+      default: 0,
     },
     nationality: String,
   },
@@ -60,7 +60,7 @@ export default {
 }
 ```
 
-### Individual validators import
+## Individual validators import
 
 Starting from version 2.0.0, you can import individual validators for an even more concise syntax:
 

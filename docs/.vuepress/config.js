@@ -14,10 +14,20 @@ module.exports = {
     sidebarDepth: 2,
     sidebar: [
       ['/', 'Introduction'],
-      '/guide/installation',
-      ['/guide/validators', 'Validators'],
-      '/guide/namespaced',
-      '/guide/advanced-usage',
+      {
+        title: 'Guide',
+        collapsable: false,
+        children: [
+          '/guide/installation',
+          ['/guide/validators', 'Validators'],
+          '/guide/namespaced',
+        ],
+      },
+      {
+        title: 'Advanced',
+        collapsable: false,
+        children: ['/advanced/extending-vue-types'],
+      },
     ],
   },
 }
