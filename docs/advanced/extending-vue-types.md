@@ -118,10 +118,12 @@ When used in a TypeScript project, validators added via `.extend()` might fail t
 
 // import
 // - VueTypes library
-// - validation object interface (VueTypeDef or VueTypeValidableDef)
-import VueTypes, { VueTypeDef, VueTypeValidableDef } from 'vue-types'
-
-type VueTypesInterface = typeof VueTypes
+// - VueTypes interface and validation object interface (VueTypeDef or VueTypeValidableDef)
+import VueTypes, {
+  VueTypesInterface,
+  VueTypeDef,
+  VueTypeValidableDef,
+} from 'vue-types'
 
 interface ProjectTypes extends VueTypesInterface {
   //VueTypeDef accepts the prop expected type as argument
@@ -130,7 +132,7 @@ interface ProjectTypes extends VueTypesInterface {
   positive: VueTypeValidableDef<number>
 }
 
-VueTypes.extend([
+export default VueTypes.extend<ProjectTypes>([
   {
     name: 'maxLength',
     type: String,
@@ -143,8 +145,6 @@ VueTypes.extend([
     validator: (v: number) => v > 0,
   },
 ])
-
-export default VueTypes as ProjectTypes
 ```
 
 2. Then import the newly created `prop-types.ts` instead of `vue-types`:
@@ -172,7 +172,7 @@ export default Vue.extend({
 
 If your source code supports ES6 or newer, you can use the native ES `extends` feature with the `toType` and `toValidableType` utility functions.
 
-For example you could create a `prop-types.js` file in your project and export there the extended VueTypes class:
+For example you could create a `prop-types.js` file in your project and export the extended VueTypes class:
 
 ```js
 // prop-types.ts
