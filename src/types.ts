@@ -88,5 +88,5 @@ export interface ExtendProps<T = any> {
   type?: PropType<T> | VueTypeDef<T> | VueTypeValidableDef<T>
   required?: boolean
   default?: T | null | undefined | (() => T | null | undefined)
-  validator?(value: T): boolean
+  validator?(...args: any[]): boolean
 }

@@ -1,6 +1,7 @@
 import Vue, { CreateElement } from 'vue'
 import Component from 'vue-class-component'
 import VueTypes, { VueTypesInterface, VueTypeValidableDef } from 'vue-types'
+import ProjectTypes from './namespaced-extended'
 
 const noop = (): void => undefined
 
@@ -132,6 +133,11 @@ myTypes.test.isRequired
 
 const a = myTypes.user.def({ name: 'xxx' })
 const str = myTypes.string
+
+const projectString = ProjectTypes.string.isRequired
+const pjMax = ProjectTypes.maxLength(2)
+const pjpositive = ProjectTypes.positive
+
 const NativeComponent = Vue.extend({
   props: {
     verified: boolType,
