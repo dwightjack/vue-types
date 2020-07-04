@@ -36,7 +36,10 @@ const userType2 = MyTypes.object.def(() => ({ ID: 1, name: 'John' }))
 const ageType = MyTypes.number.def(2).isRequired
 const strType = MyTypes.string.def('a')
 
-const userAsShape = MyTypes.shape<User>({}).def({ ID: 1 })
+const userAsShape = MyTypes.shape<User>({
+  ID: Number,
+  name: String,
+}).def({ ID: 1 })
 
 const userGetterType = MyTypes.user.isRequired
 const customTestType = MyTypes.test.def('aaa')

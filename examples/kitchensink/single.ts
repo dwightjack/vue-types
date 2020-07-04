@@ -15,7 +15,9 @@ import {
   objectOf,
   shape,
   toType,
-} from 'vue-types'
+  fromType,
+  VueTypeShape,
+} from '../../src'
 
 interface User {
   ID: number
@@ -50,14 +52,25 @@ const ageType = number().isRequired.def(20).def(10)
 
 const customType = custom<string>((v) => typeof v === 'string' && v.length > 0)
 
-const userAsShape = shape<User>({}).def({ ID: 1, name: 'aaa' })
-const userAsLooseShape = shape<User>({}).loose.def({
+const userAsShape = shape<User>({ ID: Number, name: string() }).def({
+  ID: 1,
+  name: 'aaa',
+})
+
+const userAsLooseShape = shape<User>({ ID: Number, name: String }).loose.def({
   ID: 1,
   name: 'aaa',
   ops: true,
 })
 
+const looseClone = fromType('looseClone', userAsShape).loose
+
 const messageType = string().isRequired
+
+const messageTypeClone = fromType('message', messageType)
+const messageTypeClone2 = fromType('message', messageType, {
+  default: 'sss',
+})
 
 const stringOrNumberOrBoolType = oneOfType([{ type: String }, Number, bool()])
 

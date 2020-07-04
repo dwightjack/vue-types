@@ -1,6 +1,6 @@
 import Vue, { CreateElement } from 'vue'
 import Component from 'vue-class-component'
-import VueTypes, { VueTypeValidableDef } from 'vue-types'
+import VueTypes, { VueTypesInterface, VueTypeValidableDef } from 'vue-types'
 
 const noop = (): void => undefined
 
@@ -105,8 +105,7 @@ VueTypes.sensibleDefaults = {}
 VueTypes.sensibleDefaults = false
 VueTypes.sensibleDefaults = true
 
-type VueTypeD = typeof VueTypes
-interface CustomVueTypes extends VueTypeD {
+interface CustomVueTypes extends VueTypesInterface {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly test: VueTypeValidableDef<any>
   readonly user: typeof shapeType
