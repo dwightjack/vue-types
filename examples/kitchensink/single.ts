@@ -16,8 +16,7 @@ import {
   shape,
   toType,
   fromType,
-  VueTypeShape,
-} from '../../src'
+} from 'vue-types'
 
 interface User {
   ID: number
