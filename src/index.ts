@@ -13,6 +13,8 @@ import {
   ExtendProps,
   VueTypeDef,
   VueTypeValidableDef,
+  VueTypeShape,
+  VueTypeLooseShape,
 } from './types'
 import { typeDefaults } from './sensibles'
 import { PropOptions } from './types'
@@ -38,6 +40,8 @@ import shape from './validators/shape'
 
 class BaseVueTypes {
   static defaults: Partial<VueTypesDefaults> = {}
+
+  static sensibleDefaults: Partial<VueTypesDefaults> | boolean
 
   static get any() {
     return any()
@@ -208,4 +212,5 @@ export {
   fromType,
 }
 
-export { VueTypeDef, VueTypeValidableDef }
+export type VueTypesInterface = ReturnType<typeof createTypes>
+export { VueTypeDef, VueTypeValidableDef, VueTypeShape, VueTypeLooseShape }
