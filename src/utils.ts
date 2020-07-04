@@ -347,19 +347,26 @@ export function clone<T extends object>(obj: T): T {
  * @param source - Source type
  * @param props - Custom type properties
  */
-export function fromType<T extends VueTypeDef<any>, U = InferType<T>>(
-  name: string,
-  source: T,
-  props = {} as PropOptions<U>,
-): VueTypeDef<U> {
-  const { validator, ...rest } = props
-
+export function fromType<T extends VueTypeDef<any>>(name: string, source: T): T
+export function fromType<
+  T extends VueTypeDef<any>,
+  V extends PropOptions<InferType<T>>
+>(name: string, source: T, props: V): T & V
+export function fromType<
+  T extends VueTypeDef<any>,
+  V extends PropOptions<InferType<T>>
+>(name: string, source: T, props?: V) {
   // 1. create an exact copy of the source type
-  const copy = clone<VueTypeDef<U>>(source)
+  const copy = clone(source)
 
   // 2. give it a new name
   // eslint-disable-next-line @typescript-eslint/camelcase
   copy._vueTypes_name = name
+
+  if (!isPlainObject(props)) {
+    return copy
+  }
+  const { validator, ...rest } = props
 
   // 3. compose the validator function
   // with the one on the source (if present)
@@ -373,7 +380,7 @@ export function fromType<T extends VueTypeDef<any>, U = InferType<T>>(
 
     copy.validator = bindTo(
       prevValidator
-        ? function (this: VueTypeDef<U>, value: any) {
+        ? function (this: T, value: any) {
             return (
               prevValidator.call(this, value) && validator.call(this, value)
             )
@@ -383,5 +390,5 @@ export function fromType<T extends VueTypeDef<any>, U = InferType<T>>(
     )
   }
   // 4. overwrite the rest, if present
-  return Object.assign(copy, rest)
+  return Object.assign(copy, rest as V)
 }
