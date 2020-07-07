@@ -24,6 +24,8 @@ export default {
 
 The main difference between namespaced validators as those imported directly from the library is that the former come (usually) with a sensible default by design.
 
+<a name="default-values"></name>
+
 | Validator | Default    | `validate()` method |
 | --------- | ---------- | ------------------- |
 | any       | none       | yes                 |
