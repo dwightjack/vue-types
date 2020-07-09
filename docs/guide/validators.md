@@ -1,5 +1,7 @@
 # VueTypes Validators
 
+[[toc]]
+
 VueTypes validators can be imported as named functions from `vue-types`:
 
 ```js
@@ -290,9 +292,9 @@ By default `.shape` won't validate objects with properties not defined in the sh
 ```js
 export default {
   props: {
-    userData: VueTypes.shape({
+    userData: shape({
       name: String,
-      id: VueTypes.integer.isRequired,
+      id: integer().isRequired,
     }).loose,
   },
 }
@@ -331,10 +333,51 @@ function minLength(value) {
 
 export default {
   props: {
-    theProp: VueTypes.custom(
-      minLength,
-      'theProp is not a string or is too short',
-    ),
+    theProp: custom(minLength, 'theProp is not a string or is too short'),
   },
 }
 ```
+
+## Utilities
+
+VueTypes exposes some useful utility functions that can be used standalone or to compose
+and extend the library.
+
+### `validateType`
+
+Checks a value against a type definition.
+
+Accepts the following arguments:
+
+- `validator`: An object constructor or VueTypes validator instance
+- `value`: The value to check
+- `[silent=false]`: Toggle error console logging
+
+```js
+import { validateType, arrayOf } from 'vue-types'
+
+const isArrayOfStrings = arrayOf(String)
+
+validateType(isArrayOfStrings, ['hello', 'world']) // true
+validateType(isArrayOfStrings, ['hello', 1]) // false
+
+validateType(Number, 10) // true
+```
+
+### `toType` and `toValidableType`
+
+Converts an object compatible with Vue.js [prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) to a VueTypes validator.
+
+See [Custom validators from scratch](/advanced/extending-vue-types.html#standalone-custom-validators) for more details.
+
+### `fromType`
+
+Creates a validator from one used as base.
+
+See [Inheriting from existing validators](/advanced/extending-vue-types.html#inheriting-from-existing-validators) for more details.
+
+### `createTypes`
+
+Returns a namespaced collection of validators.
+
+See [Custom namespaced instance](/advanced/custom-instance.html) for more details.

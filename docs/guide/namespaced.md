@@ -22,7 +22,7 @@ export default {
 }
 ```
 
-The main difference between namespaced validators as those imported directly from the library is that the former come (usually) with a sensible default by design.
+The main difference between namespaced validators and those directly imported from the library is that the former come (usually) with a sensible default by design.
 
 <a name="default-values"></name>
 
@@ -37,6 +37,8 @@ The main difference between namespaced validators as those imported directly fro
 | integer   | `0`        | no                  |
 | symbol    | none       | no                  |
 | object    | `{}`       | yes                 |
+
+Examples:
 
 ```js
 const numProp = VueTypes.number
@@ -97,7 +99,7 @@ The class object exposes some utility functions under the `.utils` property:
 
 ### `utils.validate(value, type)`
 
-Checks a value against a type definition
+Checks a value against a type definition:
 
 ```js
 VueTypes.utils.validate('John', VueTypes.string) //true

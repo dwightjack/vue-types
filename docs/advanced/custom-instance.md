@@ -41,7 +41,7 @@ export default {
 }
 ```
 
-### Introducing `createTypes`
+## Introducing `createTypes`
 
 To prevent this issue, VueTypes provides a `createTypes` function which returns a fresh namespaced object.
 
@@ -69,5 +69,54 @@ const MyComponent = {
   props: {
     name: MyTypes.string, // default is `undefined`
   },
+}
+```
+
+## Extending a custom namespaced instance
+
+Like the default `VueTypes` instance, custom namespaced instances can be extended either by the `extend` method or (in ES6+ environments) with the `extend` keyword:
+
+This allow you to setup highly customizable custom validators:
+
+```js
+// ./src/prop-types.js
+
+import { createTypes } from 'vue-types'
+
+export default createTypes().extend([
+  {
+    name: 'positive',
+    getter: true,
+    type: Number,
+    validator: (v) => v > 0,
+  },
+])
+
+// Usage:
+// ./src/my-component.vue
+import MyTypes from './prop-types'
+
+export default {
+  props: {
+    name: MyTypes.string,
+    score: MyTypes.positive.isRequired,
+  },
+}
+```
+
+In E6+ and TypeScript environments, `./scr/prop-types.js` could be rewritten as:
+
+```js
+// ./src/prop-types.js
+
+import { createTypes, toType } from 'vue-types'
+
+export default class MyTypes extends createTypes() {
+  static get positive() {
+    return toType({
+      type: Number,
+      validator: (v) => v > 0,
+    })
+  }
 }
 ```
