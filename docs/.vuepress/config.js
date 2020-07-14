@@ -26,7 +26,10 @@ module.exports = {
       {
         title: 'Advanced',
         collapsable: false,
-        children: ['/advanced/extending-vue-types'],
+        children: [
+          '/advanced/extending-vue-types',
+          '/advanced/custom-instance',
+        ],
       },
     ],
   },

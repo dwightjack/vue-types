@@ -2,7 +2,11 @@
 
 [[toc]]
 
-You can extend VueTypes with your own validators via `VueTypes.extend({...})`. The method accepts an object with every key supported by [Vue prop validation objects](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) plus the following custom properties:
+## The `extend()` method
+
+You can extend the VueTypes object with your own validators via `VueTypes.extend({...})`.
+
+The method accepts an object with every key supported by [Vue prop validation objects](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) plus the following custom properties:
 
 | name       | type      | default | description                                                        |
 | ---------- | --------- | ------- | ------------------------------------------------------------------ |
@@ -10,12 +14,12 @@ You can extend VueTypes with your own validators via `VueTypes.extend({...})`. T
 | `validate` | boolean   | false   | If `true` the type will have a `validate` method like native types |
 | `getter`   | `boolean` | false   | Set the validator as a getter <sup>(1)</sup>                       |
 
-1. If `true` will setup the type as an accessor property (like, for example `VueTypes.string`) else will setup the type as a configurable method (like, for example `VueTypes.arrayOf()`).
+1. If `true` the validator will be defined as an accessor property (like, for example, `VueTypes.string`). If `false` it will be defined as a configurable method (like `VueTypes.arrayOf()`).
 
 Examples:
 
 ```js
-// as an accessor type
+// as an accessor
 VueTypes.extend({
   name: 'negative',
   getter: true,
@@ -35,7 +39,7 @@ VueTypes.extend({
 const negativeProp2 = VueTypes.negativeFn() // <-- we need to call it
 ```
 
-Note that if `getter` is set to `false`, arguments passed to the type will be passed to the `validator` method together with the prop value:
+Note that if `getter === false`, arguments passed to the validator function will be passed down to the `validator` method together with the prop value:
 
 ```js
 VueTypes.extend({

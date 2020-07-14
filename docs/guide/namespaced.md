@@ -6,7 +6,9 @@ sidebarDepth: 1
 
 The default export of `vue-types` exposes an ES6 class object that mimics React prop-type.
 
-The class object exposes both [native](/validators.html#native-validators) and [custom](/validators.html#custom-validators) validators.
+The class object exposes both [native](/guide/validators.html#native-validators) and [custom](/guide/validators.html#custom-validators) validators.
+
+[[toc]]
 
 ## Native Validators
 
@@ -24,7 +26,7 @@ export default {
 
 The main difference between namespaced validators and those directly imported from the library is that the former come (usually) with a sensible default by design.
 
-<a name="default-values"></name>
+<div id="default-values">
 
 | Validator | Default    | `validate()` method |
 | --------- | ---------- | ------------------- |
@@ -37,6 +39,8 @@ The main difference between namespaced validators and those directly imported fr
 | integer   | `0`        | no                  |
 | symbol    | none       | no                  |
 | object    | `{}`       | yes                 |
+
+</div>
 
 Examples:
 
@@ -56,11 +60,11 @@ const stringProp = VueTypes.string
 All native type validators (with the exception of `any` and `symbol`) come with a sensible default value. In order to customize or disable that value you can set the global option `VueTypes.sensibleDefaults`:
 
 ```js
-//use vue-types default (this is the "default" behavior)
+//use vue-types defaults (this is the "default" behavior)
 VueTypes.sensibleDefaults = true
 
 //disable all sensible defaults.
-//Use .def(...) to set one
+//Use .def(...) to set one on each prop
 VueTypes.sensibleDefaults = false
 
 //assign an object in order to specify custom defaults
@@ -72,14 +76,13 @@ VueTypes.sensibleDefaults = {
 
 Under the hood `VueTypes.sensibleDefaults` is a plain object implemented with custom getters/setters. That let's you play with it like you'd do with every other object.
 
-For example you can remove some of the default values by leveraging [object rest spread](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#Spread_in_object_literals) or [lodash.omit](https://lodash.com/docs/4.17.11#omit) like functions.
+For example you can remove some of the default values by leveraging [object rest spread](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#Spread_in_object_literals) or [lodash.omit](https://lodash.com/docs/4.17.11#omit).
 
 ```js
-// copy every default value but boolean
-
 console.log(VueTypes.bool.default)
 // logs true
 
+// copy every default value but boolean
 const { bool, ...newDefaults } = VueTypes.sensibleDefaults
 
 VueTypes.sensibleDefaults = newDefaults
@@ -91,7 +94,7 @@ console.log(VueTypes.bool.default)
 
 ## Custom Validators
 
-Custom validators are exposed as static methods. Refer to the [dedicated documentation](/validators.html#custom-validators) for usage instructions.
+Custom validators are exposed as static methods. Refer to the [dedicated documentation](/guide/validators.html#custom-validators) for usage instructions.
 
 ## Utilities
 
@@ -123,7 +126,7 @@ VueTypes.utils.validate('Jane', isJohn) //false
 
 ### `utils.toType(name, obj, validable = false)`
 
-Will convert a plain object to a VueTypes validator with `.def()` and `isRequired` modifiers:
+Will convert a plain object to a VueTypes validator object with `.def()` and `isRequired` modifiers:
 
 ```js
 const password = {
@@ -143,7 +146,7 @@ export default {
 }
 ```
 
-If the last argument is `true` the resulting validator will support the `.validate()` method:
+If the last argument is `true` the resulting validator object will support the `.validate()` method as well:
 
 ```js
 const password = {
