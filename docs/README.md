@@ -1,6 +1,10 @@
+---
+title: Introduction
+---
+
 # VueTypes
 
-`vue-types` is a collection of configurable [prop validators](http://vuejs.org/guide/components.html#Props) for Vue.js, inspired by React `prop-types`.
+VueTypes is a collection of configurable [prop validators](http://vuejs.org/guide/components.html#Props) for Vue.js, inspired by React `prop-types`.
 
 [Try it now!](https://codesandbox.io/embed/vue-types-template-khfk4)
 
@@ -8,11 +12,11 @@
 
 While basic prop validation in Vue.js is straight-forward and convenient, fine-grained validation can become verbose on complex components.
 
-`vue-types` offers a compact and fluent interface to define your project's props.
+VueTypes offers a compact and fluent interface to define your project's props.
 
 ## Usage example
 
-Imagine a typical Vue-js component with a set of props:
+Imagine a typical Vue.js component with a set of props:
 
 ```js
 export default {
@@ -42,7 +46,7 @@ export default {
 
 While this component works perfectly fine, writing a lot of prop validation objects can become repetitive.
 
-With `vue-types` you could rewrite the same props like this:
+With VueTypes you could rewrite the same props like this:
 
 ```js
 import VueTypes from 'vue-types'

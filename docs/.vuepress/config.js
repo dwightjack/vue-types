@@ -1,4 +1,5 @@
 module.exports = {
+  title: 'VueTypes',
   plugins: [
     [
       'container',
@@ -12,6 +13,14 @@ module.exports = {
     repo: 'dwightjack/vue-types',
     docsDir: 'docs',
     sidebarDepth: 2,
+    smoothScroll: true,
+    lastUpdated: 'Last Updated',
+    nav: [
+      {
+        text: 'v1.x Docs',
+        link: 'https://github.com/dwightjack/vue-types/blob/v1/README.md',
+      },
+    ],
     sidebar: [
       ['/', 'Introduction'],
       {

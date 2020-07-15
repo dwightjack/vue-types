@@ -1,3 +1,7 @@
+---
+title: Validators
+---
+
 # VueTypes Validators
 
 [[toc]]
@@ -197,7 +201,7 @@ oneOf(['action', 'thriller'] as const)
 
 ### `oneOfType`
 
-Validates that a prop is an object that could be one of many types. Accepts JavaScript constructors, Vue.js props validation objects and `vue-types` validators objects.
+Validates that a prop is an object that could be one of many types. Accepts JavaScript constructors, Vue.js props validation objects and VueTypes validators objects.
 
 ```js
 export default {
@@ -210,7 +214,7 @@ export default {
 
 ### `arrayOf`
 
-Validates that a prop is an array of a certain type. Accepts JavaScript constructors, Vue.js props validation objects and `vue-types` validators objects.
+Validates that a prop is an array of a certain type. Accepts JavaScript constructors, Vue.js props validation objects and VueTypes validators objects.
 
 ```js
 export default {
@@ -225,9 +229,18 @@ export default {
 }
 ```
 
+::: tip
+Prop Validators are composable. For example, to validate an array that can contain both strings and numbers you can use `arrayOf` and `oneOfType`:
+
+```js
+const stringOrNumber = arrayOf(oneOfType([String, Number]))
+```
+
+:::
+
 ### `objectOf`
 
-Validates that a prop is an object with values of a certain type. Accepts JavaScript constructors, Vue.js props validation objects and `vue-types` validators objects.
+Validates that a prop is an object with values of a certain type. Accepts JavaScript constructors, Vue.js props validation objects and VueTypes validators objects.
 
 ```js
 export default {
@@ -241,7 +254,7 @@ export default {
 
 ### `shape`
 
-Validates that a prop is an object taking on a particular shape. Accepts JavaScript constructors, Vue.js props validation objects and `vue-types` validators objects.
+Validates that a prop is an object taking on a particular shape. Accepts JavaScript constructors, Vue.js props validation objects and VueTypes validators objects.
 
 Note that:
 

@@ -30,14 +30,14 @@ The main difference between namespaced validators and those directly imported fr
 
 | Validator | Default    | `validate()` method |
 | --------- | ---------- | ------------------- |
-| any       | none       | yes                 |
+| any       | -          | yes                 |
 | func      | `() => {}` | yes                 |
 | bool      | `true`     | yes                 |
 | string    | `''`       | yes                 |
 | number    | `0`        | yes                 |
 | array     | `[]`       | yes                 |
-| integer   | `0`        | no                  |
-| symbol    | none       | no                  |
+| integer   | `0`        | -                   |
+| symbol    | -          | -                   |
 | object    | `{}`       | yes                 |
 
 </div>
@@ -60,7 +60,7 @@ const stringProp = VueTypes.string
 All native type validators (with the exception of `any` and `symbol`) come with a sensible default value. In order to customize or disable that value you can set the global option `VueTypes.sensibleDefaults`:
 
 ```js
-//use vue-types defaults (this is the "default" behavior)
+//use VueTypes defaults (this is the "default" behavior)
 VueTypes.sensibleDefaults = true
 
 //disable all sensible defaults.
@@ -76,7 +76,7 @@ VueTypes.sensibleDefaults = {
 
 Under the hood `VueTypes.sensibleDefaults` is a plain object implemented with custom getters/setters. That let's you play with it like you'd do with every other object.
 
-For example you can remove some of the default values by leveraging [object rest spread](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#Spread_in_object_literals) or [lodash.omit](https://lodash.com/docs/4.17.11#omit).
+For example you can remove some of the default values using [object rest spread](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#Spread_in_object_literals) or [lodash.omit](https://lodash.com/docs/4.17.11#omit).
 
 ```js
 console.log(VueTypes.bool.default)
@@ -85,8 +85,10 @@ console.log(VueTypes.bool.default)
 // copy every default value but boolean
 const { bool, ...newDefaults } = VueTypes.sensibleDefaults
 
+// or, with lodash
+// const newDefaults = _.omit(VueTypes.sensibleDefaults, ['bool'])
+
 VueTypes.sensibleDefaults = newDefaults
-// or VueTypes.sensibleDefaults = _.omit(VueTypes.sensibleDefaults, ['bool'])
 
 console.log(VueTypes.bool.default)
 // logs undefined
@@ -95,6 +97,10 @@ console.log(VueTypes.bool.default)
 ## Custom Validators
 
 Custom validators are exposed as static methods. Refer to the [dedicated documentation](/guide/validators.html#custom-validators) for usage instructions.
+
+```js
+const arrayOfStrings = VueTypes.arrayOf(String)
+```
 
 ## Utilities
 
@@ -110,7 +116,9 @@ VueTypes.utils.validate('John', VueTypes.string) //true
 VueTypes.utils.validate('John', { type: String }) //true
 ```
 
-Note that this utility won't check for `isRequired` flag, but will execute any provided custom validator function:
+::: warning
+
+This utility won't check for `isRequired` flag, but will execute any provided custom validator function:
 
 ```js
 const isJohn = {
@@ -123,6 +131,8 @@ const isJohn = {
 VueTypes.utils.validate('John', isJohn) //true
 VueTypes.utils.validate('Jane', isJohn) //false
 ```
+
+:::
 
 ### `utils.toType(name, obj, validable = false)`
 
