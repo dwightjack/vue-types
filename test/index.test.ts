@@ -277,7 +277,7 @@ describe('VueTypes', () => {
 
     it('should clone the base type definition at each call', () => {
       interface VueTypesClone extends VueTypesType {
-        cloneDemo: VueTypeValidableDef<object>
+        cloneDemo: VueTypeValidableDef<{ [key: string]: any }>
       }
       VueTypes.extend<VueTypesClone>({
         name: 'cloneDemo',

@@ -4,9 +4,12 @@ export { PropType, PropOptions }
 
 export type Prop<T> =
   | { (): T }
+  // eslint-disable-next-line @typescript-eslint/ban-types
   | { new (...args: never[]): T & object }
+  // eslint-disable-next-line @typescript-eslint/ban-types
   | { new (...args: string[]): Function }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export type NativeType = string | boolean | number | null | undefined | Function
 
 export type Constructor = new (...args: any[]) => any

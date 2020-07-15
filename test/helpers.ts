@@ -9,7 +9,7 @@ export function checkRequired(type: any) {
 // Vue.js does keep the context for validators, so there is no `this`
 export const forceNoContext = (validator) => validator.bind(undefined)
 
-export function getDescriptors<T extends object>(type: T): T {
+export function getDescriptors<T extends { [key: string]: any }>(type: T): T {
   const descriptors = {} as { [P in keyof T]: any }
   Object.getOwnPropertyNames(type).forEach((key) => {
     descriptors[key as keyof T] = Object.getOwnPropertyDescriptor(type, key)
@@ -17,7 +17,9 @@ export function getDescriptors<T extends object>(type: T): T {
   return descriptors
 }
 
-export function getExpectDescriptors<T extends object>(type: T): any {
+export function getExpectDescriptors<T extends { [key: string]: any }>(
+  type: T,
+): any {
   const descriptors = {} as { [P in keyof T]: any }
   Object.getOwnPropertyNames(type).forEach((key) => {
     const descr = Object.getOwnPropertyDescriptor(type, key)

@@ -147,7 +147,6 @@ describe('`toType()`', () => {
 
   it('should allow the name property to be writtable', () => {
     const type = utils.toType('demo', {})
-    // eslint-disable-next-line @typescript-eslint/camelcase
     type._vueTypes_name = 'a'
     expect(type._vueTypes_name).toBe('a')
   })

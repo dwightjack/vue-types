@@ -26,8 +26,9 @@
   ],
   "scripts": {
     "prepublishOnly": "run-s lint test build",
-    "build": "run-s build:clean build:ts build:umd",
+    "build": "run-s build:clean build:copy build:ts build:umd",
     "build:clean": "del dist",
+    "build:copy": "cpy src/*.d.ts dist",
     "build:ts": "microbundle --external=vue --tsconfig=./tsconfig.build.json --format=modern,es,cjs",
     "build:umd": "cross-env NODE_ENV=production microbundle --external=vue --tsconfig=./tsconfig.build.json --format=umd",
     "test": "karma start karma.conf.js --single-run --browsers ChromeHeadless",
@@ -60,6 +61,7 @@
     "@typescript-eslint/parser": "3.6.1",
     "babel-plugin-transform-node-env-inline": "0.4.3",
     "core-js": "3.6.5",
+    "cpy-cli": "3.1.1",
     "cross-env": "7.0.2",
     "del": "5.1.0",
     "del-cli": "3.0.1",

@@ -68,7 +68,7 @@ export { warn }
  * @param {object} obj - Object
  * @param {string} prop - Property to check
  */
-export const has = <T extends object, U extends keyof T>(obj: T, prop: U) =>
+export const has = <T extends any, U extends keyof T>(obj: T, prop: U) =>
   hasOwn.call(obj, prop)
 
 /**
@@ -106,6 +106,7 @@ export const isArray =
  * @param {any} value - Value to check
  * @returns {boolean}
  */
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const isFunction = (value: unknown): value is Function =>
   toString.call(value) === '[object Function]'
 
@@ -152,6 +153,7 @@ export function bindTo(fn: (...args: any[]) => any, ctx: any): WrappedFn {
  *
  * @param fn - Function to unwrap
  */
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function unwrap<T extends WrappedFn | Function>(fn: T) {
   return (fn as WrappedFn).__original ?? fn
 }
@@ -259,7 +261,6 @@ export function validateType<T, U>(
  */
 export function toType<T = any>(name: string, obj: PropOptions<T>) {
   const type: VueTypeDef<T> = Object.defineProperties(obj, {
-    // eslint-disable-next-line @typescript-eslint/camelcase
     _vueTypes_name: {
       value: name,
       writable: true,
@@ -329,6 +330,7 @@ export function toValidableType<T = any>(name: string, obj: PropOptions<T>) {
  *
  * @param obj - Object to clone
  */
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function clone<T extends object>(obj: T): T {
   const descriptors = {} as { [P in keyof T]: any }
   Object.getOwnPropertyNames(obj).forEach((key) => {
@@ -360,7 +362,6 @@ export function fromType<
   const copy = clone(source)
 
   // 2. give it a new name
-  // eslint-disable-next-line @typescript-eslint/camelcase
   copy._vueTypes_name = name
 
   if (!isPlainObject(props)) {

@@ -13,7 +13,6 @@ const isArray =
 
 function type<T = any>(name: string, props: any = {}, validable = false): T {
   const descriptors: PropertyDescriptorMap = {
-    // eslint-disable-next-line @typescript-eslint/camelcase
     _vueTypes_name: {
       value: name,
       writable: true,
