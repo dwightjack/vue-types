@@ -25,7 +25,7 @@
     "types/*.d.ts"
   ],
   "scripts": {
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "run-s lint test build",
     "build": "run-s build:clean build:ts build:umd",
     "build:clean": "del dist",
     "build:ts": "microbundle --external=vue --tsconfig=./tsconfig.build.json --format=modern,es,cjs",
