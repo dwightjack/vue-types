@@ -1,5 +1,6 @@
 module.exports = {
   title: 'VueTypes',
+  base: 'vue-types',
   plugins: [
     [
       'container',
