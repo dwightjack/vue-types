@@ -351,7 +351,7 @@ export function fromType<T extends VueTypeDef<any>>(name: string, source: T): T
 export function fromType<
   T extends VueTypeDef<any>,
   V extends PropOptions<InferType<T>>
->(name: string, source: T, props: V): T & V
+>(name: string, source: T, props: V): Omit<T, keyof V> & V
 export function fromType<
   T extends VueTypeDef<any>,
   V extends PropOptions<InferType<T>>

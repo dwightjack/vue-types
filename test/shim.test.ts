@@ -16,7 +16,7 @@ describe('SHIM: VueTypes', () => {
 
     it('should have a `type` property', () => {
       const type = VueTypes.any
-      expect(type.type).toBe(null)
+      expect(type.type).toBe(undefined)
     })
 
     it('should have a `isRequired` flag that returns the type itself', () => {
@@ -288,7 +288,7 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `type` property', () => {
-      expect(VueTypes.symbol.type).toBe(null)
+      expect(VueTypes.symbol.type).toBe(undefined)
     })
 
     it('should have a `isRequired` flag that returns the type itself', () => {
@@ -311,8 +311,8 @@ describe('SHIM: VueTypes', () => {
       expect(VueTypes.symbol.validator).toBeInstanceOf(Function)
     })
 
-    it('should have a `validate` method', () => {
-      expect(VueTypes.symbol.validate).toBeInstanceOf(Function)
+    it('should NOT have a `validate` method', () => {
+      expect(VueTypes.symbol.validate).toBeUndefined()
     })
   })
 
@@ -322,7 +322,7 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `type` property', () => {
-      expect(VueTypes.custom(() => true).type).toBe(null)
+      expect(VueTypes.custom(() => true).type).toBe(undefined)
     })
 
     it('should have a `isRequired` flag that returns the type itself', () => {
@@ -352,7 +352,7 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `type` property', () => {
-      expect(VueTypes.oneOf([]).type).toBe(null)
+      expect(VueTypes.oneOf([]).type).toBe(undefined)
     })
 
     it('should have a `isRequired` flag that returns the type itself', () => {
@@ -382,7 +382,7 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `type` property', () => {
-      expect(VueTypes.instanceOf(Object).type).toBe(null)
+      expect(VueTypes.instanceOf(Object).type).toBe(Object)
     })
 
     it('should have a `isRequired` flag that returns the type itself', () => {
@@ -507,7 +507,7 @@ describe('SHIM: VueTypes', () => {
     })
 
     it('should have a `type` property', () => {
-      expect(VueTypes.oneOfType([String]).type).toBe(null)
+      expect(VueTypes.oneOfType([String]).type).toBe(undefined)
     })
 
     it('should have a `isRequired` flag that returns the type itself', () => {

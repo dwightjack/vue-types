@@ -69,15 +69,17 @@ export const array = <T = any>() => type<T>('array', { type: Array }, true)
 export const object = <T = any>() => type<T>('object', { type: Object }, true)
 export const symbol = () => type('symbol')
 export const integer = () => type('integer', { type: Number })
-
-export const oneOf = <T = any>() => type<T>('oneOf')
-export const custom = <T = any>() => type<T>('custom')
+/* eslint-disable @typescript-eslint/no-unused-vars */
+export const oneOf = <T = any>(a: any) => type<T>('oneOf')
+export const custom = <T = any>(a: any) => type<T>('custom')
 export const instanceOf = <T = any>(Constr: any) =>
   type<T>('instanceOf', { type: Constr })
-export const oneOfType = <T = any>() => type<T>('oneOfType')
-export const arrayOf = <T = any>() => type<T>('arrayOf', { type: Array })
-export const objectOf = <T = any>() => type<T>('objectOf', { type: Object })
-export const shape = <T = any>() =>
+export const oneOfType = <T = any>(a: any) => type<T>('oneOfType')
+export const arrayOf = <T = any>(a: any) => type<T>('arrayOf', { type: Array })
+
+export const objectOf = <T = any>(a: any) =>
+  type<T>('objectOf', { type: Object })
+export const shape = <T = any>(a: any) =>
   dfn(
     type<T>('shape', { type: Object }),
     'loose',
@@ -87,6 +89,7 @@ export const shape = <T = any>() =>
       },
     },
   )
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 function createValidator(
   root: any,
