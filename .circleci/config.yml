@@ -64,21 +64,21 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-    - run:
-        name: Generate Documentation
-        command: npm run docs:build
-    - run:
-        name: Documentation deploy setup
-        command: |
-          git config user.email "$GH_EMAIL"
-          git config user.name "$GH_NAME"
-          mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-    - add_ssh_keys:
-        fingerprints:
-          - '98:76:28:83:a8:e7:b5:2d:8a:de:44:c6:28:56:3d:84'
-    - run:
-        name: Deploy documentation to gh-pages branch
-        command: npx gh-pages --dotfiles --message "[skip ci] Documentation for $CIRCLE_SHA1" --dist docs/.vuepress/dist
+      - run:
+          name: Generate Documentation
+          command: npm run docs:build
+      - run:
+          name: Documentation deploy setup
+          command: |
+            git config user.email "$GH_EMAIL"
+            git config user.name "$GH_NAME"
+            mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+      - add_ssh_keys:
+          fingerprints:
+            - '98:76:28:83:a8:e7:b5:2d:8a:de:44:c6:28:56:3d:84'
+      - run:
+          name: Deploy documentation to gh-pages branch
+          command: npx gh-pages --dotfiles --message "[skip ci] Documentation for $CIRCLE_SHA1" --dist docs/.vuepress/dist
 
 workflows:
   version: 2
