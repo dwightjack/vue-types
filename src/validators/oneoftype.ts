@@ -4,10 +4,10 @@ import {
   isComplexType,
   isVueTypeDef,
   isFunction,
-  getType,
   toType,
   validateType,
   warn,
+  indent,
 } from '../utils'
 
 export default function oneOfType<
@@ -56,17 +56,26 @@ export default function oneOfType<
   return toType<V>('oneOfType', {
     type: nativeChecks,
     validator(value) {
+      const err: string[] = []
       const valid = arr.some((type) => {
         const t =
           isVueTypeDef(type) && type._vueTypes_name === 'oneOf'
             ? type.type || null
             : type
-        return validateType(t, value, true) === true
+        const res = validateType(t, value, true)
+        if (typeof res === 'string') {
+          err.push(res)
+        }
+        return res === true
       })
-      if (!valid)
+      if (!valid) {
         warn(
-          `oneOfType - value "${value}" does not match any of the passed-in validators.`,
+          `oneOfType - provided value does not match any of the ${
+            err.length
+          } passed-in validators:\n${indent(err.join('\n'))}`,
         )
+      }
+
       return valid
     },
   })

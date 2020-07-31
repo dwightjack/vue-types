@@ -241,7 +241,7 @@ export function validateType<T, U>(
     warn = oldWarn
 
     if (!valid) {
-      const msg = '* ' + warnLog.join('\n* ')
+      const msg = (warnLog.length > 1 ? '* ' : '') + warnLog.join('\n* ')
       warnLog.length = 0
       if (silent === false) {
         warn(msg)
@@ -392,4 +392,8 @@ export function fromType<
   }
   // 4. overwrite the rest, if present
   return Object.assign(copy, rest as V)
+}
+
+export function indent(string: string) {
+  return string.replace(/^(?!\s*$)/gm, '  ')
 }

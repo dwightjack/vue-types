@@ -1,5 +1,5 @@
 import { Prop, VueProp, VueTypeShape, VueTypeLooseShape } from '../types'
-import { toType, validateType, warn, isPlainObject } from '../utils'
+import { toType, validateType, warn, isPlainObject, indent } from '../utils'
 
 export default function shape<T extends object>(
   obj: { [K in keyof T]: Prop<T[K]> | VueProp<T[K]> },
@@ -50,7 +50,7 @@ export default function shape<T extends object>(
         const type = (obj as any)[key]
         const valid = validateType(type, value[key], true)
         if (typeof valid === 'string') {
-          warn(`shape - "${key}" property validation error:\n${valid}`)
+          warn(`shape - "${key}" property validation error:\n ${indent(valid)}`)
         }
         return valid === true
       })

@@ -1,12 +1,18 @@
 import { Prop, VueProp, InferType } from '../types'
-import { getType, toType, validateType, warn } from '../utils'
+import { toType, validateType, warn, indent } from '../utils'
 
 export default function arrayOf<T extends VueProp<any> | Prop<any>>(type: T) {
   return toType<InferType<T>[]>('arrayOf', {
     type: Array,
     validator(values: any[]) {
-      const valid = values.every((value) => validateType(type, value))
-      if (!valid) warn(`arrayOf - value must be an array of "${getType(type)}"`)
+      let vResult: string | boolean
+      const valid = values.every((value) => {
+        vResult = validateType(type, value, true)
+        return vResult === true
+      })
+      if (!valid) {
+        warn(`arrayOf - value validation error:\n${indent(vResult as string)}`)
+      }
       return valid
     },
   })
