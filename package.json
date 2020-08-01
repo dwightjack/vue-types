@@ -38,7 +38,7 @@
     "serve": "sirv examples",
     "examples": "run-s build:examples serve",
     "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "cross-env NODE_ENV=production vuepress build docs"
   },
   "keywords": [
     "vue",

@@ -1,6 +1,6 @@
 module.exports = {
   title: 'VueTypes',
-  base: 'vue-types',
+  base: process.env.NODE_ENV === 'production' ? '/vue-types/' : '/',
   plugins: [
     [
       'container',
