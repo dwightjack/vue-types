@@ -8,6 +8,10 @@ VueTypes is a collection of configurable [prop validators](http://vuejs.org/guid
 
 [Try it now!](https://codesandbox.io/embed/vue-types-template-khfk4)
 
+::: warning VERSION NOTE
+This is the documentation for VueTypes 2 and above. If you are using an older version, refer to the documentation [here](https://github.com/dwightjack/vue-types/blob/v1/README.md).
+:::
+
 ## When to use
 
 While basic prop validation in Vue.js is straight-forward and convenient, fine-grained validation can become verbose on complex components.

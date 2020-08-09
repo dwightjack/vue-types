@@ -3,13 +3,13 @@
     "target": "ES5",
     "baseUrl": "./",
     "paths": {
-      "vue-types": ["../dist/vue-types.m.js"],
-      "vue-types/*": ["../dist/*"]
+      "vue-types": ["../src/index.ts"],
+      "vue-types/*": ["../src/*"]
     },
     "esModuleInterop": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "declaration": false
   },
-  "include": ["**/*.ts", "../dist/**/*.ts"]
+  "include": ["**/*.ts", "../src/**/*.ts"]
 }

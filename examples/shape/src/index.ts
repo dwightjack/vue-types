@@ -4,7 +4,7 @@ import VueTypes from 'vue-types'
 Vue.config.silent = false
 
 const Model = Vue.extend({
-  template: '<li>{{ model.id }} {{ isNew }}</li>',
+  template: '<li>{{ model.id }} {{ isNew }} (pet: {{ model.pet }})</li>',
   props: {
     model: VueTypes.shape({
       id: VueTypes.string.isRequired,
@@ -48,4 +48,4 @@ const App = Vue.extend({
   },
 })
 
-new Vue({ render: (h) => h(App) }).$mount("#app")
+new Vue({ render: (h) => h(App) }).$mount('#app')
