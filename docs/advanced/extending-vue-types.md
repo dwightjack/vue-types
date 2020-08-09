@@ -261,7 +261,7 @@ the most efficient and readable option for TypeScript projects.
 
 ## Standalone custom validators
 
-The `toType` and `toValidableType` functions can be used to create standalone validator as well. Indeed, they are used internally by `vue-types` in [native](/validators.html#native-validators) and [custom](/validators.html#custom-validators) validators.
+The `toType` and `toValidableType` functions can be used to create standalone validator as well. Indeed, they are used internally by `vue-types` in [native](/guide/validators.html#native-validators) and [custom](/guide/validators.html#custom-validators) validators.
 
 ### Custom validators from scratch
 
@@ -339,7 +339,7 @@ const userJohn = fromType('userJohn', user, {
 
 :::
 
-This function can be used to mimic the [Inherit from VueTypes validators](#inherit-from-vue-types-validators) pattern in `VueTypes.extend`:
+This function can be used to mimic the [Inherit from VueTypes validators](#inherit-from-vuetypes-validators) pattern in `VueTypes.extend`:
 
 ```js
 import { fromType, shape, number, string } from 'vue-types'
