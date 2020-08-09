@@ -5,5 +5,7 @@
     "plugin:node/recommended",
     "plugin:prettier/recommended"
   ],
-  "plugins": ["node"]
+  "env": {
+    "node": true
+  }
 }

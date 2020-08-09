@@ -1,9 +1,10 @@
 {
   "extends": "../src/.eslintrc.json",
   "env": {
-    "mocha": true
+    "jasmine": true
   },
   "rules": {
-    "camelcase": "off"
+    "camelcase": "off",
+    "@typescript-eslint/no-empty-function": 0
   }
 }
