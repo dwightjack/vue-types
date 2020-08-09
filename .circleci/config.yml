@@ -75,7 +75,7 @@ jobs:
             mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
       - add_ssh_keys:
           fingerprints:
-            - '98:76:28:83:a8:e7:b5:2d:8a:de:44:c6:28:56:3d:84'
+            - 'a8:04:82:83:42:dc:d3:5c:ad:39:27:54:22:59:18:ed'
       - run:
           name: Deploy documentation to gh-pages branch
           command: npx gh-pages --dotfiles --message "[skip ci] Documentation for $CIRCLE_SHA1" --dist docs/.vuepress/dist
