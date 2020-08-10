@@ -33,7 +33,7 @@
     "build:umd": "cross-env NODE_ENV=production microbundle --external=vue --tsconfig=./tsconfig.build.json --format=umd",
     "test": "karma start karma.conf.js --single-run --browsers ChromeHeadless",
     "test:saucelab": "karma start karma-sauce.conf.js --single-run",
-    "lint": "eslint src/*.ts test/*.ts",
+    "lint": "eslint  '{src,test,.}/**/*.{ts,js}'",
     "examples": "cross-env NODE_ENV=development node ./scripts/run-examples.js",
     "docs:dev": "vuepress dev docs",
     "docs:build": "cross-env NODE_ENV=production vuepress build docs"

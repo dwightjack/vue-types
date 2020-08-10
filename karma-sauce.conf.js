@@ -54,7 +54,7 @@ const customLaunchers = {
   },
 }
 
-module.exports = function(config) {
+module.exports = function (config) {
   if (!process.env.SAUCE_USERNAME || !process.env.SAUCE_ACCESS_KEY) {
     //eslint-disable-next-line no-console
     console.log(

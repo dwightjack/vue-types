@@ -3,6 +3,7 @@ import shape from '../../src/validators/shape'
 import { forceNoContext, checkRequired } from '../helpers'
 
 describe('`.shape`', () => {
+  // eslint-disable-next-line @typescript-eslint/ban-types
   let shapeType: object
 
   beforeEach(() => {
