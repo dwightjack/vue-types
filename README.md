@@ -2,6 +2,19 @@
 
 > Prop type definitions for [Vue.js](http://vuejs.org). Compatible with both Vue 1.x and 2.x
 
+<p id="badges">
+  <a href="https://www.npmjs.com/package/vue-types" target="_blank">
+    <img alt="NPM package version" src="https://img.shields.io/npm/v/vue-types" />
+  </a>
+  <a href="https://circleci.com/gh/dwightjack/vue-types" target="_blank">
+    <img alt="CircleCI status" src="https://circleci.com/gh/dwightjack/vue-types.svg?style=shield" />
+  </a>
+<a href="https://www.npmjs.com/package/vue-types" target="_blank">
+    <img alt="NPM package version" src="https://img.shields.io/codeclimate/dwightjack/vue-types" />
+  </a>
+
+</p>
+
 **Note: This document is for VueTypes 2 and above. If you are looking for an older version, refer to the `v1` branch.**
 
 ## Introduction
