@@ -76,7 +76,7 @@ array<string | number>()
 ```
 
 **Note**: this signature will validate the prop at compile-time only. For
-runtime validation use [`oneOfType`](#oneoftype)
+runtime validation use [`arrayOf`](#arrayof)
 
 :::
 
