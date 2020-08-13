@@ -10,7 +10,7 @@
     <img alt="CircleCI status" src="https://circleci.com/gh/dwightjack/vue-types.svg?style=shield" />
   </a>
 <a href="https://www.npmjs.com/package/vue-types" target="_blank">
-    <img alt="NPM package version" src="https://img.shields.io/codeclimate/dwightjack/vue-types" />
+    <img alt="Code coverage" src="https://img.shields.io/codeclimate/dwightjack/vue-types" />
   </a>
 
 </p>
