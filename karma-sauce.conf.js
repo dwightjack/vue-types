@@ -5,31 +5,19 @@ const baseConfig = require('./karma.conf')
 const pkg = require('./package.json')
 
 const customLaunchers = {
-  sl_chrome: {
-    base: 'SauceLabs',
-    browserName: 'chrome',
-    platform: 'Windows 10',
-    version: 'latest',
-  },
   sl_firefox: {
     base: 'SauceLabs',
     browserName: 'firefox',
     platform: 'Windows 10',
     version: 'latest',
   },
-
   sl_mac_safari: {
     base: 'SauceLabs',
     browserName: 'safari',
-    platform: 'OS X 10.10',
+    version: 'latest',
+    platform: 'macOS 10.13',
   },
 
-  sl_ie_9: {
-    base: 'SauceLabs',
-    browserName: 'internet explorer',
-    platform: 'Windows 7',
-    version: '9',
-  },
   sl_ie_11: {
     base: 'SauceLabs',
     browserName: 'internet explorer',
@@ -40,17 +28,7 @@ const customLaunchers = {
     base: 'SauceLabs',
     browserName: 'MicrosoftEdge',
     platform: 'Windows 10',
-  },
-
-  sl_android_5_1: {
-    base: 'SauceLabs',
-    browserName: 'android',
-    version: '5.1',
-  },
-  sl_ios_safari_10_3: {
-    base: 'SauceLabs',
-    browserName: 'iphone',
-    version: '10.3',
+    version: '18.17763',
   },
 }
 
@@ -73,15 +51,18 @@ module.exports = function (config) {
       build: `${pkg.version}-${Date.now()}`,
     },
 
+    files: [require.resolve('core-js-bundle/minified.js'), ...config.files],
     customLaunchers,
 
     browsers: Object.keys(customLaunchers),
 
-    reporters: ['mocha', 'saucelabs'],
+    reporters: ['progress', 'saucelabs'],
 
     singleRun: true,
 
     captureTimeout: 300000,
     browserNoActivityTimeout: 300000,
+    browserDisconnectTimeout: 300000, // default 2000
+    browserDisconnectTolerance: 1, // default 0
   })
 }

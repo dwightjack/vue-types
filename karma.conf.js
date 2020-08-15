@@ -84,6 +84,7 @@ module.exports = (config) => {
     client: {
       jasmine: {
         random: false,
+        timeoutInterval: 5000,
       },
     },
   })

@@ -188,7 +188,7 @@ describe('Native validators', () => {
       if ('Symbol' in window && typeof Symbol() === 'symbol') {
         expect(native.symbol().validator(Symbol())).toBe(true)
       } else {
-        this.skip()
+        expect(true).toBe(true)
       }
     })
   })
