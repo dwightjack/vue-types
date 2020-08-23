@@ -82,6 +82,7 @@ module.exports = (config) => {
     logLevel: config.LOG_INFO,
 
     client: {
+      captureConsole: false,
       jasmine: {
         random: false,
         timeoutInterval: 5000,
