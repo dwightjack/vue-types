@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { defineComponent, createApp, ref, h } from 'vue'
 import VueTypes, { VueTypeDef } from 'vue-types'
 
 type typeofVueTypes = typeof VueTypes
@@ -15,15 +15,15 @@ const CustomTypes = VueTypes.extend<VueTypesCustom>({
   },
 })
 
-var User = {
+const User = defineComponent({
   template: '<li><strong>{{ name }}</strong> ({{ age }})</li>',
   props: {
     name: CustomTypes.string.isRequired,
     age: CustomTypes.adult,
   },
-}
+})
 
-var UserList = {
+const UserList = defineComponent({
   template: `
     <ul>
       <User v-for="user in users" :name="user.name" :age="user.age"  :key="user.name" />
@@ -35,14 +35,11 @@ var UserList = {
   components: {
     User,
   },
-}
+})
 
-new Vue({
-  el: '#app',
-  template:
-    '<section><h1>A list of users:</h1><UserList :users="users" /></section>',
-  data: {
-    users: [
+createApp({
+  setup() {
+    const users = [
       {
         name: 'John',
         age: 20,
@@ -55,9 +52,11 @@ new Vue({
         name: 'Jack',
         age: 18,
       },
-    ],
+    ]
+    return () =>
+      h('section', [h('h1', ['A list of users:']), h(UserList, { users })])
   },
   components: {
     UserList,
   },
-})
+}).mount('#app')

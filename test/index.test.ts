@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import { noop } from '../src/utils'
 import * as native from '../src/validators/native'
 import custom from '../src/validators/custom'
@@ -11,9 +10,6 @@ import shape from '../src/validators/shape'
 import { VueTypeValidableDef, VueTypeDef } from '../src/types'
 import VueTypes, { createTypes } from '../src/index'
 import { getDescriptors, getExpectDescriptors } from './helpers'
-
-Vue.config.productionTip = false
-Vue.config.silent = true
 
 type VueTypesType = typeof VueTypes
 

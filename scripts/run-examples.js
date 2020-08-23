@@ -21,8 +21,9 @@ const del = require('del')
       watch: true,
       format: 'iife',
       compress: false,
+      external: 'none',
       define: 'process.env.NODE_ENV="development"',
-      alias: 'vue=vue/dist/vue.esm.js',
+      alias: 'vue=vue/dist/vue.esm-bundler.js',
     })
   })
 

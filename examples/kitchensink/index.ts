@@ -1,5 +1,5 @@
-import Vue, { CreateElement } from 'vue'
-import Component from 'vue-class-component'
+import { defineComponent, createApp, h } from 'vue'
+// import Component from 'vue-class-component'
 import VueTypes, { VueTypesInterface, VueTypeValidableDef } from 'vue-types'
 import ProjectTypes from './namespaced-extended'
 
@@ -138,7 +138,7 @@ const projectString = ProjectTypes.string.isRequired
 const pjMax = ProjectTypes.maxLength(2)
 const pjpositive = ProjectTypes.positive
 
-const NativeComponent = Vue.extend({
+const NativeComponent = defineComponent({
   props: {
     verified: boolType,
     funcProp: funcType,
@@ -152,7 +152,7 @@ const NativeComponent = Vue.extend({
   },
 })
 
-const OtherTypesComponent = Vue.extend({
+const OtherTypesComponent = defineComponent({
   props: {
     friends: ArrayOfType,
     user: userType,
@@ -167,19 +167,19 @@ const OtherTypesComponent = Vue.extend({
   },
 })
 
-new Vue({ render: (h) => h(OtherTypesComponent) })
+createApp({ render: () => h(OtherTypesComponent) })
 
-@Component
-class ClassComponent extends NativeComponent {
-  public msg = 10
-}
+// @Component
+// class ClassComponent extends NativeComponent {
+//   public msg = 10
+// }
 
-new Vue({
-  render: (h: CreateElement) =>
-    h(ClassComponent, {
-      props: {
-        verified: true,
-        user: { ID: 10, name: 'me' },
-      },
-    }),
-})
+// new Vue({
+//   render: (h: CreateElement) =>
+//     h(ClassComponent, {
+//       props: {
+//         verified: true,
+//         user: { ID: 10, name: 'me' },
+//       },
+//     }),
+// })

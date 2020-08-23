@@ -1,25 +1,28 @@
-import Vue from 'vue'
+import { defineComponent, createApp, h, computed, ref } from 'vue'
 import VueTypes from 'vue-types'
 
-Vue.config.silent = false
+interface ModelItem {
+  id: string
+  pet: 'dog' | 'cat'
+  isNew: boolean
+}
 
-const Model = Vue.extend({
+const Model = defineComponent({
   template: '<li>{{ model.id }} {{ isNew }} (pet: {{ model.pet }})</li>',
   props: {
-    model: VueTypes.shape({
+    model: VueTypes.shape<ModelItem>({
       id: VueTypes.string.isRequired,
-      pet: VueTypes.oneOf(['dog', 'cat']).isRequired,
+      pet: VueTypes.oneOf(['dog', 'cat'] as const).isRequired,
       isNew: VueTypes.bool,
     }).isRequired,
   },
-  computed: {
-    isNew() {
-      return this.model.isNew ? '- new' : ''
-    },
+  setup(props) {
+    const isNew = computed(() => (props.model.isNew ? '- new' : ''))
+    return { isNew }
   },
 })
 
-const App = Vue.extend({
+const App = defineComponent({
   template: `
     <section>
       <h1>A list of models</h1>
@@ -27,25 +30,26 @@ const App = Vue.extend({
       <ul><Model v-for="model in models" :model="model" :key="model.id" /></ul>
     </section>
   `,
-  data: () => ({
-    models: [],
-  }),
+  setup() {
+    const models = ref<ModelItem[]>([])
+    const pets = ['dog', 'cat'] as const
+
+    function addModel() {
+      models.value.forEach((model) => {
+        model.isNew = false
+      })
+      models.value.push({
+        id: 'model-' + models.value.length,
+        pet: pets[Math.floor(Math.random() * pets.length)],
+        isNew: true,
+      })
+    }
+
+    return { models, addModel }
+  },
   components: {
     Model,
   },
-  methods: {
-    addModel() {
-      const newId = 'model-' + this.models.length
-      this.models.forEach((model) => {
-        model.isNew = false
-      })
-      this.models.push({
-        id: newId,
-        pet: 'parrot',
-        isNew: true,
-      })
-    },
-  },
 })
 
-new Vue({ render: (h) => h(App) }).$mount('#app')
+createApp({ render: () => h(App) }).mount('#app')

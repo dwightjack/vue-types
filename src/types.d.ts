@@ -1,13 +1,31 @@
-import { PropOptions, PropType } from 'vue'
+import { PropType } from 'vue'
 
-export { PropType, PropOptions }
+export { PropType }
 
-export type Prop<T> =
-  | { (): T }
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  | { new (...args: never[]): T & object }
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  | { new (...args: string[]): Function }
+export interface PropOptions<T = any, D = T> {
+  type?: PropType<T> | true | null
+  required?: boolean
+  default?: D | ((props: Record<string, unknown>) => D) | null | undefined
+  validator?(value: unknown): boolean
+}
+
+export type Prop<T = any> =
+  | {
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      new (...args: any[]): T & object
+    }
+  | {
+      (): T
+    }
+  | PropMethod<T>
+
+type PropMethod<T, TConstructor = any> = T extends (...args: any) => any
+  ? {
+      new (): TConstructor
+      (): T
+      readonly prototype: TConstructor
+    }
+  : never
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NativeType = string | boolean | number | null | undefined | Function

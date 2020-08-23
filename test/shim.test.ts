@@ -1,12 +1,7 @@
 process.env.NODE_ENV = 'production'
 
-import Vue from 'vue'
-
 import { noop } from '../src/utils'
 import VueTypes from '../src/shim'
-
-Vue.config.productionTip = false
-Vue.config.silent = true
 
 describe('SHIM: VueTypes', () => {
   describe('SHIM: `.any`', () => {
