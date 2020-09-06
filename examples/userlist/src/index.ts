@@ -1,4 +1,4 @@
-import { defineComponent, createApp, ref, h } from 'vue'
+import { defineComponent, createApp, h } from 'vue'
 import VueTypes, { VueTypeDef } from 'vue-types'
 
 type typeofVueTypes = typeof VueTypes
