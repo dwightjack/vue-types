@@ -55,6 +55,19 @@ const numPropGreaterThanTen = number().validate(gtTen)
 // numPropGreaterThanTen ===  { type: Number, validator: (num) => num > 10 }
 ```
 
+::: tip
+You can unset any previously defined default value by passing `undefined` to `.def()`
+
+```js
+const type = VueTypes.string.def('hello')
+// { type: String, default: 'hello' }
+
+type.def(undefined)
+// { type: String }
+```
+
+:::
+
 ### `any`
 
 Validates any type of value.

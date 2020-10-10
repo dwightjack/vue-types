@@ -179,7 +179,7 @@ describe('`toType()`', () => {
       expect(Object.keys(type)).not.toContain('def')
     })
 
-    it('`def` should NOT be writtable', () => {
+    it('`def` should NOT be writable', () => {
       const type = utils.toType('testType', {})
 
       try {
@@ -195,6 +195,14 @@ describe('`toType()`', () => {
       type.def(true as any)
 
       expect(type.default).toBe(undefined)
+    })
+
+    it('should remove the "default" key if passed-in value is undefined', () => {
+      const type = utils.toType('testType', { type: String })
+      type.def('')
+      expect(type.default).toBe('')
+      type.def(undefined)
+      expect(Object.keys(type)).not.toContain('default')
     })
 
     it('skips validation if passed-in value is a function', () => {

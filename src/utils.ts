@@ -273,7 +273,10 @@ export function toType<T = any>(name: string, obj: PropOptions<T>) {
     },
     def: {
       value(def?: any) {
-        if (def === undefined && !this.default) {
+        if (def === undefined) {
+          if (has(this, 'default')) {
+            delete this.default
+          }
           return this
         }
         if (!isFunction(def) && validateType(this, def, true) !== true) {

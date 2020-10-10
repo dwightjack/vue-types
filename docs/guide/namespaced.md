@@ -94,6 +94,19 @@ console.log(VueTypes.bool.default)
 // logs undefined
 ```
 
+::: tip
+To unset the default value for an individual validator instance use `.def(undefined)`
+
+```js
+const type = VueTypes.string.def(undefined)
+// { type: String }
+
+const type2 = VueTypes.string
+// still { type: String, default: '' }
+```
+
+:::
+
 ## Custom Validators
 
 Custom validators are exposed as static methods. Refer to the [dedicated documentation](/guide/validators.html#custom-validators) for usage instructions.
