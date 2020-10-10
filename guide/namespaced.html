@@ -7,7 +7,7 @@
     <meta name="generator" content="VuePress 1.5.2">
     
     <meta name="description" content="">
-    <link rel="preload" href="/vue-types/assets/css/0.styles.1b1d89bc.css" as="style"><link rel="preload" href="/vue-types/assets/js/app.06c307ec.js" as="script"><link rel="preload" href="/vue-types/assets/js/2.b9fabd5a.js" as="script"><link rel="preload" href="/vue-types/assets/js/9.d4646a21.js" as="script"><link rel="prefetch" href="/vue-types/assets/js/10.05001191.js"><link rel="prefetch" href="/vue-types/assets/js/3.a9ebf161.js"><link rel="prefetch" href="/vue-types/assets/js/4.b6b8cdb2.js"><link rel="prefetch" href="/vue-types/assets/js/5.b59ddfed.js"><link rel="prefetch" href="/vue-types/assets/js/6.88d44763.js"><link rel="prefetch" href="/vue-types/assets/js/7.d460ddcb.js"><link rel="prefetch" href="/vue-types/assets/js/8.762c6e8d.js">
+    <link rel="preload" href="/vue-types/assets/css/0.styles.1b1d89bc.css" as="style"><link rel="preload" href="/vue-types/assets/js/app.060353a9.js" as="script"><link rel="preload" href="/vue-types/assets/js/2.b9fabd5a.js" as="script"><link rel="preload" href="/vue-types/assets/js/9.d04b1889.js" as="script"><link rel="prefetch" href="/vue-types/assets/js/10.879cc710.js"><link rel="prefetch" href="/vue-types/assets/js/3.a9ebf161.js"><link rel="prefetch" href="/vue-types/assets/js/4.b6b8cdb2.js"><link rel="prefetch" href="/vue-types/assets/js/5.b59ddfed.js"><link rel="prefetch" href="/vue-types/assets/js/6.88d44763.js"><link rel="prefetch" href="/vue-types/assets/js/7.d460ddcb.js"><link rel="prefetch" href="/vue-types/assets/js/8.762c6e8d.js">
     <link rel="stylesheet" href="/vue-types/assets/css/0.styles.1b1d89bc.css">
   </head>
   <body>
@@ -59,7 +59,12 @@ VueTypes<span class="token punctuation">.</span>sensibleDefaults <span class="to
 
 console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>VueTypes<span class="token punctuation">.</span>bool<span class="token punctuation">.</span>default<span class="token punctuation">)</span>
 <span class="token comment">// logs undefined</span>
-</code></pre></div><h2 id="custom-validators"><a href="#custom-validators" class="header-anchor">#</a> Custom Validators</h2> <p>Custom validators are exposed as static methods. Refer to the <a href="/vue-types/guide/validators.html#custom-validators">dedicated documentation</a> for usage instructions.</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">const</span> arrayOfStrings <span class="token operator">=</span> VueTypes<span class="token punctuation">.</span><span class="token function">arrayOf</span><span class="token punctuation">(</span>String<span class="token punctuation">)</span>
+</code></pre></div><div class="custom-block tip"><p class="custom-block-title">TIP</p> <p>To unset the default value for an individual validator instance use <code>.def(undefined)</code></p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">const</span> type <span class="token operator">=</span> VueTypes<span class="token punctuation">.</span>string<span class="token punctuation">.</span><span class="token function">def</span><span class="token punctuation">(</span><span class="token keyword">undefined</span><span class="token punctuation">)</span>
+<span class="token comment">// { type: String }</span>
+
+<span class="token keyword">const</span> type2 <span class="token operator">=</span> VueTypes<span class="token punctuation">.</span>string
+<span class="token comment">// still { type: String, default: '' }</span>
+</code></pre></div></div> <h2 id="custom-validators"><a href="#custom-validators" class="header-anchor">#</a> Custom Validators</h2> <p>Custom validators are exposed as static methods. Refer to the <a href="/vue-types/guide/validators.html#custom-validators">dedicated documentation</a> for usage instructions.</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">const</span> arrayOfStrings <span class="token operator">=</span> VueTypes<span class="token punctuation">.</span><span class="token function">arrayOf</span><span class="token punctuation">(</span>String<span class="token punctuation">)</span>
 </code></pre></div><h2 id="utilities"><a href="#utilities" class="header-anchor">#</a> Utilities</h2> <p>The class object exposes some utility functions under the <code>.utils</code> property:</p> <h3 id="utils-validate-value-type"><a href="#utils-validate-value-type" class="header-anchor">#</a> <code>utils.validate(value, type)</code></h3> <p>Checks a value against a type definition:</p> <div class="language-js extra-class"><pre class="language-js"><code>VueTypes<span class="token punctuation">.</span>utils<span class="token punctuation">.</span><span class="token function">validate</span><span class="token punctuation">(</span><span class="token string">'John'</span><span class="token punctuation">,</span> VueTypes<span class="token punctuation">.</span>string<span class="token punctuation">)</span> <span class="token comment">//true</span>
 
 VueTypes<span class="token punctuation">.</span>utils<span class="token punctuation">.</span><span class="token function">validate</span><span class="token punctuation">(</span><span class="token string">'John'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> type<span class="token operator">:</span> String <span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment">//true</span>
@@ -100,7 +105,7 @@ VueTypes<span class="token punctuation">.</span>utils<span class="token punctuat
     password<span class="token operator">:</span> passwordType<span class="token punctuation">.</span><span class="token function">validate</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">v</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token operator">/</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token operator">-</span><span class="token number">9</span><span class="token punctuation">]</span><span class="token operator">/</span>test<span class="token punctuation">.</span><span class="token punctuation">(</span>v<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span>
-</code></pre></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated:</span> <span class="time">7/15/2020, 6:48:25 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+</code></pre></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated:</span> <span class="time">10/10/2020, 9:26:28 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
       ←
       <a href="/vue-types/guide/validators.html" class="prev">
         Validators
@@ -109,6 +114,6 @@ VueTypes<span class="token punctuation">.</span>utils<span class="token punctuat
       </a>
       →
     </span></p></div> </main></div><div class="global-ui"></div></div>
-    <script src="/vue-types/assets/js/app.06c307ec.js" defer></script><script src="/vue-types/assets/js/2.b9fabd5a.js" defer></script><script src="/vue-types/assets/js/9.d4646a21.js" defer></script>
+    <script src="/vue-types/assets/js/app.060353a9.js" defer></script><script src="/vue-types/assets/js/2.b9fabd5a.js" defer></script><script src="/vue-types/assets/js/9.d04b1889.js" defer></script>
   </body>
 </html>
