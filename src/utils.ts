@@ -1,4 +1,4 @@
-import _isPlainObject from 'is-plain-object'
+import { isPlainObject as _isPlainObject } from 'is-plain-object'
 import Vue from 'vue'
 import {
   VueTypeDef,
