@@ -49,7 +49,7 @@ module.exports = (config) => {
             text: '',
           },
       compilerOptions: {
-        target: 'ES5',
+        target: 'ES2020',
         sourceMap: true,
         module: 'commonjs',
       },
