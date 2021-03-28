@@ -1,4 +1,4 @@
-import isPlainObject from 'is-plain-object'
+import { isPlainObject } from 'is-plain-object'
 import { typeDefaults } from './sensibles'
 import { VueTypesDefaults } from './types'
 export { VueTypeDef, VueTypeValidableDef } from './types'

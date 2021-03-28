@@ -89,7 +89,7 @@
     "vuepress": "1.5.2"
   },
   "dependencies": {
-    "is-plain-object": "3.0.1"
+    "is-plain-object": "5.0.0"
   },
   "browserslist": [
     "last 3 versions",
