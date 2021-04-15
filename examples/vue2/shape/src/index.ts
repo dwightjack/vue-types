@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue2'
 import VueTypes from 'vue-types'
 
 Vue.config.silent = false
@@ -8,7 +8,7 @@ const Model = Vue.extend({
   props: {
     model: VueTypes.shape({
       id: VueTypes.string.isRequired,
-      pet: VueTypes.oneOf(['dog', 'cat']).isRequired,
+      pet: VueTypes.oneOf(['dog', 'cat'] as const).isRequired,
       isNew: VueTypes.bool,
     }).isRequired,
   },
@@ -23,7 +23,8 @@ const App = Vue.extend({
   template: `
     <section>
       <h1>A list of models</h1>
-      <button type="button" @click="addModel">Add model</button>
+      <button type="button" @click="addPet('parrot')">Add parrot (invalid, logs to console)</button>
+      <button type="button" @click="addPet('dog')">Add dog</button>
       <ul><Model v-for="model in models" :model="model" :key="model.id" /></ul>
     </section>
   `,
@@ -34,14 +35,14 @@ const App = Vue.extend({
     Model,
   },
   methods: {
-    addModel() {
+    addPet(pet: string) {
       const newId = 'model-' + this.models.length
       this.models.forEach((model) => {
         model.isNew = false
       })
       this.models.push({
         id: newId,
-        pet: 'parrot',
+        pet,
         isNew: true,
       })
     },

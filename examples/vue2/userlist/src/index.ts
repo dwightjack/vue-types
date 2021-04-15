@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue2'
 import VueTypes, { VueTypeDef } from 'vue-types'
 
 type typeofVueTypes = typeof VueTypes
@@ -15,7 +15,7 @@ const CustomTypes = VueTypes.extend<VueTypesCustom>({
   },
 })
 
-var User = {
+const User = {
   template: '<li><strong>{{ name }}</strong> ({{ age }})</li>',
   props: {
     name: CustomTypes.string.isRequired,
@@ -23,7 +23,7 @@ var User = {
   },
 }
 
-var UserList = {
+const UserList = {
   template: `
     <ul>
       <User v-for="user in users" :name="user.name" :age="user.age"  :key="user.name" />

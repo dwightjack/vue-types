@@ -10,7 +10,12 @@ const del = require('del')
 
   console.log('Compiling examples...')
 
-  const bundles = ['userlist', 'shape'].map(async (path) => {
+  const bundles = [
+    'vue2/userlist',
+    'vue2/shape',
+    'vue3/userlist',
+    'vue3/shape',
+  ].map(async (path) => {
     await del(resolve(ROOT_DIR, `./${path}/dist`))
 
     await microbundle({
@@ -22,7 +27,7 @@ const del = require('del')
       format: 'iife',
       compress: false,
       define: 'process.env.NODE_ENV="development"',
-      alias: 'vue=vue/dist/vue.esm.js',
+      alias: 'vue2=vue2/dist/vue.esm.js,vue3=vue3/dist/vue.esm-browser.js',
     })
   })
 

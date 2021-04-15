@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import { isPlainObject } from 'is-plain-object'
 import { typeDefaults } from './sensibles'
 import { VueTypesDefaults } from './types'
@@ -183,10 +182,9 @@ export function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
 
 /* eslint-disable no-console */
 if (process.env.NODE_ENV !== 'production') {
-  Vue.config.silent === false &&
-    console.warn(
-      'You are using the production shimmed version of VueTypes in a development build. Refer to https://github.com/dwightjack/vue-types#production-build to learn how to configure VueTypes for usage in multiple environments.',
-    )
+  console.warn(
+    'You are using the production shimmed version of VueTypes in a development build. Refer to https://github.com/dwightjack/vue-types#production-build to learn how to configure VueTypes for usage in multiple environments.',
+  )
 }
 /* eslint-enable no-console */
 

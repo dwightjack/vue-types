@@ -1,19 +1,16 @@
 # Installation
 
 ::: warning VERSION NOTE
-This guide covers both for VueTypes 2 and VueTypes 3.
+This guide covers VueTypes 2+.
 
 - VueTypes 2 is compatible with **Vue 1 and 2**.
-- VueTypes 3 is compatible with **Vue 3**.
-
+- VueTypes 4 is compatible with **Vue 2 Vue 3**.
 :::
 
 ## NPM package
 
 ```bash
 npm install vue-types --save
-# or for Vue 3
-npm install vue-types@3 --save
 ```
 
 ## CDN delivered script
@@ -22,12 +19,6 @@ Add the following script tags before your code
 
 ```html
 <script src="https://unpkg.com/vue-types"></script>
-```
-
-For the Vue 3 compatible version use:
-
-```html
-<script src="https://unpkg.com/vue-types@3"></script>
 ```
 
 ## Usage with `eslint-plugin-vue`
@@ -92,14 +83,6 @@ If you're including the library via a `script` tag, use the dedicated shim build
 ```html
 <!-- use the shim from version 2.0.0 -->
 <script src="https://unpkg.com/vue-types@2.0.0/dist/shim.umd.js"></script>
-```
-
-```html
-<!--
-  use the shim from version 3.0.0
-  compatible with Vue 3
--->
-<script src="https://unpkg.com/vue-types@3/dist/shim.umd.js"></script>
 ```
 
 ### Webpack

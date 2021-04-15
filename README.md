@@ -1,6 +1,6 @@
 # vue-types
 
-> Prop type definitions for [Vue.js](http://vuejs.org). Compatible with both Vue 1.x and 2.x
+> Prop type definitions for [Vue.js](http://vuejs.org).
 
 <p id="badges">
   <a href="https://www.npmjs.com/package/vue-types" target="_blank">
@@ -42,4 +42,4 @@
 
 [MIT](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2020 Marco Solazzi
+Copyright (c) 2021 Marco Solazzi

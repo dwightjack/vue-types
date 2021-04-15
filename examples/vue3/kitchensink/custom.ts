@@ -1,10 +1,11 @@
-import Vue from 'vue'
+import { defineComponent, createApp, h } from 'vue3'
 import {
   createTypes,
   object,
   toValidableType,
   fromType,
   VueTypeValidableDef,
+  toType,
 } from 'vue-types'
 
 interface User {
@@ -53,12 +54,20 @@ class MyTypesClass extends createTypes({}) {
   static get user() {
     return fromType('user', userShape)
   }
+  static get positive() {
+    return toValidableType('positive', {
+      type: Number,
+    })
+      .validate((v) => v >= 0)
+      .def(0)
+  }
 }
 
 const userGetter2 = MyTypesClass.user.isRequired
 const stringT = MyTypesClass.string.isRequired
+const positiveT = MyTypesClass.positive.isRequired
 
-const UserComponent = Vue.extend({
+const UserComponent = defineComponent({
   props: {
     user: userGetterType,
     message: messageType,
@@ -67,6 +76,6 @@ const UserComponent = Vue.extend({
   },
 })
 
-new Vue({
-  render: (h) => h(UserComponent),
+createApp({
+  render: () => h(UserComponent),
 })

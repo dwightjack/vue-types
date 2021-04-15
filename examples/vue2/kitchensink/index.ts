@@ -1,4 +1,4 @@
-import Vue, { CreateElement } from 'vue'
+import Vue, { CreateElement } from 'vue2'
 import Component from 'vue-class-component'
 import VueTypes, { VueTypesInterface, VueTypeValidableDef } from 'vue-types'
 import ProjectTypes from './namespaced-extended'
