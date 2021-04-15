@@ -1,6 +1,6 @@
 {
   "name": "vue-types",
-  "version": "4.0.0-rc.1",
+  "version": "4.0.0-rc.2",
   "description": "Prop types utility for Vue",
   "author": "Marco Solazzi",
   "license": "MIT",
@@ -50,7 +50,7 @@
   },
   "bugs": "https://github.com/dwightjack/vue-types/issues",
   "peerDependencies": {
-    "vue": "^2.0.0 | ^3.0.0"
+    "vue": "^2.0.0 || ^3.0.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "7.13.8",
