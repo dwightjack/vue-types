@@ -1,5 +1,6 @@
 import { isPlainObject } from 'is-plain-object'
 import { typeDefaults } from './sensibles'
+import { config } from './config'
 import { VueTypesDefaults } from './types'
 export { VueTypeDef, VueTypeValidableDef } from './types'
 const dfn = Object.defineProperty
@@ -112,6 +113,8 @@ class BaseVueTypes {
 
   static sensibleDefaults: Partial<VueTypesDefaults> | boolean
 
+  static config = config
+
   static get any() {
     return any()
   }
@@ -182,9 +185,10 @@ export function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
 
 /* eslint-disable no-console */
 if (process.env.NODE_ENV !== 'production') {
-  console.warn(
-    'You are using the production shimmed version of VueTypes in a development build. Refer to https://github.com/dwightjack/vue-types#production-build to learn how to configure VueTypes for usage in multiple environments.',
-  )
+  config.silent === false &&
+    console.warn(
+      'You are using the production shimmed version of VueTypes in a development build. Refer to https://github.com/dwightjack/vue-types#production-build to learn how to configure VueTypes for usage in multiple environments.',
+    )
 }
 /* eslint-enable no-console */
 

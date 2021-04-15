@@ -37,11 +37,14 @@ import arrayOf from './validators/arrayof'
 import instanceOf from './validators/instanceof'
 import objectOf from './validators/objectof'
 import shape from './validators/shape'
+import { config } from './config'
 
 class BaseVueTypes {
   static defaults: Partial<VueTypesDefaults> = {}
 
   static sensibleDefaults: Partial<VueTypesDefaults> | boolean
+
+  static config = config
 
   static get any() {
     return any()

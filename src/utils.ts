@@ -1,4 +1,5 @@
 import { isPlainObject as _isPlainObject } from 'is-plain-object'
+import { config } from './config'
 import {
   VueTypeDef,
   VueTypeValidableDef,
@@ -54,7 +55,7 @@ if (process.env.NODE_ENV !== 'production') {
   warn = hasConsole
     ? function warn(msg) {
         // eslint-disable-next-line no-console
-        console.warn(`[VueTypes warn]: ${msg}`)
+        config.silent === false && console.warn(`[VueTypes warn]: ${msg}`)
       }
     : identity
 }
