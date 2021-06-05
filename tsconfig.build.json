@@ -1,3 +1,7 @@
 {
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+  },
   "exclude": ["node_modules", "test/**/*.ts", "examples/**/*.ts"]
 }

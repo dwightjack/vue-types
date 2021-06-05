@@ -1,11 +1,12 @@
 {
   "name": "vue-types",
-  "version": "4.0.0-rc.2",
+  "version": "4.0.0-rc.3",
   "description": "Prop types utility for Vue",
   "author": "Marco Solazzi",
   "license": "MIT",
   "homepage": "https://github.com/dwightjack/vue-types",
-  "main": "dist/vue-types.js",
+  "main": "dist/vue-types.cjs",
+  "type": "module",
   "source": [
     "src/index.ts",
     "src/shim.ts"
@@ -15,9 +16,19 @@
   "umd:main": "dist/vue-types.umd.js",
   "module": "dist/vue-types.m.js",
   "esmodule": "dist/vue-types.modern.js",
+  "exports": {
+    ".": {
+      "require": "./dist/vue-types.cjs",
+      "default": "./dist/vue-types.modern.js"
+    },
+    "./shim": {
+      "require": "./dist/shim.cjs",
+      "default": "./dist/shim.modern.js"
+    }
+  },
   "types": "dist/index.d.ts",
   "engines": {
-    "node": ">=10.15.0"
+    "node": ">=12.16.0"
   },
   "files": [
     "dist",
@@ -30,13 +41,13 @@
     "build:clean": "del dist",
     "build:copy": "cpy src/*.d.ts dist",
     "build:ts": "microbundle --external=vue --tsconfig=./tsconfig.build.json --format=modern,es",
-    "build:cjs": "microbundle --external=vue --tsconfig=./tsconfig.build.json -i src/index.cjs.ts -o dist/vue-types.js --no-pkg-main --format=cjs",
-    "build:shim:cjs": "microbundle --external=vue --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o dist/shim.js --no-pkg-main --format=cjs",
+    "build:cjs": "microbundle --external=vue --tsconfig=./tsconfig.build.json -i src/index.cjs.ts -o dist/vue-types.cjs --no-pkg-main --format=cjs",
+    "build:shim:cjs": "microbundle --external=vue --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o dist/shim.cjs --no-pkg-main --format=cjs",
     "build:umd": "cross-env NODE_ENV=production microbundle --external=vue --tsconfig=./tsconfig.build.json --format=umd",
-    "test": "karma start karma.conf.js --single-run --browsers ChromeHeadless",
-    "test:saucelab": "karma start karma-sauce.conf.js --single-run",
+    "test": "karma start karma.conf.cjs --single-run --browsers ChromeHeadless",
+    "test:saucelab": "karma start karma-sauce.conf.cjs --single-run",
     "lint": "eslint  '{src,test,.}/**/*.{ts,js}'",
-    "examples": "cross-env NODE_ENV=development node ./scripts/run-examples.js",
+    "examples": "cross-env NODE_ENV=development node ./scripts/run-examples.cjs",
     "docs:dev": "vuepress dev docs",
     "docs:build": "cross-env NODE_ENV=production vuepress build docs"
   },
@@ -53,8 +64,8 @@
     "vue": "^2.0.0 || ^3.0.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-nullish-coalescing-operator": "7.13.8",
-    "@babel/plugin-proposal-optional-chaining": "7.13.12",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "7.14.2",
+    "@babel/plugin-proposal-optional-chaining": "7.14.2",
     "@types/jasmine": "3.6.9",
     "@types/node": "14.14.37",
     "@typescript-eslint/eslint-plugin": "4.19.0",
@@ -79,14 +90,13 @@
     "karma-sauce-launcher": "4.3.5",
     "karma-typescript": "5.5.1",
     "karma-typescript-es6-transform": "5.5.1",
-    "microbundle": "0.13.0",
+    "microbundle": "0.13.1",
     "npm-run-all": "4.1.5",
     "prettier": "2.2.1",
     "puppeteer": "8.0.0",
     "typescript": "4.2.3",
     "vue2": "npm:vue@2.6.12",
     "vue3": "npm:vue@3.0.11",
-    "vue-class-component": "7.2.6",
     "vuepress": "1.8.2"
   },
   "dependencies": {

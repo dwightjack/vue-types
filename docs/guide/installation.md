@@ -5,7 +5,7 @@ This guide covers VueTypes 2+.
 
 - VueTypes 2 is compatible with **Vue 1 and 2**.
 - VueTypes 4 is compatible with **Vue 2 and Vue 3**.
-:::
+  :::
 
 ## NPM package
 
@@ -27,9 +27,13 @@ When used in a project with [eslint-plugin-vue](https://github.com/vuejs/eslint-
 
 To prevent that error use [eslint-plugin-vue-types](https://github.com/dwightjack/eslint-plugin-vue-types).
 
-## Modern bundle
+## Usage with bundlers
 
-The default entry points of the library are ES5 transpiled modules. When used with a bundler like [Webpack](https://webpack.js.org/) or [rollup](https://rollupjs.org) the module resolution system will automatically pick either the Commonjs or ESM version based on your configuration.
+Starting from version 4, VueTypes is published as a native ESM module with CommonJS and UMD support.
+
+The default entry points of the library are modules compiled in ES5. When used with a bundler like [Webpack](https://webpack.js.org/) or [rollup](https://rollupjs.org) the module resolution system will automatically pick either the Commonjs or ESM version based on your configuration.
+
+## Modern bundle
 
 If your project supports modern browsers (ie: browsers that support `<script type="module">`), you can instruct your bundle to load the special ES2017 entry point by setting an alias on its configuration file:
 
@@ -70,7 +74,7 @@ export default {
 
 ## Production build
 
-Vue.js does not validate components' props when used in a production build. If you're using a bundler such as Webpack or rollup you can shrink VueTypes filesize by around **70%** (minified and gzipped) by removing the validation logic while preserving the library's API methods. To achieve that result setup an alias to `vue-types/dist/shim.m.js` (`vue-types/dist/shim.js` if you're using CommonJS modules).
+Vue.js does not validate components' props when used in a production build. If you're using a bundler such as Webpack or rollup you can shrink VueTypes file size by around **70%** (minified and gzipped) by removing the validation logic while preserving the library's API methods. To achieve that result setup an alias to `vue-types/dist/shim.m.js` (`vue-types/dist/shim.js` if you're using CommonJS modules).
 
 If you're including the library via a `script` tag, use the dedicated shim build file:
 
