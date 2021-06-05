@@ -29,8 +29,9 @@ module.exports = {
         collapsable: false,
         children: [
           '/guide/installation',
-          ['/guide/validators', 'Validators'],
+          ['/guide/validators', 'Using VueTypes'],
           '/guide/namespaced',
+          '/guide/configuration',
         ],
       },
       {

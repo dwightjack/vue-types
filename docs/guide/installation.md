@@ -4,7 +4,7 @@
 This guide covers VueTypes 2+.
 
 - VueTypes 2 is compatible with **Vue 1 and 2**.
-- VueTypes 4 is compatible with **Vue 2 Vue 3**.
+- VueTypes 4 is compatible with **Vue 2 and Vue 3**.
 :::
 
 ## NPM package
