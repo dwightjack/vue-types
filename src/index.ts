@@ -213,7 +213,8 @@ export {
   toValidableType,
   validateType,
   fromType,
+  config,
 }
 
 export type VueTypesInterface = ReturnType<typeof createTypes>
-export { VueTypeDef, VueTypeValidableDef, VueTypeShape, VueTypeLooseShape }
+export type { VueTypeDef, VueTypeValidableDef, VueTypeShape, VueTypeLooseShape }
