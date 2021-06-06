@@ -39,7 +39,8 @@ import objectOf from './validators/objectof'
 import shape from './validators/shape'
 import { config } from './config'
 
-class BaseVueTypes {
+
+const BaseVueTypes = /*#__PURE__*/(() => class BaseVueTypes {
   static defaults: Partial<VueTypesDefaults> = {}
 
   static sensibleDefaults: Partial<VueTypesDefaults> | boolean
@@ -165,7 +166,7 @@ class BaseVueTypes {
       return validable ? toValidableType<T>(name, obj) : toType<T>(name, obj)
     },
   }
-}
+})()
 
 function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
   return class extends BaseVueTypes {
@@ -189,7 +190,7 @@ function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
   }
 }
 
-export default class VueTypes extends createTypes() {}
+export default class VueTypes extends (/*#__PURE__*/ createTypes()) {}
 
 export {
   any,
