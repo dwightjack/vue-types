@@ -59,6 +59,8 @@ function type<T = any>(name: string, props: any = {}, validable = false): T {
   )
 }
 
+export { config }
+
 export const any = () => type('any', {}, true)
 export const func = <T = any>() => type<T>('func', { type: Function }, true)
 export const bool = () => type('bool', { type: Boolean }, true)
@@ -108,7 +110,7 @@ function createValidator(
   return dfn(root, name, descr)
 }
 
-class BaseVueTypes {
+const BaseVueTypes = /*#__PURE__*/(() => class BaseVueTypes {
   static defaults: Partial<VueTypesDefaults> = {}
 
   static sensibleDefaults: Partial<VueTypesDefaults> | boolean
@@ -159,7 +161,7 @@ class BaseVueTypes {
     toType: type as (...args: any[]) => any,
     validate: (...args: any[]) => !!args,
   }
-}
+})()
 
 export function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
   return class extends BaseVueTypes {
@@ -192,4 +194,4 @@ if (process.env.NODE_ENV !== 'production') {
 }
 /* eslint-enable no-console */
 
-export default class VueTypes extends createTypes() {}
+export default class VueTypes extends (/*#__PURE__*/ createTypes()) {}
