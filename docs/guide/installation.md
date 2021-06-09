@@ -21,12 +21,6 @@ Add the following script tags before your code
 <script src="https://unpkg.com/vue-types"></script>
 ```
 
-## Usage with `eslint-plugin-vue`
-
-When used in a project with [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue), the linter might report errors related to the `vue/require-default-prop` rule.
-
-To prevent that error use [eslint-plugin-vue-types](https://github.com/dwightjack/eslint-plugin-vue-types).
-
 ## Usage with bundlers
 
 Starting from version 4, VueTypes is published as a native ESM module with CommonJS and UMD support.
@@ -35,8 +29,8 @@ Modern bundlers and tools should be able to automatically pick the correct versi
 
 Anyway, here is the list of available entry points:
 
-- `vue-types.modern.js`: ES module for environments [supporting it](https://caniuse.com/es6-module). This is the default entry point for Node 14+, Webpack 5+, Rollup and other tools with native support for ES Modules (like [Vite](https://vitejs.dev/) and [Snowpack](https://www.snowpack.dev/)).
-- `vue-types.m.js`: ES5 compiled version exported as ES module. This is the default entry point for Webpack 4 and frameworks like [Nuxt 2](https://nuxtjs.org/)
+- `vue-types.modern.js`: ES module for environments [supporting it](https://caniuse.com/es6-module). This is the default entry point for Node 14+, Webpack 5+, Rollup and other tools with native support for ES Modules (like [Vite](https://vitejs.dev/), Vue CLI 5 and [Snowpack](https://www.snowpack.dev/)).
+- `vue-types.m.js`: ES5 compiled version exported as ES module. This is the default entry point for Webpack 4 and frameworks like [Nuxt 2](https://nuxtjs.org/) and [Vue CLI 4](https://cli.vuejs.org/)
 - `vue-types.cjs`: ES5 compiled version exported as CommonJS module. This is the default entry point for Node 12 and older and tools not supporting ES Modules.
 - `vue-types.umd.js`: ES5 compiled version bundled as UMD module. This entry point can be used when loading VueTypes from a `<script src="...">` tag or from a CDN. It's the default entry point for [unpkg](https://unpkg.com/).
 
@@ -127,3 +121,24 @@ return {
 ```
 
 Note: If you are using [@rollup/plugin-node-resolve](https://www.npmjs.com/package/@rollup/plugin-node-resolve) make sure to place the alias plugin **before** the resolve plugin.
+
+### Vite
+
+You can use the [conditional config](https://vitejs.dev/config/#conditional-config) feature to set a production-only [alias](https://vitejs.dev/config/#resolve-alias):
+
+```js
+// vite.config.js
+
+export default function ({ mode }) {
+  return {
+    // ... other config settings
+    resolve: {
+      ...(mode === 'production' && {
+        alias: {
+          'vue-types': 'vue-types/shim',
+        },
+      }),
+    },
+  }
+}
+```
