@@ -42,4 +42,4 @@
 
 [MIT](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2021 Marco Solazzi
+Copyright (c) 2016 - present Marco Solazzi
