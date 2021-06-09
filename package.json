@@ -45,7 +45,7 @@
     "build:shim:cjs": "microbundle --external=vue --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o dist/shim.cjs --no-pkg-main --format=cjs",
     "build:umd": "cross-env NODE_ENV=production microbundle --external=vue --tsconfig=./tsconfig.build.json --format=umd",
     "test": "jest",
-    "lint": "eslint  '{src,test,.}/**/*.{ts,js}'",
+    "lint": "eslint  '{src,__tests__,.}/**/*.{ts,js,cjs}'",
     "examples": "cross-env NODE_ENV=development node ./scripts/run-examples.cjs",
     "docs:dev": "vuepress dev docs",
     "docs:build": "cross-env NODE_ENV=production vuepress build docs"

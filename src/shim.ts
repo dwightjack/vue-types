@@ -110,58 +110,59 @@ function createValidator(
   return dfn(root, name, descr)
 }
 
-const BaseVueTypes = /*#__PURE__*/(() => class BaseVueTypes {
-  static defaults: Partial<VueTypesDefaults> = {}
+const BaseVueTypes = /*#__PURE__*/ (() =>
+  class BaseVueTypes {
+    static defaults: Partial<VueTypesDefaults> = {}
 
-  static sensibleDefaults: Partial<VueTypesDefaults> | boolean
+    static sensibleDefaults: Partial<VueTypesDefaults> | boolean
 
-  static config = config
+    static config = config
 
-  static get any() {
-    return any()
-  }
-  static get func() {
-    return func().def(this.defaults.func)
-  }
-  static get bool() {
-    return bool().def(this.defaults.bool)
-  }
-  static get string() {
-    return string().def(this.defaults.string)
-  }
-  static get number() {
-    return number().def(this.defaults.number)
-  }
-  static get array() {
-    return array().def(this.defaults.array)
-  }
-  static get object() {
-    return object().def(this.defaults.object)
-  }
-  static get symbol() {
-    return symbol()
-  }
-  static get integer() {
-    return integer().def(this.defaults.integer)
-  }
-  static oneOf = oneOf
-  static custom = custom
-  static instanceOf = instanceOf
-  static oneOfType = oneOfType
-  static arrayOf = arrayOf
-  static objectOf = objectOf
-  static shape = shape
-  static extend<T = any>(props): T {
-    const { name, validate, getter = false, type = null } = props
-    // If we are inheriting from a custom type, let's ignore the type property
-    const extType = isPlainObject(type) && type.type ? null : type
-    return createValidator(this, name, { type: extType }, getter, !!validate)
-  }
-  static utils = {
-    toType: type as (...args: any[]) => any,
-    validate: (...args: any[]) => !!args,
-  }
-})()
+    static get any() {
+      return any()
+    }
+    static get func() {
+      return func().def(this.defaults.func)
+    }
+    static get bool() {
+      return bool().def(this.defaults.bool)
+    }
+    static get string() {
+      return string().def(this.defaults.string)
+    }
+    static get number() {
+      return number().def(this.defaults.number)
+    }
+    static get array() {
+      return array().def(this.defaults.array)
+    }
+    static get object() {
+      return object().def(this.defaults.object)
+    }
+    static get symbol() {
+      return symbol()
+    }
+    static get integer() {
+      return integer().def(this.defaults.integer)
+    }
+    static oneOf = oneOf
+    static custom = custom
+    static instanceOf = instanceOf
+    static oneOfType = oneOfType
+    static arrayOf = arrayOf
+    static objectOf = objectOf
+    static shape = shape
+    static extend<T = any>(props): T {
+      const { name, validate, getter = false, type = null } = props
+      // If we are inheriting from a custom type, let's ignore the type property
+      const extType = isPlainObject(type) && type.type ? null : type
+      return createValidator(this, name, { type: extType }, getter, !!validate)
+    }
+    static utils = {
+      toType: type as (...args: any[]) => any,
+      validate: (...args: any[]) => !!args,
+    }
+  })()
 
 export function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
   return class extends BaseVueTypes {
@@ -194,4 +195,4 @@ if (process.env.NODE_ENV !== 'production') {
 }
 /* eslint-enable no-console */
 
-export default class VueTypes extends (/*#__PURE__*/ createTypes()) {}
+export default class VueTypes /*#__PURE__*/ extends createTypes() {}
