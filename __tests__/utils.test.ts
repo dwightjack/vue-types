@@ -81,13 +81,13 @@ describe('`isComplexType()`', () => {
 
 describe('`bindTo()`', () => {
   it('binds a function and store its original value', () => {
-    const fn = jasmine.createSpy()
+    const fn = jest.fn()
     const ctx = {}
     const bound = utils.bindTo(fn, ctx)
 
     bound()
 
-    expect(fn.calls.first().object).toBe(ctx)
+    expect(fn.mock.instances[0]).toBe(ctx)
     expect(bound.__original).toBe(fn)
   })
 })
@@ -127,7 +127,7 @@ describe('`toType()`', () => {
   })
 
   it('should bind provided `validator function to the passed in object`', () => {
-    const spy = jasmine.createSpy()
+    const spy = jest.fn()
     const obj = {
       validator: spy,
     }
@@ -136,7 +136,7 @@ describe('`toType()`', () => {
     const { validator } = type
     validator(true)
 
-    expect(spy.calls.first().object).toBe(type)
+    expect(spy.mock.instances[0]).toBe(type)
   })
 
   it('should add a non-enumerable name property', () => {
@@ -255,22 +255,22 @@ describe('`toValidableType()`', () => {
     expect(type.validate).toBeInstanceOf(Function)
   })
   it('the validate function sets a custom validator', () => {
-    const fn = jasmine.createSpy()
+    const fn = jest.fn()
     const type = utils
       .toValidableType('testType', { type: String })
       .validate(fn)
-    expect(type.validator).toBeInstanceOf(Function)
+    expect(typeof type.validator).toBe('function')
 
     type.validator('demo')
     expect(fn).toHaveBeenCalledWith('demo')
   })
   it('binds the validate function to the type object', () => {
-    const fn = jasmine.createSpy()
+    const fn = jest.fn()
     const type = utils
       .toValidableType('testType', { type: String })
       .validate(fn)
     type.validator('')
-    expect(fn.calls.first().object).toBe(type)
+    expect(fn.mock.instances[0]).toBe(type)
   })
 })
 
@@ -311,8 +311,10 @@ describe('`fromType()`', () => {
   })
 
   it('composes validator functions', () => {
-    const validator = jasmine.createSpy().and.returnValue(true)
-    const validatorCopy = jasmine.createSpy().and.returnValue(false)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const validator = jest.fn((...args: any[]) => true)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const validatorCopy = jest.fn((...args: any[]) => false)
     const base = utils.toType('a', {
       type: String,
       validator,
@@ -324,7 +326,7 @@ describe('`fromType()`', () => {
 
     expect(validator).toHaveBeenCalledWith('')
     expect(validatorCopy).toHaveBeenCalledWith('')
-    expect(validator.calls.first().object).toBe(copy)
-    expect(validatorCopy.calls.first().object).toBe(copy)
+    expect(validator.mock.instances[0]).toBe(copy as any)
+    expect(validatorCopy.mock.instances[0]).toBe(copy as any)
   })
 })

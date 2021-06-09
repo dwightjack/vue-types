@@ -203,7 +203,7 @@ describe('VueTypes', () => {
 
   describe('`.extend` helper', () => {
     it('should add getter prop to the library', () => {
-      const validator = jasmine.createSpy()
+      const validator = jest.fn()
       interface VueTypesDate extends VueTypesType {
         date: VueTypeDef<Date>
       }
@@ -232,7 +232,7 @@ describe('VueTypes', () => {
       })
       expect((VueTypes as VueTypesDateFn).dateFn).toBeInstanceOf(Function)
       expect((VueTypes as VueTypesDateFn).dateFn().isRequired).toEqual(
-        jasmine.objectContaining({
+        expect.objectContaining({
           type: Date,
           required: true,
         }),
@@ -240,7 +240,7 @@ describe('VueTypes', () => {
     })
 
     it('should pass configuration params to the validator method', () => {
-      const validator = jasmine.createSpy()
+      const validator = jest.fn()
       interface VueTypesDateFnArgs extends VueTypesType {
         dateFnArgs: (...args: any[]) => VueTypeDef<Date>
       }
@@ -320,7 +320,7 @@ describe('VueTypes', () => {
         getter: true,
       })
       expect((VueTypes as VueTypesAlias).stringAlias).toEqual(
-        jasmine.objectContaining({
+        expect.objectContaining({
           type: String,
           required: true,
           default: 'parent',
@@ -334,7 +334,7 @@ describe('VueTypes', () => {
 
     it('should inherit from vue-types type and add custom validation', () => {
       const parent = VueTypes.string
-      const validator = jasmine.createSpy().and.returnValue(true)
+      const validator = jest.fn(() => true)
 
       interface VueTypesAliasValidate extends VueTypesType {
         stringValidationAlias: VueTypeValidableDef<string>
@@ -352,7 +352,7 @@ describe('VueTypes', () => {
       expect(type.type).toBe(String)
       expect(type.validator('a')).toBe(true)
       expect(validator).toHaveBeenCalledWith('a')
-      expect(validator.calls.first().object).toBe(type)
+      expect(validator.mock.instances[0]).toBe(type)
     })
 
     it('should inherit from vue-types (complex types)', () => {
@@ -361,7 +361,7 @@ describe('VueTypes', () => {
         number: VueTypes.oneOf([1, 2, 3] as const),
       }).isRequired.loose
 
-      const spy = spyOn(parent, 'validator').and.callThrough()
+      const spy = jest.spyOn(parent, 'validator')
 
       VueTypes.extend({
         name: 'shapeAlias',
@@ -372,13 +372,13 @@ describe('VueTypes', () => {
       const type = (VueTypes as any).shapeAlias
 
       expect(type).toEqual(
-        jasmine.objectContaining({
+        expect.objectContaining({
           type: Object,
           required: true,
         }),
       )
 
-      expect(type.validator).toBeInstanceOf(Function)
+      expect(typeof type.validator).toBe('function')
 
       const pass = {
         name: 'John',
@@ -397,7 +397,7 @@ describe('VueTypes', () => {
 
       expect(type.validator(pass)).toBe(true)
       expect(spy).toHaveBeenCalledWith(pass)
-      expect(spy.calls.first().object).toBe(type)
+      expect(spy.mock.instances[0]).toBe(type)
 
       expect(type.validator(passLoose)).toBe(true)
       expect(type.validator(fail)).toBe(false)
@@ -451,7 +451,7 @@ describe('VueTypes', () => {
 
     it('should inherit from vue-types type (non-getter types)', () => {
       const parent = VueTypes.string
-      const validator = jasmine.createSpy()
+      const validator = jest.fn()
 
       VueTypes.extend({
         name: 'aliasMinLength',
@@ -464,7 +464,7 @@ describe('VueTypes', () => {
       expect(type.type).toBe(String)
       type.validator('a')
       expect(validator).toHaveBeenCalledWith(3, 'a')
-      expect(validator.calls.first().object).toBe(type)
+      expect(validator.mock.instances[0]).toBe(type)
     })
   })
 })
@@ -525,7 +525,7 @@ describe('`createTypes()`', () => {
     const MyClass = createTypes()
 
     expect(MyClass.string).toEqual(
-      jasmine.objectContaining({
+      expect.objectContaining({
         type: String,
       }),
     )
@@ -534,11 +534,8 @@ describe('`createTypes()`', () => {
   it('accepts custom defaults', () => {
     const MyClass = createTypes({ string: 'hello world' })
 
-    console.log(VueTypes.defaults)
-    console.log(MyClass.defaults)
-
     expect(MyClass.string).toEqual(
-      jasmine.objectContaining({
+      expect.objectContaining({
         type: String,
         default: 'hello world',
       }),

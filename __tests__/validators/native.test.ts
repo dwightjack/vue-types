@@ -34,7 +34,7 @@ describe('Native validators', () => {
 
   describe('`.bool`', () => {
     it('should match an object with methods, type and default', () => {
-      const match = jasmine.objectContaining({
+      const match = expect.objectContaining({
         type: Boolean,
       })
 
@@ -52,7 +52,7 @@ describe('Native validators', () => {
 
   describe('`.string`', () => {
     it('should match an object with methods, type and default', () => {
-      const match = jasmine.objectContaining({
+      const match = expect.objectContaining({
         type: String,
       })
 
@@ -70,7 +70,7 @@ describe('Native validators', () => {
 
   describe('`.number`', () => {
     it('should match an object with methods, type and default', () => {
-      const match = jasmine.objectContaining({
+      const match = expect.objectContaining({
         type: Number,
       })
 
@@ -88,7 +88,7 @@ describe('Native validators', () => {
 
   describe('`.array`', () => {
     it('should match an object with methods, type and default', () => {
-      const match = jasmine.objectContaining({
+      const match = expect.objectContaining({
         type: Array,
       })
 
@@ -102,7 +102,7 @@ describe('Native validators', () => {
     it('should provide a method to set a custom default. `default` value must be a function', () => {
       const arr = [0, 1]
       const def = native.array().def(arr).default
-      expect(def).toEqual(jasmine.any(Function))
+      expect(def).toEqual(expect.any(Function))
       expect(def()).toEqual(arr)
     })
 
@@ -115,7 +115,7 @@ describe('Native validators', () => {
 
   describe('`.object`', () => {
     it('should match an object with methods, type and default', () => {
-      const match = jasmine.objectContaining({
+      const match = expect.objectContaining({
         type: Object,
       })
 
@@ -129,7 +129,7 @@ describe('Native validators', () => {
     it('should provide a method to set a custom default. `default` value must be a function', () => {
       const obj = { test: 'test' }
       const def = native.object().def(obj).default
-      expect(def).toEqual(jasmine.any(Function))
+      expect(def).toEqual(expect.any(Function))
       expect(def()).toEqual(obj)
     })
 
@@ -147,9 +147,9 @@ describe('Native validators', () => {
   describe('`.integer`', () => {
     it('should match an object with methods, type and default', () => {
       expect(native.integer()).toEqual(
-        jasmine.objectContaining({
+        expect.objectContaining({
           type: Number,
-          validator: jasmine.any(Function),
+          validator: expect.any(Function),
         }),
       )
     })
@@ -177,8 +177,8 @@ describe('Native validators', () => {
   describe('symbol', () => {
     it('should match an object with type and validator, but not default', () => {
       expect(native.symbol()).toEqual(
-        jasmine.objectContaining({
-          validator: jasmine.any(Function),
+        expect.objectContaining({
+          validator: expect.any(Function),
         }),
       )
       expect(native.symbol().default).toBe(undefined)

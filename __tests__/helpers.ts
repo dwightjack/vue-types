@@ -1,13 +1,14 @@
 export function checkRequired(type: any) {
   expect(type.isRequired).toEqual(
-    jasmine.objectContaining({
+    expect.objectContaining({
       required: true,
     }),
   )
 }
 
 // Vue.js does keep the context for validators, so there is no `this`
-export const forceNoContext = (validator) => validator.bind(undefined)
+export const forceNoContext = (validator: (..._args: any[]) => any) =>
+  validator.bind(undefined)
 
 export function getDescriptors<T extends { [key: string]: any }>(type: T): T {
   const descriptors = {} as { [P in keyof T]: any }
@@ -24,10 +25,10 @@ export function getExpectDescriptors<T extends { [key: string]: any }>(
   Object.getOwnPropertyNames(type).forEach((key) => {
     const descr = Object.getOwnPropertyDescriptor(type, key)
     if (typeof descr.get === 'function') {
-      descr.get = jasmine.any(Function) as any
+      descr.get = expect.any(Function) as any
     }
     if (typeof descr.value === 'function') {
-      descr.value = jasmine.any(Function) as any
+      descr.value = expect.any(Function) as any
     }
     descriptors[key as keyof T] = descr
   })

@@ -11,8 +11,8 @@ describe('`.custom`', () => {
 
   it('should match an object with a validator method', () => {
     expect(customType).toEqual(
-      jasmine.objectContaining({
-        validator: jasmine.any(Function),
+      expect.objectContaining({
+        validator: expect.any(Function),
       }),
     )
   })

@@ -15,7 +15,7 @@ describe('`.instanceOf`', () => {
 
   it('should match an object with a validator method', () => {
     expect(customType).toEqual(
-      jasmine.objectContaining({
+      expect.objectContaining({
         type: MyClass,
       }),
     )

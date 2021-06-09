@@ -11,8 +11,8 @@ describe('`.oneOf`', () => {
 
   it('should match an object with a validator method', () => {
     expect(customType).toEqual(
-      jasmine.objectContaining({
-        validator: jasmine.any(Function),
+      expect.objectContaining({
+        validator: expect.any(Function),
       }),
     )
   })
@@ -32,8 +32,8 @@ describe('`.oneOf`', () => {
 
   it('should NOT allow default values other than the provided ones', () => {
     expect(customType.def('not this' as any)).not.toEqual(
-      jasmine.objectContaining({
-        default: jasmine.anything(),
+      expect.objectContaining({
+        default: expect.anything(),
       }),
     )
   })
