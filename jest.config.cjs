@@ -4,6 +4,6 @@ module.exports = {
   setupFilesAfterEnv: ['./__tests__/jest.setup.js'],
   testMatch: ['**/__tests__/**/*.test.ts'],
   collectCoverage: true,
-  collectCoverageFrom: ['src/**/*.ts'],
+  collectCoverageFrom: ['src/**/*.ts', '!src/**/*.d.ts'],
   coverageDirectory: 'coverage',
 }
