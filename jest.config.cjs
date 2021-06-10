@@ -3,4 +3,7 @@ module.exports = {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['./__tests__/jest.setup.js'],
   testMatch: ['**/__tests__/**/*.test.ts'],
+  collectCoverage: true,
+  collectCoverageFrom: ['src/**/*.ts'],
+  coverageDirectory: 'coverage',
 }
