@@ -15,7 +15,7 @@
 
 </p>
 
-**Note: This document is for VueTypes 2 and above. If you are looking for an older version, refer to the `v1` branch.**
+**Note: This document is for VueTypes 4. If you are looking for an older versions, refer to the `v1~v3` branches.**
 
 ## Introduction
 
