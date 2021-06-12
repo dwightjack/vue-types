@@ -4,7 +4,7 @@
   "description": "Prop types utility for Vue",
   "author": "Marco Solazzi",
   "license": "MIT",
-  "homepage": "https://github.com/dwightjack/vue-types",
+  "homepage": "https://dwightjack.github.io/vue-types/",
   "main": "dist/vue-types.cjs",
   "type": "module",
   "source": [
@@ -92,13 +92,5 @@
   },
   "dependencies": {
     "is-plain-object": "5.0.0"
-  },
-  "browserslist": [
-    "last 3 versions",
-    "Safari >= 10",
-    "not ie <= 8",
-    "Edge >= 12",
-    "iOS >= 10",
-    "Android >= 4.4"
-  ]
+  }
 }
