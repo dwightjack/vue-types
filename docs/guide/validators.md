@@ -2,11 +2,11 @@
 title: Validators
 ---
 
-# VueTypes Validators
+# Using VueTypes Validators
 
-[[toc]]
+VueTypes is a collection of prop validators. Each validator is basically a factory function returning an object (_validator object_) compatible with [Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation).
 
-VueTypes validators are factory functions returning an object (_validator object_) compatible with [Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation).
+Differently from simple Vue prop validation objects, VueTypes prop validator objects provide some additional chainable properties and methods to control things like `required` and default values.
 
 Validators can be imported as named functions from `vue-types`:
 
@@ -59,7 +59,7 @@ const numPropGreaterThanTen = number().validate(gtTen)
 You can unset any previously defined default value by passing `undefined` to `.def()`
 
 ```js
-const type = VueTypes.string.def('hello')
+const type = string().def('hello')
 // { type: String, default: 'hello' }
 
 type.def(undefined)
