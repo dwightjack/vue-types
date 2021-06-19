@@ -4,7 +4,7 @@
 
 ## The `extend()` method
 
-You can extend the [main VueTypes object](/guide/namespaced.html) with your own validators via `VueTypes.extend({...})`.
+You can extend the [namespaced VueTypes object](/guide/namespaced.html) with your own validators via `VueTypes.extend({...})`.
 
 The method accepts an object with every key supported by [Vue prop validation objects](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) plus the following custom properties:
 
@@ -14,7 +14,7 @@ The method accepts an object with every key supported by [Vue prop validation ob
 | `validate` | boolean   | false   | If `true`, the type will have a `validate` method like native types |
 | `getter`   | `boolean` | false   | Set the validator as a getter <sup>(1)</sup>                        |
 
-1. If `true` the validator will be defined as an accessor property (like, for example, `VueTypes.string`). If `false` it will be defined as a configurable method (like `VueTypes.arrayOf()`).
+1. If `true` the validator will be defined as an accessor property (like, for example, `VueTypes.string`). If `false` it will be defined as a method (like `VueTypes.arrayOf()`).
 
 Examples:
 
@@ -36,7 +36,7 @@ VueTypes.extend({
   validator: (v) => v < 0,
 })
 
-const negativeProp2 = VueTypes.negativeFn() // <-- we need to call it
+const negativeProp2 = VueTypes.negativeFn() // <-- you need to call it
 ```
 
 Note that if `getter === false`, arguments passed to the validator function will be passed down to the `validator` method together with the prop value:
@@ -49,6 +49,7 @@ VueTypes.extend({
   validator: (max, v) => v.length <= max,
 })
 
+// set the "max" argument of the validator method
 const maxLengthType = VueTypes.maxLength(2)
 
 maxLengthType.validator('ab') // true
@@ -57,21 +58,24 @@ maxLengthType.validator('abcd') // false
 
 ## Inherit from VueTypes validators
 
-You can set another validator as _parent_ of a new one by setting it as the `type` property. This feature can be useful to create named aliases:
+You can set another validator as the _parent_ of a new one by setting it as the `type` property. This feature can be useful to create named aliases:
 
 ```js
-const userShape = VueTypes.shape({ name: String, age: Number })
+const shoesShape = VueTypes.shape({ color: String, size: Number })
 
 VueTypes.extend({
-  name: 'user',
+  name: 'shoes',
   getter: true,
-  type: userShape,
+  type: shoesShape,
 })
 
-console.log(VueTypes.user.type) // Object
-
-const data = { name: 'John', surname: 'Doe' }
-console.log(VueTypes.utils.validate(data, VueTypes.user)) // true
+export default {
+  props: {
+    shoes: VueTypes.shoes,
+    // same as
+    // shoes: shoesShape
+  },
+}
 ```
 
 Custom validators will be executed before the parent's one:
@@ -79,16 +83,16 @@ Custom validators will be executed before the parent's one:
 ```js
 // ...
 VueTypes.extend({
-  name: 'userDoe',
+  name: 'redShoes',
   getter: true,
-  type: userShape,
+  type: shoesShape,
   validator(value) {
-    return value && value.surname === 'Doe'
+    return value && value.color === 'red'
   },
 })
 
-const data = { name: 'John', surname: 'Smith' }
-console.log(VueTypes.utils.validate(data, VueTypes.userDoe)) // false
+const myShoes = { color: 'blue', size: 11 }
+console.log(VueTypes.utils.validate(myShoes, VueTypes.redShoes)) // false
 ```
 
 ::: warning
@@ -135,9 +139,11 @@ VueTypes.negative
 
 ## Typescript
 
-When used in a TypeScript project, validators added via `.extend()` might fail type checking. In order to instruct TypeScript about your custom validators you can use the following pattern:
+When used in a TypeScript project, validators added via `.extend()` might fail type checking.
 
-- First create a module to host your extended VueTypes object:
+To instruct TypeScript about your custom validators you can use the following pattern:
+
+**1. First create a module to host your extended VueTypes object:**
 
 ```ts
 // prop-types.ts
@@ -154,7 +160,7 @@ import VueTypes, {
 
 // 2. define your custom VueTypes validators interface
 interface ProjectTypes extends VueTypesInterface {
-  //VueTypeDef accepts the prop expected type as argument
+  // VueTypeDef accepts a type as argument
   maxLength(max: number): VueTypeDef<string>
   // use VueTypeValidableDef if the new type is going to support the `validate` method.
   positive: VueTypeValidableDef<number>
@@ -176,7 +182,7 @@ export default VueTypes.extend<ProjectTypes>([
 ])
 ```
 
-- Then import the newly created `prop-types.ts` instead of `vue-types`:
+**2. Then import the newly created `prop-types.ts` instead of `vue-types`:**
 
 ```vue
 <!-- MyComponent.vue -->
@@ -199,14 +205,7 @@ export default Vue.extend({
 
 ## Extending in ES6+
 
-If your source code supports ES6 or newer, you can use the native ES `extends` feature with the `toType` and `toValidableType` utility functions.
-
-Both function accept the following arguments:
-
-| name   | type   | description                                                                                                          |
-| ------ | ------ | -------------------------------------------------------------------------------------------------------------------- |
-| `name` | string | The validator name, used for logging                                                                                 |
-| `type` | object | An object compatible with Vue.js [prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) |
+If your source code supports ES6 or newer, you can use the native ES `extends` feature with the `toType`, `toValidableType` or `fromType` utility functions (see [Standalone custom validators](#standalone-custom-validators) for detailed usage instructions).
 
 For example, you could create a `prop-types.js` file in your project and export the extended VueTypes class:
 
@@ -240,15 +239,14 @@ Usage:
 <template>
   <!-- template here -->
 </template>
-<script lang="ts">
-import Vue from 'vue'
-import VueTypes from './prop-types'
+<script>
+import ProjectTypes from './prop-types'
 
 export default {
   name: 'MyComponent',
   props: {
-    msg: VueTypes.maxLength(2),
-    count: VueTypes.positive,
+    msg: ProjectTypes.maxLength(2),
+    count: ProjectTypes.positive,
   },
 }
 </script>
@@ -261,7 +259,7 @@ the most efficient and readable option for TypeScript projects.
 
 ## Standalone custom validators
 
-The `toType` and `toValidableType` functions can be used to create standalone validator as well. Indeed, they are used internally by `vue-types` in [native](/guide/validators.html#native-validators) and [custom](/guide/validators.html#custom-validators) validators.
+The `toType`, `toValidableType` and `fromType` functions can be used to create custom standalone validators. Indeed, they are used internally by `vue-types` in [native](/guide/validators.html#native-validators) and [custom](/guide/validators.html#custom-validators) validators.
 
 ### Custom validators from scratch
 
@@ -281,13 +279,20 @@ export default {
 }
 ```
 
+Both `toType` and `toValidableType` accept the following arguments:
+
+| name   | type   | description                                                                                                          |
+| ------ | ------ | -------------------------------------------------------------------------------------------------------------------- |
+| `name` | string | The validator name, used for logging                                                                                 |
+| `type` | object | An object compatible with Vue.js [prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) |
+
 ::: tip
 The difference between `toType` and `toValidableType` is that the latter creates validators that support the `.validate()` method to setup custom validation functions.
 :::
 
 ### Inheriting from existing validators
 
-In some cases you might want to use an already defined validator or validator instance as base for a new validator. This might came handy for code reusability.
+In some cases you might want to use an already defined validator or validator instance as base for a new validator. This might come handy for code reusability.
 
 In this case you can use the `fromType` utility function.
 
