@@ -1,18 +1,41 @@
-import { PropOptions, PropType } from 'vue'
+export type Prop<T = any> =
+  | {
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      new (...args: any[]): T & object
+    }
+  | {
+      (): T
+    }
+  | PropMethod<T>
 
-export { PropType, PropOptions }
-
-export type Prop<T> =
-  | { (): T }
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  | { new (...args: never[]): T & object }
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  | { new (...args: string[]): Function }
+type PropMethod<T, TConstructor = any> = T extends (...args: any) => any
+  ? {
+      new (): TConstructor
+      (): T
+      readonly prototype: TConstructor
+    }
+  : never
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NativeType = string | boolean | number | null | undefined | Function
 
 export type Constructor = new (...args: any[]) => any
+
+export type PropType<T> = Prop<T> | Prop<T>[]
+
+export interface PropOptions<T = any, D = T> {
+  type?: PropType<T> | true | null
+  required?: boolean
+  default?:
+    | D
+    | null
+    | undefined
+    | (() => D | null | undefined)
+    | ((props: Record<string, unknown>) => D)
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    | object
+  validator?(value: T): boolean
+}
 
 // see https://github.com/vuejs/vue-next/blob/22717772dd83b67ffaa6ad9805c6269e184c7e41/packages/runtime-core/src/componentProps.ts#L67
 export type InferType<T> = T extends { type: null | true }
@@ -41,6 +64,7 @@ export interface VueTypeBaseDef<
   U = T extends NativeType ? T : () => T
 > extends PropOptions<T> {
   _vueTypes_name: string
+  type?: PropType<T> | null
   readonly def: (
     def?: D,
   ) => this & {

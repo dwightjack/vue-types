@@ -1,4 +1,4 @@
-import { Prop, VueProp, InferType } from '../types'
+import { Prop, VueProp, InferType, PropType } from '../types'
 import {
   isArray,
   isComplexType,
@@ -27,14 +27,18 @@ export default function oneOfType<
   for (let i = 0; i < arr.length; i += 1) {
     const type = arr[i]
     if (isComplexType<V>(type)) {
-      if (isVueTypeDef<V>(type) && type._vueTypes_name === 'oneOf') {
-        nativeChecks = nativeChecks.concat(type.type || [])
+      if (
+        isVueTypeDef<V>(type) &&
+        type._vueTypes_name === 'oneOf' &&
+        type.type
+      ) {
+        nativeChecks = nativeChecks.concat(type.type as PropType<V>)
         continue
       }
       if (isFunction(type.validator)) {
         hasCustomValidators = true
       }
-      if (typeof type.type !== 'undefined') {
+      if (type.type !== true && type.type) {
         nativeChecks = nativeChecks.concat(type.type)
         continue
       }

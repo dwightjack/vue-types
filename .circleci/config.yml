@@ -3,7 +3,7 @@ executors:
   node:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:10-browsers
+      - image: cimg/node:14.17.0
 
 jobs:
   install:
@@ -53,7 +53,7 @@ jobs:
           name: Run Tests
           command: |
             ./cc-test-reporter before-build
-            npm test -- --browsers ChromeHeadlessCI
+            npm test
             ./cc-test-reporter after-build -t lcov
       - store_artifacts: # upload test coverage as artifact
           path: ./coverage/lcov.info

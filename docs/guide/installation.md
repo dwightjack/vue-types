@@ -1,19 +1,16 @@
 # Installation
 
 ::: warning VERSION NOTE
-This guide covers both for VueTypes 2 and VueTypes 3.
+This guide covers VueTypes 2+.
 
 - VueTypes 2 is compatible with **Vue 1 and 2**.
-- VueTypes 3 is compatible with **Vue 3**.
-
-:::
+- VueTypes 4 is compatible with **Vue 2 and Vue 3**.
+  :::
 
 ## NPM package
 
 ```bash
 npm install vue-types --save
-# or for Vue 3
-npm install vue-types@3 --save
 ```
 
 ## CDN delivered script
@@ -24,62 +21,31 @@ Add the following script tags before your code
 <script src="https://unpkg.com/vue-types"></script>
 ```
 
-For the Vue 3 compatible version use:
+## Usage with bundlers
 
-```html
-<script src="https://unpkg.com/vue-types@3"></script>
-```
+Starting from version 4, VueTypes is published as a native ESM module with CommonJS and UMD support.
 
-## Usage with `eslint-plugin-vue`
+Modern bundlers and tools should be able to automatically pick the correct version based on your configuration.
 
-When used in a project with [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue), the linter might report errors related to the `vue/require-default-prop` rule.
+Anyway, here is the list of available entry points:
 
-To prevent that error use [eslint-plugin-vue-types](https://github.com/dwightjack/eslint-plugin-vue-types).
-
-## Modern bundle
-
-The default entry points of the library are ES5 transpiled modules. When used with a bundler like [Webpack](https://webpack.js.org/) or [rollup](https://rollupjs.org) the module resolution system will automatically pick either the Commonjs or ESM version based on your configuration.
-
-If your project supports modern browsers (ie: browsers that support `<script type="module">`), you can instruct your bundle to load the special ES2017 entry point by setting an alias on its configuration file:
-
-### Webpack
-
-```diff
-// webpack.config.js
-
-module.exports = {
-  // ...
-+  resolve: {
-+    alias: {
-+      'vue-types': 'vue-types/dist/vue-types.modern.js'
-+    }
-+  }
-}
-```
-
-### Rollup
-
-Use [rollup-plugin-alias](https://github.com/rollup/rollup-plugin-alias)
-
-```diff
-// rollup.config.js
-+ import path from 'path';
-+ import alias from 'rollup-plugin-alias';
-
-export default {
-  input: './src/index.js',
-  plugins: [
-    // ...
-+    alias({
-+      'vue-types': path.resolve(__dirname, 'node_modules/vue-types/dist/vue-types.modern.js')
-+    })
-  ],
-};
-```
+- `vue-types.modern.js`: ES module for environments [supporting it](https://caniuse.com/es6-module). This is the default entry point for Node 14+, Webpack 5+, Rollup and other tools with native support for ES Modules (like [Vite](https://vitejs.dev/), Vue CLI 5 and [Snowpack](https://www.snowpack.dev/)).
+- `vue-types.m.js`: ES5 compiled version exported as ES module. This is the default entry point for Webpack 4 and frameworks like [Nuxt 2](https://nuxtjs.org/) and [Vue CLI 4](https://cli.vuejs.org/)
+- `vue-types.cjs`: ES5 compiled version exported as CommonJS module. This is the default entry point for Node 12 and older and tools not supporting ES Modules.
+- `vue-types.umd.js`: ES5 compiled version bundled as UMD module. This entry point can be used when loading VueTypes from a `<script src="...">` tag or from a CDN. It's the default entry point for [unpkg](https://unpkg.com/).
 
 ## Production build
 
-Vue.js does not validate components' props when used in a production build. If you're using a bundler such as Webpack or rollup you can shrink VueTypes filesize by around **70%** (minified and gzipped) by removing the validation logic while preserving the library's API methods. To achieve that result setup an alias to `vue-types/dist/shim.m.js` (`vue-types/dist/shim.js` if you're using CommonJS modules).
+Vue.js does not validate components' props when used in a production build. If you're using a bundler such as Webpack or rollup you can shrink VueTypes file size by around **70%** (minified and gzipped) by removing the validation logic while preserving the library's API methods. To achieve that result, VueTypes ships with a `shim` module that can be used as alias in the production build.
+
+| Full Library entry point | Shim entry point |
+| ------------------------ | ---------------- |
+| `vue-types.modern.js`    | `shim.modern.js` |
+| `vue-types.m.js`         | `shim.m.js`      |
+| `vue-types.cjs`          | `shim.cjs`       |
+| `vue-types.umd.js`       | `shim.umd.js`    |
+
+### CDN usage
 
 If you're including the library via a `script` tag, use the dedicated shim build file:
 
@@ -94,15 +60,7 @@ If you're including the library via a `script` tag, use the dedicated shim build
 <script src="https://unpkg.com/vue-types@2.0.0/dist/shim.umd.js"></script>
 ```
 
-```html
-<!--
-  use the shim from version 3.0.0
-  compatible with Vue 3
--->
-<script src="https://unpkg.com/vue-types@3/dist/shim.umd.js"></script>
-```
-
-### Webpack
+### Webpack 4 and earlier
 
 The following example will shim the module in Webpack by adding an [alias field](https://webpack.js.org/configuration/resolve/#resolve-alias) to the configuration when `NODE_ENV` is set to `"production"`:
 
@@ -122,29 +80,65 @@ return {
 }
 ```
 
+### Webpack 5
+
+The following example will shim the module in Webpack by adding an [alias field](https://webpack.js.org/configuration/resolve/#resolve-alias) to the configuration when `NODE_ENV` is set to `"production"`:
+
+```js
+// webpack.config.js
+
+return {
+  // ... configuration
+  resolve: {
+    alias: {
+      // ... other aliases
+      'vue-types': 'vue-types/shim',
+      },
+    },
+  },
+}
+```
+
 ### Rollup
 
-The following example will shim the module in rollup using [rollup-plugin-alias](https://github.com/rollup/rollup-plugin-alias) when `NODE_ENV` is set to `"production"`:
+The following example will shim the module in rollup using [@rollup/plugin-alias](https://www.npmjs.com/package/@rollup/plugin-alias):
 
 ```js
 // rollup.config.js
-import alias from 'rollup-plugin-alias'
+import alias from '@rollup/plugin-alias'
 
 return {
   // ... configuration
   plugins: [
+    alias({
+      entries: {
+        'vue-types': 'vue-types/shim',
+      },
+    }),
     // ...other plugins
-    ...(process.env.NODE_ENV === 'production' && [
-      alias({
-        'vue-types': require.resolve('vue-types/dist/shim.m.js'),
-      }),
-    ]),
   ],
 }
 ```
 
-Note: If you are using [rollup-plugin-node-resolve](https://github.com/rollup/rollup-plugin-node-resolve) make sure to place the alias plugin **before** the resolve plugin.
+Note: If you are using [@rollup/plugin-node-resolve](https://www.npmjs.com/package/@rollup/plugin-node-resolve) make sure to place the alias plugin **before** the resolve plugin.
 
-::: tip
-Production build also ships with a [modern](#modern-bundle) entry point. Just replace `vue-types/dist/shim.***.js` with `vue-types/dist/shim.modern.js`.
-:::
+### Vite
+
+You can use the [conditional config](https://vitejs.dev/config/#conditional-config) feature to set a production-only [alias](https://vitejs.dev/config/#resolve-alias):
+
+```js
+// vite.config.js
+
+export default function ({ mode }) {
+  return {
+    // ... other config settings
+    resolve: {
+      ...(mode === 'production' && {
+        alias: {
+          'vue-types': 'vue-types/shim',
+        },
+      }),
+    },
+  }
+}
+```

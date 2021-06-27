@@ -37,132 +37,136 @@ import arrayOf from './validators/arrayof'
 import instanceOf from './validators/instanceof'
 import objectOf from './validators/objectof'
 import shape from './validators/shape'
+import { config } from './config'
 
-class BaseVueTypes {
-  static defaults: Partial<VueTypesDefaults> = {}
+const BaseVueTypes = /*#__PURE__*/ (() =>
+  class BaseVueTypes {
+    static defaults: Partial<VueTypesDefaults> = {}
 
-  static sensibleDefaults: Partial<VueTypesDefaults> | boolean
+    static sensibleDefaults: Partial<VueTypesDefaults> | boolean
 
-  static get any() {
-    return any()
-  }
-  static get func() {
-    return func().def(this.defaults.func)
-  }
-  static get bool() {
-    return bool().def(this.defaults.bool)
-  }
-  static get string() {
-    return string().def(this.defaults.string)
-  }
-  static get number() {
-    return number().def(this.defaults.number)
-  }
-  static get array() {
-    return array().def(this.defaults.array)
-  }
-  static get object() {
-    return object().def(this.defaults.object)
-  }
-  static get integer() {
-    return integer().def(this.defaults.integer)
-  }
-  static get symbol() {
-    return symbol()
-  }
+    static config = config
 
-  static readonly custom = custom
-  static readonly oneOf = oneOf
-  static readonly instanceOf = instanceOf
-  static readonly oneOfType = oneOfType
-  static readonly arrayOf = arrayOf
-  static readonly objectOf = objectOf
-  static readonly shape = shape
-
-  static extend<T>(props: ExtendProps | ExtendProps[]): T {
-    if (isArray(props)) {
-      props.forEach((p) => this.extend(p))
-      return this as any
+    static get any() {
+      return any()
+    }
+    static get func() {
+      return func().def(this.defaults.func)
+    }
+    static get bool() {
+      return bool().def(this.defaults.bool)
+    }
+    static get string() {
+      return string().def(this.defaults.string)
+    }
+    static get number() {
+      return number().def(this.defaults.number)
+    }
+    static get array() {
+      return array().def(this.defaults.array)
+    }
+    static get object() {
+      return object().def(this.defaults.object)
+    }
+    static get integer() {
+      return integer().def(this.defaults.integer)
+    }
+    static get symbol() {
+      return symbol()
     }
 
-    const { name, validate = false, getter = false, ...opts } = props
+    static readonly custom = custom
+    static readonly oneOf = oneOf
+    static readonly instanceOf = instanceOf
+    static readonly oneOfType = oneOfType
+    static readonly arrayOf = arrayOf
+    static readonly objectOf = objectOf
+    static readonly shape = shape
 
-    if (has(this, name as any)) {
-      throw new TypeError(`[VueTypes error]: Type "${name}" already defined`)
-    }
+    static extend<T>(props: ExtendProps | ExtendProps[]): T {
+      if (isArray(props)) {
+        props.forEach((p) => this.extend(p))
+        return this as any
+      }
 
-    const { type } = opts
-    if (isVueTypeDef(type)) {
-      // we are using as base type a vue-type object
+      const { name, validate = false, getter = false, ...opts } = props
 
-      // detach the original type
-      // we are going to inherit the parent data.
-      delete opts.type
+      if (has(this, name as any)) {
+        throw new TypeError(`[VueTypes error]: Type "${name}" already defined`)
+      }
 
-      if (getter) {
+      const { type } = opts
+      if (isVueTypeDef(type)) {
+        // we are using as base type a vue-type object
+
+        // detach the original type
+        // we are going to inherit the parent data.
+        delete opts.type
+
+        if (getter) {
+          return Object.defineProperty(this, name, {
+            get: () => fromType(name, type, opts as Omit<ExtendProps, 'type'>),
+          })
+        }
         return Object.defineProperty(this, name, {
-          get: () => fromType(name, type, opts as Omit<ExtendProps, 'type'>),
+          value(...args: unknown[]) {
+            const t = fromType(name, type, opts as Omit<ExtendProps, 'type'>)
+            if (t.validator) {
+              t.validator = t.validator.bind(t, ...args)
+            }
+            return t
+          },
         })
       }
-      return Object.defineProperty(this, name, {
-        value(...args: unknown[]) {
-          const t = fromType(name, type, opts as Omit<ExtendProps, 'type'>)
-          if (t.validator) {
-            t.validator = t.validator.bind(t, ...args)
-          }
-          return t
-        },
-      })
+
+      let descriptor: PropertyDescriptor
+      if (getter) {
+        descriptor = {
+          get() {
+            const typeOptions = Object.assign({}, opts as PropOptions<T>)
+            if (validate) {
+              return toValidableType<T>(name, typeOptions)
+            }
+            return toType<T>(name, typeOptions)
+          },
+          enumerable: true,
+        }
+      } else {
+        descriptor = {
+          value(...args: T[]) {
+            const typeOptions = Object.assign({}, opts as PropOptions<T>)
+            let ret: VueTypeDef<T>
+            if (validate) {
+              ret = toValidableType<T>(name, typeOptions)
+            } else {
+              ret = toType<T>(name, typeOptions)
+            }
+
+            if (typeOptions.validator) {
+              ret.validator = typeOptions.validator.bind(ret, ...args)
+            }
+            return ret
+          },
+          enumerable: true,
+        }
+      }
+
+      return Object.defineProperty(this, name, descriptor)
     }
 
-    let descriptor: PropertyDescriptor
-    if (getter) {
-      descriptor = {
-        get() {
-          const typeOptions = Object.assign({}, opts as PropOptions<T>)
-          if (validate) {
-            return toValidableType<T>(name, typeOptions)
-          }
-          return toType<T>(name, typeOptions)
-        },
-        enumerable: true,
-      }
-    } else {
-      descriptor = {
-        value(...args: T[]) {
-          const typeOptions = Object.assign({}, opts as PropOptions<T>)
-          let ret: VueTypeDef<T>
-          if (validate) {
-            ret = toValidableType<T>(name, typeOptions)
-          } else {
-            ret = toType<T>(name, typeOptions)
-          }
-
-          if (typeOptions.validator) {
-            ret.validator = typeOptions.validator.bind(ret, ...args)
-          }
-          return ret
-        },
-        enumerable: true,
-      }
+    static utils = {
+      validate<T, U>(value: T, type: U) {
+        return validateType<U, T>(type, value, true) === true
+      },
+      toType<T = unknown>(
+        name: string,
+        obj: PropOptions<T>,
+        validable = false,
+      ): VueTypeDef<T> | VueTypeValidableDef<T> {
+        return validable ? toValidableType<T>(name, obj) : toType<T>(name, obj)
+      },
     }
-
-    return Object.defineProperty(this, name, descriptor)
-  }
-
-  static utils = {
-    validate<T, U>(value: T, type: U) {
-      return validateType<U, T>(type, value, true) === true
-    },
-    toType<T = unknown>(
-      name: string,
-      obj: PropOptions<T>,
-      validable = false,
-    ): VueTypeDef<T> | VueTypeValidableDef<T> {
-      return validable ? toValidableType<T>(name, obj) : toType<T>(name, obj)
-    },
-  }
-}
+  })()
 
 function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
   return class extends BaseVueTypes {
@@ -186,7 +190,7 @@ function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
   }
 }
 
-export default class VueTypes extends createTypes() {}
+export default class VueTypes /*#__PURE__*/ extends createTypes() {}
 
 export {
   any,
@@ -210,7 +214,8 @@ export {
   toValidableType,
   validateType,
   fromType,
+  config,
 }
 
 export type VueTypesInterface = ReturnType<typeof createTypes>
-export { VueTypeDef, VueTypeValidableDef, VueTypeShape, VueTypeLooseShape }
+export type { VueTypeDef, VueTypeValidableDef, VueTypeShape, VueTypeLooseShape }

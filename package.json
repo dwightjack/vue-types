@@ -1,11 +1,12 @@
 {
   "name": "vue-types",
-  "version": "2.0.3",
+  "version": "4.0.0",
   "description": "Prop types utility for Vue",
   "author": "Marco Solazzi",
   "license": "MIT",
-  "homepage": "https://github.com/dwightjack/vue-types",
-  "main": "dist/vue-types.js",
+  "homepage": "https://dwightjack.github.io/vue-types/",
+  "main": "dist/vue-types.cjs",
+  "type": "module",
   "source": [
     "src/index.ts",
     "src/shim.ts"
@@ -15,9 +16,19 @@
   "umd:main": "dist/vue-types.umd.js",
   "module": "dist/vue-types.m.js",
   "esmodule": "dist/vue-types.modern.js",
+  "exports": {
+    ".": {
+      "require": "./dist/vue-types.cjs",
+      "default": "./dist/vue-types.modern.js"
+    },
+    "./shim": {
+      "require": "./dist/shim.cjs",
+      "default": "./dist/shim.modern.js"
+    }
+  },
   "types": "dist/index.d.ts",
   "engines": {
-    "node": ">=10.15.0"
+    "node": ">=12.16.0"
   },
   "files": [
     "dist",
@@ -30,13 +41,12 @@
     "build:clean": "del dist",
     "build:copy": "cpy src/*.d.ts dist",
     "build:ts": "microbundle --external=vue --tsconfig=./tsconfig.build.json --format=modern,es",
-    "build:cjs": "microbundle --external=vue --tsconfig=./tsconfig.build.json -i src/index.cjs.ts -o dist/vue-types.js --no-pkg-main --format=cjs",
-    "build:shim:cjs": "microbundle --external=vue --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o dist/shim.js --no-pkg-main --format=cjs",
+    "build:cjs": "microbundle --external=vue --tsconfig=./tsconfig.build.json -i src/index.cjs.ts -o dist/vue-types.cjs --no-pkg-main --format=cjs",
+    "build:shim:cjs": "microbundle --external=vue --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o dist/shim.cjs --no-pkg-main --format=cjs",
     "build:umd": "cross-env NODE_ENV=production microbundle --external=vue --tsconfig=./tsconfig.build.json --format=umd",
-    "test": "karma start karma.conf.js --single-run --browsers ChromeHeadless",
-    "test:saucelab": "karma start karma-sauce.conf.js --single-run",
-    "lint": "eslint  '{src,test,.}/**/*.{ts,js}'",
-    "examples": "cross-env NODE_ENV=development node ./scripts/run-examples.js",
+    "test": "jest",
+    "lint": "eslint '{src,__tests__,.}/**/*.{ts,js,cjs}'",
+    "examples": "cross-env NODE_ENV=development node ./scripts/run-examples.cjs",
     "docs:dev": "vuepress dev docs",
     "docs:build": "cross-env NODE_ENV=production vuepress build docs"
   },
@@ -50,19 +60,17 @@
   },
   "bugs": "https://github.com/dwightjack/vue-types/issues",
   "peerDependencies": {
-    "vue": "^2.0.0"
+    "vue": "^2.0.0 || ^3.0.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-nullish-coalescing-operator": "7.13.8",
-    "@babel/plugin-proposal-optional-chaining": "7.13.12",
-    "@types/jasmine": "3.6.9",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "7.14.2",
+    "@babel/plugin-proposal-optional-chaining": "7.14.2",
+    "@types/jest": "26.0.23",
     "@types/node": "14.14.37",
     "@typescript-eslint/eslint-plugin": "4.19.0",
     "@typescript-eslint/parser": "4.19.0",
     "babel-plugin-transform-node-env-inline": "0.4.3",
     "browser-sync": "2.26.14",
-    "core-js": "3.9.1",
-    "core-js-bundle": "3.9.1",
     "cpy-cli": "3.1.1",
     "cross-env": "7.0.3",
     "del": "6.0.0",
@@ -72,31 +80,17 @@
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-prettier": "3.3.1",
     "eslint-plugin-vue": "7.8.0",
-    "jasmine": "3.7.0",
-    "karma": "6.3.1",
-    "karma-chrome-launcher": "3.1.0",
-    "karma-jasmine": "4.0.1",
-    "karma-sauce-launcher": "4.3.5",
-    "karma-typescript": "5.5.1",
-    "karma-typescript-es6-transform": "5.5.1",
-    "microbundle": "0.13.0",
+    "jest": "27.0.4",
+    "microbundle": "0.13.1",
     "npm-run-all": "4.1.5",
     "prettier": "2.2.1",
-    "puppeteer": "8.0.0",
+    "ts-jest": "27.0.3",
     "typescript": "4.2.3",
-    "vue": "2.6.12",
-    "vue-class-component": "7.2.6",
+    "vue2": "npm:vue@2.6.12",
+    "vue3": "npm:vue@3.0.11",
     "vuepress": "1.8.2"
   },
   "dependencies": {
     "is-plain-object": "5.0.0"
-  },
-  "browserslist": [
-    "last 3 versions",
-    "Safari >= 10",
-    "not ie <= 8",
-    "Edge >= 12",
-    "iOS >= 10",
-    "Android >= 4.4"
-  ]
+  }
 }

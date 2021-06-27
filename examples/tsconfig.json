@@ -9,7 +9,7 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "declaration": false
+    "declaration": true
   },
   "include": ["**/*.ts", "../src/**/*.ts"]
 }
