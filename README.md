@@ -34,7 +34,7 @@
 1. Clone this repository
 1. Install dependencies: `npm ci`
 1. Make your changes
-1. Update or add tests in `test/`
+1. Update or add tests in `__tests__/`
 1. Verify that everything works: `npm run lint && npm test`
 1. Submit a Pull Request
 
