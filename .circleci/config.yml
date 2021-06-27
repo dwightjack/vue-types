@@ -3,7 +3,7 @@ executors:
   node:
     working_directory: ~/repo
     docker:
-      - image: cimg/node:14.17.0
+      - image: cimg/node:14.17.1
 
 jobs:
   install:
