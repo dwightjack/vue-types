@@ -96,4 +96,4 @@ workflows:
             - install
           filters:
             branches:
-              only: master
+              only: main
