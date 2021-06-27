@@ -1,6 +1,6 @@
 # vue-types
 
-> Prop type definitions for [Vue.js](http://vuejs.org). Compatible with both Vue 1.x and 2.x
+> Prop type definitions for [Vue.js](http://vuejs.org).
 
 <p id="badges">
   <a href="https://www.npmjs.com/package/vue-types" target="_blank">
@@ -15,13 +15,13 @@
 
 </p>
 
-**Note: This document is for VueTypes 2 and above. If you are looking for an older version, refer to the `v1` branch.**
+**Note: This document is for VueTypes 4. If you are looking for an older versions, refer to the `v1~v3` branches.**
 
 ## Introduction
 
 `vue-types` is a collection of configurable [prop type](http://vuejs.org/guide/components.html#Props) definitions for Vue.js components, inspired by React's `prop-types`.
 
-[Try it now!](https://codesandbox.io/s/vue-types-2-demo-rbrdh) or learn more at the [official documentation site](https://dwightjack.github.io/vue-types/).
+[Try it now!](https://codesandbox.io/s/vue-types-4-demo-rbrdh) or learn more at the [official documentation site](https://dwightjack.github.io/vue-types/).
 
 ## Run examples
 
@@ -34,7 +34,7 @@
 1. Clone this repository
 1. Install dependencies: `npm ci`
 1. Make your changes
-1. Update or add tests in `test/`
+1. Update or add tests in `__tests__/`
 1. Verify that everything works: `npm run lint && npm test`
 1. Submit a Pull Request
 
@@ -42,4 +42,4 @@
 
 [MIT](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2020 Marco Solazzi
+Copyright (c) 2016 - present Marco Solazzi

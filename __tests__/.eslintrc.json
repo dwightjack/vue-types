@@ -1,0 +1,10 @@
+{
+  "extends": "../src/.eslintrc.json",
+  "env": {
+    "jest": true
+  },
+  "rules": {
+    "camelcase": "off",
+    "@typescript-eslint/no-empty-function": 0
+  }
+}

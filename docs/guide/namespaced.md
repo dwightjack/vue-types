@@ -12,7 +12,7 @@ The class object exposes both [native](/guide/validators.html#native-validators)
 
 ## Native Validators
 
-Native validators are exposed as static getters factories:
+Native validators are exposed as static getter factories:
 
 ```js
 import VueTypes from 'vue-types'
@@ -24,7 +24,7 @@ export default {
 }
 ```
 
-The main difference between namespaced validators and those directly imported from the library is that the former come (usually) with a sensible default by design.
+The main difference between namespaced native validators and those directly imported from the library is that the former come (usually) with a default value already defined.
 
 <div id="default-values">
 
@@ -52,23 +52,24 @@ const numPropCustom = VueTypes.number.def(10)
 // numPropCustom ===  { type: Number, default : 10 }
 
 const stringProp = VueTypes.string
-// numPropCustom ===  { type: String, default : '' }
+// stringProp ===  { type: String, default : '' }
 ```
 
 ## Native Types Configuration
 
-All native type validators (with the exception of `any` and `symbol`) come with a sensible default value. In order to customize or disable that value you can set the global option `VueTypes.sensibleDefaults`:
+All native validators (with the exception of `any` and `symbol`) come with a sensible default value. To customize or disable that value, you can set the global option `VueTypes.sensibleDefaults`:
 
 ```js
-//use VueTypes defaults (this is the "default" behavior)
+//use VueTypes built-in defaults (this is the "default" behavior)
 VueTypes.sensibleDefaults = true
 
 //disable all sensible defaults.
-//Use .def(...) to set one on each prop
+//Use .def(...) when you need a default value
 VueTypes.sensibleDefaults = false
 
-//assign an object in order to specify custom defaults
+//assign an object to specify custom defaults
 VueTypes.sensibleDefaults = {
+  // the key must match the validator name
   string: 'mystringdefault',
   //...
 }
@@ -90,19 +91,19 @@ const { bool, ...newDefaults } = VueTypes.sensibleDefaults
 
 VueTypes.sensibleDefaults = newDefaults
 
-console.log(VueTypes.bool.default)
-// logs undefined
+console.log(VueTypes.bool.default) // logs undefined
+console.log(VueTypes.string.default) // logs ''
 ```
 
 ::: tip
 To unset the default value for an individual validator instance use `.def(undefined)`
 
 ```js
-const type = VueTypes.string.def(undefined)
-// { type: String }
+const type = VueTypes.string
+// { type: String, default: '' }
 
-const type2 = VueTypes.string
-// still { type: String, default: '' }
+const type2 = VueTypes.string.def(undefined)
+// { type: String }
 ```
 
 :::
@@ -119,7 +120,7 @@ const arrayOfStrings = VueTypes.arrayOf(String)
 
 The class object exposes some utility functions under the `.utils` property:
 
-### `utils.validate(value, type)`
+### utils.validate(value, type)
 
 Checks a value against a type definition:
 
@@ -134,37 +135,31 @@ VueTypes.utils.validate('John', { type: String }) //true
 This utility won't check for `isRequired` flag, but will execute any provided custom validator function:
 
 ```js
-const isJohn = {
-  type: String,
-  validator(value) {
-    return value.length === 'John'
-  },
-}
+const isJohn = VueTypes.string.validate((value) => value === 'John')
 
 VueTypes.utils.validate('John', isJohn) //true
-VueTypes.utils.validate('Jane', isJohn) //false
+VueTypes.utils.validate('Jack', isJohn) //false
 ```
 
 :::
 
-### `utils.toType(name, obj, validable = false)`
+### utils.toType(name, obj, validable = false)
 
 Will convert a plain object to a VueTypes validator object with `.def()` and `isRequired` modifiers:
 
 ```js
-const password = {
+const minLength = {
   type: String,
   validator(value) {
-    //very raw!
     return value.length > 10
   },
 }
 
-const passwordType = VueTypes.utils.toType('password', password)
+const minLengthType = VueTypes.utils.toType('minLength', minLength)
 
 export default {
   props: {
-    password: passwordType.isRequired,
+    username: minLengthType.isRequired,
   },
 }
 ```
@@ -177,7 +172,7 @@ const password = {
   required: true
 }
 
-const passwordType = VueTypes.utils.toType('password', password)
+const passwordType = VueTypes.utils.toType('password', password, true)
 
 export default {
   props: {

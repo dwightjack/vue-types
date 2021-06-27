@@ -1,9 +1,8 @@
 .DS_Store
 *.log
-test
+__tests__
 examples
 .babelrc
 .editorconfig
-.eslintrc.js
-karma*.conf.js
+.eslintrc.json
 rollup.*

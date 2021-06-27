@@ -1,5 +1,5 @@
 import { isPlainObject as _isPlainObject } from 'is-plain-object'
-import Vue from 'vue'
+import { config } from './config'
 import {
   VueTypeDef,
   VueTypeValidableDef,
@@ -55,7 +55,7 @@ if (process.env.NODE_ENV !== 'production') {
   warn = hasConsole
     ? function warn(msg) {
         // eslint-disable-next-line no-console
-        Vue.config.silent === false && console.warn(`[VueTypes warn]: ${msg}`)
+        config.silent === false && console.warn(`[VueTypes warn]: ${msg}`)
       }
     : identity
 }
@@ -186,15 +186,13 @@ export function validateType<T, U>(
     : ''
 
   if (isComplexType(typeToCheck) && typeToCheck.type !== null) {
-    if (typeToCheck.type === undefined) {
+    if (typeToCheck.type === undefined || typeToCheck.type === true) {
       return valid
     }
     if (!typeToCheck.required && value === undefined) {
       return valid
     }
-    if (typeToCheck.type === undefined) {
-      expectedType = 'any'
-    } else if (isArray(typeToCheck.type)) {
+    if (isArray(typeToCheck.type)) {
       valid = typeToCheck.type.some(
         (type: any) => validateType(type, value, true) === true,
       )
