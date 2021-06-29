@@ -81,15 +81,11 @@ export const arrayOf = <T = any>(a: any) => type<T>('arrayOf', { type: Array })
 export const objectOf = <T = any>(a: any) =>
   type<T>('objectOf', { type: Object })
 export const shape = <T = any>(a: any) =>
-  dfn(
-    type<T>('shape', { type: Object }),
-    'loose',
-    {
-      get() {
-        return this
-      },
+  dfn(type<T>('shape', { type: Object }), 'loose', {
+    get() {
+      return this
     },
-  )
+  })
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
 function createValidator(
