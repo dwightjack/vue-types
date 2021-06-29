@@ -107,7 +107,7 @@ export const isArray =
  * @returns {boolean}
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export const isFunction = (value: unknown): value is Function =>
+export const isFunction = <T extends Function>(value: unknown): value is T =>
   toString.call(value) === '[object Function]'
 
 /**
@@ -258,7 +258,7 @@ export function validateType<T, U>(
  * @param {object} obj - Object to enhance
  */
 export function toType<T = any>(name: string, obj: PropOptions<T>) {
-  const type: VueTypeDef<T> = Object.defineProperties(obj, {
+  const type: VueTypeDef<T> = Object.defineProperties(obj as VueTypeDef<T>, {
     _vueTypes_name: {
       value: name,
       writable: true,
@@ -337,7 +337,7 @@ export function clone<T extends object>(obj: T): T {
   Object.getOwnPropertyNames(obj).forEach((key) => {
     descriptors[key as keyof T] = Object.getOwnPropertyDescriptor(obj, key)
   })
-  return Object.defineProperties({}, descriptors)
+  return Object.defineProperties({}, descriptors) as T
 }
 
 /**
@@ -377,7 +377,7 @@ export function fromType<
     let { validator: prevValidator } = copy
 
     if (prevValidator) {
-      prevValidator = unwrap(prevValidator)
+      prevValidator = unwrap(prevValidator) as (_v: any) => boolean
     }
 
     copy.validator = bindTo(
