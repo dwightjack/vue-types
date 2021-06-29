@@ -70,7 +70,7 @@
     "@typescript-eslint/eslint-plugin": "4.28.1",
     "@typescript-eslint/parser": "4.28.1",
     "babel-plugin-transform-node-env-inline": "0.4.3",
-    "browser-sync": "2.26.14",
+    "browser-sync": "2.27.3",
     "cpy-cli": "3.1.1",
     "cross-env": "7.0.3",
     "del": "6.0.0",
