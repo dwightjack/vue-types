@@ -12,7 +12,7 @@ import {
 
 export default function oneOfType<
   U extends VueProp<any> | Prop<any>,
-  V = InferType<U>
+  V = InferType<U>,
 >(arr: U[]) {
   if (!isArray(arr)) {
     throw new TypeError(
