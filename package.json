@@ -19,11 +19,11 @@
   "exports": {
     ".": {
       "require": "./dist/vue-types.cjs",
-      "default": "./dist/vue-types.modern.js"
+      "import": "./dist/vue-types.modern.js"
     },
     "./shim": {
       "require": "./dist/shim.cjs",
-      "default": "./dist/shim.modern.js"
+      "import": "./dist/shim.modern.js"
     }
   },
   "types": "dist/index.d.ts",
