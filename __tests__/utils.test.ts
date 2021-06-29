@@ -281,7 +281,7 @@ describe('`clone()`', () => {
     const nonEnum = Object.defineProperty({ a: true }, 'demo', {
       value: true,
       enumerable: false,
-    })
+    }) as any
 
     expect(utils.clone(obj)).not.toBe(obj)
     expect(utils.clone(obj)).toEqual(obj)
