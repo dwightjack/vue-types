@@ -1,17 +1,19 @@
 {
   "compilerOptions": {
-    "target": "ES5",
+    "target": "esnext",
+    "module": "esnext",
+    "lib": ["esnext", "dom"],
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "noEmit": true,
+    "jsx": "react",
+    "jsxFactory": "h",
     "baseUrl": "./",
     "paths": {
       "vue-types": ["../src/index.ts"],
       "vue-types/*": ["../src/*"]
-    },
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "strict": true,
-    "declaration": true,
-    "skipLibCheck": true
+    }
   },
   "include": ["**/*.ts", "../src/**/*.ts"]
 }
