@@ -44,10 +44,10 @@ enum IntsWords {
   Two = 'Two',
 }
 export const stringType = string().isRequired
+export const messageType = string().isRequired
 export const stringUnionType = string<'one' | 'two'>().def('one')
 export const stringEnumType = string<IntsWords>().def(IntsWords.One)
 export const stringEnumTypeTS41 = string<`${IntsWords}`>().def(IntsWords.One)
-export const messageType = string().isRequired
 
 /**
  * `number` validator examples

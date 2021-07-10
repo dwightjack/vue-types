@@ -88,12 +88,8 @@ props: {
 }
 ```
 
-::: tip
-[Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) requires Array props to provide default value as a factory function. `array().def()` accepts both factory functions and arrays. In the latter case, VueTypes will convert the value to a factory function for you.
-:::
-
 ::: ts
-You can specify the type of array items as type argument:
+In TypeScript, you can specify the type of array items as type argument:
 
 ```ts
 props: {
@@ -107,6 +103,10 @@ props: {
 **Note**: this signature will validate the prop at compile-time only. For
 runtime validation use [`arrayOf`](#arrayof)
 
+:::
+
+::: tip
+[Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) requires Array props to provide default value as a factory function. `array().def()` accepts both factory functions and arrays. In the latter case, VueTypes will convert the value to a factory function for you.
 :::
 
 ### bool
@@ -151,6 +151,21 @@ props: {
 }
 ```
 
+::: ts
+You can constrain the number value with a type argument:
+
+```ts
+props: {
+  // union type
+  length: number<1 | 2 | 3>()
+}
+```
+
+**Note**: this signature will validate the prop at compile-time only. For
+runtime validation use [`oneOf`](#oneof).
+
+:::
+
 ### integer
 
 Validates that a prop is an integer.
@@ -161,6 +176,11 @@ props: {
 }
 ```
 
+::: ts
+Because `integer()` inherits from `number()`, you can constrain its value with a type argument as well (see above for details).
+
+:::
+
 ### object
 
 Validates that a prop is an object.
@@ -170,10 +190,6 @@ props: {
   user: object()
 }
 ```
-
-::: tip
-[Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) requires Object props to provide default value as a factory function. `object().def()` accepts both factory functions and plain objects. In the latter case, VueTypes will convert the value to a factory function for you.
-:::
 
 ::: ts
 You can specify the shape of the object as type argument:
@@ -197,6 +213,10 @@ runtime validation use [`shape`](#shape)
 
 :::
 
+::: tip
+[Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) requires Object props to provide default value as a factory function. `object().def()` accepts both factory functions and plain objects. In the latter case, VueTypes will convert the value to a factory function for you.
+:::
+
 ### string
 
 Validates that a prop is a string.
@@ -206,6 +226,29 @@ props: {
   username: string()
 }
 ```
+
+::: ts
+You can constrain the string value with a type argument:
+
+```ts
+
+enum Fruits {
+  Apple = 'Apple',
+  Pear = 'Pear',
+}
+
+props: {
+  // string enum
+  users: string<Fruits>(),
+  // union type
+  fruits: string<'apple' | 'pear'>()
+}
+```
+
+**Note**: this signature will validate the prop at compile-time only. For
+runtime validation use [`oneOf`](#oneof).
+
+:::
 
 ### symbol
 
