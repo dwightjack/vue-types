@@ -36,3 +36,6 @@ const UserProfile = defineComponent({
 createApp({
   render: () => h(UserComponent),
 })
+createApp({
+  render: () => h(UserProfile),
+})

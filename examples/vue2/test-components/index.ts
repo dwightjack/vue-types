@@ -1,4 +1,4 @@
-import Vue, { CreateElement } from 'vue2'
+import Vue from 'vue2'
 import VueTypes from 'vue-types'
 import {
   boolType,

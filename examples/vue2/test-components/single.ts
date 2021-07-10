@@ -35,3 +35,7 @@ const UserProfile = Vue.extend({
 new Vue({
   render: (h) => h(UserComponent),
 })
+
+new Vue({
+  render: (h) => h(UserProfile),
+})
