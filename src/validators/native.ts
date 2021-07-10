@@ -13,9 +13,9 @@ export const bool = () =>
     type: Boolean,
   })
 
-export const string = () =>
-  toValidableType('string', {
-    type: String,
+export const string = <T extends string = string>() =>
+  toValidableType<T>('string', {
+    type: String as unknown as PropType<T>,
   })
 
 export const number = () =>
