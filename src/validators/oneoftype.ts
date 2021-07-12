@@ -10,10 +10,6 @@ import {
   indent,
 } from '../utils'
 
-type RawLocation = string | { name: string }
-const ctor = oneOfType([String, Object]) // Valid
-const route = oneOfType<RawLocation>([String, Object]) // Valid
-
 export default function oneOfType<
   D extends V,
   U extends VueProp<any> | Prop<any> = any,
