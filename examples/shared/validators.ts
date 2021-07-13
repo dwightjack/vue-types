@@ -91,6 +91,8 @@ export const oneOfTuple = oneOf([1, 2, 'string'] as const).def(1)
 /**
  * `oneOfType` validator examples
  */
+type stringTuple = 'one' | 'two'
+type UserOneOf = { name: string }
 export const stringOrNumberOrBoolType = oneOfType([
   { type: String },
   Number,
@@ -98,18 +100,15 @@ export const stringOrNumberOrBoolType = oneOfType([
 ])
 
 export const stringOrObject = oneOfType([String, Object])
-export const stringOrObjectCast = oneOfType<string | { name: string }>([
+export const stringOrObjectCast = oneOfType<string | UserOneOf>([
   String,
   Object,
 ])
-export const stringOrCastedObject = oneOfType([
-  String,
-  object<{ name: string }>(),
-])
-type stringTuple = 'one' | 'two'
+export const stringOrCastedObject = oneOfType([String, object<UserOneOf>()])
+
 export const castedStringOrCastedObject = oneOfType([
   string<stringTuple>(),
-  object<{ name: string }>(),
+  object<UserOneOf>(),
 ]).def('one')
 
 /**
@@ -121,6 +120,11 @@ export const arrayofUsersType = arrayOf(userType)
 export const arrayOfStringsType2 = arrayOf(String)
 export const arrayOfMultipleType = arrayOf(stringOrNumberOrBoolType).def(['a'])
 export const arrayOfVueProp = arrayOf({ type: [String, Number] })
+type UserArrayOf = { name: string }
+
+export const arrayOfCastedTypes = arrayOf(
+  oneOfType([object<UserArrayOf>(), array<string>()]),
+)
 
 /**
  * `instanceOf` validator examples

@@ -317,12 +317,35 @@ props: {
 
 ### oneOfType
 
-Validates that a prop is an object that could be one of many types. Accepts JavaScript constructors, Vue.js props validation objects and VueTypes validators objects.
+Validates that a prop is an object that could be one of many types. Accepts as inner validators an array of JavaScript constructors, Vue.js props validation objects and VueTypes validators objects.
 
 ```js
 props: {
   // Either a string, an integer or an instance of the User class
   theProp: oneOfType([String, integer(), instanceOf(User)])
+}
+```
+
+::: ts
+You can constrain the expected types passing them as type argument:
+
+```ts
+type User = { name: string; id: string }
+
+props: {
+  // string or instance of User
+  theProp: oneOfType<string | User>([String, Object])
+}
+```
+
+Constraints can be set on the inner validators as well:
+
+```ts
+type User = { name: string; id: string }
+
+props: {
+  // same as above
+  theProp: oneOfType([String, object<User>()])
 }
 ```
 
@@ -346,7 +369,19 @@ Prop Validators are composable. For example, to validate an array that can conta
 
 ```js
 props: {
+  // an array containing both strings and numbers
   collection: arrayOf(oneOfType([String, Number]))
+}
+```
+
+In TypeScript, composition can be used together with type arguments to constrain the final prop type:
+
+```ts
+type User = { name: string; id: string }
+
+props: {
+  // an array containing both arrays of strings and User object instances
+  collection: arrayOf(oneOfType([array<string>(), object<User>()]))
 }
 ```
 
