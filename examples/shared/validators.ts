@@ -97,6 +97,21 @@ export const stringOrNumberOrBoolType = oneOfType([
   bool(),
 ])
 
+export const stringOrObject = oneOfType([String, Object])
+export const stringOrObjectCast = oneOfType<string | { name: string }>([
+  String,
+  Object,
+])
+export const stringOrCastedObject = oneOfType([
+  String,
+  object<{ name: string }>(),
+])
+type stringTuple = 'one' | 'two'
+export const castedStringOrCastedObject = oneOfType([
+  string<stringTuple>(),
+  object<{ name: string }>(),
+]).def('one')
+
 /**
  * `arrayOf` validator examples
  */
