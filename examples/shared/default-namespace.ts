@@ -37,8 +37,8 @@ export const symbolType = VueTypes.symbol.def(Symbol('foo')).isRequired
 const validator = (v: number) => v > 18
 export const customType = VueTypes.custom(validator).def(0).isRequired
 
-export const customTypeStrict = VueTypes.custom<number>(validator).def(0)
-  .isRequired
+export const customTypeStrict =
+  VueTypes.custom<number>(validator).def(0).isRequired
 
 export const oneOf = VueTypes.oneOf([0, 'string', null]).def(2).isRequired
 
@@ -52,8 +52,8 @@ class MyClass {
 
 const instance = new MyClass()
 
-export const instanceOfType = VueTypes.instanceOf(MyClass).def(instance)
-  .isRequired
+export const instanceOfType =
+  VueTypes.instanceOf(MyClass).def(instance).isRequired
 instanceOfType.type = MyClass
 
 export const oneOfTypeType = VueTypes.oneOfType([
