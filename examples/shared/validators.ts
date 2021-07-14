@@ -21,6 +21,7 @@ import {
  * `any` validator examples
  */
 export const anyType = any()
+export const anyTypeCast = any<unknown>()
 
 /**
  * `func` validator examples
