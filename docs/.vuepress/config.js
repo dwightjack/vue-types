@@ -40,6 +40,7 @@ module.exports = {
         children: [
           '/advanced/extending-vue-types',
           '/advanced/custom-instance',
+          '/advanced/typescript',
         ],
       },
     ],

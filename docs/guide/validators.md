@@ -70,13 +70,27 @@ type.def(undefined)
 
 ### any
 
-Validates any type of value.
+Validates any type of value. This validator should be used sparingly and can be an escape hatch for props with unknown values.
 
 ```js
 props: {
   myProp: any(),
 }
 ```
+
+::: ts
+In TypeScript, you can specify a type constraint other than `any`:
+
+```ts
+props: {
+  // type is `any`
+  myPropAny: any(),
+  // type is `unknown`
+  myPropUnknown: any<unknown>(),
+}
+```
+
+:::
 
 ### array
 
@@ -428,8 +442,8 @@ You can constrain the shape with a type argument:
 
 ```ts
 interface User {
-  name: string
-  age: number
+  name?: string
+  age?: number
   id: number
 }
 
@@ -503,6 +517,23 @@ props: {
   theProp: custom(minLength, 'theProp is not a string or is too short')
 }
 ```
+
+::: ts
+In TypeScript, you can specify the prop type with a type argument:
+
+```ts
+function minLength(value) {
+  return typeof value === 'string' && value.length >= 6
+}
+
+// ...
+props: {
+  // theProp is a string
+  theProp: custom<string>(minLength)
+}
+```
+
+:::
 
 ## Utilities
 
