@@ -13,7 +13,7 @@ import {
 export default function oneOfType<
   D extends V,
   U extends VueProp<any> | Prop<any> = any,
-  V = InferType<U>,
+  V = InferType<U>
 >(arr: U[]) {
   if (!isArray(arr)) {
     throw new TypeError(
@@ -54,12 +54,12 @@ export default function oneOfType<
     // we got just native objects (ie: Array, Object)
     // delegate to Vue native prop check
     return toType<D>('oneOfType', {
-      type: nativeChecks as unknown as PropType<D>,
+      type: (nativeChecks as unknown) as PropType<D>,
     })
   }
 
   return toType<D>('oneOfType', {
-    type: nativeChecks as unknown as PropType<D>,
+    type: (nativeChecks as unknown) as PropType<D>,
     validator(value) {
       const err: string[] = []
       const valid = arr.some((type) => {

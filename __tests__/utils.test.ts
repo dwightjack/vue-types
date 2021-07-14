@@ -244,9 +244,8 @@ describe('`toType()`', () => {
 describe('`toValidableType()`', () => {
   it('creates a type', () => {
     const obj = { a: 'hello' }
-    const type = utils
-      .toValidableType('testType', { type: Object })
-      .def(obj).isRequired
+    const type = utils.toValidableType('testType', { type: Object }).def(obj)
+      .isRequired
     expect(type.default()).toEqual(obj)
     expect(type.required).toBe(true)
     expect(type._vueTypes_name).toBe('testType')

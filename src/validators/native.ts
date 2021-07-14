@@ -15,12 +15,12 @@ export const bool = () =>
 
 export const string = <T extends string = string>() =>
   toValidableType<T>('string', {
-    type: String as unknown as PropType<T>,
+    type: (String as unknown) as PropType<T>,
   })
 
 export const number = <T extends number = number>() =>
   toValidableType<T>('number', {
-    type: Number as unknown as PropType<T>,
+    type: (Number as unknown) as PropType<T>,
   })
 
 export const array = <T>() =>
@@ -35,7 +35,7 @@ export const object = <T extends { [key: string]: any }>() =>
 
 export const integer = <T extends number = number>() =>
   toType<T>('integer', {
-    type: Number as unknown as PropType<T>,
+    type: (Number as unknown) as PropType<T>,
     validator(value) {
       return isInteger(value)
     },

@@ -353,11 +353,11 @@ export function clone<T extends object>(obj: T): T {
 export function fromType<T extends VueTypeDef<any>>(name: string, source: T): T
 export function fromType<
   T extends VueTypeDef<any>,
-  V extends PropOptions<InferType<T>>,
+  V extends PropOptions<InferType<T>>
 >(name: string, source: T, props: V): Omit<T, keyof V> & V
 export function fromType<
   T extends VueTypeDef<any>,
-  V extends PropOptions<InferType<T>>,
+  V extends PropOptions<InferType<T>>
 >(name: string, source: T, props?: V) {
   // 1. create an exact copy of the source type
   const copy = clone(source)
