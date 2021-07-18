@@ -1,6 +1,6 @@
 # TypeScript Usage
 
-VueTypes is written in TypeScript and comes with builtin types support for its API and validators.
+VueTypes is written in TypeScript and comes with full builtin types support.
 
 Most of the validators can infer the prop type from their configuration:
 
@@ -15,7 +15,7 @@ props: {
 
 ## Optional type constraint
 
-Some validators accepts an optional type argument to refine their prop type.
+Some validators accepts an optional type argument to refine their TS typing.
 
 ### any<T = any>
 
@@ -70,7 +70,7 @@ props: {
 
 ### func<T = (...args: any[]) => any>
 
-Useful to cast even handlers and function return types.
+Useful to type event handlers and function return types.
 
 ```ts
 type EventFn = (e: Event) => void
@@ -113,7 +113,9 @@ props: {
 
 :::
 
-### array<T = unknown[]>
+### array<T = unknown>
+
+The validator accepts an argument defining the contained items type.
 
 ```ts
 interface User {
@@ -122,7 +124,9 @@ interface User {
 }
 
 props: {
+  // array of numbers
   sizes: array<number>()
+  // array of users
   users: array<User>()
 }
 ```
@@ -138,8 +142,97 @@ interface User {
 
 props: {
   sizes: arrayOf(Number)
-  // cast the object() validator to User
+  // set the object() validator type to User
   users: arrayOf(object<User>())
+}
+```
+
+:::
+
+### OneOfType\<T>
+
+You can use a union type to specify the expected types.
+
+```ts
+interface User {
+  name: string
+  // ...
+}
+
+props: {
+  // string or instance of User
+  theProp: oneOfType<string | User>([String, Object])
+}
+```
+
+::: tip
+The same prop types can be expressed composing VueTypes validators:
+
+```ts
+interface User {
+  name: string
+  // ...
+}
+
+props: {
+  // same as above
+  theProp: oneOfType([String, object<User>()])
+}
+```
+
+:::
+
+### shape\<T>
+
+Setting the type argument provides type checking on top of runtime validation:
+
+```ts
+interface User {
+  name: string
+  id?: string
+}
+
+props: {
+  user: shape<User>({
+    name: string().isRequired,
+    id: string(),
+  })
+}
+```
+
+### oneOf
+
+This validator does not support type arguments, but you can use [const assertions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions) on the expected values to constrain the validators type:
+
+```ts
+props: {
+  // ERROR: Argument of type '"small"' is not assignable
+  // to parameter of type '"large" | "medium"'.
+  sizes: oneOf(['large', 'medium'] as const).def('small')
+}
+```
+
+### custom\<T>
+
+You can define the type of the value received by the validator function.
+
+```ts
+props: {
+  // function argument is of type string
+  nonEmptyString: custom<string>((v) => typeof v === 'string' && v.length > 0)
+}
+```
+
+::: tip
+This validator can be used for tuple props:
+
+```ts
+type Pair = [string, number]
+
+props: {
+  tuple: custom<Pair>(
+    ([a, b]) => typeof a === 'string' && typeof b === 'number',
+  )
 }
 ```
 

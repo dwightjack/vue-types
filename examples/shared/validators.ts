@@ -15,7 +15,7 @@ import {
   shape,
   toType,
   fromType,
-} from 'vue-types'
+} from 'vue-types/shim'
 
 /**
  * `any` validator examples
@@ -88,6 +88,16 @@ export const tupleType = custom<Pair>(
  * `oneOf` validator examples
  */
 export const oneOfTuple = oneOf([1, 2, 'string'] as const).def(1)
+interface OneUser {
+  name: string
+}
+const oneObj: OneUser = {
+  name: 'John',
+}
+
+export const oneOfInstances = oneOf(['hello', oneObj] as const)
+
+oneOf(['large', 'medium'] as const)
 
 /**
  * `oneOfType` validator examples
