@@ -15,7 +15,7 @@ import {
   shape,
   toType,
   fromType,
-} from 'vue-types/shim'
+} from 'vue-types'
 
 /**
  * `any` validator examples
