@@ -200,18 +200,6 @@ props: {
 }
 ```
 
-### oneOf
-
-This validator does not support type arguments, but you can use [const assertions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions) on the expected values to constrain the validators type:
-
-```ts
-props: {
-  // ERROR: Argument of type '"small"' is not assignable
-  // to parameter of type '"large" | "medium"'.
-  sizes: oneOf(['large', 'medium'] as const).def('small')
-}
-```
-
 ### custom\<T>
 
 You can define the type of the value received by the validator function.
@@ -237,3 +225,15 @@ props: {
 ```
 
 :::
+
+### oneOf
+
+This validator does not support type arguments, but you can use [const assertions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions) on the expected values to constrain the validators type:
+
+```ts
+props: {
+  // ERROR: Argument of type '"small"' is not assignable
+  // to parameter of type '"large" | "medium"'.
+  sizes: oneOf(['large', 'medium'] as const).def('small')
+}
+```
