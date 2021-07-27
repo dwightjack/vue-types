@@ -1,7 +1,7 @@
 process.env.NODE_ENV = 'production'
 
 import { noop } from '../src/utils'
-import VueTypes from '../src/shim'
+import VueTypes, { fromType, toValidableType, toType } from '../src/shim'
 
 describe('SHIM: VueTypes', () => {
   describe('SHIM: `.any`', () => {
@@ -647,5 +647,136 @@ describe('SHIM: VueTypes.utils', () => {
     it('returns true', () => {
       expect(VueTypes.utils.validate()).toBe(true)
     })
+  })
+})
+
+describe('`toType()`', () => {
+  it('should enhance the passed-in object without cloning', () => {
+    const obj = {}
+
+    const type = toType('testType', obj)
+    expect(type).toBe(obj as any)
+  })
+
+  it('should add a non-enumerable name property', () => {
+    const type = toType('demo', {})
+    expect(type._vueTypes_name).toBe('demo')
+    expect(Object.keys(type)).not.toContain('_vueTypes_name')
+  })
+
+  it('should allow the name property to be writtable', () => {
+    const type = toType('demo', {})
+    type._vueTypes_name = 'a'
+    expect(type._vueTypes_name).toBe('a')
+  })
+
+  describe('`isRequired`', () => {
+    it('should add a `isRequired` getter on passed in object', () => {
+      const obj = {}
+
+      toType('testType', obj)
+      // eslint-disable-next-line no-prototype-builtins
+      expect(obj.hasOwnProperty('isRequired')).toBe(true)
+    })
+
+    it('should set the required flag', () => {
+      const type = toType('testType', {}).isRequired
+      expect(type.required).toBe(true)
+    })
+  })
+
+  describe('`def()`', () => {
+    it('should set `def` on passed in object', () => {
+      const obj = {} as any
+
+      toType('testType', obj)
+      expect(obj.def).toBeInstanceOf(Function)
+    })
+
+    it('`def` should NOT be enumerable', () => {
+      const type = toType('testType', {})
+      expect(Object.keys(type)).not.toContain('def')
+    })
+
+    it('`def` should NOT be writable', () => {
+      const type = toType('testType', {})
+
+      try {
+        ;(type as any).def = 'demo'
+        // eslint-disable-next-line no-empty
+      } catch (e) {}
+      expect(type.def).toBeInstanceOf(Function)
+    })
+
+    it('should remove the "default" key if passed-in value is undefined', () => {
+      const type = toType('testType', { type: String })
+      type.def('')
+      expect(type.default).toBe('')
+      type.def(undefined)
+      expect(Object.keys(type)).not.toContain('default')
+    })
+
+    it('sets a `default` key on the object', () => {
+      const type = toType('testType', {})
+
+      const stubs = [true, null, 'string', () => {}, 0]
+
+      stubs.forEach((v) => {
+        type.def(v)
+        expect(type.default).toBe(v)
+      })
+    })
+
+    it('sets a factory function if value is an array', () => {
+      const arr = [1, 2]
+      const type = toType('testType', { type: Array }).def(arr)
+      expect(type.default).toBeInstanceOf(Function)
+      expect(type.default()).not.toBe(arr)
+      expect(type.default()).toEqual(arr)
+    })
+
+    it('sets a factory function if value is an object', () => {
+      const obj = { a: 'hello' }
+      const type = toType('testType', { type: Object }).def(obj)
+      expect(type.default).toBeInstanceOf(Function)
+      expect(type.default()).not.toBe(obj)
+      expect(type.default()).toEqual(obj)
+    })
+  })
+})
+
+describe('`toValidableType()`', () => {
+  it('creates a type', () => {
+    const obj = { a: 'hello' }
+    const type = toValidableType('testType', { type: Object }).def(
+      obj,
+    ).isRequired
+    expect(type.default()).toEqual(obj)
+    expect(type.required).toBe(true)
+    expect(type._vueTypes_name).toBe('testType')
+  })
+  it('adds a validate function', () => {
+    const type = toValidableType('testType', { type: String })
+    expect(type.validate).toBeInstanceOf(Function)
+  })
+})
+
+describe('`fromType()`', () => {
+  it('inherits from a type', () => {
+    const base = toType('a', { type: String }).isRequired
+    const copy = fromType('b', base)
+
+    expect(copy).not.toBe(base)
+    expect(copy._vueTypes_name).toBe('b')
+    expect(copy.type).toBe(base.type)
+    expect(copy.required).toBe(base.required)
+  })
+
+  it('overwrite the source type', () => {
+    const base = toType('a', { type: String }).isRequired
+    const copy = fromType('b', base, { required: false })
+
+    expect(base.required).toBe(true)
+    expect(copy.required).toBe(false)
   })
 })

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { isPlainObject } from 'is-plain-object'
 import { typeDefaults } from './sensibles'
 import { config } from './config'
@@ -11,18 +12,21 @@ const isArray =
     return Object.prototype.toString.call(value) === '[object Array]'
   }
 
-function type<T = any>(name: string, props: any = {}, validable = false): T {
+function type(name: string, props: any = {}, validable = false): any {
   const descriptors: PropertyDescriptorMap = {
     _vueTypes_name: {
       value: name,
       writable: true,
     },
     def: {
-      value(v) {
+      value(v: any) {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const t = this
-        if (v === undefined && !t.default) {
-          return t
+        if (v === undefined) {
+          if ('default' in this) {
+            delete this.default
+          }
+          return this
         }
         if (isArray(v)) {
           t.default = () => [].concat(v)
@@ -48,40 +52,36 @@ function type<T = any>(name: string, props: any = {}, validable = false): T {
       value() {},
     }
   }
-  return Object.assign(
-    Object.defineProperties(
-      {
-        validator: () => true,
-      },
-      descriptors,
-    ),
-    props,
-  )
+  if (!props.validator) {
+    props.validator = () => true
+  }
+
+  return Object.defineProperties(props, descriptors)
 }
 
 export { config }
 
-export const any = () => type('any', {}, true)
-export const func = <T = any>() => type<T>('func', { type: Function }, true)
-export const bool = () => type('bool', { type: Boolean }, true)
-export const string = () => type('string', { type: String }, true)
-export const number = () => type('number', { type: Number }, true)
-export const array = <T = any>() => type<T>('array', { type: Array }, true)
-export const object = <T = any>() => type<T>('object', { type: Object }, true)
-export const symbol = () => type('symbol')
-export const integer = () => type('integer', { type: Number })
-/* eslint-disable @typescript-eslint/no-unused-vars */
-export const oneOf = <T = any>(a: any) => type<T>('oneOf')
-export const custom = <T = any>(a: any) => type<T>('custom')
-export const instanceOf = <T = any>(Constr: any) =>
-  type<T>('instanceOf', { type: Constr })
-export const oneOfType = <T = any>(a: any) => type<T>('oneOfType')
-export const arrayOf = <T = any>(a: any) => type<T>('arrayOf', { type: Array })
+type TypeShim = <T = any>(...args: any[]) => any
 
-export const objectOf = <T = any>(a: any) =>
-  type<T>('objectOf', { type: Object })
-export const shape = <T = any>(a: any) =>
-  dfn(type<T>('shape', { type: Object }), 'loose', {
+export const any: TypeShim = () => type('any', {}, true)
+export const func: TypeShim = () => type('func', { type: Function }, true)
+export const bool = () => type('bool', { type: Boolean }, true)
+export const string: TypeShim = () => type('string', { type: String }, true)
+export const number: TypeShim = () => type('number', { type: Number }, true)
+export const array: TypeShim = () => type('array', { type: Array }, true)
+export const object: TypeShim = () => type('object', { type: Object }, true)
+export const symbol = () => type('symbol')
+export const integer: TypeShim = () => type('integer', { type: Number })
+export const oneOf: TypeShim = (a: any) => type('oneOf')
+export const custom: TypeShim = (a: any) => type('custom')
+export const instanceOf: TypeShim = (Constr: any) =>
+  type('instanceOf', { type: Constr })
+export const oneOfType: TypeShim = (a: any) => type('oneOfType')
+export const arrayOf: TypeShim = (a: any) => type('arrayOf', { type: Array })
+
+export const objectOf: TypeShim = (a: any) => type('objectOf', { type: Object })
+export const shape: TypeShim = (a: any) =>
+  dfn(type('shape', { type: Object }), 'loose', {
     get() {
       return this
     },
@@ -105,6 +105,16 @@ function createValidator(
 
   return dfn(root, name, descr)
 }
+
+export function fromType(name: string, source: any, props: any = {}) {
+  const t = type(name, Object.assign({}, source, props), !!source.validable)
+  t.validator && delete t.validator
+  return t
+}
+
+export const toValidableType = <T>(name: string, props: any) =>
+  type(name, props, true)
+export const toType = <T>(name: string, props: any) => type(name, props)
 
 const BaseVueTypes = /*#__PURE__*/ (() =>
   class BaseVueTypes {
@@ -162,10 +172,10 @@ const BaseVueTypes = /*#__PURE__*/ (() =>
 
 export function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
   return class extends BaseVueTypes {
-    static defaults = { ...defs }
+    static defaults = Object.assign({}, defs)
 
     static get sensibleDefaults() {
-      return { ...this.defaults }
+      return Object.assign({}, this.defaults)
     }
 
     static set sensibleDefaults(v: boolean | Partial<VueTypesDefaults>) {
@@ -174,10 +184,10 @@ export function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
         return
       }
       if (v === true) {
-        this.defaults = { ...defs }
+        this.defaults = Object.assign({}, defs)
         return
       }
-      this.defaults = { ...v }
+      this.defaults = Object.assign({}, v)
     }
   }
 }
