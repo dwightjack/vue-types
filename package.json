@@ -36,7 +36,7 @@
     "types/*.d.ts"
   ],
   "scripts": {
-    "prepublishOnly": "run-s lint test build",
+    "prepublishOnly": "run-s lint lint:examples test build",
     "build": "run-s build:clean build:copy build:cjs build:shim:cjs build:ts build:umd",
     "build:clean": "del dist",
     "build:copy": "cpy src/*.d.ts dist",
@@ -46,6 +46,7 @@
     "build:umd": "cross-env NODE_ENV=production microbundle --external=vue --tsconfig=./tsconfig.build.json --format=umd",
     "test": "jest",
     "lint": "eslint '{src,__tests__,.}/**/*.{ts,js,cjs}'",
+    "lint:examples": "tsc --noEmit -p ./examples",
     "examples": "cross-env NODE_ENV=development node ./scripts/run-examples.cjs",
     "docs:dev": "vuepress dev docs",
     "docs:build": "cross-env NODE_ENV=production vuepress build docs"

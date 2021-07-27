@@ -64,7 +64,7 @@ export interface VueTypeBaseDef<
   U = T extends NativeType ? T : () => T,
 > extends PropOptions<T> {
   _vueTypes_name: string
-  type?: PropType<T> | null
+  type?: PropType<T>
   readonly def: (def?: D) => this & {
     default: U
   }

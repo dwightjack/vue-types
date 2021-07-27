@@ -19,7 +19,7 @@ const arrayType2 = VueTypes.array.def(() => []).isRequired
 const stringType = VueTypes.string.def('John').isRequired
 const stringTypeValidate = VueTypes.string
   .def('John')
-  .isRequired.validate((v: string): boolean => v === 'John')
+  .isRequired.validate((v: string | unknown): boolean => v === 'John')
 
 const numberType = VueTypes.number.def(0).isRequired
 const integerType = VueTypes.integer.def(0).isRequired
@@ -46,8 +46,9 @@ const customTypeStrict = VueTypes.custom<number>(validator).def(0).isRequired
 
 const oneOf = VueTypes.oneOf([0, 'string', null]).def(2).isRequired
 
-const oneOfStrict = VueTypes.oneOf([true, 'string'] as const).def('string')
-  .isRequired
+const oneOfStrict = VueTypes.oneOf([true, 'string'] as const).def(
+  'string',
+).isRequired
 
 class MyClass {
   public test = 'testProp'
@@ -66,8 +67,10 @@ const oneOfTypeType = VueTypes.oneOfType([
   VueTypes.number,
 ])
 
-const ArrayOfType = VueTypes.arrayOf(VueTypes.string).def(['string', 'string'])
-  .isRequired
+const ArrayOfType = VueTypes.arrayOf(VueTypes.string).def([
+  'string',
+  'string',
+]).isRequired
 
 const ObjectOfType = VueTypes.objectOf(VueTypes.string).def({
   prop: 'test',

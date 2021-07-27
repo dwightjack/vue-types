@@ -58,7 +58,7 @@ class MyTypesClass extends createTypes({}) {
     return toValidableType('positive', {
       type: Number,
     })
-      .validate((v) => v >= 0)
+      .validate((v) => (v as number) >= 0)
       .def(0)
   }
 }

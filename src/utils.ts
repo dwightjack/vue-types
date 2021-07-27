@@ -142,7 +142,7 @@ export interface WrappedFn {
  * @param ctx - New function context
  */
 export function bindTo(fn: (...args: any[]) => any, ctx: any): WrappedFn {
-  return Object.defineProperty(fn.bind(ctx), '__original', {
+  return Object.defineProperty(fn.bind(ctx) as WrappedFn, '__original', {
     value: fn,
   })
 }
@@ -230,7 +230,7 @@ export function validateType<T, U>(
 
   if (has(typeToCheck, 'validator') && isFunction(typeToCheck.validator)) {
     const oldWarn = warn
-    const warnLog = []
+    const warnLog: string[] = []
     warn = (msg) => {
       warnLog.push(msg)
     }
@@ -384,7 +384,8 @@ export function fromType<
       prevValidator
         ? function (this: T, value: any) {
             return (
-              prevValidator.call(this, value) && validator.call(this, value)
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              prevValidator!.call(this, value) && validator.call(this, value)
             )
           }
         : validator,

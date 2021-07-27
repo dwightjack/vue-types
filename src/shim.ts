@@ -19,7 +19,7 @@ function type(name: string, props: any = {}, validable = false): any {
       writable: true,
     },
     def: {
-      value(v: any) {
+      value(this: any, v: any) {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const t = this
         if (v === undefined) {
@@ -29,7 +29,7 @@ function type(name: string, props: any = {}, validable = false): any {
           return this
         }
         if (isArray(v)) {
-          t.default = () => [].concat(v)
+          t.default = () => [].concat(v as any)
         } else if (isPlainObject(v)) {
           t.default = () => Object.assign({}, v)
         } else {
@@ -39,7 +39,7 @@ function type(name: string, props: any = {}, validable = false): any {
       },
     },
     isRequired: {
-      get() {
+      get(this: any) {
         this.required = true
         return this
       },
@@ -158,7 +158,7 @@ const BaseVueTypes = /*#__PURE__*/ (() =>
     static arrayOf = arrayOf
     static objectOf = objectOf
     static shape = shape
-    static extend<T = any>(props): T {
+    static extend<T = any>(props: any): T {
       const { name, validate, getter = false, type = null } = props
       // If we are inheriting from a custom type, let's ignore the type property
       const extType = isPlainObject(type) && type.type ? null : type
