@@ -46,7 +46,7 @@
     "build:umd": "cross-env NODE_ENV=production microbundle --external=vue --tsconfig=./tsconfig.build.json --format=umd",
     "test": "jest",
     "lint": "run-s lint:*",
-    "lint:examples": "tsc --noEmit -p ./examples",
+    "lint:ts": "tsc --noEmit -p ./examples",
     "lint:src": "eslint '{examples,src,__tests__,.}/**/*.{ts,js,cjs}'",
     "examples": "vite examples -c examples/vite.config.js",
     "docs:dev": "vuepress dev docs",

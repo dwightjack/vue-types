@@ -23,7 +23,7 @@ export default function oneOfType<
 
   let hasCustomValidators = false
 
-  let nativeChecks: Prop<V>[] | null = []
+  let nativeChecks: Prop<V>[] = []
 
   for (let i = 0; i < arr.length; i += 1) {
     const type = arr[i]
@@ -53,20 +53,18 @@ export default function oneOfType<
   // filter duplicates
   nativeChecks = nativeChecks.filter((t, i) => nativeChecks.indexOf(t) === i)
 
-  if (nativeChecks.length === 0) {
-    nativeChecks = null
-  }
+  const typeProp = nativeChecks.length > 0 ? nativeChecks : null
 
   if (!hasCustomValidators) {
     // we got just native objects (ie: Array, Object)
     // delegate to Vue native prop check
     return toType<D>('oneOfType', {
-      type: nativeChecks as unknown as PropType<D>,
+      type: typeProp as unknown as PropType<D>,
     })
   }
 
   return toType<D>('oneOfType', {
-    type: nativeChecks as unknown as PropType<D>,
+    type: typeProp as unknown as PropType<D>,
     validator(value) {
       const err: string[] = []
       const valid = arr.some((type) => {

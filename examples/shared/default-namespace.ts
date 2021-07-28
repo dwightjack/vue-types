@@ -14,7 +14,7 @@ export const arrayType2 = VueTypes.array.def(() => []).isRequired
 export const stringType = VueTypes.string.def('John').isRequired
 export const stringTypeValidate = VueTypes.string
   .def('John')
-  .isRequired.validate((v: string): boolean => v === 'John')
+  .isRequired.validate((v: unknown): boolean => v === 'John')
 
 export const numberType = VueTypes.number.def(0).isRequired
 export const integerType = VueTypes.integer.def(0).isRequired
