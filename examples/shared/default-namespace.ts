@@ -42,6 +42,12 @@ export const customTypeStrict =
 
 export const oneOf = VueTypes.oneOf([0, 'string', null]).def(2).isRequired
 
+export const oneOfUnion = VueTypes.oneOf<0 | 'string' | null>([
+  0,
+  'string',
+  null,
+]).def(0).isRequired
+
 export const oneOfStrict = VueTypes.oneOf([true, 'string'] as const).def(
   'string',
 ).isRequired
@@ -57,6 +63,14 @@ export const instanceOfType =
 instanceOfType.type = MyClass
 
 export const oneOfTypeType = VueTypes.oneOfType([
+  String,
+  {
+    type: String,
+  },
+  VueTypes.number,
+])
+
+export const oneOfTypeTSType = VueTypes.oneOfType<string | number>([
   String,
   {
     type: String,

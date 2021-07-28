@@ -88,6 +88,14 @@ export const tupleType = custom<Pair>(
  * `oneOf` validator examples
  */
 export const oneOfTuple = oneOf([1, 2, 'string'] as const).def(1)
+
+export const oneOfUnion = oneOf<1 | 2 | 'string'>([1, 2, 'string']).def(1)
+export const oneOfTupleUnion = oneOf<1 | 2 | 'string'>([
+  1,
+  'string',
+] as const).def(2)
+export const oneOfArray = oneOf([1, 2, 'string']).def(1)
+
 interface OneUser {
   name: string
 }
