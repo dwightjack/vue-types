@@ -23,41 +23,53 @@ Add the following script tags before your code
 
 ## Usage with bundlers
 
-Starting from version 4, VueTypes is published as a native ESM module with CommonJS and UMD support.
+Starting from version 4, VueTypes is published as a **native ESM module** with CommonJS and UMD support.
 
 Modern bundlers and tools should be able to automatically pick the correct version based on your configuration.
 
-Anyway, here is the list of available entry points:
+::: tip NOTE
+
+Here is the list of available entry points:
 
 - `vue-types.modern.js`: ES module for environments [supporting it](https://caniuse.com/es6-module). This is the default entry point for Node 14+, Webpack 5+, Rollup and other tools with native support for ES Modules (like [Vite](https://vitejs.dev/), Vue CLI 5 and [Snowpack](https://www.snowpack.dev/)).
 - `vue-types.m.js`: ES5 compiled version exported as ES module. This is the default entry point for Webpack 4 and frameworks like [Nuxt 2](https://nuxtjs.org/) and [Vue CLI 4](https://cli.vuejs.org/)
 - `vue-types.cjs`: ES5 compiled version exported as CommonJS module. This is the default entry point for Node 12 and older and tools not supporting ES Modules.
 - `vue-types.umd.js`: ES5 compiled version bundled as UMD module. This entry point can be used when loading VueTypes from a `<script src="...">` tag or from a CDN. It's the default entry point for [unpkg](https://unpkg.com/).
 
+:::
+
 ## Production build
 
-Vue.js does not validate components' props when used in a production build. If you're using a bundler such as Webpack or rollup you can shrink VueTypes file size by around **70%** (minified and gzipped) by removing the validation logic while preserving the library's API methods. To achieve that result, VueTypes ships with a `shim` module that can be used as alias in the production build.
+Vue.js does not validate components' props when used in a production build. If you're using a bundler such as Webpack or rollup you can shrink VueTypes file size by around **70%** (minified and gzipped) by removing the validation logic while preserving the library's API methods. To achieve that result, VueTypes ships with a `vue-types/shim` module that can be used as alias in the production build.
 
-| Full Library entry point | Shim entry point |
-| ------------------------ | ---------------- |
-| `vue-types.modern.js`    | `shim.modern.js` |
-| `vue-types.m.js`         | `shim.m.js`      |
-| `vue-types.cjs`          | `shim.cjs`       |
-| `vue-types.umd.js`       | `shim.umd.js`    |
+By aliasing `vue-types` to `vue-types/shim`, bundlers should be able to pick the module type that fits your configuration (ES, CommonJS, ...).
+
+::: tip NOTE
+
+As an additional insight, here is a table showing the full and shim versions of the library for each module system.
+
+| Module system | Full Library entry point | Shim entry point       |
+| ------------- | ------------------------ | ---------------------- |
+| Modern ES     | `vue-types.modern.js`    | `shim/index.modern.js` |
+| ES5 ES        | `vue-types.m.js`         | `shim/index.m.js`      |
+| CommonJS      | `vue-types.cjs`          | `shim/index.cjs.js`    |
+| UMD           | `vue-types.umd.js`       | `shim/index.umd.js`    |
+
+:::
 
 ### CDN usage
 
 If you're including the library via a `script` tag, use the dedicated shim build file:
 
 ```html
-<script src="https://unpkg.com/vue-types@latest/dist/shim.umd.js"></script>
+<script src="https://unpkg.com/vue-types@latest/shim/index.umd.js"></script>
 ```
 
 **Note:** In order to use a specific version of the library change `@latest` with `@<version-number>`:
 
 ```html
-<!-- use the shim from version 2.0.0 -->
-<script src="https://unpkg.com/vue-types@2.0.0/dist/shim.umd.js"></script>
+<!-- use the shim from version 4.1.0 -->
+<script src="https://unpkg.com/vue-types@4.1.0/shim/index.umd.js"></script>
 ```
 
 ### Webpack 4 and earlier
@@ -73,7 +85,7 @@ return {
     alias: {
       // ... other aliases
       ...(process.env.NODE_ENV === 'production' && {
-        'vue-types': require.resolve('vue-types/dist/shim.m.js'),
+        'vue-types': 'vue-types/shim',
       }),
     },
   },
