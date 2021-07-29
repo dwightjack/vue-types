@@ -1,6 +1,6 @@
 {
   "name": "vue-types",
-  "version": "4.0.1",
+  "version": "4.1.0-beta.2",
   "description": "Prop types utility for Vue",
   "author": "Marco Solazzi",
   "license": "MIT",
@@ -45,9 +45,10 @@
     "build:shim:cjs": "microbundle --external=vue --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o dist/shim.cjs --no-pkg-main --format=cjs",
     "build:umd": "cross-env NODE_ENV=production microbundle --external=vue --tsconfig=./tsconfig.build.json --format=umd",
     "test": "jest",
-    "lint": "eslint '{src,__tests__,.}/**/*.{ts,js,cjs}'",
-    "lint:examples": "tsc --noEmit -p ./examples",
-    "examples": "cross-env NODE_ENV=development node ./scripts/run-examples.cjs",
+    "lint": "run-s lint:*",
+    "lint:ts": "tsc --noEmit -p ./examples",
+    "lint:src": "eslint '{examples,src,__tests__,.}/**/*.{ts,js,cjs}'",
+    "examples": "vite examples -c examples/vite.config.js",
     "docs:dev": "vuepress dev docs",
     "docs:build": "cross-env NODE_ENV=production vuepress build docs"
   },
@@ -71,7 +72,6 @@
     "@typescript-eslint/eslint-plugin": "4.28.3",
     "@typescript-eslint/parser": "4.28.3",
     "babel-plugin-transform-node-env-inline": "0.4.3",
-    "browser-sync": "2.27.4",
     "cpy-cli": "3.1.1",
     "cross-env": "7.0.3",
     "del": "6.0.0",
@@ -87,6 +87,7 @@
     "prettier": "2.3.2",
     "ts-jest": "27.0.3",
     "typescript": "4.3.5",
+    "vite": "2.4.1",
     "vue2": "npm:vue@2.6.14",
     "vue3": "npm:vue@3.1.4",
     "vuepress": "1.8.2"
