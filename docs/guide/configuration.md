@@ -20,8 +20,6 @@ VueTypes.config === config
 
 ## Configuration Options
 
-At the moment, there is only one configuration option:
-
 - `silent`: (boolean, default `false`) set to `true` to prevent VueTypes from logging validation warnings.
 
 ::: tip
@@ -37,3 +35,5 @@ config.silent = Vue.config.silent
 ```
 
 :::
+
+- `logLevel`: (string, default `warn`) allows choosing which console method will be used to display validation errors. Available options are `log`, `warn`, `error`, `debug` and`info`.
