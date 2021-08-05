@@ -602,6 +602,24 @@ describe('SHIM: VueTypes', () => {
       expect((VueTypes as any).dateFn().isRequired.required).toBe(true)
     })
 
+    it('should accept multiple types as array', () => {
+      VueTypes.extend([
+        {
+          name: 'type1',
+          type: String,
+          getter: true,
+        },
+        {
+          name: 'type2',
+          type: Number,
+          getter: true,
+        },
+      ])
+
+      expect((VueTypes as any).type1.type).toBe(String)
+      expect((VueTypes as any).type2.type).toBe(Number)
+    })
+
     it('should add a validate method to the prop', () => {
       VueTypes.extend({
         name: 'stringCustom',
