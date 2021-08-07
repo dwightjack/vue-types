@@ -115,3 +115,8 @@ export interface ExtendProps<T = any> {
   default?: T | null | undefined | (() => T | null | undefined)
   validator?(...args: any[]): boolean
 }
+
+export interface VueTypesConfig {
+  silent: boolean
+  logLevel: 'log' | 'warn' | 'error' | 'debug' | 'info'
+}

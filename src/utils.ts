@@ -53,9 +53,10 @@ let warn: (msg: string) => string | void = identity
 if (process.env.NODE_ENV !== 'production') {
   const hasConsole = typeof console !== 'undefined'
   warn = hasConsole
-    ? function warn(msg) {
-        // eslint-disable-next-line no-console
-        config.silent === false && console.warn(`[VueTypes warn]: ${msg}`)
+    ? function warn(msg: string, level = config.logLevel) {
+        if (config.silent === false) {
+          console[level](`[VueTypes warn]: ${msg}`)
+        }
       }
     : identity
 }
