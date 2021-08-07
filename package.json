@@ -1,6 +1,6 @@
 {
   "name": "vue-types",
-  "version": "4.1.0-beta.2",
+  "version": "4.1.0-beta.3",
   "description": "Prop types utility for Vue",
   "author": "Marco Solazzi",
   "license": "MIT",
@@ -22,9 +22,10 @@
       "import": "./dist/vue-types.modern.js"
     },
     "./shim": {
-      "require": "./dist/shim.cjs",
-      "import": "./dist/shim.modern.js"
-    }
+      "require": "./shim/index.cjs.js",
+      "import": "./shim/index.modern.js"
+    },
+    "./nuxt": "./nuxt/module.js"
   },
   "types": "dist/index.d.ts",
   "engines": {
@@ -32,18 +33,22 @@
   },
   "files": [
     "dist",
+    "shim",
     "src",
     "types/*.d.ts"
   ],
   "scripts": {
-    "prepublishOnly": "run-s lint lint:examples test build",
-    "build": "run-s build:clean build:copy build:cjs build:shim:cjs build:ts build:umd",
-    "build:clean": "del dist",
-    "build:copy": "cpy src/*.d.ts dist",
-    "build:ts": "microbundle --external=vue --tsconfig=./tsconfig.build.json --format=modern,es",
-    "build:cjs": "microbundle --external=vue --tsconfig=./tsconfig.build.json -i src/index.cjs.ts -o dist/vue-types.cjs --no-pkg-main --format=cjs",
-    "build:shim:cjs": "microbundle --external=vue --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o dist/shim.cjs --no-pkg-main --format=cjs",
-    "build:umd": "cross-env NODE_ENV=production microbundle --external=vue --tsconfig=./tsconfig.build.json --format=umd",
+    "prepublishOnly": "run-s lint lint:ts test build",
+    "build": "run-s 'clean:*' copy 'build:**'",
+    "clean:dist": "del dist",
+    "clean:shim": "del \"shim/*.*\" \"!shim/package.json\"",
+    "copy": "cpy src/*.d.ts dist",
+    "build:ts": "microbundle --tsconfig=./tsconfig.build.json --format=modern,es",
+    "build:cjs": "microbundle --tsconfig=./tsconfig.build.json -i src/index.cjs.ts -o dist/vue-types.cjs --no-pkg-main --format=cjs",
+    "build:umd": "cross-env NODE_ENV=production microbundle --tsconfig=./tsconfig.build.json --format=umd",
+    "build:shim:ts": "microbundle --tsconfig=./tsconfig.build.json -i src/shim.ts -o shim/index.js --format=modern,es --no-sourcemap",
+    "build:shim:cjs": "microbundle --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o shim/index.cjs.js --no-pkg-main --format=cjs --no-sourcemap",
+    "build:shim:umd": "cross-env NODE_ENV=production microbundle --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o shim/index.js --format=umd --no-sourcemap",
     "test": "jest",
     "lint": "run-s lint:*",
     "lint:ts": "tsc --noEmit -p ./examples",
@@ -67,6 +72,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "7.14.5",
     "@babel/plugin-proposal-optional-chaining": "7.14.5",
+    "@nuxt/types": "2.15.7",
     "@types/jest": "26.0.24",
     "@types/node": "14.17.5",
     "@typescript-eslint/eslint-plugin": "4.28.5",
