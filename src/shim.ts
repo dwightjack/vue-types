@@ -159,6 +159,10 @@ const BaseVueTypes = /*#__PURE__*/ (() =>
     static objectOf = objectOf
     static shape = shape
     static extend<T = any>(props: any): T {
+      if (isArray(props)) {
+        props.forEach((p) => this.extend(p))
+        return this as any
+      }
       const { name, validate, getter = false, type = null } = props
       // If we are inheriting from a custom type, let's ignore the type property
       const extType = isPlainObject(type) && type.type ? null : type
