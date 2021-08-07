@@ -18,7 +18,25 @@ npm install vue-types --save
 Add the following script tags before your code
 
 ```html
-<script src="https://unpkg.com/vue-types"></script>
+<script src="https://unpkg.com/vue-types@4"></script>
+
+<!-- Or -->
+
+<script src="https://cdn.jsdelivr.net/npm/vue-types@4/dist/vue-types.umd.js"></script>
+```
+
+In modern browsers [supporting ES Modules](https://caniuse.com/es6-module) you can import the library like this:
+
+```html
+<script type="module">
+  import { string, number } from 'https://unpkg.com/vue-types@4?module'
+</script>
+
+<!-- Or -->
+
+<script type="module">
+  import { string, number } from 'https://cdn.jsdelivr.net/npm/vue-types@4/+esm'
+</script>
 ```
 
 ## Usage with bundlers
@@ -68,17 +86,10 @@ For reference, here is a table showing the full and shim versions of the library
 If you're including the library via a `script` tag, use the dedicated shim build file:
 
 ```html
-<script src="https://unpkg.com/vue-types@latest/shim/index.umd.js"></script>
+<script src="https://unpkg.com/vue-types@4/shim/index.umd.js"></script>
 ```
 
-**Note:** In order to use a specific version of the library change `@latest` with `@<version-number>`:
-
-```html
-<!-- use the shim from version 4.1.0 -->
-<script src="https://unpkg.com/vue-types@4.1.0/shim/index.umd.js"></script>
-```
-
-### Webpack 4 and earlier
+### Webpack
 
 The following example will shim the module in Webpack by adding an [alias field](https://webpack.js.org/configuration/resolve/#resolve-alias) to the configuration when `NODE_ENV` is set to `"production"`:
 
@@ -93,25 +104,6 @@ return {
       ...(process.env.NODE_ENV === 'production' && {
         'vue-types': 'vue-types/shim',
       }),
-    },
-  },
-}
-```
-
-### Webpack 5
-
-The following example will shim the module in Webpack by adding an [alias field](https://webpack.js.org/configuration/resolve/#resolve-alias) to the configuration when `NODE_ENV` is set to `"production"`:
-
-```js
-// webpack.config.js
-
-return {
-  // ... configuration
-  resolve: {
-    alias: {
-      // ... other aliases
-      'vue-types': 'vue-types/shim',
-      },
     },
   },
 }
