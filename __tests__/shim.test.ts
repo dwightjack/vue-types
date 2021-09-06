@@ -639,6 +639,17 @@ describe('SHIM: VueTypes', () => {
       })
       expect((VueTypes as any).customTypeChild.type).toBe(null)
     })
+
+    it('should be able to be get multiple times (eg:to avoid redefined property)', () => {
+      VueTypes.extend({
+        name: 'booleanCustom',
+        getter: true,
+        type: Boolean,
+        default: undefined,
+      })
+      expect((VueTypes as any).booleanCustom.type).toBe(Boolean)
+      expect((VueTypes as any).booleanCustom.type).toBe(Boolean)
+    })
   })
 })
 
