@@ -1,6 +1,6 @@
 {
   "name": "vue-types",
-  "version": "4.0.3",
+  "version": "4.1.0-rc.1",
   "description": "Prop types utility for Vue",
   "author": "Marco Solazzi",
   "license": "MIT",
@@ -22,9 +22,10 @@
       "import": "./dist/vue-types.modern.js"
     },
     "./shim": {
-      "require": "./dist/shim.cjs",
-      "import": "./dist/shim.modern.js"
-    }
+      "require": "./shim/index.cjs.js",
+      "import": "./shim/index.modern.js"
+    },
+    "./nuxt": "./nuxt/module.js"
   },
   "types": "dist/index.d.ts",
   "engines": {
@@ -32,22 +33,27 @@
   },
   "files": [
     "dist",
+    "shim",
     "src",
     "types/*.d.ts"
   ],
   "scripts": {
-    "prepublishOnly": "run-s lint lint:examples test build",
-    "build": "run-s build:clean build:copy build:cjs build:shim:cjs build:ts build:umd",
-    "build:clean": "del dist",
-    "build:copy": "cpy src/*.d.ts dist",
-    "build:ts": "microbundle --external=vue --tsconfig=./tsconfig.build.json --format=modern,es",
-    "build:cjs": "microbundle --external=vue --tsconfig=./tsconfig.build.json -i src/index.cjs.ts -o dist/vue-types.cjs --no-pkg-main --format=cjs",
-    "build:shim:cjs": "microbundle --external=vue --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o dist/shim.cjs --no-pkg-main --format=cjs",
-    "build:umd": "cross-env NODE_ENV=production microbundle --external=vue --tsconfig=./tsconfig.build.json --format=umd",
+    "prepublishOnly": "run-s lint lint:ts test build",
+    "build": "run-s 'clean:*' copy 'build:**'",
+    "clean:dist": "del dist",
+    "clean:shim": "del \"shim/*.*\" \"!shim/package.json\"",
+    "copy": "cpy src/*.d.ts dist",
+    "build:ts": "microbundle --tsconfig=./tsconfig.build.json --format=modern,es",
+    "build:cjs": "microbundle --tsconfig=./tsconfig.build.json -i src/index.cjs.ts -o dist/vue-types.cjs --no-pkg-main --format=cjs",
+    "build:umd": "cross-env NODE_ENV=production microbundle --tsconfig=./tsconfig.build.json --format=umd",
+    "build:shim:ts": "microbundle --tsconfig=./tsconfig.build.json -i src/shim.ts -o shim/index.js --format=modern,es --no-sourcemap",
+    "build:shim:cjs": "microbundle --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o shim/index.cjs.js --no-pkg-main --format=cjs --no-sourcemap",
+    "build:shim:umd": "cross-env NODE_ENV=production microbundle --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o shim/index.js --format=umd --no-sourcemap",
     "test": "jest",
-    "lint": "eslint '{src,__tests__,.}/**/*.{ts,js,cjs}'",
-    "lint:examples": "tsc --noEmit -p ./examples",
-    "examples": "cross-env NODE_ENV=development node ./scripts/run-examples.cjs",
+    "lint": "run-s lint:*",
+    "lint:ts": "tsc --noEmit -p ./examples",
+    "lint:src": "eslint '{examples,src,__tests__,.}/**/*.{ts,js,cjs}'",
+    "examples": "vite examples -c examples/vite.config.js",
     "docs:dev": "vuepress dev docs",
     "docs:build": "cross-env NODE_ENV=production vuepress build docs"
   },
@@ -66,12 +72,12 @@
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "7.14.5",
     "@babel/plugin-proposal-optional-chaining": "7.14.5",
+    "@nuxt/types": "2.15.8",
     "@types/jest": "26.0.24",
     "@types/node": "14.17.9",
-    "@typescript-eslint/eslint-plugin": "4.29.0",
-    "@typescript-eslint/parser": "4.29.0",
+    "@typescript-eslint/eslint-plugin": "4.29.1",
+    "@typescript-eslint/parser": "4.29.1",
     "babel-plugin-transform-node-env-inline": "0.4.3",
-    "browser-sync": "2.27.5",
     "cpy-cli": "3.1.1",
     "cross-env": "7.0.3",
     "del": "6.0.0",
@@ -80,15 +86,16 @@
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-prettier": "3.4.0",
-    "eslint-plugin-vue": "7.15.1",
+    "eslint-plugin-vue": "7.16.0",
     "jest": "27.0.6",
     "microbundle": "0.13.3",
     "npm-run-all": "4.1.5",
     "prettier": "2.3.2",
     "ts-jest": "27.0.4",
     "typescript": "4.3.5",
+    "vite": "2.4.4",
     "vue2": "npm:vue@2.6.14",
-    "vue3": "npm:vue@3.1.5",
+    "vue3": "npm:vue@3.2.2",
     "vuepress": "1.8.2"
   },
   "dependencies": {

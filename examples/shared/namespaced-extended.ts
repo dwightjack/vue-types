@@ -11,7 +11,7 @@ interface ProjectTypes extends VueTypesInterface {
   positive: VueTypeValidableDef<number>
 }
 
-export default VueTypes.extend<ProjectTypes>([
+export const VueTypesProject = VueTypes.extend<ProjectTypes>([
   {
     name: 'maxLength',
     type: String,

@@ -1,5 +1,5 @@
 import Vue from 'vue2'
-import VueTypes, { VueTypeDef } from 'vue-types'
+import VueTypes, { VueTypeDef } from '../../../src'
 
 type typeofVueTypes = typeof VueTypes
 interface VueTypesCustom extends typeofVueTypes {

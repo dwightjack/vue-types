@@ -70,13 +70,27 @@ type.def(undefined)
 
 ### any
 
-Validates any type of value.
+Validates any type of value. This validator should be used sparingly and can be an escape hatch for props with unknown values.
 
 ```js
 props: {
   myProp: any(),
 }
 ```
+
+::: ts
+In TypeScript, you can specify a type constraint other than `any`:
+
+```ts
+props: {
+  // type is `any`
+  myPropAny: any(),
+  // type is `unknown`
+  myPropUnknown: any<unknown>(),
+}
+```
+
+:::
 
 ### array
 
@@ -88,12 +102,8 @@ props: {
 }
 ```
 
-::: tip
-[Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) requires Array props to provide default value as a factory function. `array().def()` accepts both factory functions and arrays. In the latter case, VueTypes will convert the value to a factory function for you.
-:::
-
 ::: ts
-You can specify the type of array items as type argument:
+In TypeScript, you can specify the type of array items as type argument:
 
 ```ts
 props: {
@@ -107,6 +117,10 @@ props: {
 **Note**: this signature will validate the prop at compile-time only. For
 runtime validation use [`arrayOf`](#arrayof)
 
+:::
+
+::: tip
+[Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) requires Array props to provide default value as a factory function. `array().def()` accepts both factory functions and arrays. In the latter case, VueTypes will convert the value to a factory function for you.
 :::
 
 ### bool
@@ -151,6 +165,21 @@ props: {
 }
 ```
 
+::: ts
+You can constrain the number value with a type argument:
+
+```ts
+props: {
+  // union type
+  length: number<1 | 2 | 3>()
+}
+```
+
+**Note**: this signature will validate the prop at compile-time only. For
+runtime validation use [`oneOf`](#oneof).
+
+:::
+
 ### integer
 
 Validates that a prop is an integer.
@@ -161,6 +190,11 @@ props: {
 }
 ```
 
+::: ts
+Because `integer()` inherits from `number()`, you can constrain its value with a type argument as well (see above for details).
+
+:::
+
 ### object
 
 Validates that a prop is an object.
@@ -170,10 +204,6 @@ props: {
   user: object()
 }
 ```
-
-::: tip
-[Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) requires Object props to provide default value as a factory function. `object().def()` accepts both factory functions and plain objects. In the latter case, VueTypes will convert the value to a factory function for you.
-:::
 
 ::: ts
 You can specify the shape of the object as type argument:
@@ -197,6 +227,10 @@ runtime validation use [`shape`](#shape)
 
 :::
 
+::: tip
+[Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) requires Object props to provide default value as a factory function. `object().def()` accepts both factory functions and plain objects. In the latter case, VueTypes will convert the value to a factory function for you.
+:::
+
 ### string
 
 Validates that a prop is a string.
@@ -206,6 +240,29 @@ props: {
   username: string()
 }
 ```
+
+::: ts
+You can constrain the string value with a type argument:
+
+```ts
+
+enum Fruits {
+  Apple = 'Apple',
+  Pear = 'Pear',
+}
+
+props: {
+  // string enum
+  users: string<Fruits>(),
+  // union type
+  fruits: string<'apple' | 'pear'>()
+}
+```
+
+**Note**: this signature will validate the prop at compile-time only. For
+runtime validation use [`oneOf`](#oneof).
+
+:::
 
 ### symbol
 
@@ -274,12 +331,35 @@ props: {
 
 ### oneOfType
 
-Validates that a prop is an object that could be one of many types. Accepts JavaScript constructors, Vue.js props validation objects and VueTypes validators objects.
+Validates that a prop is an object that could be one of many types. Accepts as inner validators an array of JavaScript constructors, Vue.js props validation objects and VueTypes validators objects.
 
 ```js
 props: {
   // Either a string, an integer or an instance of the User class
   theProp: oneOfType([String, integer(), instanceOf(User)])
+}
+```
+
+::: ts
+You can constrain the expected types passing them as type argument:
+
+```ts
+type User = { name: string; id: string }
+
+props: {
+  // string or instance of User
+  theProp: oneOfType<string | User>([String, Object])
+}
+```
+
+Constraints can be set on the inner validators as well:
+
+```ts
+type User = { name: string; id: string }
+
+props: {
+  // same as above
+  theProp: oneOfType([String, object<User>()])
 }
 ```
 
@@ -303,7 +383,19 @@ Prop Validators are composable. For example, to validate an array that can conta
 
 ```js
 props: {
+  // an array containing both strings and numbers
   collection: arrayOf(oneOfType([String, Number]))
+}
+```
+
+In TypeScript, composition can be used together with type arguments to constrain the final prop type:
+
+```ts
+type User = { name: string; id: string }
+
+props: {
+  // an array containing both arrays of strings and User object instances
+  collection: arrayOf(oneOfType([array<string>(), object<User>()]))
 }
 ```
 
@@ -350,8 +442,8 @@ You can constrain the shape with a type argument:
 
 ```ts
 interface User {
-  name: string
-  age: number
+  name?: string
+  age?: number
   id: number
 }
 
@@ -425,6 +517,23 @@ props: {
   theProp: custom(minLength, 'theProp is not a string or is too short')
 }
 ```
+
+::: ts
+In TypeScript, you can specify the prop type with a type argument:
+
+```ts
+function minLength(value) {
+  return typeof value === 'string' && value.length >= 6
+}
+
+// ...
+props: {
+  // theProp is a string
+  theProp: custom<string>(minLength)
+}
+```
+
+:::
 
 ## Utilities
 

@@ -1,4 +1,4 @@
-import { string, integer } from '../../src/validators/native'
+import { string, integer, any } from '../../src/validators/native'
 import oneOf from '../../src/validators/oneof'
 import shape from '../../src/validators/shape'
 import oneOfType from '../../src/validators/oneoftype'
@@ -64,5 +64,10 @@ describe('`.oneOfType`', () => {
     expect(validator({})).toBe(true)
 
     expect(validator({ id: 2 })).toBe(false)
+  })
+
+  it('should validate edge cases with null and true', () => {
+    expect(oneOfType([any()]).type).toBe(null)
+    expect(oneOfType([{ type: true }]).type).toBe(null)
   })
 })

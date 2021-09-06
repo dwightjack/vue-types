@@ -1,5 +1,11 @@
 import * as utils from '../src/utils'
-import { VueTypeDef } from '../src/types'
+import { VueTypeDef } from '../src'
+import { config } from '../src'
+
+beforeEach(() => {
+  config.logLevel = 'warn'
+  config.silent = false
+})
 
 describe('`getType()`', () => {
   it('return the type constructor as a string', () => {
@@ -329,5 +335,41 @@ describe('`fromType()`', () => {
     expect(validatorCopy).toHaveBeenCalledWith('')
     expect(validator.mock.instances[0]).toBe(copy as any)
     expect(validatorCopy.mock.instances[0]).toBe(copy as any)
+  })
+})
+
+describe('`warn()`', () => {
+  it('calls `console.warn` by default', () => {
+    const message = 'message'
+    utils.warn(message)
+    expect(console.warn).toHaveBeenCalledWith(`[VueTypes warn]: ${message}`)
+  })
+
+  it('calls `console.log` if `config.logLevel` is `log`', () => {
+    config.logLevel = 'log'
+    const message = 'message'
+    utils.warn(message)
+    expect(console.log).toHaveBeenCalledWith(`[VueTypes warn]: ${message}`)
+  })
+
+  it('calls `console.error` if `config.logLevel` is `error`', () => {
+    config.logLevel = 'error'
+    const message = 'message'
+    utils.warn(message)
+    expect(console.error).toHaveBeenCalledWith(`[VueTypes warn]: ${message}`)
+  })
+
+  it('calls `console.debug` if `config.logLevel` is `debug`', () => {
+    config.logLevel = 'debug'
+    const message = 'message'
+    utils.warn(message)
+    expect(console.debug).toHaveBeenCalledWith(`[VueTypes warn]: ${message}`)
+  })
+
+  it('calls `console.info` if `config.logLevel` is `info`', () => {
+    config.logLevel = 'info'
+    const message = 'message'
+    utils.warn(message)
+    expect(console.info).toHaveBeenCalledWith(`[VueTypes warn]: ${message}`)
   })
 })
