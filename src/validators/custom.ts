@@ -12,7 +12,7 @@ export default function custom<T>(
   }
 
   return toType<T>(validatorFn.name || '<<anonymous function>>', {
-    type: null as PropType<T>,
+    type: null as unknown as PropType<T>,
     validator(this: VueTypeDef<T>, value: T) {
       const valid = validatorFn(value)
       if (!valid) warn(`${this._vueTypes_name} - ${warnMsg}`)
