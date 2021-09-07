@@ -122,6 +122,19 @@ describe('`validateType()`', () => {
       utils.validateType({ type: String, required: true }, undefined),
     ).toBe(false)
   })
+
+  it('should validate validators with no type or type === true', () => {
+    expect(utils.validateType({}, 'anyValue')).toBe(true)
+    expect(utils.validateType({ type: true }, 'anyValue')).toBe(true)
+  })
+
+  it('should execute the validator for type === null', () => {
+    const validator = jest.fn().mockReturnValue(false)
+    expect(utils.validateType({ type: null, validator }, 'anyValue')).toBe(
+      false,
+    )
+    expect(validator).toHaveBeenLastCalledWith('anyValue')
+  })
 })
 
 describe('`toType()`', () => {
