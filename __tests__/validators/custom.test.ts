@@ -1,4 +1,5 @@
 import custom from '../../src/validators/custom'
+import { validateType } from '../../src/utils'
 import { VueTypeDef } from '../../src/types'
 import { forceNoContext, checkRequired } from '../helpers'
 
@@ -12,6 +13,7 @@ describe('`.custom`', () => {
   it('should match an object with a validator method', () => {
     expect(customType).toEqual(
       expect.objectContaining({
+        type: null,
         validator: expect.any(Function),
       }),
     )
@@ -29,5 +31,12 @@ describe('`.custom`', () => {
     const validator = forceNoContext(customType.validator)
     expect(validator('mytest')).toBe(true)
     expect(validator(0)).toBe(false)
+  })
+
+  it('should trigger the validator in validateType', () => {
+    const spy = jest.fn().mockReturnValue(true)
+    const type = custom(spy)
+    expect(validateType(type, '__TEST__')).toBe(true)
+    expect(spy).toHaveBeenCalledWith('__TEST__')
   })
 })
