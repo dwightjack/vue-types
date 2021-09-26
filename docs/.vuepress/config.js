@@ -32,6 +32,7 @@ module.exports = {
           ['/guide/validators', 'Using VueTypes'],
           '/guide/namespaced',
           '/guide/configuration',
+          '/guide/troubleshooting',
         ],
       },
       {
