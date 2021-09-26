@@ -98,7 +98,7 @@ function createValidator(
   const prop = getter ? 'get' : 'value'
   const descr = {
     [prop]: () =>
-      type(name, props, validable).def(
+      type(name, Object.assign({}, props), validable).def(
         getter ? root.defaults[name] : undefined,
       ),
   }

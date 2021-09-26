@@ -1,5 +1,5 @@
 import { toType, warn } from '../utils'
-import { ValidatorFunction, VueTypeDef } from '../types'
+import { ValidatorFunction, VueTypeDef, PropType } from '../types'
 
 export default function custom<T>(
   validatorFn: ValidatorFunction<T>,
@@ -12,6 +12,7 @@ export default function custom<T>(
   }
 
   return toType<T>(validatorFn.name || '<<anonymous function>>', {
+    type: null as unknown as PropType<T>,
     validator(this: VueTypeDef<T>, value: T) {
       const valid = validatorFn(value)
       if (!valid) warn(`${this._vueTypes_name} - ${warnMsg}`)
