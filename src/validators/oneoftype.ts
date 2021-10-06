@@ -42,12 +42,12 @@ export default function oneOfType<
       if (type.type === true || !type.type) {
         warn('oneOfType - invalid usage of "true" or "null" as types.')
         continue
-      }
-      if (type.type) {
+      } else {
         nativeChecks = nativeChecks.concat(type.type)
       }
+    } else {
+      nativeChecks.push(type as Prop<V>)
     }
-    nativeChecks.push(type as Prop<V>)
   }
 
   // filter duplicates
