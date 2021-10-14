@@ -45,6 +45,12 @@ jobs:
         env:
           # Use a token to publish to NPM. See below for how to set it up
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish beta release
+        if: github.event.release.target_commitish != 'main' && github.event.release.target_commitish != 'next'
+        run: npm publish --ignore-scripts --tag=beta
+        env:
+          # Use a token to publish to NPM. See below for how to set it up
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish stable release
         if: github.event.release.target_commitish == 'main'
         run: npm publish --ignore-scripts

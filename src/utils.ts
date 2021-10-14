@@ -69,7 +69,7 @@ export { warn }
  * @param {object} obj - Object
  * @param {string} prop - Property to check
  */
-export const has = <T extends any, U extends keyof T>(obj: T, prop: U) =>
+export const has = <T, U extends keyof T>(obj: T, prop: U) =>
   hasOwn.call(obj, prop)
 
 /**

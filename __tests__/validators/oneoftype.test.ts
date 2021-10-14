@@ -45,6 +45,11 @@ describe('`.oneOfType`', () => {
     expect(validator({ id: '10' })).toBe(false)
   })
 
+  it('should extract native types from other validators', () => {
+    const type = oneOfType([string(), integer()])
+    expect(type.type).toEqual([String, Number])
+  })
+
   it('should validate multiple shapes', () => {
     const customType = oneOfType([
       shape({

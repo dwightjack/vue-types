@@ -112,8 +112,10 @@ export function fromType(name: string, source: any, props: any = {}) {
   return t
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const toValidableType = <T>(name: string, props: any) =>
   type(name, props, true)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const toType = <T>(name: string, props: any) => type(name, props)
 
 const BaseVueTypes = /*#__PURE__*/ (() =>
