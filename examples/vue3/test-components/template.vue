@@ -20,6 +20,7 @@ import {
   anyType,
   objectOfTuple,
   oneOfTuple,
+  nullType,
 } from '../../shared/validators'
 
 export default defineComponent({
@@ -27,6 +28,7 @@ export default defineComponent({
     user: userType,
     message: messageType,
     age: ageType,
+    sometng: nullType,
     hobbies: arrayOfStringsType,
     randomData: arrayOfMultipleType,
     score: scoreType,

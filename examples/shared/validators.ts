@@ -15,6 +15,7 @@ import {
   shape,
   toType,
   fromType,
+  isNull,
 } from 'vue-types'
 
 /**
@@ -22,6 +23,11 @@ import {
  */
 export const anyType = any()
 export const anyTypeCast = any<unknown>()
+
+/**
+ * `any` validator examples
+ */
+export const nullType = isNull()
 
 /**
  * `func` validator examples
