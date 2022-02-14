@@ -10,6 +10,7 @@ import {
   anyType,
   objectOfTuple,
   oneOfTuple,
+  stringOrNull,
 } from '../../shared/validators'
 
 const UserComponent = Vue.extend({
@@ -20,6 +21,7 @@ const UserComponent = Vue.extend({
     hobbies: arrayOfStringsType,
     randomData: arrayOfMultipleType,
     score: scoreType,
+    maybeStr: stringOrNull,
   },
 })
 

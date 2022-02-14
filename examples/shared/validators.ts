@@ -25,11 +25,6 @@ export const anyType = any()
 export const anyTypeCast = any<unknown>()
 
 /**
- * `any` validator examples
- */
-export const nullType = isNull()
-
-/**
  * `func` validator examples
  */
 type OnClick = (e: MouseEvent) => void
@@ -127,6 +122,8 @@ export const castedStringOrCastedObject = oneOfType([
   string<stringTuple>(),
   object<UserOneOf>(),
 ]).def('one')
+
+export const stringOrNull = oneOfType([string(), isNull()]).def('one')
 
 /**
  * `arrayOf` validator examples

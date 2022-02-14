@@ -11,6 +11,7 @@ import {
   anyType,
   objectOfTuple,
   oneOfTuple,
+  stringOrNull,
 } from '../../shared/validators'
 
 const UserComponent = defineComponent({
@@ -21,6 +22,7 @@ const UserComponent = defineComponent({
     hobbies: arrayOfStringsType,
     randomData: arrayOfMultipleType,
     score: scoreType,
+    maybeStr: stringOrNull,
   },
 })
 
