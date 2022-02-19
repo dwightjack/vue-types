@@ -90,6 +90,13 @@ describe('VueTypes', () => {
     })
   })
 
+  describe('`.isNull`', () => {
+    it('should proxy the `isNull` validator', () => {
+      const expected = getExpectDescriptors(native.isNull())
+      expect(getDescriptors(VueTypes.isNull)).toEqual(expected)
+    })
+  })
+
   describe('`.custom`', () => {
     it('should proxy the `custom` validator', () => {
       const fn = () => true

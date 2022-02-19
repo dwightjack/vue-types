@@ -274,6 +274,28 @@ props: {
 }
 ```
 
+### isNull
+
+Validates that a prop is null.
+
+```js
+props: {
+  uniq: isNull()
+}
+```
+
+::: warning
+This validator **does not come with any flag or method**. It can be used with [`oneOfType`](#oneoftype) to make a **non required** prop nullable.
+
+```js
+props: {
+  stringOrNull: oneOfType([string(), isNull()])
+}
+```
+
+**Use this validator sparingly.** Nullable props are not encouraged in Vue components, so please consider reviewing your strategy.
+:::
+
 ## Custom Validators
 
 Custom validators are a special kind of factory function useful to describe complex validation requirements. By design custom validators:

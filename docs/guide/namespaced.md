@@ -39,6 +39,7 @@ The main difference between namespaced native validators and those directly impo
 | integer   | `0`        | -                   |
 | symbol    | -          | -                   |
 | object    | `{}`       | yes                 |
+| isNull    | -          | -                   |
 
 </div>
 
