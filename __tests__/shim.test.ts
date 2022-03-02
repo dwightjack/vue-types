@@ -311,6 +311,12 @@ describe('SHIM: VueTypes', () => {
     })
   })
 
+  describe('`.nullable`', () => {
+    it('should proxy the `nullable` validator', () => {
+      expect(VueTypes.nullable).toEqual({ type: null })
+    })
+  })
+
   describe('SHIM: `.custom`', () => {
     it('should exist', () => {
       expect(VueTypes.custom).toBeInstanceOf(Function)

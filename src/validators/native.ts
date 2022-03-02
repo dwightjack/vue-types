@@ -47,3 +47,7 @@ export const symbol = () =>
       return typeof value === 'symbol'
     },
   })
+
+export const nullable = () => ({
+  type: null as unknown as PropType<null>,
+})

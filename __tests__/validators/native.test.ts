@@ -192,4 +192,14 @@ describe('Native validators', () => {
       }
     })
   })
+
+  describe('nullable', () => {
+    it('should return a validator for null', () => {
+      expect(native.nullable().type).toBe(null)
+    })
+    it('should not have any flag', () => {
+      expect((native.nullable() as any).isRequired).toBe(undefined)
+      expect((native.nullable() as any).def).toBe(undefined)
+    })
+  })
 })

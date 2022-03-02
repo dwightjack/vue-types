@@ -86,6 +86,9 @@ export const shape: TypeShim = (a: any) =>
       return this
     },
   })
+export const nullable: TypeShim = () => ({
+  type: null,
+})
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
 function createValidator(
@@ -152,6 +155,9 @@ const BaseVueTypes = /*#__PURE__*/ (() =>
     }
     static get integer() {
       return integer().def(this.defaults.integer)
+    }
+    static get nullable() {
+      return nullable()
     }
     static oneOf = oneOf
     static custom = custom

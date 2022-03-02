@@ -15,6 +15,7 @@ import {
   shape,
   toType,
   fromType,
+  nullable,
 } from 'vue-types'
 
 /**
@@ -121,6 +122,8 @@ export const castedStringOrCastedObject = oneOfType([
   string<stringTuple>(),
   object<UserOneOf>(),
 ]).def('one')
+
+export const stringOrNull = oneOfType([string(), nullable()]).def('one')
 
 /**
  * `arrayOf` validator examples

@@ -16,5 +16,5 @@
       "vue-types/*": ["../src/*"]
     }
   },
-  "include": ["**/*.ts", "../src/**/*.ts"]
+  "include": ["**/*.ts", "**/*.vue", "../src/**/*.ts"]
 }

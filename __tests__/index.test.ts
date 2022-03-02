@@ -90,6 +90,13 @@ describe('VueTypes', () => {
     })
   })
 
+  describe('`.nullable`', () => {
+    it('should proxy the `nullable` validator', () => {
+      const expected = getExpectDescriptors(native.nullable())
+      expect(getDescriptors(VueTypes.nullable)).toEqual(expected)
+    })
+  })
+
   describe('`.custom`', () => {
     it('should proxy the `custom` validator', () => {
       const fn = () => true

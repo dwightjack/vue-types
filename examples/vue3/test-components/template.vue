@@ -2,7 +2,8 @@
   <div>
     <ul>
       <li>User: {{ user.ID }}: {{ user.name }} - {{ age }}</li>
-      <li>Hobbies: {{ hobbies.join(', ') }}</li>
+      <li>Hobbies: {{ hobbies?.join(', ') }}</li>
+      <li>{{ maybeStr ?? 'hello' }}</li>
     </ul>
     <button @click="onClick">click</button>
   </div>
@@ -20,6 +21,7 @@ import {
   anyType,
   objectOfTuple,
   oneOfTuple,
+  stringOrNull,
 } from '../../shared/validators'
 
 export default defineComponent({
@@ -27,6 +29,7 @@ export default defineComponent({
     user: userType,
     message: messageType,
     age: ageType,
+    maybeStr: stringOrNull,
     hobbies: arrayOfStringsType,
     randomData: arrayOfMultipleType,
     score: scoreType,
