@@ -274,13 +274,13 @@ props: {
 }
 ```
 
-### isNull
+### nullable
 
 Validates that a prop is null.
 
 ```js
 props: {
-  uniq: isNull()
+  uniq: nullable()
 }
 ```
 
@@ -289,7 +289,7 @@ This validator **does not come with any flag or method**. It can be used with [`
 
 ```js
 props: {
-  stringOrNull: oneOfType([string(), isNull()])
+  stringOrNull: oneOfType([string(), nullable()])
 }
 ```
 

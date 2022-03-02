@@ -29,7 +29,7 @@ import {
   integer,
   symbol,
   object,
-  isNull,
+  nullable,
 } from './validators/native'
 import custom from './validators/custom'
 import oneOf from './validators/oneof'
@@ -76,8 +76,8 @@ const BaseVueTypes = /*#__PURE__*/ (() =>
       return symbol()
     }
 
-    static get isNull() {
-      return isNull()
+    static get nullable() {
+      return nullable()
     }
 
     static readonly custom = custom
@@ -216,7 +216,7 @@ export {
   instanceOf,
   objectOf,
   shape,
-  isNull,
+  nullable,
   createTypes,
   toType,
   toValidableType,
