@@ -48,6 +48,6 @@ export const symbol = () =>
     },
   })
 
-export const isNull = () => ({
+export const nullable = () => ({
   type: null as unknown as PropType<null>,
 })
