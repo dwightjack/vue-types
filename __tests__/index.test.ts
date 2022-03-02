@@ -210,7 +210,7 @@ describe('VueTypes', () => {
 
   describe('`.extend` helper', () => {
     it('should add getter prop to the library', () => {
-      const validator = jest.fn()
+      const validator = vi.fn()
       interface VueTypesDate extends VueTypesType {
         date: VueTypeDef<Date>
       }
@@ -247,7 +247,7 @@ describe('VueTypes', () => {
     })
 
     it('should pass configuration params to the validator method', () => {
-      const validator = jest.fn()
+      const validator = vi.fn()
       interface VueTypesDateFnArgs extends VueTypesType {
         dateFnArgs: (...args: any[]) => VueTypeDef<Date>
       }
@@ -341,7 +341,7 @@ describe('VueTypes', () => {
 
     it('should inherit from vue-types type and add custom validation', () => {
       const parent = VueTypes.string
-      const validator = jest.fn(() => true)
+      const validator = vi.fn(() => true)
 
       interface VueTypesAliasValidate extends VueTypesType {
         stringValidationAlias: VueTypeValidableDef<string>
@@ -368,7 +368,7 @@ describe('VueTypes', () => {
         number: VueTypes.oneOf([1, 2, 3] as const),
       }).isRequired.loose
 
-      const spy = jest.spyOn(parent, 'validator')
+      const spy = vi.spyOn(parent, 'validator')
 
       VueTypes.extend({
         name: 'shapeAlias',
@@ -458,7 +458,7 @@ describe('VueTypes', () => {
 
     it('should inherit from vue-types type (non-getter types)', () => {
       const parent = VueTypes.string
-      const validator = jest.fn()
+      const validator = vi.fn()
 
       VueTypes.extend({
         name: 'aliasMinLength',

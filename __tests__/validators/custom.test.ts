@@ -34,7 +34,7 @@ describe('`.custom`', () => {
   })
 
   it('should trigger the validator in validateType', () => {
-    const spy = jest.fn().mockReturnValue(true)
+    const spy = vi.fn().mockReturnValue(true)
     const type = custom(spy)
     expect(validateType(type, '__TEST__')).toBe(true)
     expect(spy).toHaveBeenCalledWith('__TEST__')

@@ -2,8 +2,8 @@
 import { isPlainObject } from 'is-plain-object'
 import { typeDefaults } from './sensibles'
 import { config } from './config'
-import { VueTypesDefaults } from './types'
-export { VueTypeDef, VueTypeValidableDef } from './types'
+import type { VueTypesDefaults } from './types'
+export type { VueTypeDef, VueTypeValidableDef } from './types'
 const dfn = Object.defineProperty
 
 const isArray =
