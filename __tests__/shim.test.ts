@@ -1,5 +1,3 @@
-process.env.NODE_ENV = 'production'
-
 import { noop } from '../src/utils'
 import VueTypes, { fromType, toValidableType, toType } from '../src/shim'
 

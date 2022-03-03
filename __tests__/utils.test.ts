@@ -87,7 +87,7 @@ describe('`isComplexType()`', () => {
 
 describe('`bindTo()`', () => {
   it('binds a function and store its original value', () => {
-    const fn = jest.fn()
+    const fn = vi.fn()
     const ctx = {}
     const bound = utils.bindTo(fn, ctx)
 
@@ -129,7 +129,7 @@ describe('`validateType()`', () => {
   })
 
   it('should execute the validator for type === null', () => {
-    const validator = jest.fn().mockReturnValue(false)
+    const validator = vi.fn().mockReturnValue(false)
     expect(utils.validateType({ type: null, validator }, 'anyValue')).toBe(
       false,
     )
@@ -146,7 +146,7 @@ describe('`toType()`', () => {
   })
 
   it('should bind provided `validator function to the passed in object`', () => {
-    const spy = jest.fn()
+    const spy = vi.fn()
     const obj = {
       validator: spy,
     }
@@ -275,7 +275,7 @@ describe('`toValidableType()`', () => {
     expect(type.validate).toBeInstanceOf(Function)
   })
   it('the validate function sets a custom validator', () => {
-    const fn = jest.fn()
+    const fn = vi.fn()
     const type = utils
       .toValidableType('testType', { type: String })
       .validate(fn)
@@ -285,7 +285,7 @@ describe('`toValidableType()`', () => {
     expect(fn).toHaveBeenCalledWith('demo')
   })
   it('binds the validate function to the type object', () => {
-    const fn = jest.fn()
+    const fn = vi.fn()
     const type = utils
       .toValidableType('testType', { type: String })
       .validate(fn)
@@ -332,9 +332,9 @@ describe('`fromType()`', () => {
 
   it('composes validator functions', () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const validator = jest.fn((...args: any[]) => true)
+    const validator = vi.fn((...args: any[]) => true)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const validatorCopy = jest.fn((...args: any[]) => false)
+    const validatorCopy = vi.fn((...args: any[]) => false)
     const base = utils.toType('a', {
       type: String,
       validator,
