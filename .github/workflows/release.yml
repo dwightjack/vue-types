@@ -21,7 +21,7 @@ jobs:
           # Specifies the registry, this field is required!
           registry-url: https://registry.npmjs.org/
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
         with:
