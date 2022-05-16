@@ -73,7 +73,7 @@
     "@babel/plugin-proposal-nullish-coalescing-operator": "7.16.7",
     "@babel/plugin-proposal-optional-chaining": "7.16.7",
     "@nuxt/types": "2.15.8",
-    "@types/node": "16.11.35",
+    "@types/node": "16.11.36",
     "@typescript-eslint/eslint-plugin": "5.21.0",
     "@typescript-eslint/parser": "5.21.0",
     "babel-plugin-transform-node-env-inline": "0.4.3",
