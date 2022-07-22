@@ -33,6 +33,7 @@
   },
   "files": [
     "dist",
+    "nuxt",
     "shim",
     "src",
     "types/*.d.ts"
