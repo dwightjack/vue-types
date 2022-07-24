@@ -5,33 +5,28 @@ on:
       - main
     paths:
       - 'docs/**'
+  release:
+    # This specifies that the build will be triggered when we publish a release
+    types: [published]
 
 jobs:
   build:
+    if: github.ref == 'refs/heads/main' || github.event.release.target_commitish == 'main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          ref: 'main'
       - uses: actions/setup-node@v3
         with:
-          node-version: '16'
-      - name: Cache node modules
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+          node-version-file: '.nvmrc'
+          cache: 'npm'
       - run: npm ci
       - name: Generate Documentation
         run: npm run docs:build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/.vuepress/dist
