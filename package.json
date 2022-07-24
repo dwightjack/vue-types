@@ -54,9 +54,7 @@
     "lint": "run-s lint:*",
     "lint:ts": "tsc --noEmit -p ./examples",
     "lint:src": "eslint '{examples,src,__tests__,.}/**/*.{ts,js,cjs}'",
-    "examples": "vite examples -c examples/vite.config.js",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "cross-env NODE_ENV=production vuepress build docs"
+    "examples": "vite examples -c examples/vite.config.js"
   },
   "keywords": [
     "vue",
@@ -96,8 +94,7 @@
     "vite": "2.9.14",
     "vitest": "0.10.5",
     "vue2": "npm:vue@2.6.14",
-    "vue3": "npm:vue@3.2.37",
-    "vuepress": "1.9.7"
+    "vue3": "npm:vue@3.2.37"
   },
   "dependencies": {
     "is-plain-object": "5.0.0"

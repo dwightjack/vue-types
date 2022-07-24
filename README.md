@@ -29,6 +29,12 @@
 1. Run script: `npm run examples`
 1. Wait for the server and bundler to start-up
 
+## Run docs on localhost
+
+1. CD into `docs` folder dependencies: `cd docs`
+1. Install dependencies: `npm ci`
+1. Run script: `npm run docs:dev`
+
 ## Contributing
 
 1. Clone this repository
