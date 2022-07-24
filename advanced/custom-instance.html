@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Custom namespaced instance | VueTypes</title>
-    <meta name="generator" content="VuePress 1.8.2">
+    <meta name="generator" content="VuePress 1.9.7">
     
     <meta name="description" content="">
     
-    <link rel="preload" href="/vue-types/assets/css/0.styles.6cd1c7d1.css" as="style"><link rel="preload" href="/vue-types/assets/js/app.dae66406.js" as="script"><link rel="preload" href="/vue-types/assets/js/2.e6246d05.js" as="script"><link rel="preload" href="/vue-types/assets/js/8.ba8d9dee.js" as="script"><link rel="prefetch" href="/vue-types/assets/js/10.be0b8a14.js"><link rel="prefetch" href="/vue-types/assets/js/11.6bc5c9c9.js"><link rel="prefetch" href="/vue-types/assets/js/12.0cb52edd.js"><link rel="prefetch" href="/vue-types/assets/js/13.fddca450.js"><link rel="prefetch" href="/vue-types/assets/js/14.c67a694d.js"><link rel="prefetch" href="/vue-types/assets/js/15.9f7e83a5.js"><link rel="prefetch" href="/vue-types/assets/js/3.35ec1c29.js"><link rel="prefetch" href="/vue-types/assets/js/4.3af4e00b.js"><link rel="prefetch" href="/vue-types/assets/js/5.d91f4f80.js"><link rel="prefetch" href="/vue-types/assets/js/6.b00d925a.js"><link rel="prefetch" href="/vue-types/assets/js/7.f625ba29.js"><link rel="prefetch" href="/vue-types/assets/js/9.1427419a.js">
-    <link rel="stylesheet" href="/vue-types/assets/css/0.styles.6cd1c7d1.css">
+    <link rel="preload" href="/vue-types/assets/css/0.styles.c54b844c.css" as="style"><link rel="preload" href="/vue-types/assets/js/app.3a5cf6cd.js" as="script"><link rel="preload" href="/vue-types/assets/js/2.66dbf3eb.js" as="script"><link rel="preload" href="/vue-types/assets/js/8.f82ae978.js" as="script"><link rel="prefetch" href="/vue-types/assets/js/10.c9502663.js"><link rel="prefetch" href="/vue-types/assets/js/11.3d25a45f.js"><link rel="prefetch" href="/vue-types/assets/js/12.3efdf7d0.js"><link rel="prefetch" href="/vue-types/assets/js/13.adf9e6e0.js"><link rel="prefetch" href="/vue-types/assets/js/14.c71d7c0c.js"><link rel="prefetch" href="/vue-types/assets/js/15.f1cd4825.js"><link rel="prefetch" href="/vue-types/assets/js/3.1b34c2ec.js"><link rel="prefetch" href="/vue-types/assets/js/4.09cb46a0.js"><link rel="prefetch" href="/vue-types/assets/js/5.8865fc04.js"><link rel="prefetch" href="/vue-types/assets/js/6.461cca72.js"><link rel="prefetch" href="/vue-types/assets/js/7.78f708be.js"><link rel="prefetch" href="/vue-types/assets/js/9.ae94e6f9.js">
+    <link rel="stylesheet" href="/vue-types/assets/css/0.styles.c54b844c.css">
   </head>
   <body>
     <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/vue-types/" class="home-link router-link-active"><!----> <span class="site-name">VueTypes</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="https://github.com/dwightjack/vue-types/blob/v1/README.md" target="_blank" rel="noopener noreferrer" class="nav-link external">
@@ -26,23 +26,23 @@ In <code>core</code> we define a custom default and use it:</p> <div class="lang
 
 VueTypes<span class="token punctuation">.</span>sensibleDefaults <span class="token operator">=</span> <span class="token punctuation">{</span>
   <span class="token operator">...</span>VueTypes<span class="token punctuation">.</span>sensibleDefaults<span class="token punctuation">,</span>
-  string<span class="token operator">:</span> <span class="token string">'hello'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">string</span><span class="token operator">:</span> <span class="token string">'hello'</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span>
 
 <span class="token comment">// core/component.vue</span>
 <span class="token keyword">import</span> VueTypes <span class="token keyword">from</span> <span class="token string">'./types'</span>
 
 <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
-  props<span class="token operator">:</span> <span class="token punctuation">{</span>
-    greeting<span class="token operator">:</span> VueTypes<span class="token punctuation">.</span>string<span class="token punctuation">,</span> <span class="token comment">// default is 'hello'</span>
+  <span class="token literal-property property">props</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token literal-property property">greeting</span><span class="token operator">:</span> VueTypes<span class="token punctuation">.</span>string<span class="token punctuation">,</span> <span class="token comment">// default is 'hello'</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span>
 </code></pre></div><p>Now, if we import VueTypes in <code>ui</code>, we might expect the default value for <code>VueTypes.string</code> to be an empty string but, depending on how the bundler imports our modules, that might not be the case.</p> <p>That's because in the <code>core/types.js</code> module <strong>we globally mutated the VueTypes object</strong>.</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// ui/ui-component.js</span>
 <span class="token keyword">import</span> VueTypes <span class="token keyword">from</span> <span class="token string">'vue-types'</span>
 
 <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
-  props<span class="token operator">:</span> <span class="token punctuation">{</span>
-    greeting<span class="token operator">:</span> VueTypes<span class="token punctuation">.</span>string<span class="token punctuation">,</span> <span class="token comment">// default is ???</span>
+  <span class="token literal-property property">props</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token literal-property property">greeting</span><span class="token operator">:</span> VueTypes<span class="token punctuation">.</span>string<span class="token punctuation">,</span> <span class="token comment">// default is ???</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span>
 </code></pre></div><h2 id="introducing-createtypes"><a href="#introducing-createtypes" class="header-anchor">#</a> Introducing <code>createTypes</code></h2> <p>To prevent this issue, VueTypes provides a <code>createTypes</code> function which returns a fresh namespaced object.</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">import</span> <span class="token punctuation">{</span> createTypes <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'vue-types'</span>
@@ -50,8 +50,8 @@ VueTypes<span class="token punctuation">.</span>sensibleDefaults <span class="to
 <span class="token keyword">const</span> MyTypes <span class="token operator">=</span> <span class="token function">createTypes</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 
 <span class="token keyword">const</span> MyComponent <span class="token operator">=</span> <span class="token punctuation">{</span>
-  props<span class="token operator">:</span> <span class="token punctuation">{</span>
-    name<span class="token operator">:</span> MyTypes<span class="token punctuation">.</span>string<span class="token punctuation">,</span>
+  <span class="token literal-property property">props</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token literal-property property">name</span><span class="token operator">:</span> MyTypes<span class="token punctuation">.</span>string<span class="token punctuation">,</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span>
 </code></pre></div><p>The function accepts an optional object argument with sensible defaults. If nothing is provided, then the new object will have the <a href="/vue-types/guide/namespaced.html#default-values">same defaults</a> as the default VueTypes object.</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">import</span> <span class="token punctuation">{</span> createTypes <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'vue-types'</span>
@@ -60,8 +60,8 @@ VueTypes<span class="token punctuation">.</span>sensibleDefaults <span class="to
 <span class="token keyword">const</span> MyTypes <span class="token operator">=</span> <span class="token function">createTypes</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
 
 <span class="token keyword">const</span> MyComponent <span class="token operator">=</span> <span class="token punctuation">{</span>
-  props<span class="token operator">:</span> <span class="token punctuation">{</span>
-    name<span class="token operator">:</span> MyTypes<span class="token punctuation">.</span>string<span class="token punctuation">,</span> <span class="token comment">// default is `undefined`</span>
+  <span class="token literal-property property">props</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token literal-property property">name</span><span class="token operator">:</span> MyTypes<span class="token punctuation">.</span>string<span class="token punctuation">,</span> <span class="token comment">// default is `undefined`</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span>
 </code></pre></div><h2 id="extending-a-custom-namespaced-instance"><a href="#extending-a-custom-namespaced-instance" class="header-anchor">#</a> Extending a custom namespaced instance</h2> <p>Like the default <code>VueTypes</code> instance, custom namespaced instances can be extended either by the <code>extend</code> method or (in ES6+ environments) with the <code>extend</code> keyword:</p> <p>This allow you to setup highly customizable custom validators:</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// ./src/prop-types.js</span>
@@ -70,9 +70,9 @@ VueTypes<span class="token punctuation">.</span>sensibleDefaults <span class="to
 
 <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">createTypes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">extend</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
   <span class="token punctuation">{</span>
-    name<span class="token operator">:</span> <span class="token string">'positive'</span><span class="token punctuation">,</span>
-    getter<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    type<span class="token operator">:</span> Number<span class="token punctuation">,</span>
+    <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'positive'</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">getter</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">type</span><span class="token operator">:</span> Number<span class="token punctuation">,</span>
     <span class="token function-variable function">validator</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">v</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> v <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">,</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">]</span><span class="token punctuation">)</span>
@@ -82,9 +82,9 @@ VueTypes<span class="token punctuation">.</span>sensibleDefaults <span class="to
 <span class="token keyword">import</span> MyTypes <span class="token keyword">from</span> <span class="token string">'./prop-types'</span>
 
 <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
-  props<span class="token operator">:</span> <span class="token punctuation">{</span>
-    name<span class="token operator">:</span> MyTypes<span class="token punctuation">.</span>string<span class="token punctuation">,</span>
-    score<span class="token operator">:</span> MyTypes<span class="token punctuation">.</span>positive<span class="token punctuation">.</span>isRequired<span class="token punctuation">,</span>
+  <span class="token literal-property property">props</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token literal-property property">name</span><span class="token operator">:</span> MyTypes<span class="token punctuation">.</span>string<span class="token punctuation">,</span>
+    <span class="token literal-property property">score</span><span class="token operator">:</span> MyTypes<span class="token punctuation">.</span>positive<span class="token punctuation">.</span>isRequired<span class="token punctuation">,</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span>
 </code></pre></div><p>In E6+ and TypeScript environments, <code>./scr/prop-types.js</code> could be rewritten as:</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// ./src/prop-types.js</span>
@@ -94,12 +94,12 @@ VueTypes<span class="token punctuation">.</span>sensibleDefaults <span class="to
 <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">class</span> <span class="token class-name">MyTypes</span> <span class="token keyword">extends</span> <span class="token class-name">createTypes</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token keyword">static</span> <span class="token keyword">get</span> <span class="token function">positive</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">return</span> <span class="token function">toType</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-      type<span class="token operator">:</span> Number<span class="token punctuation">,</span>
+      <span class="token literal-property property">type</span><span class="token operator">:</span> Number<span class="token punctuation">,</span>
       <span class="token function-variable function">validator</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">v</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> v <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">,</span>
     <span class="token punctuation">}</span><span class="token punctuation">)</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated:</span> <span class="time">9/26/2021, 7:08:16 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+</code></pre></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated:</span> <span class="time">7/24/2022, 3:37:56 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
       ←
       <a href="/vue-types/advanced/extending-vue-types.html" class="prev">
         Extending VueTypes
@@ -108,6 +108,6 @@ VueTypes<span class="token punctuation">.</span>sensibleDefaults <span class="to
       </a>
       →
     </span></p></div> </main></div><div class="global-ui"></div></div>
-    <script src="/vue-types/assets/js/app.dae66406.js" defer></script><script src="/vue-types/assets/js/2.e6246d05.js" defer></script><script src="/vue-types/assets/js/8.ba8d9dee.js" defer></script>
+    <script src="/vue-types/assets/js/app.3a5cf6cd.js" defer></script><script src="/vue-types/assets/js/2.66dbf3eb.js" defer></script><script src="/vue-types/assets/js/8.f82ae978.js" defer></script>
   </body>
 </html>
