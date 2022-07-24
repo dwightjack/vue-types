@@ -3,11 +3,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'docs/**'
-  release:
-    # This specifies that the build will be triggered when we publish a release
-    types: [published]
 
 jobs:
   build:
