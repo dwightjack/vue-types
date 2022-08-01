@@ -43,7 +43,7 @@
     "build": "run-s 'clean:*' copy 'build:**'",
     "clean:dist": "del dist",
     "clean:shim": "del \"shim/*.*\" \"!shim/package.json\"",
-    "copy": "cpy src/*.d.ts dist",
+    "copy": "cpy --flat src/*.d.ts dist",
     "build:ts": "microbundle --tsconfig=./tsconfig.build.json --format=modern,es",
     "build:cjs": "microbundle --tsconfig=./tsconfig.build.json -i src/index.cjs.ts -o dist/vue-types.cjs --no-pkg-main --format=cjs",
     "build:umd": "cross-env NODE_ENV=production microbundle --tsconfig=./tsconfig.build.json --format=umd",
