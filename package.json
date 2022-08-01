@@ -34,9 +34,7 @@
   "files": [
     "dist",
     "nuxt",
-    "shim",
-    "src",
-    "types/*.d.ts"
+    "shim"
   ],
   "scripts": {
     "prepublishOnly": "run-s lint lint:ts test build",
