@@ -107,6 +107,22 @@ const type2 = VueTypes.string.def(undefined)
 // { type: String }
 ```
 
+**Note:** Executing `.def(undefined)` on boolean or mixed-boolean types, explicitly sets the `default` property to `undefined`:
+
+```js
+const type = VueTypes.bool.def(true)
+// { type: Boolean, default: true }
+
+type.def(undefined)
+// { type: Boolean, default: undefined }
+
+const mixedType = VueTypes.oneOfType([String, Boolean])
+// { type: [Boolean, String] }
+
+mixedType.def(undefined)
+// { type: [Boolean, String], default: undefined }
+```
+
 :::
 
 ## Custom Validators

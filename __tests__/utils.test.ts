@@ -224,6 +224,24 @@ describe('`toType()`', () => {
       expect(Object.keys(type)).not.toContain('default')
     })
 
+    it('should explicitly set "default" to "undefined" for boolean types', () => {
+      const type = utils.toType('testType', { type: Boolean })
+      type.def(true)
+      expect(type.default).toBe(true)
+      type.def(undefined)
+      expect(type).toHaveProperty('default', undefined)
+    })
+
+    it('should explicitly set "default" to "undefined" for mixed boolean types', () => {
+      const type = utils.toType<string | boolean>('testType', {
+        type: [Boolean, String],
+      })
+      type.def('hello')
+      expect(type.default).toBe('hello')
+      type.def(undefined)
+      expect(type).toHaveProperty('default', undefined)
+    })
+
     it('skips validation if passed-in value is a function', () => {
       const type = utils.toType('testType', { type: String })
       const fn = () => true
