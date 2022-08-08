@@ -55,6 +55,10 @@ const BaseVueTypes = /*#__PURE__*/ (() =>
       return func().def(this.defaults.func)
     }
     static get bool() {
+      // prevent undefined to be explicitly set
+      if (this.defaults.bool === undefined) {
+        return bool()
+      }
       return bool().def(this.defaults.bool)
     }
     static get string() {

@@ -55,7 +55,7 @@ const numPropGreaterThanTen = number().validate(gtTen)
 // numPropGreaterThanTen ===  { type: Number, validator: (num) => num > 10 }
 ```
 
-::: tip
+::: tip UPDATING DEFAULT VALUES
 You can unset any previously defined default value by passing `undefined` to `.def()`
 
 ```js
@@ -64,6 +64,22 @@ const type = string().def('hello')
 
 type.def(undefined)
 // { type: String }
+```
+
+**Note:** Executing `.def(undefined)` on boolean or mixed-boolean types, explicitly sets the `default` property to `undefined`:
+
+```js
+const type = bool().def(true)
+// { type: Boolean, default: true }
+
+type.def(undefined)
+// { type: Boolean, default: undefined }
+
+const mixedType = oneOfType([bool(), string()])
+// { type: [Boolean, String] }
+
+mixedType.def(undefined)
+// { type: [Boolean, String], default: undefined }
 ```
 
 :::
@@ -132,6 +148,26 @@ props: {
   enabled: bool()
 }
 ```
+
+::: warning `undefined` AS DEFAULT VALUE
+
+Executing `.def(undefined)` on boolean or mixed-boolean types, explicitly sets the `default` property to `undefined`:
+
+```js
+const type = bool().def(true)
+// { type: Boolean, default: true }
+
+type.def(undefined)
+// { type: Boolean, default: undefined }
+
+const mixedType = oneOfType([bool(), string()])
+// { type: [Boolean, String] }
+
+mixedType.def(undefined)
+// { type: [Boolean, String], default: undefined }
+```
+
+:::
 
 ### func
 

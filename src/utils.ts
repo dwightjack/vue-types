@@ -273,6 +273,13 @@ export function toType<T = any>(name: string, obj: PropOptions<T>) {
     def: {
       value(def?: any) {
         if (def === undefined) {
+          if (
+            this.type === Boolean ||
+            (Array.isArray(this.type) && this.type.includes(Boolean))
+          ) {
+            this.default = undefined
+            return
+          }
           if (has(this, 'default')) {
             delete this.default
           }
