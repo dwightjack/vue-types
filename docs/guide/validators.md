@@ -39,7 +39,7 @@ Native validators come with:
 import { number } from 'vue-types'
 
 const numProp = number()
-// numProp === { type: Number, default : 0}
+// numProp === { type: Number}
 
 const numPropCustom = number().def(10)
 // numPropCustom ===  { type: Number, default : 10}
