@@ -70,7 +70,7 @@
     "@babel/plugin-proposal-nullish-coalescing-operator": "7.16.7",
     "@babel/plugin-proposal-optional-chaining": "7.16.7",
     "@nuxt/types": "2.15.8",
-    "@types/node": "16.11.48",
+    "@types/node": "16.11.64",
     "@typescript-eslint/eslint-plugin": "5.21.0",
     "@typescript-eslint/parser": "5.21.0",
     "babel-plugin-transform-node-env-inline": "0.4.3",
@@ -85,14 +85,14 @@
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-vue": "8.7.1",
     "happy-dom": "6.0.4",
-    "microbundle": "0.15.0",
+    "microbundle": "0.15.1",
     "npm-run-all": "4.1.5",
     "prettier": "2.6.2",
     "typescript": "4.6.4",
-    "vite": "2.9.14",
+    "vite": "2.9.15",
     "vitest": "0.10.5",
     "vue2": "npm:vue@2.6.14",
-    "vue3": "npm:vue@3.2.37"
+    "vue3": "npm:vue@3.2.40"
   },
   "dependencies": {
     "is-plain-object": "5.0.0"
