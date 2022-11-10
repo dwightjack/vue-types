@@ -92,7 +92,7 @@
     "vite": "2.9.15",
     "vitest": "0.10.5",
     "vue2": "npm:vue@2.6.14",
-    "vue3": "npm:vue@3.2.43"
+    "vue3": "npm:vue@3.2.44"
   },
   "dependencies": {
     "is-plain-object": "5.0.0"
