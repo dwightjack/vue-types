@@ -30,8 +30,10 @@ const App = Vue.extend({
   template: `
     <section>
       <h1>A list of models</h1>
-      <button type="button" @click="addPet('parrot')">Add parrot (invalid, logs to console)</button>
-      <button type="button" @click="addPet('dog')">Add dog</button>
+      <div class="grid">
+        <button type="button" @click="addPet('parrot')">Add parrot (invalid, logs to console)</button>
+        <button type="button" @click="addPet('dog')">Add dog</button>
+      </div>
       <ul><Model v-for="model in models" :model="model" :key="model.id" /></ul>
     </section>
   `,
