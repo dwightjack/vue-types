@@ -92,9 +92,7 @@ const BaseVueTypes = /*#__PURE__*/ (() =>
     static readonly objectOf = objectOf
     static readonly shape = shape
 
-    static extend<T extends typeof BaseVueTypes>(
-      props: ExtendProps | ExtendProps[],
-    ): T {
+    static extend<T = any>(props: ExtendProps | ExtendProps[]): T {
       if (isArray(props)) {
         props.forEach((p) => this.extend(p))
         return this as any
@@ -115,11 +113,11 @@ const BaseVueTypes = /*#__PURE__*/ (() =>
         delete opts.type
 
         if (getter) {
-          return Object.defineProperty(this as T, name, {
+          return Object.defineProperty(this as unknown as T, name, {
             get: () => fromType(name, type, opts as Omit<ExtendProps, 'type'>),
           })
         }
-        return Object.defineProperty(this as T, name, {
+        return Object.defineProperty(this as unknown as T, name, {
           value(...args: unknown[]) {
             const t = fromType(name, type, opts as Omit<ExtendProps, 'type'>)
             if (t.validator) {
@@ -162,7 +160,7 @@ const BaseVueTypes = /*#__PURE__*/ (() =>
         }
       }
 
-      return Object.defineProperty(this as T, name, descriptor)
+      return Object.defineProperty(this as unknown as T, name, descriptor)
     }
 
     static utils = {
