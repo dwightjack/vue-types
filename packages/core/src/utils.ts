@@ -6,6 +6,7 @@ import {
   VueProp,
   InferType,
   PropOptions,
+  VueTypesConfig,
 } from './types'
 
 const ObjProto = Object.prototype
@@ -48,7 +49,8 @@ export function noop() {}
  */
 export const identity = (arg: any) => arg
 
-let warn: (msg: string) => string | void = identity
+let warn: (msg: string, level?: VueTypesConfig['logLevel']) => string | void =
+  identity
 
 if (process.env.NODE_ENV !== 'production') {
   const hasConsole = typeof console !== 'undefined'

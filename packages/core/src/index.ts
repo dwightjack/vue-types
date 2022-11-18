@@ -6,6 +6,7 @@ import {
   isVueTypeDef,
   has,
   fromType,
+  warn,
 } from './utils'
 
 import {
@@ -93,6 +94,9 @@ const BaseVueTypes = /*#__PURE__*/ (() =>
     static readonly shape = shape
 
     static extend<T = any>(props: ExtendProps | ExtendProps[]): T {
+      warn(
+        `VueTypes.extend is deprecated. Use the ES6+ method instead. See https://dwightjack.github.io/vue-types/advanced/extending-vue-types.html#extending-namespaced-validators-in-es6 for details.`,
+      )
       if (isArray(props)) {
         props.forEach((p) => this.extend(p))
         return this as any
