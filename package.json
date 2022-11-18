@@ -10,7 +10,9 @@
     "node": ">=16.16.0"
   },
   "scripts": {
-    "build": "npm run build --workspaces --if-present"
+    "build": "npm run build --workspaces --if-present",
+    "examples:dev": "npm run build --workspace=vue-types && npm start --workspace=examples",
+    "docs:dev": "npm run dev --workspace=docs"
   },
   "workspaces": [
     "packages/*"

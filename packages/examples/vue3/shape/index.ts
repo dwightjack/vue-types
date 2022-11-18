@@ -52,4 +52,6 @@ const App = defineComponent({
   },
 })
 
-createApp({ render: () => h(App) }).mount('#app')
+createApp({ render: () => h(App) })
+  .use()
+  .mount('#app')

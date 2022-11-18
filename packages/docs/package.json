@@ -2,8 +2,8 @@
   "name": "docs",
   "type": "commonjs",
   "scripts": {
-    "docs:dev": "vuepress dev",
-    "docs:build": "cross-env NODE_ENV=production vuepress build"
+    "dev": "vuepress dev",
+    "build": "cross-env NODE_ENV=production vuepress build"
   },
   "devDependencies": {
     "cross-env": "7.0.3",

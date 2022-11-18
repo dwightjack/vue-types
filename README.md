@@ -15,7 +15,7 @@
 
 </p>
 
-**Note: This document is for VueTypes 4. If you are looking for an older versions, refer to the `v1~v3` branches.**
+**Note: This document is for VueTypes 4. If you are looking for an older versions, refer to the `v1~v4` branches.**
 
 ## Introduction
 
@@ -26,12 +26,11 @@
 ## Run examples
 
 1. Install dependencies: `npm ci`
-1. Run script: `npm run examples`
+1. Run script: `npm run examples:dev`
 1. Wait for the server and bundler to start-up
 
 ## Run docs on localhost
 
-1. CD into `docs` folder dependencies: `cd docs`
 1. Install dependencies: `npm ci`
 1. Run script: `npm run docs:dev`
 

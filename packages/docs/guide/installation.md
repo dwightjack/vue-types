@@ -4,7 +4,7 @@
 This guide covers VueTypes 2+.
 
 - VueTypes 2 is compatible with **Vue 1 and 2**.
-- VueTypes 4 is compatible with **Vue 2 and Vue 3**.
+- VueTypes 4+ is compatible with **Vue 2 and Vue 3**.
   :::
 
 ## NPM package
@@ -18,24 +18,24 @@ npm install vue-types --save
 Add the following script tags before your code
 
 ```html
-<script src="https://unpkg.com/vue-types@4"></script>
+<script src="https://unpkg.com/vue-types@5"></script>
 
 <!-- Or -->
 
-<script src="https://cdn.jsdelivr.net/npm/vue-types@4/dist/vue-types.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-types@5/dist/vue-types.umd.js"></script>
 ```
 
 In modern browsers [supporting ES Modules](https://caniuse.com/es6-module) you can import the library like this:
 
 ```html
 <script type="module">
-  import { string, number } from 'https://unpkg.com/vue-types@4?module'
+  import { string, number } from 'https://unpkg.com/vue-types@5?module'
 </script>
 
 <!-- Or -->
 
 <script type="module">
-  import { string, number } from 'https://cdn.jsdelivr.net/npm/vue-types@4/+esm'
+  import { string, number } from 'https://cdn.jsdelivr.net/npm/vue-types@5/+esm'
 </script>
 ```
 
@@ -53,7 +53,7 @@ import { string, oneOf } from 'vue-types' // or: import VueTypes from 'vue-types
 
 For reference, here is the list of available entry points:
 
-- `vue-types.modern.js`: ES module for environments [supporting it](https://caniuse.com/es6-module). This is the default entry point for Node 14+, Webpack 5+, Rollup and other tools with native support for ES Modules (like [Vite](https://vitejs.dev/), Vue CLI 5 and [Snowpack](https://www.snowpack.dev/)).
+- `vue-types.modern.js`: ES module for environments [supporting it](https://caniuse.com/es6-module). This is the default entry point for Node 14+, Webpack 5+, Rollup and other tools with native support for ES Modules (like [Vite](https://vitejs.dev/), [Nuxt 3](https://nuxt.com/), Vue CLI 5 and [Snowpack](https://www.snowpack.dev/)).
 - `vue-types.m.js`: ES5 compiled version exported as ES module. This is the default entry point for Webpack 4 and frameworks like [Nuxt 2](https://nuxtjs.org/) and [Vue CLI 4](https://cli.vuejs.org/)
 - `vue-types.cjs`: ES5 compiled version exported as CommonJS module. This is the default entry point for Node 12 and older and tools not supporting ES Modules.
 - `vue-types.umd.js`: ES5 compiled version bundled as UMD module. This entry point can be used when loading VueTypes from a `<script src="...">` tag or from a CDN. It's the default entry point for [unpkg](https://unpkg.com/).
@@ -86,7 +86,7 @@ For reference, here is a table showing the full and shim versions of the library
 If you're including the library via a `script` tag, use the dedicated shim build file:
 
 ```html
-<script src="https://unpkg.com/vue-types@4/shim/index.umd.js"></script>
+<script src="https://unpkg.com/vue-types@5/shim/index.umd.js"></script>
 ```
 
 ### Webpack

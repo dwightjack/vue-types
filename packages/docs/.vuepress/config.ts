@@ -1,6 +1,15 @@
-module.exports = {
+import { slugify as vuePressSlugify } from '@vuepress/shared-utils'
+import { defineConfig } from 'vuepress/config'
+
+// https://github.com/vuejs/vuepress/issues/1985#issuecomment-704924046
+function customSlugifyToHandleBadges(str) {
+  // Remove badges and use original slugify function
+  return vuePressSlugify(str.replace(/<Badge[^>]*\/>/, ''))
+}
+
+export default defineConfig({
   title: 'VueTypes',
-  base: process.env.NODE_ENV === 'production' ? '/vue-types/' : '/',
+  base: process.env.NODE_ENV === 'production' ? '/vue-types/' : undefined,
   plugins: [
     [
       'container',
@@ -10,6 +19,12 @@ module.exports = {
       },
     ],
   ],
+  markdown: {
+    slugify: customSlugifyToHandleBadges,
+    toc: {
+      slugify: customSlugifyToHandleBadges,
+    },
+  },
   themeConfig: {
     repo: 'dwightjack/vue-types',
     docsDir: 'docs',
@@ -46,4 +61,4 @@ module.exports = {
       },
     ],
   },
-}
+})
