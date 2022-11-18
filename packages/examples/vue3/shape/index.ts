@@ -1,5 +1,5 @@
 import { defineComponent, createApp, h, computed, ref } from 'vue3'
-import VueTypes from '../../../src'
+import VueTypes from 'vue-types'
 
 interface ModelItem {
   id: string

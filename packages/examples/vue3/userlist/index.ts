@@ -1,5 +1,6 @@
 import { defineComponent, createApp, h } from 'vue3'
-import VueTypes, { VueTypeDef } from '../../../src'
+import VueTypes from 'vue-types'
+import type { VueTypeDef } from 'vue-types'
 
 type typeofVueTypes = typeof VueTypes
 interface VueTypesCustom extends typeofVueTypes {
