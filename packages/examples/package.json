@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "vite -c ./vite.config.ts",
-    "lint:ts": "tsc --noEmit -p ."
+    "lint": "eslint '**/*.ts'"
   },
   "dependencies": {
     "vue2": "npm:vue@2.6.14",

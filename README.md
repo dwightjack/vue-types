@@ -15,7 +15,7 @@
 
 </p>
 
-**Note: This document is for VueTypes 4. If you are looking for an older versions, refer to the `v1~v4` branches.**
+**Note: This document is for VueTypes 5. If you are looking for an older versions, refer to the `v1~v4` branches.**
 
 ## Introduction
 
@@ -39,7 +39,7 @@
 1. Clone this repository
 1. Install dependencies: `npm ci`
 1. Make your changes
-1. Update or add tests in `__tests__/`
+1. Update or add tests in `packages/core/__tests__/`
 1. Verify that everything works: `npm run lint && npm test`
 1. Submit a Pull Request
 

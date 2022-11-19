@@ -3,5 +3,5 @@
     "module": "ESNext",
     "target": "ESNext"
   },
-  "exclude": ["node_modules", "**/__tests__/**/*.ts", "**/examples/**/*.ts"]
+  "exclude": ["node_modules", "**/__tests__/**/*.ts"]
 }

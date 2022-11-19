@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     paths-ignore:
-      - 'docs/**'
+      - 'packages/docs/**'
       - 'README.md'
 
 jobs:
@@ -25,7 +25,7 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
         with:
-          coverageLocations: ${{github.workspace}}/coverage/lcov.info:lcov
+          coverageLocations: ${{github.workspace}}/packages/core/coverage/lcov.info:lcov
           prefix: test
       - name: Build
         run: npm run build

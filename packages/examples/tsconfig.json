@@ -7,14 +7,7 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "strict": true,
-    "noEmit": true,
-    "jsx": "react",
-    "jsxFactory": "h",
-    "baseUrl": "./",
-    "paths": {
-      "vue-types": ["../src/index.ts"],
-      "vue-types/*": ["../src/*"]
-    }
+    "noEmit": true
   },
-  "include": ["**/*.ts", "**/*.vue", "../src/**/*.ts"]
+  "include": ["**/*.ts", "**/*.vue"]
 }

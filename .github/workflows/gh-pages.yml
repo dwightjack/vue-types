@@ -16,13 +16,12 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'npm'
-      - run: npm ci
-        working-directory: 'docs'
+      - name: Install Dependencies
+        run: npm ci
       - name: Generate Documentation
-        run: npm run docs:build
-        working-directory: 'docs'
+        run: npm run build --workspace=docs
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/.vuepress/dist
+          publish_dir: ./packages/docs/.vuepress/dist

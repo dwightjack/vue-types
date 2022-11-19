@@ -51,5 +51,6 @@ Icon
 .Spotlight-V100
 .Trashes
 dist
-**/shim/*.*
+**/shim
 !**/shim/package.json
+.nuxt

@@ -32,7 +32,6 @@
   },
   "files": [
     "dist",
-    "nuxt",
     "shim"
   ],
   "scripts": {

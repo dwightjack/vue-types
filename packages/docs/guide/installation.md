@@ -89,6 +89,27 @@ If you're including the library via a `script` tag, use the dedicated shim build
 <script src="https://unpkg.com/vue-types@5/shim/index.umd.js"></script>
 ```
 
+### Vite
+
+You can use the [conditional config](https://vitejs.dev/config/#conditional-config) feature to set a production-only [alias](https://vitejs.dev/config/#resolve-alias):
+
+```js
+// vite.config.js
+
+export default function ({ mode }) {
+  return {
+    // ... other config settings
+    resolve: {
+      ...(mode === 'production' && {
+        alias: {
+          'vue-types': 'vue-types/shim',
+        },
+      }),
+    },
+  }
+}
+```
+
 ### Webpack
 
 The following example will shim the module in Webpack by adding an [alias field](https://webpack.js.org/configuration/resolve/#resolve-alias) to the configuration when `NODE_ENV` is set to `"production"`:
@@ -135,68 +156,48 @@ If you are using [@rollup/plugin-node-resolve](https://www.npmjs.com/package/@ro
 
 :::
 
-### NuxtJS
+### Nuxt
 
-VueTypes provides a NuxtJS module that will automatically enable the shim for production builds:
+VueTypes provides a Nuxt module that will automatically enable the shim for production builds:
 
-```js
-// nuxt.config.js
+```sh
+npm install vue-types-nuxt --save-dev
+```
+
+```ts
+// nuxt.config.ts
 
 export default {
   // ...
-  modules: ['vue-types/nuxt'],
+  modules: ['vue-types-nuxt'],
 }
 ```
 
-The modules accepts a `shim` boolean option to forcefully enable / disable the shim:
+::: warning
+In projects using Nuxt 2, use the `buildModules` options:
 
 ```js
 // nuxt.config.js
 
 export default {
   // ...
-  // use the shim even during development
-  modules: [['vue-types/nuxt', { shim: true }]],
-}
-```
-
-::: tip
-You can configure NuxtJS manually using the `build.extend` method:
-
-```js
-// nuxt.config.js
-
-export default {
-  // ...
-  build: {
-    extend(config, ctx) {
-      if (ctx.isDev) {
-        config.resolve.alias['vue-types'] = 'vue-types/shim'
-      }
-    },
-  },
+  buildModules: ['vue-types-nuxt'],
 }
 ```
 
 :::
 
-### Vite
+The modules accepts a `shim` boolean option to forcefully enable / disable the shim:
 
-You can use the [conditional config](https://vitejs.dev/config/#conditional-config) feature to set a production-only [alias](https://vitejs.dev/config/#resolve-alias):
+```ts
+// nuxt.config.ts
 
-```js
-// vite.config.js
+export default {
+  modules: ['vue-types-nuxt'],
 
-export default function ({ mode }) {
-  return {
-    // ... other config settings
-    resolve: {
-      ...(mode === 'production' && {
-        alias: {
-          'vue-types': 'vue-types/shim',
-        },
-      }),
-    },
-  }
+  // use the shim even during development
+  vueTypes: {
+    shim: true,
+  },
 }
 ```
