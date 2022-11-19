@@ -1,6 +1,7 @@
 {
   "name": "docs",
   "type": "commonjs",
+  "private": true,
   "scripts": {
     "dev": "vuepress dev",
     "build": "cross-env NODE_ENV=production vuepress build"
