@@ -20,6 +20,8 @@ jobs:
 
       - name: Test
         run: npm test
+      - name: Fix coverage
+        run: sed -i 's/SF:src\//SF:packages\/core\/src\//g' ${{github.workspace}}/packages/core/coverage/lcov.info
       - name: Upload code coverage
         uses: paambaati/codeclimate-action@v3.2.0
         env:
