@@ -1,3 +1,6 @@
+---
+outline: [2, 3]
+---
 # TypeScript Usage
 
 VueTypes is written in TypeScript and comes with full builtin types support.

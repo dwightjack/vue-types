@@ -1,3 +1,6 @@
+---
+outline: 2
+---
 # Extending VueTypes
 
 [[toc]]

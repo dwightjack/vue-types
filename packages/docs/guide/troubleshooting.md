@@ -1,5 +1,5 @@
 ---
-sidebarDepth: 0
+aside: false
 ---
 
 # Troubleshooting

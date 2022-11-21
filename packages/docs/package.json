@@ -1,13 +1,15 @@
 {
   "name": "docs",
-  "type": "commonjs",
   "private": true,
   "scripts": {
-    "dev": "vuepress dev",
-    "build": "cross-env NODE_ENV=production vuepress build"
+    "dev": "vitepress dev",
+    "build": "cross-env NODE_ENV=production vitepress build"
   },
   "devDependencies": {
     "cross-env": "7.0.3",
-    "vuepress": "1.9.7"
+    "markdown-it-container": "3.0.0",
+    "vitepress": "1.0.0-alpha.29",
+    "vue": "3.2.45",
+    "vue-demi": "0.13.11"
   }
 }

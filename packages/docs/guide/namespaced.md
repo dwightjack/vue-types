@@ -1,5 +1,4 @@
 ---
-sidebarDepth: 1
 ---
 
 # Namespaced Usage
@@ -7,8 +6,6 @@ sidebarDepth: 1
 The default export of `vue-types` exposes an ES6 class object that mimics React prop-type.
 
 The class object exposes both [native](/guide/validators.html#native-validators) and [custom](/guide/validators.html#custom-validators) validators.
-
-[[toc]]
 
 ## Native Validators
 
