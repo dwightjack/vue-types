@@ -1,9 +1,11 @@
-name: NPM publish CD workflow
+name: Version or Publish
 
 on:
-  release:
-    # This specifies that the build will be triggered when we publish a release
-    types: [published]
+  push:
+    branches:
+      - next
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   publish:
@@ -22,34 +24,12 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
-      - run: git config --global user.name "GitHub Release Bot"
-      - run: git config --global user.email "github-release-bot@codeful.dev"
 
-      # upgrade npm version in package.json to the tag used in the release.
-      - run: npm version ${{ github.event.release.tag_name }} -m "Bump version %s"
-      - name: Publish next release
-        if: github.event.release.target_commitish == 'next'
-        run: npm publish --ignore-scripts --tag=next
-        env:
-          # Use a token to publish to NPM. See below for how to set it up
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Publish beta release
-        if: github.event.release.target_commitish != 'main' && github.event.release.target_commitish != 'next'
-        run: npm publish --ignore-scripts --tag=beta
-        env:
-          # Use a token to publish to NPM. See below for how to set it up
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Publish stable release
-        if: github.event.release.target_commitish == 'main'
-        run: npm publish --ignore-scripts
-        env:
-          # Use a token to publish to NPM. See below for how to set it up
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Create Release Pull Request
-        uses: peter-evans/create-pull-request@v4
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
         with:
-          branch: release/v${{ github.event.release.tag_name }}
-          delete-branch: true
-          title: Release v${{ github.event.release.tag_name }}
-          reviewers: dwightjack
-          committer: GitHub Release Bot <github-release-bot@codeful.dev>
+          publish: yarn release:next
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

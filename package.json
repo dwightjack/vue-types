@@ -14,7 +14,9 @@
     "examples:dev": "npm run build --workspace=vue-types && npm start --workspace=examples",
     "docs:dev": "npm run dev --workspace=docs",
     "lint": "npm run lint --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present"
+    "test": "npm run test --workspaces --if-present",
+    "release:next": "npm run build && npx changeset publish --tag=next",
+    "release:stable": "npm run build && npx changeset publish"
   },
   "workspaces": [
     "packages/*"
@@ -25,6 +27,7 @@
   },
   "bugs": "https://github.com/dwightjack/vue-types/issues",
   "devDependencies": {
+    "@changesets/cli": "2.25.2",
     "@typescript-eslint/eslint-plugin": "5.21.0",
     "@typescript-eslint/parser": "5.21.0",
     "@vitest/coverage-c8": "0.25.2",
