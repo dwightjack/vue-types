@@ -7,7 +7,11 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "strict": true,
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "vue-types": ["../core/src/index"]
+    }
   },
   "include": ["**/*.ts", "**/*.vue"]
 }

@@ -100,6 +100,9 @@ export const oneOfInstances = oneOf(['hello', oneObj] as const)
 
 oneOf(['large', 'medium'] as const)
 
+export const oneOfUnion = oneOf<1 | 2 | 'string'>([1, 2, 'string']).def(1)
+export const oneOfTupleUnion = oneOf<1 | 2 | 'string'>([1, 'string']).def(2)
+
 /**
  * `oneOfType` validator examples
  */

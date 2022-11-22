@@ -32,7 +32,6 @@ export default defineConfig({
       md.use(container, 'ts', {
         render(tokens, idx) {
           const token = tokens[idx]
-          console.log(token.info)
           if (token.nesting === 1) {
             return `<div class="ts custom-block"><p class="custom-block-title">${md.renderInline(
               token.info.trim().slice(2).trim() || 'TYPESCRIPT HINT',

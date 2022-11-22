@@ -1,6 +1,7 @@
 ---
 outline: [2, 3]
 ---
+
 # TypeScript Usage
 
 VueTypes is written in TypeScript and comes with full builtin types support.
@@ -231,7 +232,7 @@ props: {
 
 ### oneOf
 
-This validator does not support type arguments, but you can use [const assertions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions) on the expected values to constrain the validators type:
+You can use [const assertions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions) on the expected values to constrain the validators type:
 
 ```ts
 props: {
@@ -240,3 +241,36 @@ props: {
   sizes: oneOf(['large', 'medium'] as const).def('small')
 }
 ```
+
+Alternative, you can pass a union type:
+
+```ts
+props: {
+  // Same (mostly) as above
+  // see below for details
+  sizes: oneOf<'large' | 'medium'>(['large', 'medium'])
+}
+```
+
+::: warning
+
+Note that union types don't put any constrain on the presence of all of their members in the validation array. This can lead to runtime bugs not detected by the type checker:
+
+```ts
+props: {
+  // TS type checker does not report any error
+  // but Vue runtime throws an error
+  sizes: oneOf<'large' | 'medium'>(['large']).def('medium')
+}
+```
+
+As a general rule, we strongly suggest to use [const assertions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions) whenever possible.
+
+```ts
+props: {
+  // type checker and runtime error
+  sizes: oneOf(['large'] as const).def('medium')
+}
+```
+
+:::

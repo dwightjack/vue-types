@@ -1,7 +1,9 @@
 import { Prop } from '../types'
 import { toType, warn, isArray } from '../utils'
 
-export default function oneOf<T extends readonly any[]>(arr: T) {
+export default function oneOf<D, T extends readonly D[] = readonly D[]>(
+  arr: T,
+) {
   if (!isArray(arr)) {
     throw new TypeError(
       '[VueTypes error]: You must provide an array as argument.',

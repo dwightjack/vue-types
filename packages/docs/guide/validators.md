@@ -377,11 +377,18 @@ props: {
 ```
 
 ::: ts
-To constrain the allowed values at compile-time use [const assertions](https://devblogs.microsoft.com/typescript/announcing-typescript-3-4/#const-assertions) on the passed-in array:
+To constrain the allowed values at compile-time use [const assertions](https://devblogs.microsoft.com/typescript/announcing-typescript-3-4/#const-assertions) on the passed-in array or union types ([see caveats](../advanced/typescript.md#oneof)):
 
 ```ts
 props: {
   genre: oneOf(['action', 'thriller'] as const)
+}
+
+// mostly same as
+type Genre = 'action' | 'thriller'
+
+props: {
+  genre: oneOf<Genre>(['action', 'thriller'])
 }
 ```
 

@@ -7,3 +7,7 @@
 .dark .custom-block.ts {
   color: #6ba9ec;
 }
+
+.custom-block.custom-block {
+  font-size: inherit;
+}
