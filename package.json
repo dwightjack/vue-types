@@ -1,100 +1,44 @@
 {
-  "name": "vue-types",
-  "version": "4.2.1",
-  "description": "Prop types utility for Vue",
+  "name": "vue-types-monorepo",
+  "description": "VueTypes Monorepo",
   "author": "Marco Solazzi",
   "license": "MIT",
   "homepage": "https://dwightjack.github.io/vue-types/",
-  "main": "dist/vue-types.cjs",
   "type": "module",
-  "source": [
-    "src/index.ts",
-    "src/shim.ts"
-  ],
-  "amdName": "VueTypes",
-  "unpkg": "dist/vue-types.umd.js",
-  "umd:main": "dist/vue-types.umd.js",
-  "module": "dist/vue-types.m.js",
-  "esmodule": "dist/vue-types.modern.js",
-  "exports": {
-    ".": {
-      "require": "./dist/vue-types.cjs",
-      "import": "./dist/vue-types.modern.js"
-    },
-    "./shim": {
-      "require": "./shim/index.cjs.js",
-      "import": "./shim/index.modern.js"
-    },
-    "./nuxt": "./nuxt/module.js"
-  },
-  "types": "dist/index.d.ts",
+  "private": true,
   "engines": {
-    "node": ">=12.16.0"
+    "node": ">=16.16.0"
   },
-  "files": [
-    "dist",
-    "nuxt",
-    "shim"
-  ],
   "scripts": {
-    "prepublishOnly": "run-s lint lint:ts test build",
-    "build": "run-s 'clean:*' copy 'build:**'",
-    "clean:dist": "del dist",
-    "clean:shim": "del \"shim/*.*\" \"!shim/package.json\"",
-    "copy": "cpy --flat src/*.d.ts dist",
-    "build:ts": "microbundle --tsconfig=./tsconfig.build.json --format=modern,es",
-    "build:cjs": "microbundle --tsconfig=./tsconfig.build.json -i src/index.cjs.ts -o dist/vue-types.cjs --no-pkg-main --format=cjs",
-    "build:umd": "cross-env NODE_ENV=production microbundle --tsconfig=./tsconfig.build.json --format=umd",
-    "build:shim:ts": "microbundle --tsconfig=./tsconfig.build.json -i src/shim.ts -o shim/index.js --format=modern,es --no-sourcemap",
-    "build:shim:cjs": "microbundle --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o shim/index.cjs.js --no-pkg-main --format=cjs --no-sourcemap",
-    "build:shim:umd": "cross-env NODE_ENV=production microbundle --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o shim/index.js --format=umd --no-sourcemap",
-    "test": "vitest run",
-    "lint": "run-s lint:*",
-    "lint:ts": "tsc --noEmit -p ./examples",
-    "lint:src": "eslint '{examples,src,__tests__,.}/**/*.{ts,js,cjs}'",
-    "examples": "vite examples -c examples/vite.config.js"
+    "build": "npm run build --workspaces --if-present",
+    "examples:dev": "npm run build --workspace=vue-types && npm start --workspace=examples",
+    "docs:dev": "npm run dev --workspace=docs",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "release:next": "npm run build && npx changeset publish --tag=next",
+    "release:stable": "npm run build && npx changeset publish"
   },
-  "keywords": [
-    "vue",
-    "props"
+  "workspaces": [
+    "packages/*"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/dwightjack/vue-types.git"
   },
   "bugs": "https://github.com/dwightjack/vue-types/issues",
-  "peerDependencies": {
-    "vue": "^2.0.0 || ^3.0.0"
-  },
   "devDependencies": {
-    "@babel/plugin-proposal-nullish-coalescing-operator": "7.16.7",
-    "@babel/plugin-proposal-optional-chaining": "7.16.7",
-    "@nuxt/types": "2.15.8",
-    "@types/node": "16.11.68",
+    "@changesets/cli": "2.25.2",
     "@typescript-eslint/eslint-plugin": "5.21.0",
     "@typescript-eslint/parser": "5.21.0",
-    "babel-plugin-transform-node-env-inline": "0.4.3",
-    "c8": "7.11.3",
-    "cpy-cli": "4.1.0",
-    "cross-env": "7.0.3",
-    "del": "7.0.0",
-    "del-cli": "5.0.0",
+    "@vitest/coverage-c8": "0.25.2",
     "eslint": "8.14.0",
     "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-node": "11.1.0",
     "eslint-plugin-prettier": "4.0.0",
-    "eslint-plugin-vue": "8.7.1",
     "happy-dom": "7.6.7",
-    "microbundle": "0.15.1",
-    "npm-run-all": "4.1.5",
+    "lefthook": "1.2.1",
     "prettier": "2.6.2",
     "typescript": "4.6.4",
-    "vite": "2.9.15",
-    "vitest": "0.10.5",
-    "vue2": "npm:vue@2.6.14",
-    "vue3": "npm:vue@3.2.45"
-  },
-  "dependencies": {
-    "is-plain-object": "5.0.0"
+    "vite": "3.2.4",
+    "vitest": "0.25.2"
   }
 }

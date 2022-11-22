@@ -5,4 +5,3 @@ examples
 .babelrc
 .editorconfig
 .eslintrc.json
-rollup.*

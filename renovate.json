@@ -1,14 +1,4 @@
 {
   "extends": ["config:base", "group:allNonMajor", ":automergePatch"],
-  "commitBody": "[skip netlify]",
-  "packageRules": [
-    {
-      "matchPackageNames": ["vite"],
-      "allowedVersions": "<=2"
-    },
-    {
-      "matchPackageNames": ["vuepress"],
-      "allowedVersions": "<=2"
-    }
-  ]
+  "commitBody": "[skip netlify]"
 }

@@ -1,0 +1,6 @@
+pre-commit:
+  parallel: true
+  commands:
+    linter:
+      glob: "*.{mjs,cjs,js,ts}"
+      run: npx eslint {staged_files}

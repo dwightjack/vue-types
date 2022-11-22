@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     paths-ignore:
-      - 'docs/**'
+      - 'packages/docs/**'
       - 'README.md'
 
 jobs:
@@ -20,12 +20,14 @@ jobs:
 
       - name: Test
         run: npm test
+      - name: Fix coverage
+        run: sed -i 's/SF:src\//SF:packages\/core\/src\//g' ${{github.workspace}}/packages/core/coverage/lcov.info
       - name: Upload code coverage
-        uses: paambaati/codeclimate-action@v3.0.0
+        uses: paambaati/codeclimate-action@v3.2.0
         env:
           CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
         with:
-          coverageLocations: ${{github.workspace}}/coverage/lcov.info:lcov
+          coverageLocations: ${{github.workspace}}/packages/core/coverage/lcov.info:lcov
           prefix: test
       - name: Build
         run: npm run build

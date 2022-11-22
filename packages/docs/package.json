@@ -1,0 +1,13 @@
+{
+  "name": "docs",
+  "private": true,
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "cross-env NODE_ENV=production vitepress build"
+  },
+  "devDependencies": {
+    "cross-env": "7.0.3",
+    "markdown-it-container": "3.0.0",
+    "vitepress": "1.0.0-alpha.29"
+  }
+}
