@@ -35,7 +35,7 @@
     "shim"
   ],
   "scripts": {
-    "prepublishOnly": "run-s lint lint:ts test build",
+    "prepublishOnly": "run-s lint test build",
     "build": "run-s 'clean:*' copy 'build:**'",
     "clean:dist": "del dist",
     "clean:shim": "del \"shim/*.*\" \"!shim/package.json\"",
