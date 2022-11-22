@@ -29,6 +29,6 @@
     "@nuxt/schema": "^3.0.0"
   },
   "peerDependencies": {
-    "vue-types": "^5.0.0-beta.1"
+    "vue-types": "^5.0.0-beta.2"
   }
 }
