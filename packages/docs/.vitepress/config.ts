@@ -1,31 +1,12 @@
-// import { slugify as vuePressSlugify } from '@vuepress/shared-utils'
 import { defineConfig } from 'vitepress'
 import container from 'markdown-it-container'
+import { dirname } from 'path'
 
-// https://github.com/vuejs/vuepress/issues/1985#issuecomment-704924046
-// function customSlugifyToHandleBadges(str) {
-//   // Remove badges and use original slugify function
-//   return vuePressSlugify(str.replace(/<Badge[^>]*\/>/, ''))
-// }
+const vuePath = dirname(require.resolve('vue3'))
 
 export default defineConfig({
   title: 'VueTypes',
   base: process.env.NODE_ENV === 'production' ? '/vue-types/' : '/',
-  // plugins: [
-  //   [
-  //     'container',
-  //     {
-  //       type: 'ts',
-  //       defaultTitle: 'TYPESCRIPT HINT',
-  //     },
-  //   ],
-  // ],
-  // markdown: {
-  //   slugify: customSlugifyToHandleBadges,
-  //   toc: {
-  //     slugify: customSlugifyToHandleBadges,
-  //   },
-  // },
   lastUpdated: true,
   markdown: {
     config(md) {
@@ -83,5 +64,13 @@ export default defineConfig({
         ],
       },
     ],
+  },
+  vite: {
+    resolve: {
+      alias: [
+        { find: /^vue(\/.*)$/, replacement: `${vuePath}$1` },
+        { find: /^vue$/, replacement: require.resolve('vue3') },
+      ],
+    },
   },
 })
