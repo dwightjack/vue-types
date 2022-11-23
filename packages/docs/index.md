@@ -6,7 +6,7 @@ title: Introduction
 
 VueTypes is a collection of configurable [prop validators](http://vuejs.org/guide/components.html#Props) for Vue.js, inspired by React `prop-types`.
 
-[Try it now!](https://codesandbox.io/s/vue-types-4-demo-rbrdh)
+[Try it now!](https://stackblitz.com/edit/vitejs-vite-83cnar?file=src/App.vue)
 
 ::: warning VERSION NOTE
 This is the documentation for VueTypes 2 and above. If you are using an older version, refer to the documentation [here](https://github.com/dwightjack/vue-types/blob/v1/README.md).
