@@ -46,7 +46,8 @@
     "build:shim:ts": "microbundle --tsconfig=./tsconfig.build.json -i src/shim.ts -o shim/index.js --format=modern,es --no-sourcemap",
     "build:shim:cjs": "microbundle --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o shim/index.cjs.js --no-pkg-main --format=cjs --no-sourcemap",
     "build:shim:umd": "cross-env NODE_ENV=production microbundle --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o shim/index.js --format=umd --no-sourcemap",
-    "test": "vitest run",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest watch",
     "lint": "eslint '{src,__tests__,.}/**/*.{ts,js,cjs}'"
   },
   "keywords": [

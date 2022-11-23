@@ -11,7 +11,6 @@ export default defineConfig({
     coverage: {
       include: ['src/**/*.ts', '!src/**/*.{d,cjs}.ts'],
       reportsDirectory: 'coverage',
-      enabled: true,
       reporter: ['text', 'lcov', 'json'],
     },
   },
