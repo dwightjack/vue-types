@@ -316,7 +316,7 @@ Validates that a prop is null.
 
 ```js
 props: {
-  uniq: nullable()
+  isNull: nullable()
 }
 ```
 
@@ -398,10 +398,24 @@ props: {
 
 Validates that a prop is an object that could be one of many types. Accepts as inner validators an array of JavaScript constructors, Vue.js props validation objects and VueTypes validators objects.
 
-```js
+```ts
 props: {
   // Either a string, an integer or an instance of the User class
   theProp: oneOfType([String, integer(), instanceOf(User)])
+}
+```
+
+This validator can be used to compose complex validation logic including native types, specific values (using [`oneOf`](#oneof)) and `null` (using [`nullable`](#nullable)):
+
+```ts
+props: {
+  // Either a number (of pixels), a keyword, or null
+  // translates to: number | 'fit-content' | 'auto' | null
+  width: oneOfType([
+    Number,
+    oneOf(['fit-content', 'auto'] as const),
+    nullable(),
+  ])
 }
 ```
 
