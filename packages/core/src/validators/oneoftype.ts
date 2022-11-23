@@ -22,29 +22,29 @@ export default function oneOfType<
   }
 
   let hasCustomValidators = false
+  let hasNullable = false
 
   let nativeChecks: Prop<V>[] = []
 
   for (let i = 0; i < arr.length; i += 1) {
     const type = arr[i]
     if (isComplexType<V>(type)) {
-      if (
-        isVueTypeDef<V>(type) &&
-        type._vueTypes_name === 'oneOf' &&
-        type.type
-      ) {
+      if (isVueTypeDef<V>(type, 'oneOf') && type.type) {
         nativeChecks = nativeChecks.concat(type.type as PropType<V>)
         continue
       }
       if (isFunction(type.validator)) {
         hasCustomValidators = true
       }
-      if (type.type === true || !type.type) {
-        warn('oneOfType - invalid usage of "true" or "null" as types.')
+      if (isVueTypeDef<V>(type, 'nullable')) {
+        hasNullable = true
         continue
-      } else {
-        nativeChecks = nativeChecks.concat(type.type)
       }
+      if (type.type === true || !type.type) {
+        warn('oneOfType - invalid usage of "true" and "null" as types.')
+        continue
+      }
+      nativeChecks = nativeChecks.concat(type.type)
     } else {
       nativeChecks.push(type as Prop<V>)
     }
@@ -53,7 +53,8 @@ export default function oneOfType<
   // filter duplicates
   nativeChecks = nativeChecks.filter((t, i) => nativeChecks.indexOf(t) === i)
 
-  const typeProp = nativeChecks.length > 0 ? nativeChecks : null
+  const typeProp =
+    hasNullable === false && nativeChecks.length > 0 ? nativeChecks : null
 
   if (!hasCustomValidators) {
     // we got just native objects (ie: Array, Object)
@@ -68,16 +69,14 @@ export default function oneOfType<
     validator(value) {
       const err: string[] = []
       const valid = arr.some((type) => {
-        const t =
-          isVueTypeDef(type) && type._vueTypes_name === 'oneOf'
-            ? type.type || null
-            : type
+        const t = isVueTypeDef(type, 'oneOf') ? type.type || null : type
         const res = validateType(t, value, true)
         if (typeof res === 'string') {
           err.push(res)
         }
         return res === true
       })
+
       if (!valid) {
         warn(
           `oneOfType - provided value does not match any of the ${

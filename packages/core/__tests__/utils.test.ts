@@ -62,6 +62,12 @@ describe('`isVueTypeDef()`', () => {
       utils.isVueTypeDef(utils.toValidableType('demo', { type: String })),
     ).toBe(true)
   })
+
+  it('can narrow down specific VueTypes type', () => {
+    const demo = utils.toType('demo', { type: String })
+    expect(utils.isVueTypeDef(demo, 'demo')).toBe(true)
+    expect(utils.isVueTypeDef(demo, 'string')).toBe(false)
+  })
 })
 
 describe('`isComplexType()`', () => {

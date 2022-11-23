@@ -1,4 +1,4 @@
-import { toType, toValidableType, isInteger } from '../utils'
+import { toType, toValidableType, isInteger, warn } from '../utils'
 import { PropType } from '../types'
 
 export const any = <T = any>() => toValidableType<T>('any', {})
@@ -37,17 +37,37 @@ export const integer = <T extends number = number>() =>
   toType<T>('integer', {
     type: Number as unknown as PropType<T>,
     validator(value) {
-      return isInteger(value)
+      const res = isInteger(value)
+      if (res === false) {
+        warn(`integer - "${value}" is not an integer`)
+      }
+      return res
     },
   })
 
 export const symbol = () =>
   toType<symbol>('symbol', {
-    validator(value) {
-      return typeof value === 'symbol'
+    validator(value: unknown) {
+      const res = typeof value === 'symbol'
+      if (res === false) {
+        warn(`symbol - invalid value "${value}"`)
+      }
+      return res
     },
   })
 
-export const nullable = () => ({
-  type: null as unknown as PropType<null>,
-})
+export const nullable = () =>
+  Object.defineProperty(
+    {
+      type: null as unknown as PropType<null>,
+      validator(value: unknown) {
+        const res = value === null
+        if (res === false) {
+          warn(`nullable - value should be null`)
+        }
+        return res
+      },
+    },
+    '_vueTypes_name',
+    { value: 'nullable' },
+  )

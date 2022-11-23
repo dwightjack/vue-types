@@ -116,11 +116,15 @@ export const isFunction = <T extends Function>(value: unknown): value is T =>
 /**
  * Checks if the passed-in value is a VueTypes type
  * @param value - The value to check
+ * @param name - Optional validator name
  */
 export const isVueTypeDef = <T>(
   value: any,
+  name?: string,
 ): value is VueTypeDef<T> | VueTypeValidableDef<T> =>
-  isPlainObject(value) && has(value, '_vueTypes_name')
+  isPlainObject(value) &&
+  has(value, '_vueTypes_name') &&
+  (!name || value._vueTypes_name === name)
 
 /**
  * Checks if the passed-in value is a Vue prop definition object or a VueTypes type

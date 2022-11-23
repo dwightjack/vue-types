@@ -1,4 +1,4 @@
-import { string, integer, any } from '../../src/validators/native'
+import { string, integer, any, nullable } from '../../src/validators/native'
 import oneOf from '../../src/validators/oneof'
 import shape from '../../src/validators/shape'
 import oneOfType from '../../src/validators/oneoftype'
@@ -74,5 +74,13 @@ describe('`.oneOfType`', () => {
   it('should validate edge cases with null and true', () => {
     expect(oneOfType([any()]).type).toBe(null)
     expect(oneOfType([{ type: true }]).type).toBe(null)
+  })
+
+  it('should validate nullable validators', () => {
+    vi.mocked(console.warn).mockClear()
+    const mayBeNull = oneOfType([String, nullable()])
+
+    mayBeNull.def(null)
+    expect(console.warn).not.toHaveBeenCalled()
   })
 })
