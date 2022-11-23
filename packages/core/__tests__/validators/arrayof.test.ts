@@ -32,7 +32,9 @@ describe('`.arrayOf`', () => {
 
   it('should NOT validate an array of mixed-type values', () => {
     const customType = arrayOf(Number)
-    expect(forceNoContext(customType.validator)([0, 1, 'string'])).toBe(false)
+    expect(forceNoContext(customType.validator)([0, 1, 'string'] as any)).toBe(
+      false,
+    )
   })
 
   it('should allow validation of VuePropTypes native types', () => {

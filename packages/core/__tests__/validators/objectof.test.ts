@@ -32,9 +32,9 @@ describe('`.objectOf`', () => {
 
   it('should NOT validate an array of mixed-type values', () => {
     const customType = objectOf(Number)
-    expect(forceNoContext(customType.validator)({ id: '10', age: 30 })).toBe(
-      false,
-    )
+    expect(
+      forceNoContext(customType.validator)({ id: '10', age: 30 } as any),
+    ).toBe(false)
   })
 
   it('should allow validation of VuePropTypes native types', () => {

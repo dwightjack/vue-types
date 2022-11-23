@@ -50,7 +50,7 @@ describe('`.oneOf`', () => {
   it('should provide a custom validator function', () => {
     const validator = forceNoContext(customType.validator)
     expect(validator(0)).toBe(true)
-    expect(validator(5)).toBe(false)
+    expect(validator(5 as any)).toBe(false)
   })
 
   it('should filter `undefined` values type checking', () => {

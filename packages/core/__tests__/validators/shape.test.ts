@@ -92,7 +92,7 @@ describe('`.shape`', () => {
   it('should NOT validate a value which is NOT an object', () => {
     const customType = shape(shapeType)
     const validator = forceNoContext(customType.validator)
-    expect(validator('a string')).toBe(false)
+    expect(validator('a string' as any)).toBe(false)
 
     class MyClass {
       id: string
@@ -140,13 +140,13 @@ describe('`.shape`', () => {
     expect(
       validator({
         name: 'John',
-      }),
+      } as any),
     ).toBe(false)
 
     expect(
       validator({
         id: 10,
-      }),
+      } as any),
     ).toBe(true)
   })
 
@@ -160,13 +160,13 @@ describe('`.shape`', () => {
     expect(
       validator({
         name: 'John',
-      }),
+      } as any),
     ).toBe(false)
 
     expect(
       validator({
         myKey: null,
-      }),
+      } as any),
     ).toBe(true)
   })
 
