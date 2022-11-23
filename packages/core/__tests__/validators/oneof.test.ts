@@ -38,17 +38,42 @@ describe('`.oneOf`', () => {
     )
   })
 
+  it('validates `null` default when it is a possible value', () => {
+    const myType = oneOf([null, 'string', 2])
+    expect(myType.def(null)).toEqual(
+      expect.objectContaining({
+        default: null,
+      }),
+    )
+  })
+
   it('should provide a custom validator function', () => {
     const validator = forceNoContext(customType.validator)
     expect(validator(0)).toBe(true)
     expect(validator(5)).toBe(false)
   })
 
-  it('should filter `null` values type checking', () => {
-    const myType = oneOf([null, undefined, 'string', 2])
+  it('should filter `undefined` values type checking', () => {
+    const myType = oneOf([undefined, 'string', 2])
     expect(myType.type).toEqual([String, Number])
+  })
 
-    const myType2 = oneOf([null])
-    expect(myType2.type).toBe(undefined)
+  it('should exclude type checking when it cannot detect primitive or object types types', () => {
+    const myType = oneOf([undefined])
+    expect(myType).not.toHaveProperty('type')
+  })
+
+  it('should skip type checking when `null` is a possible value', () => {
+    const myType = oneOf([null, 'string', 2])
+    expect(myType).not.toHaveProperty('type')
+  })
+
+  it('should properly stringify values in error message', () => {
+    vi.mocked(console.warn).mockClear()
+    const myType = oneOf([Symbol('demo')])
+    myType.validator('a' as any)
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining('Symbol(demo)'),
+    )
   })
 })
