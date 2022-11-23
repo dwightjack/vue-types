@@ -29,12 +29,12 @@ export default function oneOfType<
   for (let i = 0; i < arr.length; i += 1) {
     const type = arr[i]
     if (isComplexType<V>(type)) {
+      if (isFunction(type.validator)) {
+        hasCustomValidators = true
+      }
       if (isVueTypeDef<V>(type, 'oneOf') && type.type) {
         nativeChecks = nativeChecks.concat(type.type as PropType<V>)
         continue
-      }
-      if (isFunction(type.validator)) {
-        hasCustomValidators = true
       }
       if (isVueTypeDef<V>(type, 'nullable')) {
         hasNullable = true
@@ -69,8 +69,7 @@ export default function oneOfType<
     validator(value) {
       const err: string[] = []
       const valid = arr.some((type) => {
-        const t = isVueTypeDef(type, 'oneOf') ? type.type || null : type
-        const res = validateType(t, value, true)
+        const res = validateType(type, value, true)
         if (typeof res === 'string') {
           err.push(res)
         }

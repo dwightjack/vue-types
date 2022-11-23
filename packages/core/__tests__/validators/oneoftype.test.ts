@@ -10,7 +10,7 @@ describe('`.oneOfType`', () => {
   }
 
   const nativeTypes = [Number, Array, MyClass]
-  const complexTypes = [oneOf([0, 1, 'string']), shape({ id: Number })]
+  const complexTypes = [oneOf([0, 1, 'string'] as const), shape({ id: Number })]
 
   it('should add a `required` flag', () => {
     const customType = oneOfType(nativeTypes)
@@ -37,12 +37,10 @@ describe('`.oneOfType`', () => {
     const validator = forceNoContext(customType.validator)
 
     expect(validator(1)).toBe(true)
-
-    // validates types not values!
-    expect(validator(5)).toBe(true)
+    expect(validator(5 as any)).toBe(false)
 
     expect(validator({ id: 10 })).toBe(true)
-    expect(validator({ id: '10' })).toBe(false)
+    expect(validator({ id: '10' } as any)).toBe(false)
   })
 
   it('should extract native types from other validators', () => {
