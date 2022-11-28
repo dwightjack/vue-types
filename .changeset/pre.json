@@ -1,0 +1,9 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "vue-types": "5.0.1",
+    "vue-types-nuxt": "1.0.0"
+  },
+  "changesets": []
+}
