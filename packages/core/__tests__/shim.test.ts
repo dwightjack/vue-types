@@ -813,3 +813,14 @@ describe('`fromType()`', () => {
     expect(copy.required).toBe(false)
   })
 })
+
+test('API parity', () => {
+  it('includes all methods from the full build', async () => {
+    const fullBuild = await import('../src/index')
+    const shimBuild = await import('../src/shim')
+
+    expect(Object.keys(shimBuild).sort()).toStrictEqual(
+      Object.keys(fullBuild).sort(),
+    )
+  })
+})

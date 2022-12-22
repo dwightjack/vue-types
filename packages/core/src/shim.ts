@@ -204,6 +204,14 @@ export function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
   }
 }
 
+export function validateType<T, U>(
+  type: T,
+  value: U,
+  silent = false,
+): string | boolean {
+  return true
+}
+
 /* eslint-disable no-console */
 if (process.env.NODE_ENV !== 'production') {
   config.silent === false &&

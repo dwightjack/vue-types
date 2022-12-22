@@ -64,6 +64,10 @@ For reference, here is the list of available entry points:
 
 Vue.js does not validate components' props when used in a production build. If you're using a bundler such as Webpack or rollup, you can shrink VueTypes file size by around **70%** (minified and gzipped) by removing the validation logic while preserving the library's API methods. To achieve that result, VueTypes ships with a `vue-types/shim` module that can be used as alias in production builds.
 
+::: danger NOTE
+Note that all validation functions in the shim version (including `validateType` and `VueTypes.validate`) always return `true`.
+:::
+
 By just aliasing `vue-types` to `vue-types/shim`, bundlers should be able to pick the module type that fits your configuration (ES, CommonJS, ...).
 
 See below for common configuration scenarios.
