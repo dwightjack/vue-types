@@ -15,8 +15,7 @@
     "docs:dev": "npm run dev --workspace=docs",
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "release:next": "npm run build && npx changeset publish --tag=next",
-    "release:stable": "npm run build && npx changeset publish"
+    "release": "npm run build && npx changeset publish"
   },
   "workspaces": [
     "packages/*"
