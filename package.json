@@ -27,17 +27,17 @@
   "bugs": "https://github.com/dwightjack/vue-types/issues",
   "devDependencies": {
     "@changesets/cli": "2.26.0",
-    "@typescript-eslint/eslint-plugin": "5.54.1",
-    "@typescript-eslint/parser": "5.54.1",
+    "@typescript-eslint/eslint-plugin": "5.55.0",
+    "@typescript-eslint/parser": "5.55.0",
     "@vitest/coverage-c8": "0.29.3",
-    "eslint": "8.35.0",
+    "eslint": "8.36.0",
     "eslint-config-prettier": "8.7.0",
     "eslint-plugin-prettier": "4.2.1",
     "happy-dom": "8.9.0",
     "lefthook": "1.3.6",
     "prettier": "2.8.4",
     "typescript": "4.9.5",
-    "vite": "4.1.4",
+    "vite": "4.2.0",
     "vitest": "0.29.3"
   }
 }
