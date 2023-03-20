@@ -8,6 +8,6 @@
   "devDependencies": {
     "cross-env": "7.0.3",
     "markdown-it-container": "3.0.0",
-    "vitepress": "1.0.0-alpha.60"
+    "vitepress": "1.0.0-alpha.61"
   }
 }
