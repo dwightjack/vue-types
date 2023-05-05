@@ -73,7 +73,7 @@
     "del-cli": "5.0.0",
     "microbundle": "0.15.1",
     "npm-run-all": "4.1.5",
-    "typescript": "4.9.5"
+    "typescript": "5.0.4"
   },
   "dependencies": {
     "is-plain-object": "5.0.0"
