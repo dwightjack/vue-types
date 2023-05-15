@@ -9,6 +9,7 @@ export default defineConfig({
     setupFiles: [resolve(__dirname, './vitest.setup.ts')],
     include: ['__tests__/**/*.test.ts'],
     coverage: {
+      provider: 'c8',
       include: ['src/**/*.ts', '!src/**/*.{d,cjs}.ts'],
       reportsDirectory: 'coverage',
       reporter: ['text', 'lcov', 'json'],
