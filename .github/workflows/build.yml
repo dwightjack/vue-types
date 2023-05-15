@@ -23,7 +23,7 @@ jobs:
       - name: Fix coverage
         run: sed -i 's/SF:src\//SF:packages\/core\/src\//g' ${{github.workspace}}/packages/core/coverage/lcov.info
       - name: Upload code coverage
-        uses: paambaati/codeclimate-action@v3.2.0
+        uses: paambaati/codeclimate-action@v4.0.0
         env:
           CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
         with:
