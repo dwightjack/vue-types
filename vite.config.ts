@@ -12,7 +12,7 @@ export default defineConfig({
       provider: 'c8',
       include: ['src/**/*.ts', '!src/**/*.{d,cjs}.ts'],
       reportsDirectory: 'coverage',
-      reporter: ['text', 'lcov', 'json'],
+      reporter: ['text', ['lcov', { projectRoot: __dirname }], 'json'],
     },
   },
 })
