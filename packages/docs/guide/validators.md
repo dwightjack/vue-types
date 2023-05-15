@@ -321,11 +321,11 @@ props: {
 ```
 
 ::: warning
-This validator **does not come with any flag or method**. It can be used with [`oneOfType`](#oneoftype) to make a **non required** prop nullable.
+This validator **does not come with any flag or method**. It can be used with [`oneOfType`](#oneoftype) to make a **required** prop nullable.
 
 ```js
 props: {
-  stringOrNull: oneOfType([string(), nullable()])
+  stringOrNull: oneOfType([string(), nullable()]).isRequired
 }
 ```
 

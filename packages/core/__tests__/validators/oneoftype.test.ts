@@ -74,9 +74,9 @@ describe('`.oneOfType`', () => {
     expect(oneOfType([{ type: true }]).type).toBe(null)
   })
 
-  it('should validate nullable validators', () => {
+  it('should validate nullable required validators', () => {
     vi.mocked(console.warn).mockClear()
-    const mayBeNull = oneOfType([String, nullable()])
+    const mayBeNull = oneOfType([String, nullable()]).isRequired
 
     mayBeNull.def(null)
     expect(console.warn).not.toHaveBeenCalled()
