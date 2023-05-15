@@ -1,5 +1,5 @@
 import { toType, toValidableType, isInteger, warn } from '../utils'
-import { PropType } from '../types'
+import { PropOptions, PropType } from '../types'
 
 export const any = <T = any>() => toValidableType<T>('any', {})
 
@@ -70,4 +70,4 @@ export const nullable = () =>
     },
     '_vueTypes_name',
     { value: 'nullable' },
-  )
+  ) as PropOptions<null>
