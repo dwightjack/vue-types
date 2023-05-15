@@ -196,7 +196,7 @@ export function validateType<T, U>(
     if (typeToCheck.type === undefined || typeToCheck.type === true) {
       return valid
     }
-    if (!typeToCheck.required && value === undefined) {
+    if (!typeToCheck.required && value == null) {
       return valid
     }
     if (isArray(typeToCheck.type)) {

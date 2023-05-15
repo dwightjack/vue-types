@@ -123,6 +123,9 @@ describe('`validateType()`', () => {
   it('should allow undefined explicit values for non-required types', () => {
     expect(utils.validateType({ type: String }, undefined)).toBe(true)
   })
+  it('should allow null explicit values for non-required types', () => {
+    expect(utils.validateType({ type: String }, null)).toBe(true)
+  })
   it('should NOT allow undefined explicit values for required types', () => {
     expect(
       utils.validateType({ type: String, required: true }, undefined),
