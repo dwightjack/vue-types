@@ -82,11 +82,13 @@ importers:
       '@nuxt/kit': ^3.0.0
       '@nuxt/module-builder': ^0.3.1
       '@nuxt/schema': ^3.0.0
+      vue-types: workspace:^
     dependencies:
       '@nuxt/kit': 3.5.3
     devDependencies:
       '@nuxt/module-builder': 0.3.1
       '@nuxt/schema': 3.5.3
+      vue-types: link:../core
 
 packages:
 
