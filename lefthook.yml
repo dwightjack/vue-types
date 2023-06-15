@@ -3,4 +3,4 @@ pre-commit:
   commands:
     linter:
       glob: "*.{mjs,cjs,js,ts}"
-      run: npx eslint {staged_files}
+      run: pnpm exec eslint {staged_files}

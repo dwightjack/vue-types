@@ -6,20 +6,17 @@
   "homepage": "https://dwightjack.github.io/vue-types/",
   "type": "module",
   "private": true,
+  "packageManager": "pnpm@7.29.3",
   "engines": {
-    "node": ">=16.16.0"
+    "node": ">=16.16.0",
+    "pnpm": "^7.29.3"
   },
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
-    "examples:dev": "npm run build --workspace=vue-types && npm start --workspace=examples",
-    "docs:dev": "npm run dev --workspace=docs",
-    "lint": "npm run lint --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present",
-    "release": "npm run build && npx changeset publish"
+    "examples:dev": "pnpm --filter=vue-types run build && pnpm --filter=examples start",
+    "docs:dev": "pnpm --filter=docs run dev",
+    "ci:version": "pnpm changeset version && pnpm install --lockfile-only",
+    "ci:publish": "pnpm -r publish"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/dwightjack/vue-types.git"

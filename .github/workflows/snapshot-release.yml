@@ -1,0 +1,56 @@
+name: Snapshot Release
+
+on:
+  pull_request:
+    types: [labeled]
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    if: |
+      (github.event.label.name == 'release: snapshot')
+    name: Snapshot Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+      - run: pnpm i
+      - run: pnpm -r test
+      - run: pnpm -r run build
+
+      - name: Prepare snapshot releases
+        run: |
+          pnpm changeset version --snapshot
+          pnpm install --lockfile-only
+
+      - name: Publish snapshot releases
+        run: pnpm -r publish --tag=next --no-git-checks
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Create or update the snapshot release PR
+        run: |
+          VERSIONS=$(pnpm -r ls --json --depth=-1 | jq -r 'map(select(.version | contains ("0.0.0-"))) | .[] | (.name + "@" + .version)')
+
+          echo "Changesets published the following snapshots:" >> msg_body
+          echo "\`\`\`" >> msg_body
+          echo "$VERSIONS" >> msg_body
+          echo "\`\`\`" >> msg_body
+
+          echo "--------"
+          cat msg_body
+          echo "--------"
+
+          gh pr comment $BRANCH_NAME --body-file msg_body
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: ${{ github.head_ref }}
+      - name: Unlabel PR
+        run: |
+          gh pr edit $GITHUB_HEAD_REF --remove-label='release: snapshot'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -18,7 +18,7 @@
     "dist"
   ],
   "scripts": {
-    "prepublishOnly": "npm run lint && npm run build",
+    "prepublishOnly": "pnpm run build",
     "build": "nuxt-module-build",
     "lint": "eslint 'src/**/*.ts'"
   },
@@ -30,6 +30,6 @@
     "@nuxt/schema": "^3.0.0"
   },
   "peerDependencies": {
-    "vue-types": "^5.0.4"
+    "vue-types": "workspace:^"
   }
 }
