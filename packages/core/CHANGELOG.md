@@ -1,5 +1,11 @@
 # vue-types
 
+## 5.0.4-next.0
+
+### Patch Changes
+
+- 9dfa28b: Allow the user to pass async functions as function props. Closes #397
+
 ## 5.0.3
 
 ### Patch Changes

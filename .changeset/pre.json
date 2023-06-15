@@ -7,5 +7,7 @@
     "examples": "0.0.0",
     "vue-types-nuxt": "1.0.1"
   },
-  "changesets": []
+  "changesets": [
+    "afraid-dodos-help"
+  ]
 }
