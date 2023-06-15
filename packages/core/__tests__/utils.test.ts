@@ -24,6 +24,7 @@ describe('`getNativeType()`', () => {
     expect(utils.getNativeType(() => undefined)).toBe('Function')
     expect(utils.getNativeType(null)).toBe('')
     expect(utils.getNativeType(undefined)).toBe('')
+    expect(utils.getNativeType(async () => {})).toBe('Function')
   })
 })
 
@@ -143,6 +144,11 @@ describe('`validateType()`', () => {
       false,
     )
     expect(validator).toHaveBeenLastCalledWith('anyValue')
+  })
+
+  it('should validate async functions', () => {
+    const fn = async () => {}
+    expect(utils.validateType({ type: Function }, fn)).toBe(true)
   })
 })
 

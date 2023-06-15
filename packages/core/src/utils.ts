@@ -30,7 +30,7 @@ export function getType(
 export function getNativeType(value: any): string {
   if (value === null || value === undefined) return ''
   const match = value.constructor.toString().match(FN_MATCH_REGEXP)
-  return match ? match[1] : ''
+  return match ? match[1].replace(/^Async/, '') : ''
 }
 
 type PlainObject = { [key: string]: any }
