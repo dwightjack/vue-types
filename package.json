@@ -6,7 +6,7 @@
   "homepage": "https://dwightjack.github.io/vue-types/",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@7.29.3",
+  "packageManager": "pnpm@7.33.1",
   "engines": {
     "node": ">=16.16.0",
     "pnpm": "^7.29.3"
@@ -26,15 +26,15 @@
     "@changesets/cli": "2.26.1",
     "@typescript-eslint/eslint-plugin": "5.59.11",
     "@typescript-eslint/parser": "5.59.11",
-    "@vitest/coverage-c8": "0.31.4",
-    "eslint": "8.40.0",
+    "@vitest/coverage-c8": "0.32.0",
+    "eslint": "8.42.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-prettier": "4.2.1",
-    "happy-dom": "9.18.3",
-    "lefthook": "1.3.13",
+    "happy-dom": "9.20.3",
+    "lefthook": "1.4.2",
     "prettier": "2.8.8",
-    "typescript": "5.0.4",
+    "typescript": "5.1.3",
     "vite": "4.3.9",
-    "vitest": "0.31.4"
+    "vitest": "0.32.0"
   }
 }
