@@ -63,11 +63,11 @@ importers:
     specifiers:
       cross-env: 7.0.3
       markdown-it-container: 3.0.0
-      vitepress: 1.0.0-beta.2
+      vitepress: 1.0.0-beta.3
     devDependencies:
       cross-env: 7.0.3
       markdown-it-container: 3.0.0
-      vitepress: 1.0.0-beta.2
+      vitepress: 1.0.0-beta.3
 
   packages/examples:
     specifiers:
@@ -7454,8 +7454,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitepress/1.0.0-beta.2:
-    resolution: {integrity: sha512-DBXYjtYbm3W1IPPJ2TiCaK/XK+o/2XmL2+jslOGKm+txcbmG0kbeB+vadC5tCUZA9NdA+9Ywj3M4548c7t/SDg==}
+  /vitepress/1.0.0-beta.3:
+    resolution: {integrity: sha512-GR5Pvr/o343NN1M4Na1shhDYZRrQbjmLq7WE0lla0H8iDPAsHE8agTHLWfu3FWx+3q2KA29sv16+0O9RQKGjlA==}
     hasBin: true
     dependencies:
       '@docsearch/css': 3.5.0
@@ -7598,6 +7598,8 @@ packages:
       '@vue/runtime-dom': 3.2.45
       '@vue/server-renderer': 3.2.45
       '@vue/shared': 3.2.45
+    transitivePeerDependencies:
+      - vue
     dev: false
 
   /vue/3.3.4:
