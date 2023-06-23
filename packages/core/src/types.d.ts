@@ -73,10 +73,9 @@ export interface VueTypeBaseDef<
 
 export type VueTypeDef<T = unknown> = VueTypeBaseDef<T>
 
-export interface VueTypeValidableDef<T = unknown> extends VueTypeBaseDef<T> {
-  readonly validate: (
-    fn: ValidatorFunction<T | unknown>,
-  ) => this & { validator: ValidatorFunction<T | unknown> }
+export interface VueTypeValidableDef<T = unknown, V = ValidatorFunction<T>>
+  extends VueTypeBaseDef<T> {
+  readonly validate: (fn: V) => this & { validator: V }
 }
 
 export type VueProp<T> = VueTypeBaseDef<T> | PropOptions<T>
