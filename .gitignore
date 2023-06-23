@@ -15,6 +15,7 @@ lib-cov
 coverage
 codeclimate*.json
 coverage*.*
+cc-reporter
 cc-reporter*.*
 
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
