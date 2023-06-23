@@ -15,7 +15,7 @@
     "examples:dev": "pnpm --filter=vue-types run build && pnpm --filter=examples start",
     "docs:dev": "pnpm --filter=docs run dev",
     "ci:version": "pnpm changeset version && pnpm install --lockfile-only",
-    "ci:publish": "pnpm -r publish"
+    "ci:publish": "git status && pnpm -r publish"
   },
   "repository": {
     "type": "git",

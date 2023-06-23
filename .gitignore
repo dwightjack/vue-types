@@ -13,6 +13,9 @@ lib-cov
 
 # Coverage directory used by tools like istanbul
 coverage
+codeclimate*.json
+coverage*.*
+cc-reporter*.*
 
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
