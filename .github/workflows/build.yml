@@ -1,12 +1,14 @@
-name: Build
+name: Build and Release
 on:
   push:
     paths-ignore:
       - 'packages/docs/**'
       - 'README.md'
 
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
-  build:
+  build_and_release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -30,3 +32,16 @@ jobs:
           prefix: test
       - name: Build
         run: pnpm -r run build
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        if: github.ref_name == 'main'
+        uses: changesets/action@v1
+        with:
+          version: pnpm run ci:version # pnpm changeset version && pnpm install --lockfile-only
+          publish: pnpm run ci:publish
+          commit: 'chore: update versions'
+          title: 'Release: new versions'
+          createGithubReleases: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
