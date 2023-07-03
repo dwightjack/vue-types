@@ -63,11 +63,11 @@ importers:
     specifiers:
       cross-env: 7.0.3
       markdown-it-container: 3.0.0
-      vitepress: 1.0.0-beta.4
+      vitepress: 1.0.0-beta.5
     devDependencies:
       cross-env: 7.0.3
       markdown-it-container: 3.0.0
-      vitepress: 1.0.0-beta.4
+      vitepress: 1.0.0-beta.5
 
   packages/examples:
     specifiers:
@@ -7729,8 +7729,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitepress/1.0.0-beta.4:
-    resolution: {integrity: sha512-dpWnpdUFrKU9spTAHaxfkYauFAaIokQwr/1Kx2ipGvHDij47ebuHXF/O7gD+5xnpwV3eUb8Z2zPVZn1kbGu9lQ==}
+  /vitepress/1.0.0-beta.5:
+    resolution: {integrity: sha512-/RjqqRsSEKkzF6HhK5e5Ij+bZ7ETb9jNCRRgIMm10gJ+ZLC3D1OqkE465lEqCeJUgt2HZ6jmWjDqIBfrJSpv7w==}
     hasBin: true
     dependencies:
       '@docsearch/css': 3.5.1
