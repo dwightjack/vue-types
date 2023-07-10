@@ -3,7 +3,7 @@ name: Version or Publish
 on:
   push:
     branches:
-      - next
+      - main
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -12,20 +12,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
       - uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
-      - run: npm test
-      - run: npm run build
+          cache: 'pnpm'
+      - run: pnpm i
+      - run: pnpm -r test
+      - run: pnpm -r run build
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
         with:
-          publish: npm run release
+          version: pnpm run ci:version # pnpm changeset version && pnpm install --lockfile-only
+          publish: pnpm run ci:publish
+          commit: 'chore: update versions'
+          title: 'Release: new versions'
+          createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

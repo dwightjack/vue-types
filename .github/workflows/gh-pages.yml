@@ -9,16 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: 'main'
+      - uses: pnpm/action-setup@v2
       - uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-          cache: 'npm'
+          cache: 'pnpm'
       - name: Install Dependencies
-        run: npm ci
+        run: pnpm i
       - name: Generate Documentation
-        run: npm run build --workspace=docs
+        run: pnpm --filter=docs run build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:

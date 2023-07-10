@@ -1,6 +1,6 @@
 {
   "name": "vue-types-nuxt",
-  "version": "1.0.2-next.0",
+  "version": "1.0.2",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -18,7 +18,7 @@
     "dist"
   ],
   "scripts": {
-    "prepublishOnly": "npm run lint && npm run build",
+    "prepublishOnly": "pnpm run build",
     "build": "nuxt-module-build",
     "lint": "eslint 'src/**/*.ts'"
   },
@@ -26,10 +26,10 @@
     "@nuxt/kit": "^3.0.0"
   },
   "devDependencies": {
-    "@nuxt/module-builder": "^0.3.1",
+    "@nuxt/module-builder": "^0.4.0",
     "@nuxt/schema": "^3.0.0"
   },
   "peerDependencies": {
-    "vue-types": "^5.0.4-next.0"
+    "vue-types": "workspace:^"
   }
 }

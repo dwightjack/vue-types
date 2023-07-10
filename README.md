@@ -25,22 +25,22 @@
 
 ## Run examples
 
-1. Install dependencies: `npm ci`
-1. Run script: `npm run examples:dev`
-1. Wait for the server and bundler to start-up
+1. Install dependencies: `pnpm install`
+2. Run script: `pnpm run examples:dev`
+3. Wait for the server and bundler to start-up
 
 ## Run docs on localhost
 
-1. Install dependencies: `npm ci`
-1. Run script: `npm run docs:dev`
+1. Install dependencies: `pnpm install`
+2. Run script: `pnpm run docs:dev`
 
 ## Contributing
 
 1. Clone this repository
-1. Install dependencies: `npm ci`
+1. Install dependencies: `pnpm install`
 1. Make your changes
 1. Update or add tests in `packages/core/__tests__/`
-1. Verify that everything works: `npm run lint && npm test`
+1. Verify that everything works: `pnpm -r run lint && pnpm -r test`
 1. Submit a Pull Request
 
 ## License
