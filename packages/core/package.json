@@ -18,10 +18,12 @@
   "esmodule": "dist/vue-types.modern.js",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/vue-types.cjs",
       "import": "./dist/vue-types.modern.js"
     },
     "./shim": {
+      "type": "./dist/shim.d.ts",
       "require": "./shim/index.cjs.js",
       "import": "./shim/index.modern.js"
     }
