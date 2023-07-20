@@ -20,13 +20,16 @@ export default function oneOf<D, T extends readonly D[] = readonly D[]>(
     },
   }
   if (arr.indexOf(null) === -1) {
-    const type = arr.reduce((ret, v) => {
-      if (v !== null && v !== undefined) {
-        const constr = (v as any).constructor
-        ret.indexOf(constr) === -1 && ret.push(constr)
-      }
-      return ret
-    }, [] as Prop<T[number]>[])
+    const type = arr.reduce(
+      (ret, v) => {
+        if (v !== null && v !== undefined) {
+          const constr = (v as any).constructor
+          ret.indexOf(constr) === -1 && ret.push(constr)
+        }
+        return ret
+      },
+      [] as Prop<T[number]>[],
+    )
 
     if (type.length > 0) {
       base.type = type
