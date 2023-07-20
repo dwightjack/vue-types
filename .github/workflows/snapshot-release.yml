@@ -18,6 +18,7 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
       - run: pnpm i
       - run: pnpm -r test
       - run: pnpm -r run build

@@ -17,6 +17,7 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
       - run: pnpm i
       - name: Lint
         run: pnpm -r run lint
