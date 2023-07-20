@@ -40,7 +40,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Create or update the snapshot release PR
         run: |
-          VERSIONS=$(pnpm -r ls --json --depth=-1 | jq -r 'map(select(.version | contains ("0.0.0-"))) | .[] | (.name + "@" + .version)')
+          VERSIONS=$(pnpm -r ls --json --depth=-1 | jq -r 'map(select(.version // "" | contains ("0.0.0-"))) | .[] | (.name + "@" + .version)')
 
           echo "Changesets published the following snapshots:" >> msg_body
           echo "\`\`\`" >> msg_body
