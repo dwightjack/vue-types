@@ -19,6 +19,11 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
+      - name: Unlabel PR
+        run: |
+          gh pr edit $GITHUB_HEAD_REF --remove-label='release: snapshot'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: pnpm i
       - run: pnpm -r test
       - run: pnpm -r run build
@@ -50,8 +55,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH_NAME: ${{ github.head_ref }}
-      - name: Unlabel PR
-        run: |
-          gh pr edit $GITHUB_HEAD_REF --remove-label='release: snapshot'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
