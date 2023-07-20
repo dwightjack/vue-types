@@ -37,7 +37,7 @@ jobs:
         run: pnpm -r publish --tag=next --no-git-checks
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Create or update the snapshot release PR
         run: |
           VERSIONS=$(pnpm -r ls --json --depth=-1 | jq -r 'map(select(.version | contains ("0.0.0-"))) | .[] | (.name + "@" + .version)')
