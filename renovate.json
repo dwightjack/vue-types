@@ -1,4 +1,9 @@
 {
-  "extends": ["config:base", "group:allNonMajor", ":automergePatch"],
+  "extends": [
+    "config:base",
+    "group:allNonMajor",
+    ":automergePatch",
+    "helpers:pinGitHubActionDigests"
+  ],
   "commitBody": "[skip netlify]"
 }
