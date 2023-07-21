@@ -58,3 +58,6 @@ dist
 **/shim
 !**/shim/package.json
 .nuxt
+
+# VitePress
+**/.vitepress/cache
