@@ -1,5 +1,11 @@
 # vue-types
 
+## 5.1.1
+
+### Patch Changes
+
+- 30673ac: The `exports` declarations in package.json were missing the `type` subpath. See #419
+
 ## 5.1.0
 
 ### Minor Changes
