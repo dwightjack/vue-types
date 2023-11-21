@@ -11,7 +11,7 @@ importers:
       eslint: 8.40.0
       eslint-config-prettier: 8.8.0
       eslint-plugin-prettier: 5.0.0
-      happy-dom: 10.5.3
+      happy-dom: 12.10.3
       lefthook: 1.3.13
       prettier: 3.0.1
       typescript: 5.0.4
@@ -25,12 +25,12 @@ importers:
       eslint: 8.40.0
       eslint-config-prettier: 8.8.0_eslint@8.40.0
       eslint-plugin-prettier: 5.0.0_v5sm4mrntcli3htngt7bxauvua
-      happy-dom: 10.5.3
+      happy-dom: 12.10.3
       lefthook: 1.3.13
       prettier: 3.0.1
       typescript: 5.0.4
       vite: 4.3.9
-      vitest: 0.31.4_happy-dom@10.5.3
+      vitest: 0.31.4_happy-dom@12.10.3
 
   packages/core:
     specifiers:
@@ -2824,7 +2824,7 @@ packages:
       magic-string: 0.30.0
       picocolors: 1.0.0
       std-env: 3.3.3
-      vitest: 0.31.4_happy-dom@10.5.3
+      vitest: 0.31.4_happy-dom@12.10.3
     dev: true
 
   /@vitest/expect/0.31.4:
@@ -4955,8 +4955,8 @@ packages:
       duplexer: 0.1.2
     dev: true
 
-  /happy-dom/10.5.3:
-    resolution: {integrity: sha512-CJ8dVHOVObG32X/sL1ZaFH7gIj6Brh9c+sfhhEaL0z1YtcQkWH98Cotm3uN0Ntj8bdxdLUz8fENhb8RLVBX/Bw==}
+  /happy-dom/12.10.3:
+    resolution: {integrity: sha512-JzUXOh0wdNGY54oKng5hliuBkq/+aT1V3YpTM+lrN/GoLQTANZsMaIvmHiHe612rauHvPJnDZkZ+5GZR++1Abg==}
     dependencies:
       css.escape: 1.5.1
       entities: 4.5.0
@@ -8163,7 +8163,7 @@ packages:
       - universal-cookie
     dev: true
 
-  /vitest/0.31.4_happy-dom@10.5.3:
+  /vitest/0.31.4_happy-dom@12.10.3:
     resolution: {integrity: sha512-GoV0VQPmWrUFOZSg3RpQAPN+LPmHg2/gxlMNJlyxJihkz6qReHDV6b0pPDcqFLNEPya4tWJ1pgwUNP9MLmUfvQ==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -8208,7 +8208,7 @@ packages:
       chai: 4.3.7
       concordance: 5.0.4
       debug: 4.3.4
-      happy-dom: 10.5.3
+      happy-dom: 12.10.3
       local-pkg: 0.4.3
       magic-string: 0.30.0
       pathe: 1.1.1
