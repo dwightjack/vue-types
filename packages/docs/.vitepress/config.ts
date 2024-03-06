@@ -1,6 +1,9 @@
 import { defineConfig } from 'vitepress'
 import container from 'markdown-it-container'
 import { dirname } from 'path'
+import { createRequire } from 'node:module'
+
+const require = createRequire(import.meta.url)
 
 const vuePath = dirname(require.resolve('vue3'))
 

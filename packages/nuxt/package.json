@@ -23,11 +23,11 @@
     "lint": "eslint 'src/**/*.ts'"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.0.0"
+    "@nuxt/kit": "^3.10.3"
   },
   "devDependencies": {
-    "@nuxt/module-builder": "^0.3.1",
-    "@nuxt/schema": "^3.0.0",
+    "@nuxt/module-builder": "^0.5.5",
+    "@nuxt/schema": "^3.10.3",
     "vue-types": "workspace:^"
   },
   "peerDependencies": {
