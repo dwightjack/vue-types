@@ -814,7 +814,7 @@ describe('`fromType()`', () => {
   })
 })
 
-test('API parity', () => {
+describe('API parity', () => {
   it('includes all methods from the full build', async () => {
     const fullBuild = await import('../src/index')
     const shimBuild = await import('../src/shim')

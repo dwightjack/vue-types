@@ -207,6 +207,7 @@ export function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
 export function validateType<T, U>(
   type: T,
   value: U,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   silent = false,
 ): string | boolean {
   return true
