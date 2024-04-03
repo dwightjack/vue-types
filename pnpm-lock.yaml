@@ -15,7 +15,7 @@ importers:
       lefthook: 1.3.13
       prettier: 3.0.1
       typescript: 5.0.4
-      vite: 5.0.12
+      vite: 5.0.13
       vitest: 0.31.4
     devDependencies:
       '@changesets/cli': 2.26.2
@@ -29,7 +29,7 @@ importers:
       lefthook: 1.3.13
       prettier: 3.0.1
       typescript: 5.0.4
-      vite: 5.0.12
+      vite: 5.0.13
       vitest: 0.31.4_happy-dom@12.10.3
 
   packages/core:
@@ -8444,8 +8444,8 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /vite/5.0.12:
-    resolution: {integrity: sha512-4hsnEkG3q0N4Tzf1+t6NdN9dg/L3BM+q8SWgbSPnJvrgH2kgdyzfVJwbR1ic69/4uMJJ/3dqDZZE5/WwqW8U1w==}
+  /vite/5.0.13:
+    resolution: {integrity: sha512-/9ovhv2M2dGTuA+dY93B9trfyWMDRQw2jdVBhHNP6wr0oF34wG2i/N55801iZIpgUpnHDm4F/FabGQLyc+eOgg==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
