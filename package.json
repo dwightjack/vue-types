@@ -35,6 +35,6 @@
     "prettier": "3.0.1",
     "typescript": "5.0.4",
     "vite": "5.0.13",
-    "vitest": "0.31.4"
+    "vitest": "1.5.2"
   }
 }
