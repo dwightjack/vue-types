@@ -19,7 +19,7 @@ jobs:
       - name: Generate Documentation
         run: pnpm --filter=docs run build
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847 # v3
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./packages/docs/.vitepress/dist
