@@ -41,16 +41,16 @@ export interface PropOptions<T = any, D = T> {
 export type InferType<T> = T extends { type: null | true }
   ? any
   : T extends ObjectConstructor | { type: ObjectConstructor }
-  ? { [key: string]: any }
-  : T extends Prop<infer V>
-  ? V
-  : T extends PropOptions<infer V>
-  ? V
-  : T extends VueTypeDef<infer V>
-  ? V
-  : T extends VueTypeValidableDef<infer V>
-  ? V
-  : T
+    ? { [key: string]: any }
+    : T extends Prop<infer V>
+      ? V
+      : T extends PropOptions<infer V>
+        ? V
+        : T extends VueTypeDef<infer V>
+          ? V
+          : T extends VueTypeValidableDef<infer V>
+            ? V
+            : T
 
 export type ValidatorFunction<T> = (value: T) => boolean
 
