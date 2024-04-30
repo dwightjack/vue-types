@@ -1,8 +1,5 @@
 import { defineConfig } from 'vitepress'
 import container from 'markdown-it-container'
-import { dirname } from 'path'
-
-const vuePath = dirname(require.resolve('vue3'))
 
 export default defineConfig({
   title: 'VueTypes',
@@ -64,13 +61,5 @@ export default defineConfig({
         ],
       },
     ],
-  },
-  vite: {
-    resolve: {
-      alias: [
-        { find: /^vue(\/.*)$/, replacement: `${vuePath}$1` },
-        { find: /^vue$/, replacement: require.resolve('vue3') },
-      ],
-    },
   },
 })

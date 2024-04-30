@@ -2,6 +2,7 @@
   "name": "examples",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "start": "vite -c ./vite.config.ts",
     "lint": "eslint '**/*.ts'"
