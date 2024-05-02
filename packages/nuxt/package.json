@@ -12,6 +12,11 @@
   "engines": {
     "node": ">=16.0.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dwightjack/vue-types.git",
+    "directory": "packages/nuxt"
+  },
   "main": "./dist/module.cjs",
   "types": "./dist/types.d.ts",
   "files": [
