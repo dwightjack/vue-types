@@ -1,5 +1,13 @@
 # vue-types-nuxt
 
+## 2.0.2
+
+### Patch Changes
+
+- 9f5ba17: Include provenance statements to the package
+- Updated dependencies [9f5ba17]
+  - vue-types@5.1.2
+
 ## 2.0.1
 
 ### Patch Changes
