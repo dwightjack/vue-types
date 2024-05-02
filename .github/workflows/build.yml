@@ -7,6 +7,14 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+env:
+  NPM_CONFIG_PROVENANCE: true
+
 jobs:
   build_and_release:
     runs-on: ubuntu-latest
