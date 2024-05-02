@@ -5,6 +5,15 @@ on:
     types: [labeled]
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+  issues: write
+
+env:
+  NPM_CONFIG_PROVENANCE: true
+
 jobs:
   release:
     if: |
