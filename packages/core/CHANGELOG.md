@@ -1,5 +1,11 @@
 # vue-types
 
+## 5.1.2
+
+### Patch Changes
+
+- 9f5ba17: Include provenance statements to the package
+
 ## 5.1.1
 
 ### Patch Changes
@@ -14,10 +20,10 @@
 
   ```ts
   // Before: v is of type unknown
-  string().validate((v) => v === 'Hello') // <-- TS error!
+  string().validate((v) => v === "Hello"); // <-- TS error!
 
   // After: v is of type string
-  string().validate((v) => v === 'Hello') // <-- Works!
+  string().validate((v) => v === "Hello"); // <-- Works!
   ```
 
   This should not be a breaking change, but you should be aware of the new behavior.
