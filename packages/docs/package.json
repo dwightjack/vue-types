@@ -11,6 +11,6 @@
     "cross-env": "7.0.3",
     "markdown-it-container": "4.0.0",
     "vitepress": "1.1.4",
-    "vue": "3.4.26"
+    "vue": "3.4.27"
   }
 }
