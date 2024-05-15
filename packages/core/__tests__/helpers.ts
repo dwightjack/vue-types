@@ -11,7 +11,7 @@ export const forceNoContext = <T extends (..._args: any[]) => any>(
   validator: T,
 ): T => validator.bind(undefined)
 
-export function getDescriptors<T extends { [key: string]: any }>(type: T): T {
+export function getDescriptors<T extends Record<string, any>>(type: T): T {
   const descriptors = {} as { [P in keyof T]: any }
   Object.getOwnPropertyNames(type).forEach((key) => {
     descriptors[key as keyof T] = Object.getOwnPropertyDescriptor(type, key)
@@ -19,7 +19,7 @@ export function getDescriptors<T extends { [key: string]: any }>(type: T): T {
   return descriptors
 }
 
-export function getExpectDescriptors<T extends { [key: string]: any }>(
+export function getExpectDescriptors<T extends Record<string, any>>(
   type: T,
 ): any {
   const descriptors = {} as { [P in keyof T]: any }

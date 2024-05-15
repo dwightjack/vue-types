@@ -1,11 +1,6 @@
 export type Prop<T = any> =
-  | {
-      // eslint-disable-next-line @typescript-eslint/ban-types
-      new (...args: any[]): T & object
-    }
-  | {
-      (): T
-    }
+  | (new (...args: any[]) => T & object)
+  | (() => T)
   | PropMethod<T>
 
 type PropMethod<T, TConstructor = any> = T extends (...args: any) => any
@@ -32,7 +27,6 @@ export interface PropOptions<T = any, D = T> {
     | undefined
     | (() => D | null | undefined)
     | ((props: Record<string, unknown>) => D)
-    // eslint-disable-next-line @typescript-eslint/ban-types
     | object
   validator?(value: T): boolean
 }
@@ -41,7 +35,7 @@ export interface PropOptions<T = any, D = T> {
 export type InferType<T> = T extends { type: null | true }
   ? any
   : T extends ObjectConstructor | { type: ObjectConstructor }
-    ? { [key: string]: any }
+    ? Record<string, any>
     : T extends Prop<infer V>
       ? V
       : T extends PropOptions<infer V>
@@ -88,8 +82,8 @@ export interface VueTypeShape<T>
 export interface VueTypeLooseShape<T>
   extends VueTypeBaseDef<
     T,
-    DefaultFactory<Partial<T & { [key: string]: any }>>,
-    () => Partial<T> & { [key: string]: any }
+    DefaultFactory<Partial<T & Record<string, any>>>,
+    () => Partial<T> & Record<string, any>
   > {
   readonly loose: VueTypeLooseShape<T>
   readonly _vueTypes_isLoose: true
@@ -101,7 +95,7 @@ export interface VueTypesDefaults {
   string: string
   number: number
   array: () => any[]
-  object: () => { [key: string]: any }
+  object: () => Record<string, any>
   integer: number
 }
 

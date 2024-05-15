@@ -1,7 +1,6 @@
 import { Prop, VueProp, VueTypeShape, VueTypeLooseShape } from '../types'
 import { toType, validateType, warn, isPlainObject, indent } from '../utils'
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export default function shape<T extends object>(obj: {
   [K in keyof T]: Prop<T[K]> | VueProp<T[K]>
 }): VueTypeShape<T> {

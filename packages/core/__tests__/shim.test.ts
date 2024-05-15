@@ -736,7 +736,7 @@ describe('`toType()`', () => {
 
       try {
         ;(type as any).def = 'demo'
-        // eslint-disable-next-line no-empty
+        // eslint-disable-next-line no-empty, @typescript-eslint/no-unused-vars
       } catch (e) {}
       expect(type.def).toBeInstanceOf(Function)
     })
@@ -752,6 +752,7 @@ describe('`toType()`', () => {
     it('sets a `default` key on the object', () => {
       const type = toType('testType', {})
 
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       const stubs = [true, null, 'string', () => {}, 0]
 
       stubs.forEach((v) => {

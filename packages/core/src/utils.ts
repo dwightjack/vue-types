@@ -33,7 +33,7 @@ export function getNativeType(value: any): string {
   return match ? match[1].replace(/^Async/, '') : ''
 }
 
-type PlainObject = { [key: string]: any }
+type PlainObject = Record<string, any>
 export const isPlainObject = _isPlainObject as (obj: any) => obj is PlainObject
 
 /**
@@ -49,8 +49,7 @@ export function noop() {}
  */
 export const identity = (arg: any) => arg
 
-let warn: (msg: string, level?: VueTypesConfig['logLevel']) => string | void =
-  identity
+let warn: (msg: string, level?: VueTypesConfig['logLevel']) => void = noop
 
 if (process.env.NODE_ENV !== 'production') {
   const hasConsole = typeof console !== 'undefined'
@@ -60,7 +59,7 @@ if (process.env.NODE_ENV !== 'production') {
           console[level](`[VueTypes warn]: ${msg}`)
         }
       }
-    : identity
+    : noop
 }
 
 export { warn }
@@ -180,7 +179,7 @@ export function validateType<T, U>(
   value: U,
   silent = false,
 ): string | boolean {
-  let typeToCheck: { [key: string]: any }
+  let typeToCheck: Record<string, any>
   let valid = true
   let expectedType = ''
   if (!isPlainObject(type)) {
@@ -345,7 +344,7 @@ export function toValidableType<T = any>(name: string, obj: PropOptions<T>) {
  *
  * @param obj - Object to clone
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
+
 export function clone<T extends object>(obj: T): T {
   const descriptors = {} as { [P in keyof T]: any }
   Object.getOwnPropertyNames(obj).forEach((key) => {

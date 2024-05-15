@@ -23,6 +23,7 @@ describe('VueTypes', () => {
 
   describe('`.func`', () => {
     it('should proxy the `func` validator with a sensible default', () => {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       const expected = getExpectDescriptors(native.func().def(() => {}))
       expect(getDescriptors(VueTypes.func)).toEqual(expected)
       expect(VueTypes.func.default).toBeInstanceOf(Function)
@@ -115,6 +116,7 @@ describe('VueTypes', () => {
 
   describe('`.instanceOf`', () => {
     it('should proxy the `instanceOf` validator', () => {
+      // eslint-disable-next-line @typescript-eslint/no-extraneous-class
       class Demo {}
       const expected = getExpectDescriptors(instanceOf(Demo))
       expect(getDescriptors(VueTypes.instanceOf(Demo))).toEqual(expected)
@@ -280,7 +282,7 @@ describe('VueTypes', () => {
 
     it('should clone the base type definition at each call', () => {
       interface VueTypesClone extends VueTypesType {
-        cloneDemo: VueTypeValidableDef<{ [key: string]: any }>
+        cloneDemo: VueTypeValidableDef<Record<string, any>>
       }
       VueTypes.extend<VueTypesClone>({
         name: 'cloneDemo',

@@ -42,6 +42,7 @@ import shape from './validators/shape'
 import { config } from './config'
 
 const BaseVueTypes = /*#__PURE__*/ (() =>
+  // eslint-disable-next-line @typescript-eslint/no-extraneous-class
   class BaseVueTypes {
     static defaults: Partial<VueTypesDefaults> = {}
 

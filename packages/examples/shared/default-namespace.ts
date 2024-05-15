@@ -121,7 +121,6 @@ VueTypes.sensibleDefaults = false
 VueTypes.sensibleDefaults = true
 
 interface CustomVueTypes extends VueTypesInterface {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly test: VueTypeValidableDef<any>
   readonly user: typeof shapeType
 }

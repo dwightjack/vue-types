@@ -28,7 +28,7 @@ export const array = <T>() =>
     type: Array,
   })
 
-export const object = <T extends { [key: string]: any }>() =>
+export const object = <T extends Record<string, any>>() =>
   toValidableType<T>('object', {
     type: Object,
   })

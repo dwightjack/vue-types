@@ -107,7 +107,9 @@ export const oneOfTupleUnion = oneOf<1 | 2 | 'string'>([1, 'string']).def(2)
  * `oneOfType` validator examples
  */
 type stringTuple = 'one' | 'two'
-type UserOneOf = { name: string }
+interface UserOneOf {
+  name: string
+}
 export const stringOrNumberOrBoolType = oneOfType([
   { type: String },
   Number,
@@ -137,7 +139,9 @@ export const arrayofUsersType = arrayOf(userType)
 export const arrayOfStringsType2 = arrayOf(String)
 export const arrayOfMultipleType = arrayOf(stringOrNumberOrBoolType).def(['a'])
 export const arrayOfVueProp = arrayOf({ type: [String, Number] })
-type UserArrayOf = { name: string }
+interface UserArrayOf {
+  name: string
+}
 
 export const arrayOfCastedTypes = arrayOf(
   oneOfType([object<UserArrayOf>(), array<string>()]),

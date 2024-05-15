@@ -26,6 +26,7 @@ export default function oneOfType<
 
   let nativeChecks: Prop<V>[] = []
 
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let i = 0; i < arr.length; i += 1) {
     const type = arr[i]
     if (isComplexType<V>(type)) {
