@@ -2,7 +2,7 @@ import { Prop, VueProp, InferType } from '../types'
 import { toType, validateType, warn, indent } from '../utils'
 
 export default function objectOf<T extends VueProp<any> | Prop<any>>(type: T) {
-  return toType<{ [key: string]: InferType<T> }>('objectOf', {
+  return toType<Record<string, InferType<T>>>('objectOf', {
     type: Object,
     validator(obj) {
       let vResult: string | boolean = ''

@@ -24,6 +24,7 @@ describe('`getNativeType()`', () => {
     expect(utils.getNativeType(() => undefined)).toBe('Function')
     expect(utils.getNativeType(null)).toBe('')
     expect(utils.getNativeType(undefined)).toBe('')
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     expect(utils.getNativeType(async () => {})).toBe('Function')
   })
 })
@@ -147,6 +148,7 @@ describe('`validateType()`', () => {
   })
 
   it('should validate async functions', () => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const fn = async () => {}
     expect(utils.validateType({ type: Function }, fn)).toBe(true)
   })
@@ -218,7 +220,7 @@ describe('`toType()`', () => {
 
       try {
         ;(type as any).def = 'demo'
-        // eslint-disable-next-line no-empty
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty
       } catch (e) {}
       expect(type.def).toBeInstanceOf(Function)
     })
@@ -267,6 +269,7 @@ describe('`toType()`', () => {
     it('sets a `default` key on the object', () => {
       const type = utils.toType('testType', {})
 
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       const stubs = [true, null, 'string', () => {}, 0]
 
       stubs.forEach((v) => {

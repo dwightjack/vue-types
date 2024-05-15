@@ -72,15 +72,16 @@ export const array: TypeShim = () => type('array', { type: Array }, true)
 export const object: TypeShim = () => type('object', { type: Object }, true)
 export const symbol = () => type('symbol')
 export const integer: TypeShim = () => type('integer', { type: Number })
-export const oneOf: TypeShim = (a: any) => type('oneOf')
-export const custom: TypeShim = (a: any) => type('custom')
+export const oneOf: TypeShim = (_a: any) => type('oneOf')
+export const custom: TypeShim = (_a: any) => type('custom')
 export const instanceOf: TypeShim = (Constr: any) =>
   type('instanceOf', { type: Constr })
-export const oneOfType: TypeShim = (a: any) => type('oneOfType')
-export const arrayOf: TypeShim = (a: any) => type('arrayOf', { type: Array })
+export const oneOfType: TypeShim = (_a: any) => type('oneOfType')
+export const arrayOf: TypeShim = (_a: any) => type('arrayOf', { type: Array })
 
-export const objectOf: TypeShim = (a: any) => type('objectOf', { type: Object })
-export const shape: TypeShim = (a: any) =>
+export const objectOf: TypeShim = (_a: any) =>
+  type('objectOf', { type: Object })
+export const shape: TypeShim = (_a: any) =>
   dfn(type('shape', { type: Object }), 'loose', {
     get() {
       return this
@@ -122,6 +123,7 @@ export const toValidableType = <T>(name: string, props: any) =>
 export const toType = <T>(name: string, props: any) => type(name, props)
 
 const BaseVueTypes = /*#__PURE__*/ (() =>
+  // eslint-disable-next-line @typescript-eslint/no-extraneous-class
   class BaseVueTypes {
     static defaults: Partial<VueTypesDefaults> = {}
 
@@ -205,20 +207,19 @@ export function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
 }
 
 export function validateType<T, U>(
-  type: T,
-  value: U,
-  silent = false,
+  _type: T,
+  _value: U,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _silent = false,
 ): string | boolean {
   return true
 }
 
-/* eslint-disable no-console */
 if (process.env.NODE_ENV !== 'production') {
   config.silent === false &&
     console.warn(
       'You are using the production shimmed version of VueTypes in a development build. Refer to https://dwightjack.github.io/vue-types/guide/installation.html#production-build to learn how to configure VueTypes for usage in multiple environments.',
     )
 }
-/* eslint-enable no-console */
 
 export default class VueTypes /*#__PURE__*/ extends createTypes() {}
