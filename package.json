@@ -24,8 +24,8 @@
   "bugs": "https://github.com/dwightjack/vue-types/issues",
   "devDependencies": {
     "@changesets/cli": "2.27.1",
-    "@typescript-eslint/eslint-plugin": "5.62.0",
-    "@typescript-eslint/parser": "5.62.0",
+    "@typescript-eslint/eslint-plugin": "7.9.0",
+    "@typescript-eslint/parser": "7.9.0",
     "@vitest/coverage-v8": "1.6.0",
     "eslint": "8.57.0",
     "eslint-config-prettier": "8.10.0",
