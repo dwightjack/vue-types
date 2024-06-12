@@ -24,15 +24,16 @@
   ],
   "scripts": {
     "prepublishOnly": "pnpm run build",
-    "build": "nuxt-module-build",
+    "build": "nuxt-module-build build",
     "lint": "eslint 'src/**/*.ts'"
   },
   "dependencies": {
     "@nuxt/kit": "^3.0.0"
   },
   "devDependencies": {
-    "@nuxt/module-builder": "^0.6.0",
+    "@nuxt/module-builder": "^0.7.0",
     "@nuxt/schema": "^3.0.0",
+    "nuxt": "^3.0.0",
     "vue-types": "workspace:^"
   },
   "peerDependencies": {
