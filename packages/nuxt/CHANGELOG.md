@@ -1,5 +1,12 @@
 # vue-types-nuxt
 
+## 2.0.3
+
+### Patch Changes
+
+- Updated dependencies [97f366d]
+  - vue-types@5.1.3
+
 ## 2.0.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # vue-types
 
+## 5.1.3
+
+### Patch Changes
+
+- 97f366d: vue-types: expose shared types to ESM module consumers
+
 ## 5.1.2
 
 ### Patch Changes
@@ -20,10 +26,10 @@
 
   ```ts
   // Before: v is of type unknown
-  string().validate((v) => v === "Hello"); // <-- TS error!
+  string().validate((v) => v === 'Hello') // <-- TS error!
 
   // After: v is of type string
-  string().validate((v) => v === "Hello"); // <-- Works!
+  string().validate((v) => v === 'Hello') // <-- Works!
   ```
 
   This should not be a breaking change, but you should be aware of the new behavior.
