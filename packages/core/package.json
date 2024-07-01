@@ -22,6 +22,9 @@
       "require": "./dist/vue-types.cjs",
       "import": "./dist/vue-types.modern.js"
     },
+    "./dist/types": {
+      "types": "./dist/types.d.ts"
+    },
     "./shim": {
       "types": "./dist/shim.d.ts",
       "require": "./shim/index.cjs.js",
