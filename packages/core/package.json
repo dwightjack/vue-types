@@ -78,7 +78,7 @@
     "del": "7.1.0",
     "del-cli": "5.1.0",
     "microbundle": "0.15.1",
-    "typescript": "5.4.5"
+    "typescript": "5.5.3"
   },
   "dependencies": {
     "is-plain-object": "5.0.0"
