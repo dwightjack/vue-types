@@ -16,7 +16,7 @@ importers:
         version: 9.8.0
       '@vitest/coverage-v8':
         specifier: 2.0.5
-        version: 2.0.5(vitest@2.0.5(@types/node@20.14.11)(happy-dom@14.12.0)(terser@5.31.3))
+        version: 2.0.5(vitest@2.0.5(@types/node@20.14.11)(happy-dom@15.7.4)(terser@5.31.3))
       eslint:
         specifier: 9.8.0
         version: 9.8.0
@@ -27,8 +27,8 @@ importers:
         specifier: 5.2.1
         version: 5.2.1(eslint-config-prettier@9.1.0(eslint@9.8.0))(eslint@9.8.0)(prettier@3.3.1)
       happy-dom:
-        specifier: 14.12.0
-        version: 14.12.0
+        specifier: 15.7.4
+        version: 15.7.4
       lefthook:
         specifier: 1.7.4
         version: 1.7.4
@@ -46,7 +46,7 @@ importers:
         version: 5.3.6(@types/node@20.14.11)(terser@5.31.3)
       vitest:
         specifier: 2.0.5
-        version: 2.0.5(@types/node@20.14.11)(happy-dom@14.12.0)(terser@5.31.3)
+        version: 2.0.5(@types/node@20.14.11)(happy-dom@15.7.4)(terser@5.31.3)
 
   packages/core:
     dependencies:
@@ -4058,9 +4058,9 @@ packages:
   h3@1.12.0:
     resolution: {integrity: sha512-Zi/CcNeWBXDrFNlV0hUBJQR9F7a96RjMeAZweW/ZWkR9fuXrMcvKnSA63f/zZ9l0GgQOZDVHGvXivNN9PWOwhA==}
 
-  happy-dom@14.12.0:
-    resolution: {integrity: sha512-dHcnlGFY2o2CdxfuYpqwSrBrpj/Kuzv4u4f3TU5yHW1GL24dKij4pv1BRjXnXc3uWo8qsCbToF9weaDsm/He8A==}
-    engines: {node: '>=16.0.0'}
+  happy-dom@15.7.4:
+    resolution: {integrity: sha512-r1vadDYGMtsHAAsqhDuk4IpPvr6N8MGKy5ntBo7tSdim+pWDxus2PNqOcOt8LuDZ4t3KJHE+gCuzupcx/GKnyQ==}
+    engines: {node: '>=18.0.0'}
 
   hard-rejection@2.1.0:
     resolution: {integrity: sha512-VIZB+ibDhx7ObhAe7OVtoEbuP4h/MuOTHJ+J8h/eBXotJYl0fBgR72xDFCKgIh22OJZIOVNxBMWuhAr10r8HdA==}
@@ -9546,7 +9546,7 @@ snapshots:
       vite: 5.3.6(@types/node@20.14.11)(terser@5.31.3)
       vue: 3.4.33(typescript@5.5.3)
 
-  '@vitest/coverage-v8@2.0.5(vitest@2.0.5(@types/node@20.14.11)(happy-dom@14.12.0)(terser@5.31.3))':
+  '@vitest/coverage-v8@2.0.5(vitest@2.0.5(@types/node@20.14.11)(happy-dom@15.7.4)(terser@5.31.3))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -9560,7 +9560,7 @@ snapshots:
       std-env: 3.7.0
       test-exclude: 7.0.1
       tinyrainbow: 1.2.0
-      vitest: 2.0.5(@types/node@20.14.11)(happy-dom@14.12.0)(terser@5.31.3)
+      vitest: 2.0.5(@types/node@20.14.11)(happy-dom@15.7.4)(terser@5.31.3)
     transitivePeerDependencies:
       - supports-color
 
@@ -11594,7 +11594,7 @@ snapshots:
     transitivePeerDependencies:
       - uWebSockets.js
 
-  happy-dom@14.12.0:
+  happy-dom@15.7.4:
     dependencies:
       entities: 4.5.0
       webidl-conversions: 7.0.0
@@ -14617,7 +14617,7 @@ snapshots:
       - typescript
       - universal-cookie
 
-  vitest@2.0.5(@types/node@20.14.11)(happy-dom@14.12.0)(terser@5.31.3):
+  vitest@2.0.5(@types/node@20.14.11)(happy-dom@15.7.4)(terser@5.31.3):
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@vitest/expect': 2.0.5
@@ -14640,7 +14640,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 20.14.11
-      happy-dom: 14.12.0
+      happy-dom: 15.7.4
     transitivePeerDependencies:
       - less
       - lightningcss
