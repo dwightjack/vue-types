@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import VueTypes, { VueTypesInterface, VueTypeValidableDef } from 'vue-types'
 import { VueTypesProject } from './namespaced-extended'
 

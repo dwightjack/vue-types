@@ -28,9 +28,7 @@ export const anyTypeCast = any<unknown>()
  * `func` validator examples
  */
 type OnClick = (e: MouseEvent) => void
-export const funcType = func<OnClick>().def((e: Event) => {
-  e.target
-})
+export const funcType = func<OnClick>().def((e: Event) => e.target)
 
 /**
  * `bool` validator examples

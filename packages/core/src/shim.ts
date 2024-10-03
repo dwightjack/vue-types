@@ -112,6 +112,7 @@ function createValidator(
 
 export function fromType(name: string, source: any, props: any = {}) {
   const t = type(name, Object.assign({}, source, props), !!source.validable)
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   t.validator && delete t.validator
   return t
 }
@@ -216,6 +217,7 @@ export function validateType<T, U>(
 }
 
 if (process.env.NODE_ENV !== 'production') {
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   config.silent === false &&
     console.warn(
       'You are using the production shimmed version of VueTypes in a development build. Refer to https://dwightjack.github.io/vue-types/guide/installation.html#production-build to learn how to configure VueTypes for usage in multiple environments.',
