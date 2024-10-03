@@ -24,6 +24,7 @@ export default function oneOf<D, T extends readonly D[] = readonly D[]>(
       (ret, v) => {
         if (v !== null && v !== undefined) {
           const constr = (v as any).constructor
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           ret.indexOf(constr) === -1 && ret.push(constr)
         }
         return ret

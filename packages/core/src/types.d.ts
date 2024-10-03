@@ -11,7 +11,7 @@ type PropMethod<T, TConstructor = any> = T extends (...args: any) => any
     }
   : never
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export type NativeType = string | boolean | number | null | undefined | Function
 
 export type Constructor = new (...args: any[]) => any

@@ -108,7 +108,7 @@ export const isArray =
  * @param {any} value - Value to check
  * @returns {boolean}
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export const isFunction = <T extends Function>(value: unknown): value is T =>
   toString.call(value) === '[object Function]'
 
@@ -159,7 +159,7 @@ export function bindTo(fn: (...args: any[]) => any, ctx: any): WrappedFn {
  *
  * @param fn - Function to unwrap
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export function unwrap<T extends WrappedFn | Function>(fn: T) {
   return (fn as WrappedFn).__original ?? fn
 }
