@@ -6,6 +6,7 @@ import {
   InferType,
   PropOptions,
   VueTypesConfig,
+  ValidatorFunction,
 } from './types'
 import { isPlainObject } from './is-plain-obj'
 
@@ -322,7 +323,7 @@ export function toType<T = any>(name: string, obj: PropOptions<T>) {
 export function toValidableType<T = any>(name: string, obj: PropOptions<T>) {
   const type = toType<T>(name, obj)
   return Object.defineProperty(type, 'validate', {
-    value(fn: (value: T) => boolean) {
+    value(fn: ValidatorFunction<T>) {
       if (isFunction(this.validator)) {
         warn(
           `${
@@ -394,10 +395,11 @@ export function fromType<
 
     copy.validator = bindTo(
       prevValidator
-        ? function (this: T, value: any) {
+        ? function (this: T, value: any, props: any) {
             return (
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              prevValidator!.call(this, value) && validator.call(this, value)
+              prevValidator!.call(this, value, props) &&
+              validator.call(this, value, props)
             )
           }
         : validator,

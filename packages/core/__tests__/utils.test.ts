@@ -170,7 +170,7 @@ describe('`toType()`', () => {
 
     const type = utils.toType('testType', obj)
     const { validator } = type
-    validator(true)
+    validator?.(true, {})
 
     expect(spy.mock.instances[0]).toBe(type)
   })
@@ -377,11 +377,12 @@ describe('`fromType()`', () => {
     })
 
     const copy = utils.fromType('b', base, { validator: validatorCopy })
+    const props = {}
 
-    copy.validator('')
+    copy.validator('', props)
 
-    expect(validator).toHaveBeenCalledWith('')
-    expect(validatorCopy).toHaveBeenCalledWith('')
+    expect(validator).toHaveBeenCalledWith('', props)
+    expect(validatorCopy).toHaveBeenCalledWith('', props)
     expect(validator.mock.instances[0]).toBe(copy as any)
     expect(validatorCopy.mock.instances[0]).toBe(copy as any)
   })

@@ -8,8 +8,7 @@
     <button @click="onClick">click</button>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, ExtractPropTypes, Prop, PropType } from 'vue'
+<script lang="ts" setup>
 import {
   userType,
   messageType,
@@ -24,7 +23,7 @@ import {
   stringOrNull,
 } from '../shared/validators'
 
-const componentProps = {
+const props = defineProps({
   user: userType,
   message: messageType,
   age: ageType,
@@ -36,15 +35,5 @@ const componentProps = {
   action: anyType,
   tupleObj: objectOfTuple,
   oneOf: oneOfTuple,
-}
-
-type Props = ExtractPropTypes<typeof componentProps>
-
-export default defineComponent({
-  props: componentProps,
-
-  setup(props) {
-    console.log(props.score)
-  },
 })
 </script>
