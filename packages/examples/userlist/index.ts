@@ -1,20 +1,13 @@
 import { defineComponent, createApp, h } from 'vue'
-import VueTypes from 'vue-types'
-import type { VueTypeDef } from 'vue-types'
+import VueTypes, { fromType, number } from 'vue-types'
 
-type typeofVueTypes = typeof VueTypes
-interface VueTypesCustom extends typeofVueTypes {
-  adult: VueTypeDef<number>
+class CustomTypes extends VueTypes {
+  static get adult() {
+    return fromType('adult', number(), {
+      validator: (v: number) => v >= 18,
+    })
+  }
 }
-
-const CustomTypes = VueTypes.extend<VueTypesCustom>({
-  name: 'adult',
-  getter: true,
-  type: Number,
-  validator(v) {
-    return v >= 18
-  },
-})
 
 const User = defineComponent({
   template: '<li><strong>{{ name }}</strong> ({{ age }})</li>',

@@ -27,25 +27,25 @@ describe('`.arrayOf`', () => {
 
   it('should validate an array of same-type values', () => {
     const customType = arrayOf(Number)
-    expect(forceNoContext(customType.validator)([0, 1, 2])).toBe(true)
+    expect(forceNoContext(customType.validator)([0, 1, 2], {})).toBe(true)
   })
 
   it('should NOT validate an array of mixed-type values', () => {
     const customType = arrayOf(Number)
-    expect(forceNoContext(customType.validator)([0, 1, 'string'] as any)).toBe(
-      false,
-    )
+    expect(
+      forceNoContext(customType.validator)([0, 1, 'string'] as any, {}),
+    ).toBe(false)
   })
 
   it('should allow validation of VuePropTypes native types', () => {
     const customType = arrayOf(number())
-    expect(forceNoContext(customType.validator)([0, 1, 2])).toBe(true)
+    expect(forceNoContext(customType.validator)([0, 1, 2], {})).toBe(true)
   })
 
   it('should allow validation of VuePropTypes custom types', () => {
     const customType = arrayOf(integer())
     const validator = forceNoContext(customType.validator)
-    expect(validator([0, 1, 2])).toBe(true)
-    expect(validator([0, 1.2, 2])).toBe(false)
+    expect(validator([0, 1, 2], {})).toBe(true)
+    expect(validator([0, 1.2, 2], {})).toBe(false)
   })
 })

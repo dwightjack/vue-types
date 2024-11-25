@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import VueTypes, { VueTypesInterface, VueTypeValidableDef } from 'vue-types'
+import VueTypes, { fromType, toValidableType } from 'vue-types'
 import { VueTypesProject } from './namespaced-extended'
 
 const noop = (): void => undefined
@@ -121,25 +121,15 @@ VueTypes.sensibleDefaults = {}
 VueTypes.sensibleDefaults = false
 VueTypes.sensibleDefaults = true
 
-interface CustomVueTypes extends VueTypesInterface {
-  readonly test: VueTypeValidableDef<any>
-  readonly user: typeof shapeType
-}
-
 // extending
-export const myTypes = VueTypes.extend<CustomVueTypes>([
-  {
-    name: 'test',
-    validate: true,
-    getter: true,
-  },
-  {
-    name: 'user',
-    type: shapeType,
-    getter: true,
-  },
-])
-;(VueTypes as CustomVueTypes).test.isRequired
+export class myTypes extends VueTypes {
+  static get test() {
+    return toValidableType('test', {})
+  }
+  static get user() {
+    return fromType('user', shapeType)
+  }
+}
 
 myTypes.test.isRequired
 myTypes.test.isRequired

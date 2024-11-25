@@ -7,11 +7,8 @@ import arrayOf from '../src/validators/arrayof'
 import objectOf from '../src/validators/objectof'
 import instanceOf from '../src/validators/instanceof'
 import shape from '../src/validators/shape'
-import { VueTypeValidableDef, VueTypeDef } from '../src/types'
 import VueTypes, { createTypes } from '../src/index'
 import { getDescriptors, getExpectDescriptors } from './helpers'
-
-type VueTypesType = typeof VueTypes
 
 describe('VueTypes', () => {
   describe('`.any`', () => {
@@ -165,7 +162,7 @@ describe('VueTypes', () => {
         'array',
         'object',
         'integer',
-      ]
+      ] as const
 
       types.forEach((prop) => {
         expect(VueTypes[prop].default).toBeUndefined()
@@ -184,7 +181,7 @@ describe('VueTypes', () => {
         'array',
         'object',
         'integer',
-      ]
+      ] as const
 
       types.forEach((prop) => {
         expect(VueTypes[prop].default).toBeDefined()
@@ -197,7 +194,7 @@ describe('VueTypes', () => {
         string: 'test',
       }
 
-      const types = ['bool', 'number', 'array', 'object', 'integer']
+      const types = ['bool', 'number', 'array', 'object', 'integer'] as const
 
       types.forEach((prop) => {
         expect(VueTypes[prop].default).toBeUndefined()
@@ -210,271 +207,10 @@ describe('VueTypes', () => {
     })
   })
 
-  describe('`.extend` helper', () => {
-    it('should add getter prop to the library', () => {
-      const validator = vi.fn()
-      interface VueTypesDate extends VueTypesType {
-        date: VueTypeDef<Date>
-      }
-      VueTypes.extend<VueTypesDate>({
-        name: 'date',
-        validator,
-        getter: true,
-        type: Date,
-      })
+  it('.extends has been removed', () => {
+    VueTypes.extend({})
 
-      const dateType = (VueTypes as VueTypesDate).date
-
-      expect(dateType).toBeDefined()
-      const date = new Date()
-      dateType.validator(date)
-      expect(validator).toHaveBeenCalledWith(date)
-    })
-
-    it('should add a method to the library', () => {
-      interface VueTypesDateFn extends VueTypesType {
-        dateFn: () => VueTypeDef<Date>
-      }
-      VueTypes.extend<VueTypesDateFn>({
-        name: 'dateFn',
-        type: Date,
-      })
-      expect((VueTypes as VueTypesDateFn).dateFn).toBeInstanceOf(Function)
-      expect((VueTypes as VueTypesDateFn).dateFn().isRequired).toEqual(
-        expect.objectContaining({
-          type: Date,
-          required: true,
-        }),
-      )
-    })
-
-    it('should pass configuration params to the validator method', () => {
-      const validator = vi.fn()
-      interface VueTypesDateFnArgs extends VueTypesType {
-        dateFnArgs: (...args: any[]) => VueTypeDef<Date>
-      }
-      VueTypes.extend<VueTypesDateFnArgs>({
-        name: 'dateFnArgs',
-        type: Date,
-        validator,
-      })
-
-      const dateFnType = (VueTypes as VueTypesDateFnArgs).dateFnArgs(1, 2)
-      const date = new Date()
-      dateFnType.validator(date)
-      expect(validator).toHaveBeenCalledWith(1, 2, date)
-    })
-
-    it('should add a validate method to the prop', () => {
-      interface VueTypesString extends VueTypesType {
-        stringCustom: VueTypeValidableDef<string>
-      }
-      VueTypes.extend<VueTypesString>({
-        name: 'stringCustom',
-        type: String,
-        getter: true,
-        validate: true,
-      })
-      expect((VueTypes as VueTypesString).stringCustom.validate).toBeInstanceOf(
-        Function,
-      )
-    })
-
-    it('should clone the base type definition at each call', () => {
-      interface VueTypesClone extends VueTypesType {
-        cloneDemo: VueTypeValidableDef<Record<string, any>>
-      }
-      VueTypes.extend<VueTypesClone>({
-        name: 'cloneDemo',
-        type: Object,
-        getter: true,
-        validate: true,
-      })
-      expect((VueTypes as VueTypesClone).cloneDemo).not.toBe(
-        (VueTypes as VueTypesClone).cloneDemo,
-      )
-    })
-
-    it('should accept multiple types as array', () => {
-      interface VueTypesMulti extends VueTypesType {
-        type1: VueTypeValidableDef<string>
-        type2: VueTypeValidableDef<string>
-      }
-      VueTypes.extend<VueTypesMulti>([
-        {
-          name: 'type1',
-          type: String,
-          getter: true,
-        },
-        {
-          name: 'type2',
-          type: Number,
-          getter: true,
-        },
-      ])
-      expect((VueTypes as VueTypesMulti).type1.type).toBe(String)
-      expect((VueTypes as VueTypesMulti).type2.type).toBe(Number)
-    })
-
-    it('should inherit from vue-types types', () => {
-      const parent = VueTypes.string.isRequired.def('parent')
-
-      interface VueTypesAlias extends VueTypesType {
-        stringAlias: VueTypeValidableDef<string>
-      }
-
-      VueTypes.extend({
-        name: 'stringAlias',
-        type: parent,
-        getter: true,
-      })
-      expect((VueTypes as VueTypesAlias).stringAlias).toEqual(
-        expect.objectContaining({
-          type: String,
-          required: true,
-          default: 'parent',
-        }),
-      )
-
-      expect((VueTypes as VueTypesAlias).stringAlias.validate).toBeInstanceOf(
-        Function,
-      )
-    })
-
-    it('should inherit from vue-types type and add custom validation', () => {
-      const parent = VueTypes.string
-      const validator = vi.fn(() => true)
-
-      interface VueTypesAliasValidate extends VueTypesType {
-        stringValidationAlias: VueTypeValidableDef<string>
-      }
-
-      VueTypes.extend({
-        name: 'stringValidationAlias',
-        type: parent,
-        getter: true,
-        validator,
-      })
-
-      const type = (VueTypes as VueTypesAliasValidate).stringValidationAlias
-
-      expect(type.type).toBe(String)
-      expect(type.validator('a')).toBe(true)
-      expect(validator).toHaveBeenCalledWith('a')
-      expect(validator.mock.instances[0]).toBe(type)
-    })
-
-    it('should inherit from vue-types (complex types)', () => {
-      const parent = VueTypes.shape({
-        name: VueTypes.string.isRequired,
-        number: VueTypes.oneOf([1, 2, 3] as const),
-      }).isRequired.loose
-
-      const spy = vi.spyOn(parent, 'validator')
-
-      VueTypes.extend({
-        name: 'shapeAlias',
-        type: parent,
-        getter: true,
-      })
-
-      const type = (VueTypes as any).shapeAlias
-
-      expect(type).toEqual(
-        expect.objectContaining({
-          type: Object,
-          required: true,
-        }),
-      )
-
-      expect(typeof type.validator).toBe('function')
-
-      const pass = {
-        name: 'John',
-        number: 1 as const,
-      }
-
-      const passLoose = {
-        ...pass,
-        other: true,
-      }
-
-      const fail = {
-        ...pass,
-        number: 4,
-      }
-
-      expect(type.validator(pass)).toBe(true)
-      expect(spy).toHaveBeenCalledWith(pass)
-      expect(spy.mock.instances[0]).toBe(type)
-
-      expect(type.validator(passLoose)).toBe(true)
-      expect(type.validator(fail)).toBe(false)
-    })
-
-    it('should inherit from other extended types', () => {
-      VueTypes.extend({
-        name: 'routerLocation',
-        getter: true,
-        type: VueTypes.oneOfType([
-          VueTypes.shape({
-            path: VueTypes.string.isRequired,
-            query: VueTypes.object,
-          }).loose,
-          VueTypes.shape({
-            name: VueTypes.string.isRequired,
-            params: VueTypes.object,
-          }).loose,
-        ]),
-      })
-
-      VueTypes.extend({
-        name: 'routerTo',
-        getter: true,
-        type: VueTypes.oneOfType([String, (VueTypes as any).routerLocation]),
-      })
-
-      const type = (VueTypes as any).routerTo
-
-      // validate as string
-      expect(type.validator('/url')).toBe(true)
-      // validate as custom type
-      expect(type.validator({ path: '/url' })).toBe(true)
-    })
-
-    it('should inherit from vue-types type (oneOf parent)', () => {
-      const parent = VueTypes.oneOfType([Number, VueTypes.string])
-
-      VueTypes.extend({
-        name: 'aliasOneOf',
-        getter: true,
-        type: parent,
-      })
-
-      const type = (VueTypes as any).aliasOneOf
-
-      expect(type.type).toBe(parent.type)
-      expect(VueTypes.utils.validate(1, type)).toBe(true)
-      expect(VueTypes.utils.validate(false, type)).toBe(false)
-    })
-
-    it('should inherit from vue-types type (non-getter types)', () => {
-      const parent = VueTypes.string
-      const validator = vi.fn()
-
-      VueTypes.extend({
-        name: 'aliasMinLength',
-        type: parent,
-        validator,
-      })
-
-      const type = (VueTypes as any).aliasMinLength(3)
-
-      expect(type.type).toBe(String)
-      type.validator('a')
-      expect(validator).toHaveBeenCalledWith(3, 'a')
-      expect(validator.mock.instances[0]).toBe(type)
-    })
+    expect(console.warn).toHaveBeenCalled()
   })
 })
 
@@ -491,14 +227,14 @@ describe('VueTypes.utils', () => {
     })
 
     it('returns a validable type by default', () => {
-      expect((_utils.toType('demo', { type: String }) as any).validate).toBe(
-        undefined,
+      expect(_utils.toType('demo', { type: String })).not.toHaveProperty(
+        'validate',
       )
     })
 
     it('returns a validable type is 3rd argument is true', () => {
       expect(
-        (_utils.toType('demo', { type: String }, true) as any).validate,
+        _utils.toType('demo', { type: String }, true).validate,
       ).toBeInstanceOf(Function)
     })
   })

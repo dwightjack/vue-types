@@ -1,17 +1,7 @@
-import {
-  toType,
-  toValidableType,
-  validateType,
-  isArray,
-  isVueTypeDef,
-  has,
-  fromType,
-  warn,
-} from './utils'
+import { toType, toValidableType, validateType, fromType, warn } from './utils'
 
 import {
   VueTypesDefaults,
-  ExtendProps,
   VueTypeDef,
   VueTypeValidableDef,
   VueTypeShape,
@@ -94,90 +84,25 @@ const BaseVueTypes = /*#__PURE__*/ (() =>
     static readonly objectOf = objectOf
     static readonly shape = shape
 
-    static extend<T = any>(props: ExtendProps | ExtendProps[]): T {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    static extend(...args: any[]) {
       warn(
-        `VueTypes.extend is deprecated. Use the ES6+ method instead. See https://dwightjack.github.io/vue-types/advanced/extending-vue-types.html#extending-namespaced-validators-in-es6 for details.`,
+        `VueTypes.extend has been removed. Use the ES6+ method instead. See https://dwightjack.github.io/vue-types/advanced/extending-vue-types.html#extending-namespaced-validators-in-es6 for details.`,
       )
-      if (isArray(props)) {
-        props.forEach((p) => this.extend(p))
-        return this as any
-      }
-
-      const { name, validate = false, getter = false, ...opts } = props
-
-      if (has(this, name as any)) {
-        throw new TypeError(`[VueTypes error]: Type "${name}" already defined`)
-      }
-
-      const { type } = opts
-      if (isVueTypeDef(type)) {
-        // we are using as base type a vue-type object
-
-        // detach the original type
-        // we are going to inherit the parent data.
-        delete opts.type
-
-        if (getter) {
-          return Object.defineProperty(this as unknown as T, name, {
-            get: () => fromType(name, type, opts as Omit<ExtendProps, 'type'>),
-          })
-        }
-        return Object.defineProperty(this as unknown as T, name, {
-          value(...args: unknown[]) {
-            const t = fromType(name, type, opts as Omit<ExtendProps, 'type'>)
-            if (t.validator) {
-              t.validator = t.validator.bind(t, ...args)
-            }
-            return t
-          },
-        })
-      }
-
-      let descriptor: PropertyDescriptor
-      if (getter) {
-        descriptor = {
-          get() {
-            const typeOptions = Object.assign({}, opts as PropOptions<T>)
-            if (validate) {
-              return toValidableType<T>(name, typeOptions)
-            }
-            return toType<T>(name, typeOptions)
-          },
-          enumerable: true,
-        }
-      } else {
-        descriptor = {
-          value(...args: T[]) {
-            const typeOptions = Object.assign({}, opts as PropOptions<T>)
-            let ret: VueTypeDef<T>
-            if (validate) {
-              ret = toValidableType<T>(name, typeOptions)
-            } else {
-              ret = toType<T>(name, typeOptions)
-            }
-
-            if (typeOptions.validator) {
-              ret.validator = typeOptions.validator.bind(ret, ...args)
-            }
-            return ret
-          },
-          enumerable: true,
-        }
-      }
-
-      return Object.defineProperty(this as unknown as T, name, descriptor)
     }
 
     static utils = {
       validate<T, U>(value: T, type: U) {
         return validateType<U, T>(type, value, true) === true
       },
-      toType<T = unknown>(
+      toType<T = unknown, Validable extends boolean = false>(
         name: string,
         obj: PropOptions<T>,
-        validable = false,
-      ): VueTypeDef<T> | VueTypeValidableDef<T> {
-        return validable ? toValidableType<T>(name, obj) : toType<T>(name, obj)
+        validable: Validable = false as Validable,
+      ): Validable extends true ? VueTypeValidableDef<T> : VueTypeDef<T> {
+        return (
+          validable ? toValidableType<T>(name, obj) : toType<T>(name, obj)
+        ) as any
       },
     }
   })()

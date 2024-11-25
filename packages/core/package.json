@@ -47,7 +47,9 @@
     "build": "unbuild",
     "test": "vitest run --coverage",
     "test:watch": "vitest watch",
-    "lint": "eslint '{src,__tests__,.}/**/*.{ts,js,cjs}'"
+    "lint": "pnpm run \"/^lint:.*/\"",
+    "lint:type": "tsc --noEmit --skipLibCheck",
+    "lint:js": "eslint '{src,__tests__,.}/**/*.{ts,js,cjs}'"
   },
   "keywords": [
     "vue",

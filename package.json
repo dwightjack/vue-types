@@ -14,6 +14,9 @@
   "scripts": {
     "examples:dev": "pnpm --filter=vue-types run build && pnpm --filter=examples start",
     "docs:dev": "pnpm --filter=docs run dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
     "ci:version": "pnpm changeset version && pnpm install --lockfile-only",
     "ci:publish": "git status && pnpm -r publish"
   },
