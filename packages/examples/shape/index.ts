@@ -1,4 +1,4 @@
-import { defineComponent, createApp, h, computed, ref } from 'vue3'
+import { defineComponent, createApp, h, computed, ref } from 'vue'
 import VueTypes from 'vue-types'
 
 interface ModelItem {
