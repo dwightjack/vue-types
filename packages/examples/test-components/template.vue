@@ -8,8 +8,7 @@
     <button @click="onClick">click</button>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue3'
+<script lang="ts" setup>
 import {
   userType,
   messageType,
@@ -22,21 +21,19 @@ import {
   objectOfTuple,
   oneOfTuple,
   stringOrNull,
-} from '../../shared/validators'
+} from '../shared/validators'
 
-export default defineComponent({
-  props: {
-    user: userType,
-    message: messageType,
-    age: ageType,
-    maybeStr: stringOrNull,
-    hobbies: arrayOfStringsType,
-    randomData: arrayOfMultipleType,
-    score: scoreType,
-    onClick: funcType,
-    action: anyType,
-    tupleObj: objectOfTuple,
-    oneOf: oneOfTuple,
-  },
+defineProps({
+  user: userType,
+  message: messageType,
+  age: ageType,
+  maybeStr: stringOrNull,
+  hobbies: arrayOfStringsType,
+  randomData: arrayOfMultipleType,
+  score: scoreType,
+  onClick: funcType,
+  action: anyType,
+  tupleObj: objectOfTuple,
+  oneOf: oneOfTuple,
 })
 </script>

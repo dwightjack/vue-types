@@ -1,11 +1,11 @@
-import { defineComponent, createApp, h } from 'vue3'
+import { defineComponent, createApp, h } from 'vue'
 
 import {
   userGetterType,
   messageType,
   ageType,
   stringT,
-} from '../../shared/custom-namespace'
+} from '../shared/custom-namespace'
 const UserComponent = defineComponent({
   props: {
     user: userGetterType,
