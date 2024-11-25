@@ -1,4 +1,3 @@
-import { isPlainObject as _isPlainObject } from 'is-plain-object'
 import { config } from './config'
 import {
   VueTypeDef,
@@ -8,6 +7,9 @@ import {
   PropOptions,
   VueTypesConfig,
 } from './types'
+import { isPlainObject } from './is-plain-obj'
+
+export { isPlainObject }
 
 const ObjProto = Object.prototype
 const toString = ObjProto.toString
@@ -32,9 +34,6 @@ export function getNativeType(value: any): string {
   const match = value.constructor.toString().match(FN_MATCH_REGEXP)
   return match ? match[1].replace(/^Async/, '') : ''
 }
-
-type PlainObject = Record<string, any>
-export const isPlainObject = _isPlainObject as (obj: any) => obj is PlainObject
 
 /**
  * No-op function

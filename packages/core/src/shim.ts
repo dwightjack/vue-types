@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { isPlainObject } from 'is-plain-object'
+import { isPlainObject } from './is-plain-obj'
 import { typeDefaults } from './sensibles'
 import { config } from './config'
 import type { VueTypesDefaults } from './types'
