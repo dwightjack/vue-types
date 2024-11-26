@@ -9,9 +9,9 @@ VueTypes is a collection of configurable [prop validators](https://vuejs.org/gui
 [Try it now!](https://stackblitz.com/edit/vitejs-vite-83cnar?file=src/App.vue)
 
 ::: warning VERSION NOTE
-This is the documentation for VueTypes 2 and above. If you are using an older version, refer to the documentation [here](https://github.com/dwightjack/vue-types/blob/v1/README.md).
+This is the documentation for VueTypes 6 and above. If you are using an older version, refer to the documentation [here](https://github.com/dwightjack/vue-types/blob/v1/README.md).
 
-**Starting from v4, vue-types is compatible with both vue@2 and vue@3.**
+**Starting from v6, vue-types is ONLY compatible with vue@3.**
 :::
 
 ## When to use
@@ -55,26 +55,6 @@ While this component works perfectly fine, writing a lot of prop validation obje
 With VueTypes you could rewrite the same props like this:
 
 ```js
-import VueTypes from 'vue-types'
-
-export default {
-  props: {
-    id: VueTypes.number.def(10),
-    name: VueTypes.string.isRequired,
-    age: VueTypes.integer,
-    nationality: VueTypes.string,
-  },
-  methods: {
-    // ...
-  },
-}
-```
-
-## Individual validators import
-
-Starting from version 2.0.0, you can import individual validators for an even more concise syntax:
-
-```js
 import { number, string, integer } from 'vue-types'
 
 export default {
@@ -83,6 +63,38 @@ export default {
     name: string().isRequired,
     age: integer().def(0),
     nationality: string(),
+  },
+  methods: {
+    // ...
+  },
+}
+```
+You can also use VueTypes in the setup block of Single File Components:
+
+```html
+<script setup lang="ts">
+import { number, string, integer } from 'vue-types'
+
+defineProps({
+  id: number().def(10),
+  name: string().isRequired,
+  age: integer().def(0),
+  nationality: string(),
+})
+</script>
+```
+
+VueTypes provides validators in a single namespace entrypoint as well:
+
+```js
+import VueTypes from 'vue-types'
+
+export default {
+  props: {
+    id: VueTypes.number.def(10),
+    name: VueTypes.string.isRequired,
+    age: VueTypes.integer,
+    nationality: VueTypes.string,
   },
   methods: {
     // ...

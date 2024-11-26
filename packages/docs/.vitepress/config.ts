@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
 import container from 'markdown-it-container'
+import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 
 export default defineConfig({
   title: 'VueTypes',
@@ -7,6 +8,7 @@ export default defineConfig({
   lastUpdated: true,
   markdown: {
     config(md) {
+      md.use(tabsMarkdownPlugin)
       md.use(container, 'ts', {
         render(tokens, idx) {
           const token = tokens[idx]
@@ -45,7 +47,6 @@ export default defineConfig({
           { text: 'Using VueTypes', link: '/guide/validators' },
           { text: 'Namespaced Usage', link: '/guide/namespaced' },
           { text: 'Configuration', link: '/guide/configuration' },
-          { text: 'Troubleshooting', link: '/guide/troubleshooting' },
         ],
       },
       {

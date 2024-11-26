@@ -2,16 +2,21 @@
 title: Validators
 ---
 
+<script setup>
+import CodeExample from '../components/CodeExample.vue'
+</script>
+
 # Using VueTypes Validators
 
-VueTypes is a collection of prop validators. Each validator is basically a factory function returning an object (_validator object_) compatible with [Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation).
+VueTypes is a collection of prop validators. Each validator is basically a factory function returning an object (_validator object_) compatible with [Vue prop validation](https://vuejs.org/guide/components/props.html#Prop-Validation).
 
 Differently from simple Vue prop validation objects, VueTypes prop validator objects provide some additional chainable properties and methods to control things like `required` and default values.
 
 Validators can be imported as named functions from `vue-types`:
 
+<CodeExample>
+
 ```js
-import Vue from 'vue'
 import { number, oneOf } from 'vue-types'
 
 export default {
@@ -21,6 +26,17 @@ export default {
   },
 }
 ```
+---
+```js
+import { number, oneOf } from 'vue-types'
+
+defineProps({
+  id: number().isRequired,
+  status: oneOf(['open', 'close']).def('open'),
+})
+```
+
+</CodeExample>
 
 Validators can be categorized in two groups:
 
@@ -88,14 +104,25 @@ mixedType.def(undefined)
 
 Validates any type of value. This validator should be used sparingly and can be an escape hatch for props with unknown values.
 
+<CodeExample>
+
 ```js
 props: {
   myProp: any(),
 }
 ```
+---
+```js
+defineProps({
+  myProp: any(),
+})
+```
+</CodeExample>
 
 ::: ts
 In TypeScript, you can specify a type constraint other than `any`:
+
+<CodeExample>
 
 ```ts
 props: {
@@ -105,6 +132,16 @@ props: {
   myPropUnknown: any<unknown>(),
 }
 ```
+---
+```ts
+defineProps({
+  // type is `any`
+  myPropAny: any(),
+  // type is `unknown`
+  myPropUnknown: any<unknown>(),
+})
+```
+</CodeExample>
 
 :::
 
@@ -112,14 +149,25 @@ props: {
 
 Validates that a prop is an array primitive.
 
+<CodeExample>
+
 ```js
 props: {
   users: array(),
 }
 ```
+---
+```js
+defineProps({
+  users: array(),
+})
+```
+</CodeExample>
 
 ::: ts
 In TypeScript, you can specify the type of array items as type argument:
+
+<CodeExample>
 
 ```ts
 props: {
@@ -129,6 +177,16 @@ props: {
   fruits: array<'apple' | 'pear'>()
 }
 ```
+---
+```ts
+defineProps({
+  // array of strings
+  users: array<string>(),
+  // specify the allowed array items
+  fruits: array<'apple' | 'pear'>()
+})
+```
+</CodeExample>
 
 **Note**: this signature will validate the prop at compile-time only. For
 runtime validation use [`arrayOf`](#arrayof)
@@ -143,11 +201,20 @@ runtime validation use [`arrayOf`](#arrayof)
 
 Validates boolean props.
 
+<CodeExample>
+
 ```js
 props: {
   enabled: bool()
 }
 ```
+---
+```js
+defineProps({
+  enabled: bool()
+})
+```
+</CodeExample>
 
 ::: warning `undefined` AS DEFAULT VALUE
 
@@ -173,14 +240,25 @@ mixedType.def(undefined)
 
 Validates that a prop is a function.
 
+<CodeExample>
+
 ```js
 props: {
   onClick: func()
 }
 ```
+---
+```js
+defineProps({
+  onClick: func()
+})
+```
+</CodeExample>
 
 ::: ts
 You can constrain the function signature passing it as type argument:
+
+<CodeExample>
 
 ```ts
 props: {
@@ -188,6 +266,14 @@ props: {
   onClick: func<(event: Event) => void>()
 }
 ```
+---
+```ts
+defineProps({
+  // expects an event handler
+  onClick: func<(event: Event) => void>()
+})
+```
+</CodeExample>
 
 :::
 
@@ -195,14 +281,25 @@ props: {
 
 Validates that a prop is a number.
 
+<CodeExample>
+
 ```js
 props: {
   length: number()
 }
 ```
+---
+```js
+defineProps({
+  length: number()
+})
+```
+</CodeExample>
 
 ::: ts
 You can constrain the number value with a type argument:
+
+<CodeExample>
 
 ```ts
 props: {
@@ -210,6 +307,14 @@ props: {
   length: number<1 | 2 | 3>()
 }
 ```
+---
+```ts
+defineProps({
+  // union type
+  length: number<1 | 2 | 3>()
+})
+```
+</CodeExample>
 
 **Note**: this signature will validate the prop at compile-time only. For
 runtime validation use [`oneOf`](#oneof).
@@ -220,14 +325,23 @@ runtime validation use [`oneOf`](#oneof).
 
 Validates that a prop is an integer.
 
+<CodeExample>
+
 ```js
 props: {
   age: integer()
 }
 ```
+---
+```js
+defineProps({
+  age: integer()
+})
+```
+</CodeExample>
 
 ::: ts
-Because `integer()` inherits from `number()`, you can constrain its value with a type argument as well (see above for details).
+Because `integer()` inherits from `number()`, you can constrain its value with a type argument (see above for details).
 
 :::
 
@@ -235,14 +349,26 @@ Because `integer()` inherits from `number()`, you can constrain its value with a
 
 Validates that a prop is an object.
 
+<CodeExample>
+
 ```js
 props: {
   user: object()
 }
 ```
+---
+```js
+defineProps({
+  user: object()
+})
+```
+</CodeExample>
+
 
 ::: ts
 You can specify the shape of the object as type argument:
+
+<CodeExample>
 
 ```ts
 interface User {
@@ -250,13 +376,24 @@ interface User {
   username: string
 }
 
-// ...
-
 props: {
   // restrict the object to the properties of User
   user: object<User>()
 }
 ```
+---
+```ts
+interface User {
+  ID: number
+  username: string
+}
+
+defineProps({
+  // restrict the object to the properties of User
+  user: object<User>()
+})
+```
+</CodeExample>
 
 **Note**: this signature will validate the prop at compile-time only. For
 runtime validation use [`shape`](#shape)
