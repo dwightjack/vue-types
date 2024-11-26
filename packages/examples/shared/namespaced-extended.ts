@@ -9,7 +9,7 @@ export class VueTypesProject extends VueTypes {
   }
 
   static get positive() {
-    return toType('psitive', {
+    return toType('positive', {
       type: Number,
       validator: (v: number) => v > 0,
     })

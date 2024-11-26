@@ -7,15 +7,22 @@ Starting from version 4, VueTypes has a global configuration object that can be 
 
 The configuration is exposed both as a property of the default export, and as a named export:
 
-```ts
-// default exported instance
-import VueTypes from 'vue-types'
+::: code-group
 
-// named export
+```ts [named export]
 import { config } from 'vue-types'
 
 VueTypes.config === config
 ```
+
+```js [default export]
+import VueTypes from 'vue-types'
+
+VueTypes.config === config
+```
+
+:::
+
 
 ## Configuration Options
 
