@@ -25,6 +25,9 @@ export default defineConfig({
     },
   },
   themeConfig: {
+    search: {
+      provider: 'local',
+    },
     siteTitle: 'VueTypes v' + version,
     editLink: {
       pattern:
