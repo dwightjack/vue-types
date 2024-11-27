@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { isPlainObject } from './is-plain-obj'
+import './global-this'
 import { typeDefaults } from './sensibles'
 import { config } from './config'
 import type { VueTypesDefaults } from './types'
@@ -11,6 +12,19 @@ const isArray =
   function (value) {
     return Object.prototype.toString.call(value) === '[object Array]'
   }
+
+function deepClone<T>(input: T): T {
+  if ('structuredClone' in globalThis) {
+    return structuredClone(input)
+  }
+  if (Array.isArray(input)) {
+    return [...input] as T
+  }
+  if (isPlainObject(input)) {
+    return Object.assign({}, input)
+  }
+  return input
+}
 
 function type(name: string, props: any = {}, validable = false): any {
   const descriptors: PropertyDescriptorMap = {
@@ -29,9 +43,9 @@ function type(name: string, props: any = {}, validable = false): any {
           return this
         }
         if (isArray(v)) {
-          t.default = () => [].concat(v as any)
+          t.default = () => deepClone(v)
         } else if (isPlainObject(v)) {
-          t.default = () => Object.assign({}, v)
+          t.default = () => deepClone(v)
         } else {
           t.default = v
         }

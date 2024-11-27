@@ -401,24 +401,34 @@ runtime validation use [`shape`](#shape)
 :::
 
 ::: tip
-[Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) requires Object props to provide default value as a factory function. `object().def()` accepts both factory functions and plain objects. In the latter case, VueTypes will convert the value to a factory function for you.
+[Vue prop validation](https://vuejs.org/guide/components/props.html#prop-validation) requires Object props to provide default value as a factory function. `object().def()` accepts both factory functions and plain objects. In the latter case, VueTypes will convert the value to a factory function for you.
 :::
 
 ### string
 
 Validates that a prop is a string.
 
+<CodeExample>
+
 ```js
 props: {
   username: string()
 }
 ```
+---
+```js
+defineProps({
+  username: string()
+})
+```
+</CodeExample>
 
 ::: ts
 You can constrain the string value with a type argument:
 
-```ts
+<CodeExample>
 
+```ts
 enum Fruits {
   Apple = 'Apple',
   Pear = 'Pear',
@@ -431,6 +441,21 @@ props: {
   fruits: string<'apple' | 'pear'>()
 }
 ```
+---
+```ts
+enum Fruits {
+  Apple = 'Apple',
+  Pear = 'Pear',
+}
+
+defineProps({
+  // string enum
+  users: string<Fruits>(),
+  // union type
+  fruits: string<'apple' | 'pear'>()
+})
+```
+</CodeExample>
 
 **Note**: this signature will validate the prop at compile-time only. For
 runtime validation use [`oneOf`](#oneof).
@@ -441,30 +466,57 @@ runtime validation use [`oneOf`](#oneof).
 
 Validates that a prop is a Symbol.
 
+<CodeExample>
+
 ```js
 props: {
   uniq: symbol()
 }
 ```
+---
+```js
+defineProps({
+  uniq: symbol()
+})
+```
+</CodeExample>
 
 ### nullable
 
-Validates that a prop is null.
+Validates that a prop is `null`.
+
+<CodeExample>
 
 ```js
 props: {
   isNull: nullable()
 }
 ```
+---
+```js
+defineProps({
+  isNull: nullable()
+})
+```
+</CodeExample>
 
 ::: warning
 This validator **does not come with any flag or method**. It can be used with [`oneOfType`](#oneoftype) to make a **required** prop nullable.
+
+<CodeExample>
 
 ```js
 props: {
   stringOrNull: oneOfType([string(), nullable()]).isRequired
 }
 ```
+---
+```js
+defineProps({
+  stringOrNull: oneOfType([string(), nullable()]).isRequired
+})
+```
+</CodeExample>
 
 **Use this validator sparingly.** Nullable props are not encouraged in Vue components, so please consider reviewing your strategy.
 :::
@@ -493,6 +545,8 @@ const oneOfPropRequiredCustom = oneOf([0, 1]).def(1).isRequired
 
 Validates that a prop is an instance of a JavaScript constructor. This validator uses JavaScript's `instanceof` operator.
 
+<CodeExample>
+
 ```js
 class User {
   // ...
@@ -502,19 +556,41 @@ props: {
   user: instanceOf(User)
 }
 ```
+---
+```js
+class User {
+  // ...
+}
+
+defineProps({
+  user: instanceOf(User)
+})
+```
+</CodeExample>
 
 ### oneOf
 
 Validates that a prop is one of the provided values.
+
+<CodeExample>
 
 ```js
 props: {
   genre: oneOf(['action', 'thriller'])
 }
 ```
+---
+```js
+defineProps({
+  genre: oneOf(['action', 'thriller'])
+})
+```
+</CodeExample>
 
 ::: ts
-To constrain the allowed values at compile-time use [const assertions](https://devblogs.microsoft.com/typescript/announcing-typescript-3-4/#const-assertions) on the passed-in array or union types ([see caveats](../advanced/typescript.md#oneof)):
+To constrain the allowed values at compile-time use [const assertions](https://devblogs.microsoft.com/typescript/announcing-typescript-3-4/#const-assertions) on the passed-in array or union types ([see caveats](../advanced/typescript.md#oneof-warning)):
+
+<CodeExample>
 
 ```ts
 props: {
@@ -528,6 +604,20 @@ props: {
   genre: oneOf<Genre>(['action', 'thriller'])
 }
 ```
+---
+```ts
+defineProps({
+  genre: oneOf(['action', 'thriller'] as const)
+})
+
+// mostly same as
+type Genre = 'action' | 'thriller'
+
+defineProps({
+  genre: oneOf<Genre>(['action', 'thriller'])
+})
+```
+</CodeExample>
 
 :::
 
@@ -535,14 +625,25 @@ props: {
 
 Validates that a prop is an object that could be one of many types. Accepts as inner validators an array of JavaScript constructors, Vue.js props validation objects and VueTypes validators objects.
 
-```ts
+<CodeExample>
+
+```js
 props: {
-  // Either a string, an integer or an instance of the User class
-  theProp: oneOfType([String, integer(), instanceOf(User)])
+  stringOrNull: oneOfType([string(), nullable()]).isRequired
 }
 ```
+---
+```js
+defineProps({
+  stringOrNull: oneOfType([string(), nullable()]).isRequired
+})
+```
+</CodeExample>
 
 This validator can be used to compose complex validation logic including native types, specific values (using [`oneOf`](#oneof)) and `null` (using [`nullable`](#nullable)):
+
+
+<CodeExample>
 
 ```ts
 props: {
@@ -555,9 +656,25 @@ props: {
   ])
 }
 ```
+---
+```ts
+defineProps({
+  // Either a number (of pixels), a keyword, or null
+  // translates to: number | 'fit-content' | 'auto' | null
+  width: oneOfType([
+    Number,
+    oneOf(['fit-content', 'auto'] as const),
+    nullable(),
+  ])
+})
+```
+</CodeExample>
 
 ::: ts
 You can constrain the expected types passing them as type argument:
+
+
+<CodeExample>
 
 ```ts
 type User = { name: string; id: string }
@@ -567,8 +684,22 @@ props: {
   theProp: oneOfType<string | User>([String, Object])
 }
 ```
+---
+```ts
+type User = { name: string; id: string }
+
+defineProps({
+  // string or instance of User
+  theProp: oneOfType<string | User>([String, Object])
+})
+```
+</CodeExample>
 
 Constraints can be set on the inner validators as well:
+
+
+
+<CodeExample>
 
 ```ts
 type User = { name: string; id: string }
@@ -578,12 +709,24 @@ props: {
   theProp: oneOfType([String, object<User>()])
 }
 ```
+---
+```ts
+type User = { name: string; id: string }
+
+defineProps({
+  // same as above
+  theProp: oneOfType([String, object<User>()])
+})
+```
+</CodeExample>
 
 :::
 
 ### arrayOf
 
-Validates that a prop is an array of a certain type. Accepts JavaScript constructors, Vue.js props validation objects and VueTypes validators objects.
+Validates the type of the items of an array. Accepts JavaScript constructors, Vue.js props validation objects and VueTypes validators objects.
+
+<CodeExample>
 
 ```js
 props: {
@@ -595,9 +738,24 @@ props: {
   userList: arrayOf(object())
 }
 ```
+---
+```js
+defineProps({
+  //accepts: ['my', 'string']
+  //rejects: ['my', 1]
+  theProp: arrayOf(String),
+
+  // accepts an array of objects
+  userList: arrayOf(object())
+})
+```
+</CodeExample>
 
 ::: tip
-Prop Validators are composable. For example, to validate an array that can contain both strings and numbers you can use `arrayOf` and `oneOfType`:
+Prop Validators are composable. For example, to validate an array containing both strings and numbers you can use `arrayOf` and `oneOfType`:
+
+
+<CodeExample>
 
 ```js
 props: {
@@ -605,8 +763,24 @@ props: {
   collection: arrayOf(oneOfType([String, Number]))
 }
 ```
+---
+```js
+defineProps({
+  // an array containing both strings and numbers
+  collection: arrayOf(oneOfType([String, Number]))
+})
+```
+</CodeExample>
+
+
+:::
+
+::: ts
 
 In TypeScript, composition can be used together with type arguments to constrain the final prop type:
+
+
+<CodeExample>
 
 ```ts
 type User = { name: string; id: string }
@@ -616,12 +790,25 @@ props: {
   collection: arrayOf(oneOfType([array<string>(), object<User>()]))
 }
 ```
+---
+```ts
+type User = { name: string; id: string }
+
+defineProps({
+  // an array containing both arrays of strings and User object instances
+  collection: arrayOf(oneOfType([array<string>(), object<User>()]))
+})
+```
+</CodeExample>
 
 :::
 
 ### objectOf
 
 Validates that a prop is an object with values of a certain type. Accepts JavaScript constructors, Vue.js props validation objects and VueTypes validators objects.
+
+
+<CodeExample>
 
 ```js
 props: {
@@ -630,6 +817,15 @@ props: {
   userData: objectOf(String)
 }
 ```
+---
+```js
+defineProps({
+  //accepts: {name: 'John', surname: 'Doe'}
+  //rejects: {name: 'John', age: 30}
+  userData: objectOf(String)
+})
+```
+</CodeExample>
 
 ### shape
 
@@ -640,6 +836,8 @@ Note that:
 - You can set the properties of the shape as `required` but you **cannot** use `.def()`.
 - You can use `.def()` to set a default value for the shape itself.
 - Like `array` and `object`, you can pass to `.def()` either a factory function returning an object or a plain object.
+
+<CodeExample>
 
 ```js
 props: {
@@ -654,9 +852,27 @@ props: {
   }).def(() => ({ name: 'John' }))
 }
 ```
+---
+```js
+defineProps({
+  // default value = {name: 'John'}
+  //accepts: {name: 'John', age: 30, id: 1}
+  //rejects: {name: 'John', age: 30} -> missing required `id` key
+  //rejects: {name: 'John', age: 'wrong data', id: 1} -> age is not a number
+  userData: shape({
+    name: String,
+    age: integer(),
+    id: integer().isRequired,
+  }).def(() => ({ name: 'John' }))
+})
+```
+</CodeExample>
 
 ::: ts
 You can constrain the shape with a type argument:
+
+
+<CodeExample>
 
 ```ts
 interface User {
@@ -675,81 +891,137 @@ props: {
   }).def(() => ({ name: 'John' }))
 }
 ```
+---
+```ts
+interface User {
+  name?: string
+  age?: number
+  id: number
+}
+
+// ...
+
+defineProps({
+  userData: shape<User>({
+    name: String,
+    age: integer(),
+    id: integer().isRequired,
+  }).def(() => ({ name: 'John' }))
+})
+```
+</CodeExample>
 
 :::
 
 #### Loose shape matching
 
-By default `shape` will reject objects containing properties not defined in the shape. To allow partial matching use the `loose` flag:
+By default `shape` rejects objects containing properties not defined in the shape. To allow partial matching use the `loose` flag:
+
+
+<CodeExample>
 
 ```js
-export default {
-  props: {
-    //accepts: {name: 'John', id: 1}
-    //rejects: {name: 'John', id: 1, age: 30} --> age not defined in the shape
-    userData: shape({
-      name: String,
-      id: integer().isRequired,
-    }),
-
-    //accepts: {name: 'John', id: 1}
-    //accepts: {name: 'John', id: 1, age: 30} --> loose matching
-    userDataLoose: shape({
-      name: String,
-      id: integer().isRequired,
-    }).loose, // <-- loose flag
-  },
+props: {
+  //accepts: {name: 'John', id: 1}
+  //accepts: {name: 'John', id: 1, age: 30} --> loose matching
+  userDataLoose: shape({
+    name: String,
+    id: integer().isRequired,
+  }).loose, // <-- loose flag
 }
 ```
+---
+```js
+defineProps({
+  //accepts: {name: 'John', id: 1}
+  //accepts: {name: 'John', id: 1, age: 30} --> loose matching
+  userDataLoose: shape({
+    name: String,
+    id: integer().isRequired,
+  }).loose, // <-- loose flag
+})
+```
+</CodeExample>
 
 ### custom
 
 Validates prop values against a custom validation function.
 
+<CodeExample>
+
 ```js
-function minLength(value) {
-  return typeof value === 'string' && value.length >= 6
-}
-
-// ...
-
 props: {
-  username: custom(minLength)
+  //accepts: 'arandomusername'
+  //rejects: 'user', 1
+  username: custom(function miLength(value) {
+    return typeof value === 'string' && value.length >= 6
+  })
 }
-
-//accepts: 'arandomusername'
-//rejects: 'user', 1
 ```
+---
+```js
+defineProps({
+  //accepts: 'arandomusername'
+  //rejects: 'user', 1
+  username: custom(function miLength(value) {
+    return typeof value === 'string' && value.length >= 6
+  })
+})
+```
+</CodeExample>
 
 Note that the passed-in function name will be used as the custom validator name in warnings.
 
-You can pass a validation error message as second argument as well:
+You can pass a custom validation error message as second argument:
+
+
+<CodeExample>
 
 ```js
-function minLength(value) {
-  return typeof value === 'string' && value.length >= 6
-}
-
-// ...
 props: {
-  theProp: custom(minLength, 'theProp is not a string or is too short')
+  theProp: custom(
+    (value) => typeof value === 'string' && value.length >= 6,
+    'theProp is not a string or is too short'
+  )
 }
 ```
+---
+```js
+defineProps({
+  theProp: custom(
+    (value) => typeof value === 'string' && value.length >= 6,
+    'theProp is not a string or is too short'
+  )
+})
+```
+</CodeExample>
 
 ::: ts
 In TypeScript, you can specify the prop type with a type argument:
 
-```ts
-function minLength(value) {
-  return typeof value === 'string' && value.length >= 6
-}
 
-// ...
+<CodeExample>
+
+```ts
 props: {
-  // theProp is a string
-  theProp: custom<string>(minLength)
+  theProp: custom<string>(
+    function minLength(value) {
+      return typeof value === 'string' && value.length >= 6
+    }
+  )
 }
 ```
+---
+```ts
+defineProps({
+  theProp: custom<string>(
+    function minLength(value) {
+      return typeof value === 'string' && value.length >= 6
+    }
+  )
+})
+```
+</CodeExample>
 
 :::
 

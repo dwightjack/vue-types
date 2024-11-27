@@ -1,15 +1,24 @@
 ---
 ---
+<script setup>
+import CodeExample from '../components/CodeExample.vue'
+</script>
 
 # Namespaced Usage
 
 The default export of `vue-types` exposes an ES6 class object that mimics React prop-type.
 
-The class object exposes both [native](/guide/validators.html#native-validators) and [custom](/guide/validators.html#custom-validators) validators.
+The class object exposes both [native](./validators.md#native-validators) and [custom](./validators.md#custom-validators) validators.
+
+::: tip
+While namespaced usage is not deprecated, [named validators](./validators.md) are usually a better and more type-safe option for your project.
+:::
 
 ## Native Validators
 
 Native validators are exposed as static getter factories:
+
+<CodeExample>
 
 ```js
 import VueTypes from 'vue-types'
@@ -20,10 +29,25 @@ export default {
   },
 }
 ```
+---
+```js
+import VueTypes from 'vue-types'
 
-The main difference between namespaced native validators and those directly imported from the library is that the former come (usually) with a default value already defined.
+defineProps({
+  message: VueTypes.string.isRequired,
+})
+```
+</CodeExample>
+
+::: warning NOTE
+
+The main difference between namespaced native validators and those directly imported from the library is that the former come (usually) **with a default value already defined** (see table below).
+
+:::
 
 <div id="default-values">
+
+### Native validators default values
 
 | Validator | Default    | `validate()` method |
 | --------- | ---------- | ------------------- |
@@ -53,7 +77,7 @@ const stringProp = VueTypes.string
 // stringProp ===  { type: String, default : '' }
 ```
 
-## Native Types Configuration
+## Native types configuration
 
 All native validators (with the exception of `any` and `symbol`) come with a sensible default value. To customize or disable that value, you can set the global option `VueTypes.sensibleDefaults`:
 
