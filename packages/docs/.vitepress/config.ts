@@ -24,6 +24,9 @@ export default defineConfig({
     },
   },
   themeConfig: {
+    search: {
+      provider: 'local',
+    },
     editLink: {
       pattern:
         'https://github.com/dwightjack/vue-types/edit/main/packages/docs/:path',

@@ -7,22 +7,25 @@ Starting from version 4, VueTypes has a global configuration object that can be 
 
 The configuration is exposed both as a property of the default export, and as a named export:
 
-::: code-group
+::: tabs
 
-```ts [named export]
+== Named export
+
+```js
 import { config } from 'vue-types'
 
 VueTypes.config === config
 ```
 
-```js [default export]
+== Default export
+
+```js{sss.js}
 import VueTypes from 'vue-types'
 
 VueTypes.config === config
 ```
 
 :::
-
 
 ## Configuration Options
 
