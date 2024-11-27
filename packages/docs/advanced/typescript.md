@@ -252,7 +252,7 @@ props: {
 }
 ```
 
-::: warning
+::: warning {id=oneof-warning}
 
 Note that union types don't put any constrain on the presence of all of their members in the validation array. This can lead to runtime bugs not detected by the type checker:
 

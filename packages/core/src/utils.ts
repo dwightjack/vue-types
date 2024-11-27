@@ -1,3 +1,4 @@
+import './global-this'
 import { config } from './config'
 import {
   VueTypeDef,
@@ -34,6 +35,19 @@ export function getNativeType(value: any): string {
   if (value === null || value === undefined) return ''
   const match = value.constructor.toString().match(FN_MATCH_REGEXP)
   return match ? match[1].replace(/^Async/, '') : ''
+}
+
+export function deepClone<T>(input: T): T {
+  if ('structuredClone' in globalThis) {
+    return structuredClone(input)
+  }
+  if (Array.isArray(input)) {
+    return [...input] as T
+  }
+  if (isPlainObject(input)) {
+    return Object.assign({}, input)
+  }
+  return input
 }
 
 /**
@@ -295,9 +309,9 @@ export function toType<T = any>(name: string, obj: PropOptions<T>) {
           return this
         }
         if (isArray(def)) {
-          this.default = () => [...def]
+          this.default = () => deepClone(def)
         } else if (isPlainObject(def)) {
-          this.default = () => Object.assign({}, def)
+          this.default = () => deepClone(def)
         } else {
           this.default = def
         }

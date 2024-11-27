@@ -330,6 +330,30 @@ describe('`toValidableType()`', () => {
   })
 })
 
+describe('`deepClone()`', () => {
+  it('deep clones an object', () => {
+    const obj = { a: 1, b: { c: 2 } }
+
+    const clone = utils.deepClone(obj)
+
+    expect(clone).not.toBe(obj)
+
+    clone.b.c = 3
+    expect(obj.b.c).not.toBe(clone.b.c)
+  })
+
+  it('deep clones an array', () => {
+    const arr = [{ b: { c: 2 } }]
+    const clone = utils.deepClone(arr)
+
+    expect(clone).not.toBe(arr)
+
+    clone[0].b.c = 3
+
+    expect(arr[0].b.c).not.toBe(clone[0].b.c)
+  })
+})
+
 describe('`clone()`', () => {
   it('clones an object', () => {
     const obj = { a: true }
