@@ -3,7 +3,7 @@ import container from 'markdown-it-container'
 
 export default defineConfig({
   title: 'VueTypes',
-  base: process.env.NODE_ENV === 'production' ? '/vue-types/' : '/',
+  base: '/',
   lastUpdated: true,
   markdown: {
     config(md) {
