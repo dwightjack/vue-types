@@ -6,13 +6,11 @@ import CodeExample from '../components/CodeExample.vue'
 
 # Namespaced Usage
 
+<!--@include: ./shared/warning.md-->
+
 The default export of `vue-types` exposes an ES6 class object that mimics React prop-type.
 
-The class object exposes both [native](./validators.md#native-validators) and [custom](./validators.md#custom-validators) validators.
-
-::: tip
-While namespaced usage is not deprecated, [named validators](./validators.md) are usually a better and more type-safe option for your project.
-:::
+The class object exposes both [native](../guide/validators.md#native-validators) and [custom](../guide/validators.md#custom-validators) validators.
 
 ## Native Validators
 

@@ -38,6 +38,10 @@ export default defineConfig({
         text: 'v1.x Docs',
         link: 'https://github.com/dwightjack/vue-types/blob/v1/README.md',
       },
+      {
+        text: 'v2 ~ v5.x Docs',
+        link: 'https://vue-types-v5.codeful.dev',
+      },
     ],
     socialLinks: [
       { icon: 'github', link: 'https://github.com/dwightjack/vue-types' },
@@ -50,7 +54,7 @@ export default defineConfig({
         items: [
           { text: 'Installation', link: '/guide/installation' },
           { text: 'Using VueTypes', link: '/guide/validators' },
-          { text: 'Namespaced Usage', link: '/guide/namespaced' },
+
           { text: 'Configuration', link: '/guide/configuration' },
         ],
       },
@@ -58,12 +62,24 @@ export default defineConfig({
         text: 'Advanced',
         collapsable: false,
         items: [
-          { text: 'Extending VueTypes', link: '/advanced/extending-vue-types' },
-          {
-            text: 'Custom namespaced instance',
-            link: '/advanced/custom-instance',
-          },
+          { text: 'Custom Validators', link: '/advanced/custom-validators' },
+
           { text: 'TypeScript Usage', link: '/advanced/typescript' },
+        ],
+      },
+      {
+        text: 'Namespaced Usage',
+        collapsable: true,
+        items: [
+          { text: 'Getting started', link: '/namespaced-usage/index' },
+          {
+            text: 'Extending VueTypes',
+            link: '/namespaced-usage/extend',
+          },
+          {
+            text: 'Custom instance',
+            link: '/namespaced-usage/custom-instance',
+          },
         ],
       },
     ],

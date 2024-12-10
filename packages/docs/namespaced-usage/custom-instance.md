@@ -1,6 +1,8 @@
-# Custom namespaced instance
+# Custom instance
 
-The [sensibleDefaults](/guide/namespaced.html#native-types-configuration) and [extend](/advanced/extending-vue-types.html) features let you customize the library to better fit into your project.
+<!--@include: ./shared/warning.md-->
+
+The [sensibleDefaults](./index.md#native-types-configuration) and [extend](./extend.md) features let you customize the library to better fit into your project.
 
 Anyway, they come with a downside: because they mutate the same `VueTypes` object, applications sharing the same module (ie: importing the same library instance from `node_modules`) might alter one another the behavior of validators.
 
@@ -74,37 +76,9 @@ const MyComponent = {
 
 ## Extending a custom namespaced instance
 
-Like the default `VueTypes` instance, custom namespaced instances can be extended either by the `extend` method or (in ES6+ environments) with the `extend` keyword:
+Like the default `VueTypes` instance, custom namespaced instances can be extended with the ES6+ [`extend` keyword](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/extends):
 
 This allow you to setup highly customizable custom validators:
-
-```js
-// ./src/prop-types.js
-
-import { createTypes } from 'vue-types'
-
-export default createTypes().extend([
-  {
-    name: 'positive',
-    getter: true,
-    type: Number,
-    validator: (v) => v > 0,
-  },
-])
-
-// Usage:
-// ./src/my-component.vue
-import MyTypes from './prop-types'
-
-export default {
-  props: {
-    name: MyTypes.string,
-    score: MyTypes.positive.isRequired,
-  },
-}
-```
-
-In E6+ and TypeScript environments, `./scr/prop-types.js` could be rewritten as:
 
 ```js
 // ./src/prop-types.js
@@ -112,11 +86,10 @@ In E6+ and TypeScript environments, `./scr/prop-types.js` could be rewritten as:
 import { createTypes, toType } from 'vue-types'
 
 export default class MyTypes extends createTypes() {
-  static get positive() {
+  static get string() {
     return toType({
-      type: Number,
-      validator: (v) => v > 0,
-    })
+      type: String,
+    }).def('hello')
   }
 }
 ```

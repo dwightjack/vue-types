@@ -1061,13 +1061,13 @@ validateType(String, 10, false) // 'value "10" should be of type "string"`
 
 Convert an object compatible with Vue.js [prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) to a VueTypes validator object.
 
-See [Standalone custom validators](../advanced/extending-vue-types.md#standalone-custom-validators) for more details.
+See [Standalone custom validators](../advanced/custom-validators.md#standalone-custom-validators) for more details.
 
 ### fromType
 
 Creates a new validator object from a previously defined one.
 
-See [Inheriting from existing validators](/advanced/extending-vue-types.html#inheriting-from-existing-validators) for more details.
+See [Inheriting from existing validators](/advanced/custom-validators.html#inheriting-from-existing-validators) for more details.
 
 ### createTypes
 
