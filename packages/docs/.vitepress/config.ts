@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
 import container from 'markdown-it-container'
+import { version } from '../../core/package.json'
 
 export default defineConfig({
   title: 'VueTypes',
@@ -22,6 +23,7 @@ export default defineConfig({
     },
   },
   themeConfig: {
+    siteTitle: 'VueTypes v' + version,
     editLink: {
       pattern:
         'https://github.com/dwightjack/vue-types/edit/main/packages/docs/:path',
