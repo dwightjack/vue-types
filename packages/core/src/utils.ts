@@ -1,4 +1,4 @@
-import { isPlainObject as _isPlainObject } from 'is-plain-object'
+import './global-this'
 import { config } from './config'
 import {
   VueTypeDef,
@@ -7,7 +7,11 @@ import {
   InferType,
   PropOptions,
   VueTypesConfig,
+  ValidatorFunction,
 } from './types'
+import { isPlainObject } from './is-plain-obj'
+
+export { isPlainObject }
 
 const ObjProto = Object.prototype
 const toString = ObjProto.toString
@@ -33,8 +37,18 @@ export function getNativeType(value: any): string {
   return match ? match[1].replace(/^Async/, '') : ''
 }
 
-type PlainObject = Record<string, any>
-export const isPlainObject = _isPlainObject as (obj: any) => obj is PlainObject
+export function deepClone<T>(input: T): T {
+  if ('structuredClone' in globalThis) {
+    return structuredClone(input)
+  }
+  if (Array.isArray(input)) {
+    return [...input] as T
+  }
+  if (isPlainObject(input)) {
+    return Object.assign({}, input)
+  }
+  return input
+}
 
 /**
  * No-op function
@@ -295,9 +309,9 @@ export function toType<T = any>(name: string, obj: PropOptions<T>) {
           return this
         }
         if (isArray(def)) {
-          this.default = () => [...def]
+          this.default = () => deepClone(def)
         } else if (isPlainObject(def)) {
-          this.default = () => Object.assign({}, def)
+          this.default = () => deepClone(def)
         } else {
           this.default = def
         }
@@ -323,7 +337,7 @@ export function toType<T = any>(name: string, obj: PropOptions<T>) {
 export function toValidableType<T = any>(name: string, obj: PropOptions<T>) {
   const type = toType<T>(name, obj)
   return Object.defineProperty(type, 'validate', {
-    value(fn: (value: T) => boolean) {
+    value(fn: ValidatorFunction<T>) {
       if (isFunction(this.validator)) {
         warn(
           `${
@@ -395,10 +409,11 @@ export function fromType<
 
     copy.validator = bindTo(
       prevValidator
-        ? function (this: T, value: any) {
+        ? function (this: T, value: any, props: any) {
             return (
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              prevValidator!.call(this, value) && validator.call(this, value)
+              prevValidator!.call(this, value, props) &&
+              validator.call(this, value, props)
             )
           }
         : validator,

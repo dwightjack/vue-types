@@ -19,7 +19,7 @@ describe('`.oneOf`', () => {
 
   it('should have a valid array `type` property', () => {
     expect(customType.type).toBeInstanceOf(Array)
-    expect(customType.type[0]).toBe(Number)
+    expect(customType.type).toHaveProperty([0], Number)
   })
 
   it('should add a `required` flag', () => {
@@ -49,8 +49,8 @@ describe('`.oneOf`', () => {
 
   it('should provide a custom validator function', () => {
     const validator = forceNoContext(customType.validator)
-    expect(validator(0)).toBe(true)
-    expect(validator(5 as any)).toBe(false)
+    expect(validator(0, {})).toBe(true)
+    expect(validator(5 as any, {})).toBe(false)
   })
 
   it('should filter `undefined` values type checking', () => {
@@ -71,7 +71,7 @@ describe('`.oneOf`', () => {
   it('should properly stringify values in error message', () => {
     vi.mocked(console.warn).mockClear()
     const myType = oneOf([Symbol('demo')])
-    myType.validator('a' as any)
+    myType.validator?.('a' as any, {})
     expect(console.warn).toHaveBeenCalledWith(
       expect.stringContaining('Symbol(demo)'),
     )

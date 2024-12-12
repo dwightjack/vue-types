@@ -3,11 +3,11 @@ import { VueTypeDef } from '../../src/types'
 import { checkRequired } from '../helpers'
 
 describe('`.instanceOf`', () => {
-  let customType: VueTypeDef
-
   class MyClass {
     constructor(public name: string) {}
   }
+
+  let customType: VueTypeDef<MyClass>
 
   beforeEach(() => {
     customType = instanceOf(MyClass)
@@ -31,6 +31,6 @@ describe('`.instanceOf`', () => {
   })
 
   it('should NOT allow default values other than the provided ones', () => {
-    expect(customType.def(new Date()).default).toBeUndefined()
+    expect(customType.def(new Date() as any).default).toBeUndefined()
   })
 })

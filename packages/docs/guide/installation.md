@@ -1,10 +1,11 @@
 # Installation
 
 ::: warning VERSION NOTE
-This guide covers VueTypes 2+.
+This guide covers VueTypes 6+.
 
-- VueTypes 2 is compatible with **Vue 1 and 2**.
+- **VueTypes 6+ is compatible with Vue 3**.
 - VueTypes 4+ is compatible with **Vue 2 and Vue 3**.
+- VueTypes 2 is compatible with **Vue 1 and 2**.
   :::
 
 ## NPM package
@@ -15,54 +16,43 @@ npm install vue-types --save
 
 ## CDN delivered script
 
-Add the following script tags before your code
+Add the following script tags before your code:
 
 ```html
-<script src="https://unpkg.com/vue-types@5"></script>
+<script src="https://unpkg.com/vue-types@6"></script>
 
 <!-- Or -->
 
-<script src="https://cdn.jsdelivr.net/npm/vue-types@5/dist/vue-types.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-types@6/dist/index.umd.js"></script>
 ```
 
-In modern browsers [supporting ES Modules](https://caniuse.com/es6-module) you can import the library like this:
+In modern browsers [supporting ES Modules](https://caniuse.com/es6-module), you can import the library like this:
 
 ```html
 <script type="module">
-  import { string, number } from 'https://unpkg.com/vue-types@5?module'
+  import { string, number } from 'https://unpkg.com/vue-types@6?module'
 </script>
 
 <!-- Or -->
 
 <script type="module">
-  import { string, number } from 'https://cdn.jsdelivr.net/npm/vue-types@5/+esm'
+  import { string, number } from 'https://cdn.jsdelivr.net/npm/vue-types@6/+esm'
 </script>
 ```
 
 ## Usage with bundlers
 
-Starting from version 4, VueTypes is published as a **native ESM module** with CommonJS and UMD support.
+VueTypes is published as a **native ESM module** with CommonJS and UMD support.
 
-Modern bundlers and tools should be able to automatically pick the correct entry point based on your configuration.
+Modern bundlers and tools should be able to pick the correct entry point based on your configuration automatically.
 
 ```js
 import { string, oneOf } from 'vue-types' // or: import VueTypes from 'vue-types';
 ```
 
-::: details More details
-
-For reference, here is the list of available entry points:
-
-- `vue-types.modern.js`: ES module for environments [supporting it](https://caniuse.com/es6-module). This is the default entry point for Node 14+, Webpack 5+, Rollup and other tools with native support for ES Modules (like [Vite](https://vitejs.dev/), [Nuxt 3](https://nuxt.com/), Vue CLI 5 and [Snowpack](https://www.snowpack.dev/)).
-- `vue-types.m.js`: ES5 compiled version exported as ES module. This is the default entry point for Webpack 4 and frameworks like [Nuxt 2](https://nuxtjs.org/) and [Vue CLI 4](https://cli.vuejs.org/)
-- `vue-types.cjs`: ES5 compiled version exported as CommonJS module. This is the default entry point for Node 12 and older and tools not supporting ES Modules.
-- `vue-types.umd.js`: ES5 compiled version bundled as UMD module. This entry point can be used when loading VueTypes from a `<script src="...">` tag or from a CDN. It's the default entry point for [unpkg](https://unpkg.com/).
-
-:::
-
 ## Production build
 
-Vue.js does not validate components' props when used in a production build. If you're using a bundler such as Webpack or rollup, you can shrink VueTypes file size by around **70%** (minified and gzipped) by removing the validation logic while preserving the library's API methods. To achieve that result, VueTypes ships with a `vue-types/shim` module that can be used as alias in production builds.
+Vue.js does not validate components' props when used in a production build. Using a bundler such as Webpack or Rollup, you can shrink VueTypes file size by around **70%** (minified and gzipped) by removing the validation logic while preserving the library's API methods. VueTypes ships with a `vue-types/shim` module that can be used as an alias in production builds to achieve that result.
 
 ::: danger NOTE
 Note that all validation functions in the shim version (including `validateType` and `VueTypes.utils.validate`) always return `true`.
@@ -74,14 +64,13 @@ See below for common configuration scenarios.
 
 ::: details More details
 
-For reference, here is a table showing the full and shim versions of the library for each module system.
+Here is a table showing the full and shim versions of the library for each module system.
 
-| Module system | Full Library entry point | Shim entry point       |
-| ------------- | ------------------------ | ---------------------- |
-| Modern ES     | `vue-types.modern.js`    | `shim/index.modern.js` |
-| ES5 ES        | `vue-types.m.js`         | `shim/index.m.js`      |
-| CommonJS      | `vue-types.cjs`          | `shim/index.cjs.js`    |
-| UMD           | `vue-types.umd.js`       | `shim/index.umd.js`    |
+| Module system | Full Library entry point | Shim entry point |
+| ------------- | ------------------------ | ---------------- |
+| ES6 ES        | `index.mjs`              | `shim.mjs`       |
+| CommonJS      | `index.cjs`              | `shim.cjs`       |
+| UMD           | `index.umd.js`           | `shim.umd.js`    |
 
 :::
 
@@ -90,7 +79,7 @@ For reference, here is a table showing the full and shim versions of the library
 If you're including the library via a `script` tag, use the dedicated shim build file:
 
 ```html
-<script src="https://unpkg.com/vue-types@5/shim/index.umd.js"></script>
+<script src="https://unpkg.com/vue-types@6/shim.umd.js"></script>
 ```
 
 ### Vite
@@ -156,7 +145,7 @@ return {
 ```
 
 ::: warning
-If you are using [@rollup/plugin-node-resolve](https://www.npmjs.com/package/@rollup/plugin-node-resolve) make sure to place the alias plugin **before** the resolve plugin.
+If you are using [@rollup/plugin-node-resolve](https://www.npmjs.com/package/@rollup/plugin-node-resolve), place the alias plugin **before** the resolve plugin.
 
 :::
 
@@ -177,21 +166,7 @@ export default {
 }
 ```
 
-::: warning
-In projects using Nuxt 2, use the `buildModules` options:
-
-```js
-// nuxt.config.js
-
-export default {
-  // ...
-  buildModules: ['vue-types-nuxt'],
-}
-```
-
-:::
-
-The modules accepts a `shim` boolean option to forcefully enable / disable the shim:
+The module accepts a `shim` boolean option to turn the shim on/off forcefully:
 
 ```ts
 // nuxt.config.ts

@@ -13,7 +13,7 @@ export default defineNuxtModule<VueTypesNuxtOptions>({
     name: 'vue-types',
     configKey: 'vueTypes',
     compatibility: {
-      nuxt: '^2.0.0 || ^3.0.0',
+      nuxt: '^3.0.0',
     },
   },
 

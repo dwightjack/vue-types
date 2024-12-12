@@ -25,7 +25,9 @@
   "scripts": {
     "prepublishOnly": "pnpm run build",
     "build": "nuxt-module-build build",
-    "lint": "eslint 'src/**/*.ts'"
+    "lint": "pnpm run \"/^lint:.*/\"",
+    "lint:type": "tsc --noEmit --skipLibCheck",
+    "lint:js": "eslint 'src/**/*.ts'"
   },
   "dependencies": {
     "@nuxt/kit": "^3.0.0"

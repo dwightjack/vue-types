@@ -169,9 +169,9 @@ describe('Native validators', () => {
 
     it('should provide a validator function that returns true on integer values', () => {
       const validator = forceNoContext(native.integer().validator)
-      expect(validator(100)).toBe(true)
-      expect(validator(Infinity)).toBe(false)
-      expect(validator(0.1)).toBe(false)
+      expect(validator(100, {})).toBe(true)
+      expect(validator(Infinity, {})).toBe(false)
+      expect(validator(0.1, {})).toBe(false)
     })
   })
 
@@ -187,7 +187,7 @@ describe('Native validators', () => {
 
     it('should validate symbols', function () {
       if ('Symbol' in window && typeof Symbol() === 'symbol') {
-        expect(native.symbol().validator(Symbol())).toBe(true)
+        expect(native.symbol().validator?.(Symbol(), {})).toBe(true)
       } else {
         expect(true).toBe(true)
       }

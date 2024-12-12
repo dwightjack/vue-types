@@ -1,26 +1,17 @@
-import VueTypes, {
-  VueTypesInterface,
-  VueTypeDef,
-  VueTypeValidableDef,
-} from 'vue-types'
+import VueTypes, { toType } from 'vue-types'
 
-interface ProjectTypes extends VueTypesInterface {
-  //VueTypeDef accepts the prop expected type as argument
-  maxLength(max: number): VueTypeDef<string>
-  // use VueTypeValidableDef if the new type is going to support the `validate` method.
-  positive: VueTypeValidableDef<number>
+export class VueTypesProject extends VueTypes {
+  static maxLength(max: number) {
+    return toType('maxLength', {
+      type: String,
+      validator: (v) => String(v).length <= max,
+    })
+  }
+
+  static get positive() {
+    return toType('positive', {
+      type: Number,
+      validator: (v: number) => v > 0,
+    })
+  }
 }
-
-export const VueTypesProject = VueTypes.extend<ProjectTypes>([
-  {
-    name: 'maxLength',
-    type: String,
-    validator: (max: number, v: string) => v.length <= max,
-  },
-  {
-    name: 'positive',
-    getter: true,
-    type: Number,
-    validator: (v: number) => v > 0,
-  },
-])

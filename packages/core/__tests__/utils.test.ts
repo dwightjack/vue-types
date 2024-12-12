@@ -170,7 +170,7 @@ describe('`toType()`', () => {
 
     const type = utils.toType('testType', obj)
     const { validator } = type
-    validator(true)
+    validator?.(true, {})
 
     expect(spy.mock.instances[0]).toBe(type)
   })
@@ -330,6 +330,30 @@ describe('`toValidableType()`', () => {
   })
 })
 
+describe('`deepClone()`', () => {
+  it('deep clones an object', () => {
+    const obj = { a: 1, b: { c: 2 } }
+
+    const clone = utils.deepClone(obj)
+
+    expect(clone).not.toBe(obj)
+
+    clone.b.c = 3
+    expect(obj.b.c).not.toBe(clone.b.c)
+  })
+
+  it('deep clones an array', () => {
+    const arr = [{ b: { c: 2 } }]
+    const clone = utils.deepClone(arr)
+
+    expect(clone).not.toBe(arr)
+
+    clone[0].b.c = 3
+
+    expect(arr[0].b.c).not.toBe(clone[0].b.c)
+  })
+})
+
 describe('`clone()`', () => {
   it('clones an object', () => {
     const obj = { a: true }
@@ -377,11 +401,12 @@ describe('`fromType()`', () => {
     })
 
     const copy = utils.fromType('b', base, { validator: validatorCopy })
+    const props = {}
 
-    copy.validator('')
+    copy.validator('', props)
 
-    expect(validator).toHaveBeenCalledWith('')
-    expect(validatorCopy).toHaveBeenCalledWith('')
+    expect(validator).toHaveBeenCalledWith('', props)
+    expect(validatorCopy).toHaveBeenCalledWith('', props)
     expect(validator.mock.instances[0]).toBe(copy as any)
     expect(validatorCopy.mock.instances[0]).toBe(copy as any)
   })

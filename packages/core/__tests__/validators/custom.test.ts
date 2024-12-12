@@ -29,8 +29,8 @@ describe('`.custom`', () => {
 
   it('should provide a custom validator function', () => {
     const validator = forceNoContext(customType.validator)
-    expect(validator('mytest')).toBe(true)
-    expect(validator(0)).toBe(false)
+    expect(validator('mytest', {})).toBe(true)
+    expect(validator(0, {})).toBe(false)
   })
 
   it('should trigger the validator in validateType', () => {

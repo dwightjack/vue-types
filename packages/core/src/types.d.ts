@@ -1,34 +1,22 @@
-export type Prop<T = any> =
-  | (new (...args: any[]) => T & object)
-  | (() => T)
-  | PropMethod<T>
+import type { PropType } from 'vue'
 
-type PropMethod<T, TConstructor = any> = T extends (...args: any) => any
-  ? {
-      new (): TConstructor
-      (): T
-      readonly prototype: TConstructor
-    }
-  : never
+export { PropType }
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type ExtractNonArray<T> = T extends (infer U)[] ? never : T
+
+export type Prop<T> = ExtractNonArray<PropType<T>>
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export type NativeType = string | boolean | number | null | undefined | Function
 
 export type Constructor = new (...args: any[]) => any
 
-export type PropType<T> = Prop<T> | Prop<T>[]
-
 export interface PropOptions<T = any, D = T> {
   type?: PropType<T> | true | null
   required?: boolean
-  default?:
-    | D
-    | null
-    | undefined
-    | (() => D | null | undefined)
-    | ((props: Record<string, unknown>) => D)
-    | object
-  validator?(value: T): boolean
+  default?: D | DefaultFactory<D> | null | undefined | object
+  validator?(value: unknown, props: Record<string, unknown>): boolean
 }
 
 // see https://github.com/vuejs/vue-next/blob/22717772dd83b67ffaa6ad9805c6269e184c7e41/packages/runtime-core/src/componentProps.ts#L67
@@ -46,7 +34,10 @@ export type InferType<T> = T extends { type: null | true }
             ? V
             : T
 
-export type ValidatorFunction<T> = (value: T) => boolean
+export type ValidatorFunction<T> = (
+  value: T,
+  props?: Record<string, unknown>,
+) => boolean
 
 export type DefaultFactory<T> = (() => T) | T
 
@@ -97,16 +88,6 @@ export interface VueTypesDefaults {
   array: () => any[]
   object: () => Record<string, any>
   integer: number
-}
-
-export interface ExtendProps<T = any> {
-  name: string
-  getter?: boolean
-  validate?: boolean
-  type?: PropType<T> | VueTypeDef<T> | VueTypeValidableDef<T>
-  required?: boolean
-  default?: T | null | undefined | (() => T | null | undefined)
-  validator?(...args: any[]): boolean
 }
 
 export interface VueTypesConfig {

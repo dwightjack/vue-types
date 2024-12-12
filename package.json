@@ -3,17 +3,20 @@
   "description": "VueTypes Monorepo",
   "author": "Marco Solazzi",
   "license": "MIT",
-  "homepage": "https://dwightjack.github.io/vue-types/",
+  "homepage": "https://vue-types.codeful.dev/",
   "type": "module",
   "private": true,
   "packageManager": "pnpm@9.13.2",
   "engines": {
-    "node": ">=16.16.0",
+    "node": ">=20.0.0",
     "pnpm": "^9.0.0"
   },
   "scripts": {
     "examples:dev": "pnpm --filter=vue-types run build && pnpm --filter=examples start",
     "docs:dev": "pnpm --filter=docs run dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
     "ci:version": "pnpm changeset version && pnpm install --lockfile-only",
     "ci:publish": "git status && pnpm -r publish"
   },
