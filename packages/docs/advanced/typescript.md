@@ -8,7 +8,7 @@ import CodeExample from '../components/CodeExample.vue'
 
 # TypeScript Usage
 
-VueTypes is written in TypeScript and comes with full builtin types support.
+VueTypes is written in TypeScript and comes with built-in types support.
 
 <CodeExample>
 
@@ -95,7 +95,7 @@ defineProps({
 </CodeExample>
 
 ::: tip
-The same prop type can be expressed using `oneOf` which will also perform a validation at runtime:
+The same prop type can be expressed using `oneOf`, which will also perform validation at runtime:
 
 <CodeExample>
 
@@ -192,7 +192,7 @@ defineProps({
 </CodeExample>
 
 ::: tip
-To have both compile-time and runtime validation, you can use `shape`:
+You can use `shape` to have both compile-time and runtime validation:
 
 
 <CodeExample>
@@ -228,7 +228,7 @@ defineProps({
 
 ### array<T = unknown>
 
-The validator accepts an argument defining the contained items type.
+The validator accepts an argument defining the type of the array's items.
 
 <CodeExample>
 
@@ -262,7 +262,7 @@ defineProps({
 </CodeExample>
 
 ::: tip
-The same prop types can be expressed using `arrayOf` which will also perform a validation at runtime:
+The same prop types can be expressed using `arrayOf`, which will also perform validation at runtime:
 
 <CodeExample>
 
@@ -330,7 +330,7 @@ defineProps({
 </CodeExample>
 
 ::: tip
-The same prop types can be expressed composing VueTypes validators:
+The same prop types can be expressed by composing VueTypes validators:
 
 
 <CodeExample>
@@ -496,7 +496,7 @@ defineProps({
 
 ::: warning {id=oneof-warning}
 
-Note that union types don't put any constrain on the presence of all of their members in the validation array. This can lead to runtime bugs not detected by the type checker:
+Note that union types don't put any constraint on all their members' presence in the validation array. This can lead to runtime bugs not detected by the type checker:
 
 
 <CodeExample>

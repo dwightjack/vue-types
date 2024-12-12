@@ -8,11 +8,11 @@ import CodeExample from '../components/CodeExample.vue'
 
 # Custom validators
 
-The `toType`, `toValidableType` and `fromType` functions can be used to create custom standalone validators. Indeed, they are used internally by `vue-types` in [native](/guide/validators.html#native-validators) and [custom](/guide/validators.html#custom-validators) validators.
+The `toType`, `toValidableType`, and `fromType` functions can be used to create custom standalone validators. Indeed, they are used internally by `vue-types` in [native](/guide/validators.html#native-validators) and [custom](/guide/validators.html#custom-validators) validators.
 
 ## Custom validators from scratch
 
-In the following example we define a validator for positive numbers:
+In the following example, we define a validator for positive numbers:
 
 
 <CodeExample>
@@ -57,7 +57,7 @@ The difference between `toType` and `toValidableType` is that the latter creates
 
 ## Composing existing validators
 
-To promote code reusability and composability, you can use `fromType` to use an already defined validator or a validator instance as base for a new validator.
+To promote code reusability and composability, you can use `fromType` to use an already-defined validator or a validator instance as a base for a new validator.
 
 Function arguments:
 
@@ -84,7 +84,7 @@ const userRequired = fromType('userRequired', user, { required: true })
 ```
 
 ::: warning
-Properties defined in the 3rd argument will overwrite those defined in the base validator.
+Properties defined in the 3rd argument will overwrite those specified in the base validator.
 
 The only exception is `validator()`: those functions will be merged and executed in sequence until one returns `false`.
 

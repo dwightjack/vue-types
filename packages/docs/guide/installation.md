@@ -1,7 +1,7 @@
 # Installation
 
 ::: warning VERSION NOTE
-This guide covers VueTypes 2+.
+This guide covers VueTypes 6+.
 
 - **VueTypes 6+ is compatible with Vue 3**.
 - VueTypes 4+ is compatible with **Vue 2 and Vue 3**.
@@ -16,7 +16,7 @@ npm install vue-types --save
 
 ## CDN delivered script
 
-Add the following script tags before your code
+Add the following script tags before your code:
 
 ```html
 <script src="https://unpkg.com/vue-types@6"></script>
@@ -26,7 +26,7 @@ Add the following script tags before your code
 <script src="https://cdn.jsdelivr.net/npm/vue-types@6/dist/index.umd.js"></script>
 ```
 
-In modern browsers [supporting ES Modules](https://caniuse.com/es6-module) you can import the library like this:
+In modern browsers [supporting ES Modules](https://caniuse.com/es6-module), you can import the library like this:
 
 ```html
 <script type="module">
@@ -42,9 +42,9 @@ In modern browsers [supporting ES Modules](https://caniuse.com/es6-module) you c
 
 ## Usage with bundlers
 
-Starting from version 4, VueTypes is published as a **native ESM module** with CommonJS and UMD support.
+VueTypes is published as a **native ESM module** with CommonJS and UMD support.
 
-Modern bundlers and tools should be able to automatically pick the correct entry point based on your configuration.
+Modern bundlers and tools should be able to pick the correct entry point based on your configuration automatically.
 
 ```js
 import { string, oneOf } from 'vue-types' // or: import VueTypes from 'vue-types';
@@ -52,7 +52,7 @@ import { string, oneOf } from 'vue-types' // or: import VueTypes from 'vue-types
 
 ## Production build
 
-Vue.js does not validate components' props when used in a production build. If you're using a bundler such as Webpack or rollup, you can shrink VueTypes file size by around **70%** (minified and gzipped) by removing the validation logic while preserving the library's API methods. To achieve that result, VueTypes ships with a `vue-types/shim` module that can be used as alias in production builds.
+Vue.js does not validate components' props when used in a production build. Using a bundler such as Webpack or Rollup, you can shrink VueTypes file size by around **70%** (minified and gzipped) by removing the validation logic while preserving the library's API methods. VueTypes ships with a `vue-types/shim` module that can be used as an alias in production builds to achieve that result.
 
 ::: danger NOTE
 Note that all validation functions in the shim version (including `validateType` and `VueTypes.utils.validate`) always return `true`.
@@ -64,13 +64,13 @@ See below for common configuration scenarios.
 
 ::: details More details
 
-For reference, here is a table showing the full and shim versions of the library for each module system.
+Here is a table showing the full and shim versions of the library for each module system.
 
-| Module system | Full Library entry point | Shim entry point    |
-| ------------- | ------------------------ | ------------------- |
-| ES5 ES        | `index.mjs`              | `shim/index.mjs`    |
-| CommonJS      | `index.cjs`              | `shim/index.cjs`    |
-| UMD           | `index.umd.js`           | `shim/index.umd.js` |
+| Module system | Full Library entry point | Shim entry point |
+| ------------- | ------------------------ | ---------------- |
+| ES6 ES        | `index.mjs`              | `shim.mjs`       |
+| CommonJS      | `index.cjs`              | `shim.cjs`       |
+| UMD           | `index.umd.js`           | `shim.umd.js`    |
 
 :::
 
@@ -145,7 +145,7 @@ return {
 ```
 
 ::: warning
-If you are using [@rollup/plugin-node-resolve](https://www.npmjs.com/package/@rollup/plugin-node-resolve) make sure to place the alias plugin **before** the resolve plugin.
+If you are using [@rollup/plugin-node-resolve](https://www.npmjs.com/package/@rollup/plugin-node-resolve), place the alias plugin **before** the resolve plugin.
 
 :::
 
@@ -166,7 +166,7 @@ export default {
 }
 ```
 
-The modules accepts a `shim` boolean option to forcefully enable / disable the shim:
+The module accepts a `shim` boolean option to turn the shim on/off forcefully:
 
 ```ts
 // nuxt.config.ts

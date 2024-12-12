@@ -59,7 +59,7 @@ const MyComponent = {
 }
 ```
 
-The function accepts an optional object argument with sensible defaults. If nothing is provided, then the new object will have the [same defaults](/guide/namespaced.html#default-values) as the default VueTypes object.
+The function accepts an optional object argument with sensible defaults. If nothing is provided, then the new object will have the [same defaults](./index.md#default-values) as the default VueTypes object.
 
 ```js
 import { createTypes } from 'vue-types'

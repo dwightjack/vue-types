@@ -3,7 +3,7 @@
 
 # Configuration
 
-Starting from version 4, VueTypes has a global configuration object that can be used to customize the library's behavior.
+VueTypes has a global configuration object that can be used to customize the library's behavior.
 
 The configuration is exposed both as a property of the default export, and as a named export:
 
