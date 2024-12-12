@@ -3,7 +3,7 @@
   "description": "VueTypes Monorepo",
   "author": "Marco Solazzi",
   "license": "MIT",
-  "homepage": "https://dwightjack.github.io/vue-types/",
+  "homepage": "https://vue-types.codeful.dev/",
   "type": "module",
   "private": true,
   "packageManager": "pnpm@9.13.2",

@@ -57,5 +57,25 @@ export class VueTypesProject extends VueTypes {
 ```
 
 #### Package format review:
+
 * ESM and CJS builds target is ESNext (browsers with support for the latest JavaScript features).
 * UMD builds target is ES2016 (aligned with [Vue 3 browser support](https://vuejs.org/about/faq#what-browsers-does-vue-support))
+
+If you're using a bundler, you should not encounter any issue.
+
+If you are directly referencing or importing a specific file in the `dist` or `shim` folder, you might need to update its path as described in the following table:
+
+| Old (v5)                   | New (v6)            |
+| -------------------------- | ------------------- |
+| `dist/vue-types.m.js`      | `dist/index.mjs`    |
+| `dist/vue-types.modern.js` | `dist/index.mjs`    |
+| `dist/vue-types.cjs`       | `dist/index.cjs`    |
+| `dist/vue-types.umd.js`    | `dist/index.umd.js` |
+| `dist/shim.m.js`           | `dist/shim.mjs`     |
+| `dist/shim.modern.js`      | `dist/shim.mjs`     |
+| `dist/shim.cjs`            | `dist/shim.cjs`     |
+| `dist/shim.umd.js`         | `dist/shim.umd.js`  |
+| `shim/index.m.js`          | `dist/shim.mjs`     |
+| `shim/index.modern.js`     | `dist/shim.mjs`     |
+| `shim/index.cjs`           | `dist/shim.cjs`     |
+| `shim/index.umd.js`        | `dist/shim.umd.js`  |
