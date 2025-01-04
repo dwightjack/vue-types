@@ -75,7 +75,7 @@
     "babel-plugin-transform-node-env-inline": "0.4.3",
     "cpy-cli": "5.0.0",
     "cross-env": "7.0.3",
-    "del": "7.1.0",
+    "del": "8.0.0",
     "del-cli": "5.1.0",
     "microbundle": "0.15.1",
     "typescript": "5.6.3"
