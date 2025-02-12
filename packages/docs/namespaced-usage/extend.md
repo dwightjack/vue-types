@@ -1,4 +1,3 @@
-
 <script setup>
 import CodeExample from '../components/CodeExample.vue'
 </script>
@@ -36,7 +35,6 @@ export default class ProjectTypes extends VueTypes {
 
 Usage:
 
-
 <CodeExample>
 
 ```vue
@@ -52,7 +50,9 @@ export default {
 }
 </script>
 ```
+
 ---
+
 ```vue
 <script setup>
 import ProjectTypes from './prop-types'
@@ -63,4 +63,5 @@ defineProps({
 })
 </script>
 ```
+
 </CodeExample>

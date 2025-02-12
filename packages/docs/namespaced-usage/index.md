@@ -3,6 +3,7 @@ next:
   text: Extending VueTypes
   link: './extend.md'
 ---
+
 <script setup>
 import CodeExample from '../components/CodeExample.vue'
 </script>
@@ -30,7 +31,9 @@ export default {
   },
 }
 ```
+
 ---
+
 ```js
 import VueTypes from 'vue-types'
 
@@ -38,6 +41,7 @@ defineProps({
   message: VueTypes.string.isRequired,
 })
 ```
+
 </CodeExample>
 
 ::: warning NOTE

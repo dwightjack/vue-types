@@ -20,7 +20,9 @@ props: {
   surname: string().def(false),
 }
 ```
+
 ---
+
 ```ts
 defineProps({
   // prop type is `string`
@@ -29,6 +31,7 @@ defineProps({
   surname: string().def(false),
 })
 ```
+
 </CodeExample>
 
 ## Optional type constraint
@@ -44,14 +47,16 @@ props: {
   unknownProp: any<unknown>()
 }
 ```
+
 ---
+
 ```ts
 defineProps({
-  unknownProp: any<unknown>()
+  unknownProp: any<unknown>(),
 })
 ```
-</CodeExample>
 
+</CodeExample>
 
 ### string<T = string>
 
@@ -75,7 +80,9 @@ props: {
   color: string<Colors>()
 }
 ```
+
 ---
+
 ```ts
 defineProps({
   // use a union type to constrain the string type
@@ -92,6 +99,7 @@ defineProps({
   color: string<Colors>()
 })
 ```
+
 </CodeExample>
 
 ::: tip
@@ -104,12 +112,15 @@ props: {
   genre: oneOf(['red', 'green'] as const)
 }
 ```
+
 ---
+
 ```ts
 defineProps({
-  genre: oneOf(['red', 'green'] as const)
+  genre: oneOf(['red', 'green'] as const),
 })
 ```
+
 </CodeExample>
 
 :::
@@ -126,7 +137,9 @@ props: {
   countInt: integer<1 | 2>()
 }
 ```
+
 ---
+
 ```ts
 defineProps({
   // use a union type to constrain the number type
@@ -135,6 +148,7 @@ defineProps({
   countInt: integer<1 | 2>()
 })
 ```
+
 </CodeExample>
 
 ### func<T = (...args: any[]) => any>
@@ -152,7 +166,9 @@ props: {
   loadStrings: fn<AsyncFn>()
 }
 ```
+
 ---
+
 ```ts
 type EventFn = (e: Event) => void
 type AsyncFn = () => Promise<string[]>
@@ -162,6 +178,7 @@ defineProps({
   loadStrings: fn<AsyncFn>()
 })
 ```
+
 </CodeExample>
 
 ### object<T = { [key: string]: any }>
@@ -178,7 +195,9 @@ props: {
   user: object<User>()
 }
 ```
+
 ---
+
 ```ts
 interface User {
   name: string
@@ -186,14 +205,14 @@ interface User {
 }
 
 defineProps({
-   user: object<User>()
+  user: object<User>(),
 })
 ```
+
 </CodeExample>
 
 ::: tip
 You can use `shape` to have both compile-time and runtime validation:
-
 
 <CodeExample>
 
@@ -205,11 +224,13 @@ interface User {
 
 props: {
   user: shape<User>({
-    name: string().isRequired
+    name: string().isRequired,
   })
 }
 ```
+
 ---
+
 ```ts
 interface User {
   name: string
@@ -217,11 +238,12 @@ interface User {
 }
 
 defineProps({
-   user: shape<User>({
-    name: string().isRequired
-   })
+  user: shape<User>({
+    name: string().isRequired,
+  }),
 })
 ```
+
 </CodeExample>
 
 :::
@@ -245,7 +267,9 @@ props: {
   users: array<User>()
 }
 ```
+
 ---
+
 ```ts
 interface User {
   name: string
@@ -259,6 +283,7 @@ defineProps({
   users: array<User>()
 })
 ```
+
 </CodeExample>
 
 ::: tip
@@ -279,7 +304,9 @@ props: {
   users: arrayOf(shape<User>({ name: string().isRequired }))
 }
 ```
+
 ---
+
 ```ts
 interface User {
   name: string
@@ -293,6 +320,7 @@ defineProps({
   users: arrayOf(shape<User>({ name: string().isRequired }))
 })
 ```
+
 </CodeExample>
 
 :::
@@ -301,7 +329,6 @@ defineProps({
 
 You can use a union type to specify the expected types.
 
-
 <CodeExample>
 
 ```ts
@@ -315,7 +342,9 @@ props: {
   theProp: oneOfType<string | User>([String, Object])
 }
 ```
+
 ---
+
 ```ts
 interface User {
   name: string
@@ -324,15 +353,15 @@ interface User {
 
 defineProps({
   // string or instance of User
-  theProp: oneOfType<string | User>([String, Object])
+  theProp: oneOfType<string | User>([String, Object]),
 })
 ```
+
 </CodeExample>
 
 ::: tip
 The same prop types can be expressed by composing VueTypes validators:
 
-
 <CodeExample>
 
 ```ts
@@ -346,7 +375,9 @@ props: {
   theProp: oneOfType([string(), object<User>()])
 }
 ```
+
 ---
+
 ```ts
 interface User {
   name: string
@@ -355,9 +386,10 @@ interface User {
 
 defineProps({
   // string or instance of User
-  theProp: oneOfType([string(), object<User>()])
+  theProp: oneOfType([string(), object<User>()]),
 })
 ```
+
 </CodeExample>
 :::
 
@@ -365,7 +397,6 @@ defineProps({
 
 Setting the type argument provides type checking on top of runtime validation:
 
-
 <CodeExample>
 
 ```ts
@@ -381,7 +412,9 @@ props: {
   })
 }
 ```
+
 ---
+
 ```ts
 interface User {
   name: string
@@ -392,37 +425,39 @@ defineProps({
   user: shape<User>({
     name: string().isRequired,
     id: string(),
-  })
+  }),
 })
 ```
+
 </CodeExample>
 
 ### custom\<T>
 
 You can define the type of the value received by the validator function.
 
-
 <CodeExample>
 
 ```ts
 props: {
-// function argument is of type string
+  // function argument is of type string
   nonEmptyString: custom<string>((v) => typeof v === 'string' && v.length > 0)
 }
 ```
+
 ---
+
 ```ts
 defineProps({
-// function argument is of type string
-  nonEmptyString: custom<string>((v) => typeof v === 'string' && v.length > 0)
+  // function argument is of type string
+  nonEmptyString: custom<string>((v) => typeof v === 'string' && v.length > 0),
 })
 ```
+
 </CodeExample>
 
 ::: tip
 This validator can be used for tuple props:
 
-
 <CodeExample>
 
 ```ts
@@ -434,16 +469,19 @@ props: {
   )
 }
 ```
+
 ---
+
 ```ts
 type Pair = [string, number]
 
 defineProps({
   tuple: custom<Pair>(
     ([a, b]) => typeof a === 'string' && typeof b === 'number',
-  )
+  ),
 })
 ```
+
 </CodeExample>
 
 :::
@@ -452,7 +490,6 @@ defineProps({
 
 You can use [const assertions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions) on the expected values to constrain the validators type:
 
-
 <CodeExample>
 
 ```ts
@@ -462,16 +499,18 @@ props: {
   sizes: oneOf(['large', 'medium'] as const).def('small')
 }
 ```
+
 ---
+
 ```ts
 defineProps({
   // ERROR: Argument of type '"small"' is not assignable
   // to parameter of type '"large" | "medium"'.
-  sizes: oneOf(['large', 'medium'] as const).def('small')
+  sizes: oneOf(['large', 'medium'] as const).def('small'),
 })
 ```
-</CodeExample>
 
+</CodeExample>
 
 Alternative, you can pass a union type:
 
@@ -484,21 +523,23 @@ props: {
   sizes: oneOf<'large' | 'medium'>(['large', 'medium'])
 }
 ```
+
 ---
+
 ```ts
 defineProps({
   // Same (mostly) as above
   // see below for details
-  sizes: oneOf<'large' | 'medium'>(['large', 'medium'])
+  sizes: oneOf<'large' | 'medium'>(['large', 'medium']),
 })
 ```
+
 </CodeExample>
 
 ::: warning {id=oneof-warning}
 
 Note that union types don't put any constraint on all their members' presence in the validation array. This can lead to runtime bugs not detected by the type checker:
 
-
 <CodeExample>
 
 ```ts
@@ -508,20 +549,21 @@ props: {
   sizes: oneOf<'large' | 'medium'>(['large']).def('medium')
 }
 ```
+
 ---
+
 ```ts
 defineProps({
   // TS type checker does not report any error
   // but Vue runtime throws an error
-  sizes: oneOf<'large' | 'medium'>(['large']).def('medium')
+  sizes: oneOf<'large' | 'medium'>(['large']).def('medium'),
 })
 ```
-</CodeExample>
 
+</CodeExample>
 
 As a general rule, we strongly suggest to use [const assertions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions) whenever possible.
 
-
 <CodeExample>
 
 ```ts
@@ -530,13 +572,16 @@ props: {
   sizes: oneOf(['large'] as const).def('medium')
 }
 ```
+
 ---
+
 ```ts
 defineProps({
   // type checker and runtime error
-  sizes: oneOf(['large'] as const).def('medium')
+  sizes: oneOf(['large'] as const).def('medium'),
 })
 ```
+
 </CodeExample>
 
 :::

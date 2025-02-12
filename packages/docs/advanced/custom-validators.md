@@ -14,7 +14,6 @@ The `toType`, `toValidableType`, and `fromType` functions can be used to create 
 
 In the following example, we define a validator for positive numbers:
 
-
 <CodeExample>
 
 ```ts
@@ -30,7 +29,9 @@ export default {
   },
 }
 ```
+
 ---
+
 ```ts
 const positive = () =>
   toType('positive', {
@@ -42,6 +43,7 @@ defineProps({
   myNumber: positive().isRequired,
 })
 ```
+
 </CodeExample>
 
 Both `toType` and `toValidableType` accept the following arguments:

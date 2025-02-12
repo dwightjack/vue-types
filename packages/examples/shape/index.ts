@@ -8,7 +8,6 @@ interface ModelItem {
 }
 
 const Model = defineComponent({
-  template: '<li>{{ model.id }} {{ isNew }} (pet: {{ model.pet }})</li>',
   props: {
     model: VueTypes.shape<ModelItem>({
       id: VueTypes.string.isRequired,
@@ -20,19 +19,13 @@ const Model = defineComponent({
     const isNew = computed(() => (props.model.isNew ? '- new' : ''))
     return { isNew }
   },
+  template: '<li>{{ model.id }} {{ isNew }} (pet: {{ model.pet }})</li>',
 })
 
 const App = defineComponent({
-  template: `
-    <section>
-      <h1>A list of models</h1>
-      <div class="grid">
-        <button type="button" @click="addPet('parrot')">Add parrot (invalid, logs to console)</button>
-        <button type="button" @click="addPet('dog')">Add dog</button>
-      </div>
-      <ul><Model v-for="model in models" :model="model" :key="model.id" /></ul>
-    </section>
-  `,
+  components: {
+    Model,
+  },
   setup() {
     const models = ref<ModelItem[]>([])
 
@@ -49,9 +42,16 @@ const App = defineComponent({
 
     return { models, addPet }
   },
-  components: {
-    Model,
-  },
+  template: `
+    <section>
+      <h1>A list of models</h1>
+      <div class="grid">
+        <button type="button" @click="addPet('parrot')">Add parrot (invalid, logs to console)</button>
+        <button type="button" @click="addPet('dog')">Add dog</button>
+      </div>
+      <ul><Model v-for="model in models" :model="model" :key="model.id" /></ul>
+    </section>
+  `,
 })
 
 createApp({ render: () => h(App) }).mount('#app')

@@ -16,8 +16,9 @@ VueTypes is a collection of configurable [prop validators](https://vuejs.org/gui
 **Starting from v6, vue-types is ONLY compatible with vue@3.**
 
 This is the documentation for **VueTypes 6** and above. If you are using an older version, refer to the following links:
-* [v1](https://github.com/dwightjack/vue-types/blob/v1/README.md)
-* [v2 to v5](https://vue-types-v5.codeful.dev)
+
+- [v1](https://github.com/dwightjack/vue-types/blob/v1/README.md)
+- [v2 to v5](https://vue-types-v5.codeful.dev)
 
 :::
 
@@ -30,7 +31,6 @@ VueTypes offers a compact and fluent interface to define your project's props.
 ## Usage example
 
 Imagine a typical Vue.js component with a set of props:
-
 
 <CodeExample>
 
@@ -57,9 +57,11 @@ export default defineComponent({
   methods: {
     // ...
   },
-});
+})
 ```
+
 ---
+
 ```ts
 defineProps({
   id: {
@@ -84,14 +86,12 @@ const onClick = () => {
   // ...
 }
 ```
-</CodeExample>
 
+</CodeExample>
 
 While this component works perfectly fine, writing a lot of prop validation objects can become repetitive.
 
 With VueTypes, you could rewrite the same props like this:
-
-
 
 <CodeExample>
 
@@ -108,9 +108,11 @@ export default defineComponent({
   methods: {
     // ...
   },
-});
+})
 ```
+
 ---
+
 ```ts
 defineProps({
   id: number().def(10),
@@ -123,6 +125,7 @@ const onClick = () => {
   // ...
 }
 ```
+
 </CodeExample>
 
 VueTypes provides validators in a [single namespace entry point](./namespaced-usage/index.md) as well:

@@ -10,28 +10,31 @@ class CustomTypes extends VueTypes {
 }
 
 const User = defineComponent({
-  template: '<li><strong>{{ name }}</strong> ({{ age }})</li>',
   props: {
     name: CustomTypes.string.isRequired,
     age: CustomTypes.adult,
   },
+  template: '<li><strong>{{ name }}</strong> ({{ age }})</li>',
 })
 
 const UserList = defineComponent({
-  template: `
-    <ul>
-      <User v-for="user in users" :name="user.name" :age="user.age"  :key="user.name" />
-    </ul>
-    `,
-  props: {
-    users: VueTypes.arrayOf(VueTypes.shape(User.props)),
-  },
   components: {
     User,
   },
+  props: {
+    users: VueTypes.arrayOf(VueTypes.shape(User.props)),
+  },
+  template: `
+  <ul>
+    <User v-for="user in users" :name="user.name" :age="user.age"  :key="user.name" />
+  </ul>
+  `,
 })
 
 createApp({
+  components: {
+    UserList,
+  },
   setup() {
     const users = [
       {
@@ -49,8 +52,5 @@ createApp({
     ]
     return () =>
       h('section', [h('h1', ['A list of users:']), h(UserList, { users })])
-  },
-  components: {
-    UserList,
   },
 }).mount('#app')
