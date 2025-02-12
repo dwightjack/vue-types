@@ -7,7 +7,7 @@
     "start": "vite -c ./vite.config.ts",
     "lint": "pnpm run \"/^lint:.*/\"",
     "lint:type": "tsc --noEmit --skipLibCheck",
-    "lint:js": "eslint '**/*.ts'"
+    "lint:js": "eslint '**/*.{ts,vue}'"
   },
   "dependencies": {
     "vue": "3.5.13"
