@@ -10,7 +10,7 @@ import CodeExample from './components/CodeExample.vue'
 
 VueTypes is a collection of configurable [prop validators](https://vuejs.org/guide/components/props.html#prop-validation) for Vue.js inspired by React `prop-types`.
 
-[Try it now!](https://stackblitz.com/edit/vitejs-vite-83cnar?file=src/App.vue)
+[Try it now!](https://stackblitz.com/edit/vitejs-vite-exfrzex6?file=src%2FApp.vue)
 
 ::: warning VERSION NOTE
 **Starting from v6, vue-types is ONLY compatible with vue@3.**
