@@ -26,6 +26,8 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
+      - name: Build
+        run: pnpm build
       - run: pnpm i
       - name: Lint
         run: pnpm lint
@@ -39,8 +41,6 @@ jobs:
         with:
           coverageLocations: ${{github.workspace}}/packages/core/coverage/lcov.info:lcov
           prefix: test
-      - name: Build
-        run: pnpm build
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         if: github.ref_name == 'main'
