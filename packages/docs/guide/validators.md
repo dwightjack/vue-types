@@ -8,11 +8,11 @@ import CodeExample from '../components/CodeExample.vue'
 
 # Using VueTypes Validators
 
-VueTypes is a collection of prop validators. Each validator is basically a factory function returning an object (_validator object_) compatible with [Vue prop validation](https://vuejs.org/guide/components/props.html#Prop-Validation).
+VueTypes is a collection of prop validators. Each validator is a factory function that returns an object (_validator object_) compatible with [Vue prop validation](https://vuejs.org/guide/components/props.html#Prop-Validation).
 
-Unlike simple Vue prop validation objects, VueTypes prop validator objects provide additional chainable properties and methods to control things like `required` and default values.
+Unlike simple Vue prop validation objects, VueTypes prop validator objects provide additional chainable properties and methods to control features like `required` flags and default values.
 
-Validators can be imported as named functions from `vue-types`:
+You can import validators as named functions from `vue-types`:
 
 <CodeExample>
 
@@ -40,18 +40,18 @@ defineProps({
 
 </CodeExample>
 
-Validators can be categorized into two groups:
+Validators fall into two categories:
 
 - Native Validators
 - Custom Validators
 
 ## Native Validators
 
-Native validators come with the following:
+Native validators include:
 
-- A `def(any)` method to assign a default value for the current prop. The passed-in value will be validated against the type configuration to prevent invalid values.
+- A `def(any)` method to set a default value for the prop. The provided value will be validated against the type configuration to prevent invalid values.
 - An `isRequired` flag to set the `required: true` property.
-- A `validate(function)` method to set a custom validator function (not available in `integer` and `symbol`).
+- A `validate(function)` method to set a custom validator function (not available in `integer` and `symbol` validators).
 
 ```js
 import { number } from 'vue-types'
@@ -74,7 +74,7 @@ const numPropGreaterThanTen = number().validate(gtTen)
 ```
 
 ::: tip UPDATING DEFAULT VALUES
-You can unset any previously defined default value by passing `undefined` to `.def()`
+You can clear any previously defined default value by passing `undefined` to `.def()`
 
 ```js
 const type = string().def('hello')
@@ -84,7 +84,7 @@ type.def(undefined)
 // { type: String }
 ```
 
-**Note:** Executing `.def(undefined)` on boolean or mixed-boolean types, explicitly sets the `default` property to `undefined`:
+**Note:** Using `.def(undefined)` on boolean or mixed-boolean types explicitly sets the `default` property to `undefined`:
 
 ```js
 const type = bool().def(true)
@@ -104,7 +104,7 @@ mixedType.def(undefined)
 
 ### any
 
-Validates any value. This validator should be used sparingly and can be an escape hatch for props with unknown values.
+Validates any value. Use this validator sparingly as it can serve as an escape hatch for props with unknown values.
 
 <CodeExample>
 
@@ -176,7 +176,7 @@ defineProps({
 </CodeExample>
 
 ::: ts
-In TypeScript, you can specify the type of array items as type argument:
+In TypeScript, you can specify the type of array items as a type argument:
 
 <CodeExample>
 
@@ -202,13 +202,13 @@ defineProps({
 
 </CodeExample>
 
-**Note**: This signature will validate the prop only at compile-time. For
-runtime validation use [`arrayOf`](#arrayof)
+**Note**: This signature validates the prop only at compile-time. For
+runtime validation, use [`arrayOf`](#arrayof)
 
 :::
 
 ::: tip
-[Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) requires Array props to provide the default value as a factory function. `array().def()` accepts both factory functions and arrays. In the latter case, VueTypes will convert the value to a factory function for you.
+[Vue prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) requires Array props to provide the default value as a factory function. `array().def()` accepts both factory functions and arrays. When you provide an array, VueTypes automatically converts it to a factory function.
 :::
 
 ### bool
@@ -235,7 +235,7 @@ defineProps({
 
 ::: warning `undefined` AS DEFAULT VALUE
 
-Executing `.def(undefined)` on boolean or mixed-boolean types, explicitly sets the `default` property to `undefined`:
+Using `.def(undefined)` on boolean or mixed-boolean types explicitly sets the `default` property to `undefined`:
 
 ```js
 const type = bool().def(true)
@@ -276,7 +276,7 @@ defineProps({
 </CodeExample>
 
 ::: ts
-You can constrain the function signature by passing it as the type argument:
+You can constrain the function signature by passing it as a type argument:
 
 <CodeExample>
 
@@ -345,8 +345,8 @@ defineProps({
 
 </CodeExample>
 
-**Note**: This signature will validate the prop only at compile-time. For
-runtime validation use [`oneOf`](#oneof).
+**Note**: This signature validates the prop only at compile-time. For
+runtime validation, use [`oneOf`](#oneof).
 
 :::
 
@@ -373,7 +373,7 @@ defineProps({
 </CodeExample>
 
 ::: ts
-Because `integer()` inherits from `number()`, you can constrain its value with a type argument (see above for details).
+Since `integer()` inherits from `number()`, you can constrain its value with a type argument (see above for details).
 
 :::
 
@@ -400,7 +400,7 @@ defineProps({
 </CodeExample>
 
 ::: ts
-You can specify the shape of the object as the type argument:
+You can specify the shape of the object as a type argument:
 
 <CodeExample>
 
@@ -432,13 +432,13 @@ defineProps({
 
 </CodeExample>
 
-**Note**: This signature will validate the prop only at compile-time. For
-runtime validation use [`shape`](#shape)
+**Note**: This signature validates the prop only at compile-time. For
+runtime validation, use [`shape`](#shape)
 
 :::
 
 ::: tip
-[Vue prop validation](https://vuejs.org/guide/components/props.html#prop-validation) requires Object props to provide the default value as a factory function. `object().def()` accepts both factory functions and plain objects. In the latter case, VueTypes will convert the value to a factory function for you.
+[Vue prop validation](https://vuejs.org/guide/components/props.html#prop-validation) requires Object props to provide the default value as a factory function. `object().def()` accepts both factory functions and plain objects. When you provide a plain object, VueTypes automatically converts it to a factory function.
 :::
 
 ### string
@@ -500,8 +500,8 @@ defineProps({
 
 </CodeExample>
 
-**Note**: This signature will validate the prop only at compile-time. For
-runtime validation use [`oneOf`](#oneof).
+**Note**: This signature validates the prop only at compile-time. For
+runtime validation, use [`oneOf`](#oneof).
 
 :::
 
@@ -550,7 +550,7 @@ defineProps({
 </CodeExample>
 
 ::: warning
-This validator **does not come with any flag or method**. It can be used with [`oneOfType`](#oneoftype) to make a **required** prop nullable.
+This validator **does not include any flags or methods**. Use it with [`oneOfType`](#oneoftype) to make a **required** prop nullable.
 
 <CodeExample>
 
@@ -570,16 +570,16 @@ defineProps({
 
 </CodeExample>
 
-**Use this validator sparingly.** Nullable props are not encouraged in Vue components, so please consider reviewing your strategy.
+**Use this validator sparingly.** Nullable props are not recommended in Vue components. Consider reviewing your strategy if you find yourself using them frequently.
 :::
 
 ## Custom Validators
 
-Custom validators are special factory function useful for describing complex validation requirements. By design custom validators:
+Custom validators are special factory functions designed for complex validation requirements. By design, custom validators:
 
-- **don't have** a `validate` method
-- have a `.def()` method to assign a default value on the current prop
-- have an `isRequired` flag to set the `required: true` property
+- Do **not** have a `validate` method
+- Include a `.def()` method to assign a default value to the current prop
+- Include an `isRequired` flag to set the `required: true` property
 
 ```js
 const oneOfPropDefault = oneOf([0, 1]).def(1)
@@ -595,7 +595,7 @@ const oneOfPropRequiredCustom = oneOf([0, 1]).def(1).isRequired
 
 ### instanceOf
 
-Validates that a prop is an instance of a JavaScript constructor. This validator uses JavaScript's `instanceof` operator.
+Validates that a prop is an instance of a JavaScript constructor, using JavaScript's `instanceof` operator.
 
 <CodeExample>
 
@@ -625,7 +625,7 @@ defineProps({
 
 ### oneOf
 
-Validates that a prop is one of the provided values.
+Validates that a prop matches one of the provided values.
 
 <CodeExample>
 
@@ -646,7 +646,7 @@ defineProps({
 </CodeExample>
 
 ::: ts
-To constrain the allowed values at compile-time use [const assertions](https://devblogs.microsoft.com/typescript/announcing-typescript-3-4/#const-assertions) on the passed-in array or union types ([see caveats](../advanced/typescript.md#oneof-warning)):
+To constrain the allowed values at compile-time, use [const assertions](https://devblogs.microsoft.com/typescript/announcing-typescript-3-4/#const-assertions) on the passed-in array or union types ([see caveats](../advanced/typescript.md#oneof-warning)):
 
 <CodeExample>
 
@@ -684,7 +684,7 @@ defineProps({
 
 ### oneOfType
 
-Validates that a prop is an object that could be one of many types. It accepts an array of JavaScript constructors, Vue.js props validation objects, and VueTypes validators objects as inner validators.
+Validates that a prop matches one of several types. It accepts an array of JavaScript constructors, Vue.js props validation objects, and VueTypes validator objects as inner validators.
 
 <CodeExample>
 
@@ -704,7 +704,7 @@ defineProps({
 
 </CodeExample>
 
-This validator can be used to compose complex validation logic, including native types, specific values (using [`oneOf`](#oneof)), and `null` (using [`nullable`](#nullable)):
+This validator enables complex validation logic, combining native types, specific values (using [`oneOf`](#oneof)), and `null` (using [`nullable`](#nullable)):
 
 <CodeExample>
 
@@ -737,7 +737,7 @@ defineProps({
 </CodeExample>
 
 ::: ts
-You can constrain the expected types by passing them as type arguments:
+You can constrain the expected types using type arguments:
 
 <CodeExample>
 
@@ -763,7 +763,7 @@ defineProps({
 
 </CodeExample>
 
-Constraints can be set on the inner validators as well:
+You can also constrain the inner validators:
 
 <CodeExample>
 
@@ -793,7 +793,7 @@ defineProps({
 
 ### arrayOf
 
-Validates the type of the items of an array. It accepts JavaScript constructors, Vue.js props validation objects, and VueTypes validators objects.
+Validates the type of array items. It accepts JavaScript constructors, Vue.js props validation objects, and VueTypes validator objects.
 
 <CodeExample>
 
@@ -824,7 +824,7 @@ defineProps({
 </CodeExample>
 
 ::: tip
-Prop Validators are composable. For example, to validate an array containing both strings and numbers, you can use `arrayOf` and `oneOfType`:
+Prop Validators are composable. For example, to validate an array containing both strings and numbers:
 
 <CodeExample>
 
@@ -849,8 +849,7 @@ defineProps({
 :::
 
 ::: ts
-
-In TypeScript, composition can be used together with type arguments to constrain the final prop type:
+In TypeScript, you can combine composition with type arguments to constrain the final prop type:
 
 <CodeExample>
 
@@ -880,7 +879,7 @@ defineProps({
 
 ### objectOf
 
-Validates that a prop is an object with values of a certain type. It accepts JavaScript constructors, Vue.js props validation objects, and VueTypes validators objects.
+Validates that a prop is an object with values of a specific type. It accepts JavaScript constructors, Vue.js props validation objects, and VueTypes validator objects.
 
 <CodeExample>
 
@@ -906,13 +905,13 @@ defineProps({
 
 ### shape
 
-This function validates that a prop is an object taking on a particular shape. The shape properties value can be JavaScript constructors, Vue.js props validation objects, or VueTypes validators objects.
+Validates that a prop is an object with a specific shape. The shape properties can be JavaScript constructors, Vue.js props validation objects, or VueTypes validator objects.
 
-Note that:
+Important notes:
 
-- You can set the shape properties as `required,` but you **cannot** use `.def()`.
-- You can use `.def()` to set a default value for the shape itself.
-- Like `array` and `object`, you can pass to `.def()` either a factory function returning an object or a plain object.
+- Shape properties can be marked as `required`, but **cannot** use `.def()`
+- You can use `.def()` to set a default value for the entire shape
+- Like `array` and `object`, `.def()` accepts either a factory function returning an object or a plain object
 
 <CodeExample>
 
@@ -949,7 +948,7 @@ defineProps({
 </CodeExample>
 
 ::: ts
-You can constrain the shape with a type argument:
+You can constrain the shape using a type argument:
 
 <CodeExample>
 
@@ -997,7 +996,7 @@ defineProps({
 
 #### Loose shape matching
 
-By default, `shape` rejects objects containing properties that are not defined in the shape. To allow partial matching, use the `loose` flag:
+By default, `shape` rejects objects that contain properties not defined in the shape. To allow additional properties, use the `loose` flag:
 
 <CodeExample>
 
@@ -1029,7 +1028,7 @@ defineProps({
 
 ### custom
 
-Validates prop values against a custom validation function.
+Creates a validator with custom validation logic.
 
 <CodeExample>
 
@@ -1037,7 +1036,7 @@ Validates prop values against a custom validation function.
 props: {
   //accepts: 'arandomusername'
   //rejects: 'user', 1
-  username: custom(function miLength(value) {
+  username: custom(function minLength(value) {
     return typeof value === 'string' && value.length >= 6
   })
 }
@@ -1049,7 +1048,7 @@ props: {
 defineProps({
   //accepts: 'arandomusername'
   //rejects: 'user', 1
-  username: custom(function miLength(value) {
+  username: custom(function minLength(value) {
     return typeof value === 'string' && value.length >= 6
   }),
 })
@@ -1057,9 +1056,9 @@ defineProps({
 
 </CodeExample>
 
-Note that the passed-in function name will be used as the custom validator name in warnings.
+The function name will appear in validation warning messages.
 
-You can pass a custom validation error message as a second argument:
+You can provide a custom validation error message as the second argument:
 
 <CodeExample>
 
@@ -1086,7 +1085,7 @@ defineProps({
 </CodeExample>
 
 ::: ts
-In TypeScript, you can specify the prop type with a type argument:
+In TypeScript, you can specify the prop type using a type argument:
 
 <CodeExample>
 
@@ -1114,19 +1113,19 @@ defineProps({
 
 ## Utilities
 
-VueTypes exposes some useful utility functions that can be used to extend the library functionalities.
+VueTypes provides utility functions that extend the library's functionality.
 
 ### validateType
 
 Checks a value against a type definition.
 
-Accepts the following arguments:
+Arguments:
 
 - `validator`: A JavaScript constructor or VueTypes validator object
 - `value`: The value to check
 - `[silent=false]`: Toggle error console logging
 
-If `silent === false`, the function will return a boolean. If `silent === true`, it will return `true` if the check succeeds. Otherwise, it will return an error message.
+When `silent` is `false`, the function returns a boolean. When `silent` is `true`, it returns `true` for successful checks and an error message for failures.
 
 ```js
 import { validateType, arrayOf } from 'vue-types'
@@ -1146,18 +1145,18 @@ validateType(String, 10, false) // 'value "10" should be of type "string"`
 
 ### toType / toValidableType
 
-Convert an object compatible with Vue.js [prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) to a VueTypes validator object.
+Converts a Vue.js [prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) compatible object to a VueTypes validator object.
 
 See [Standalone custom validators](../advanced/custom-validators.md#standalone-custom-validators) for more details.
 
 ### fromType
 
-Creates a new validator object from a previously defined one.
+Creates a new validator object based on an existing one.
 
 See [Composing existing validators](/advanced/custom-validators.html#composing-existing-validators) for more details.
 
 ### createTypes
 
-Returns a namespaced collection of validators.
+Creates a namespaced collection of validators.
 
 See [Custom namespaced instance](../namespaced-usage/custom-instance.md) for more details.
