@@ -48,6 +48,7 @@
     "test": "vitest run --coverage",
     "test:watch": "vitest watch",
     "lint": "pnpm run \"/^lint:.*/\"",
+    "lint:npm": "publint .",
     "lint:type": "tsc --noEmit --skipLibCheck",
     "lint:js": "eslint '{src,__tests__,.}/**/*.{ts,js,cjs}'"
   },
