@@ -4,7 +4,7 @@
   "description": "Prop types utility for Vue",
   "author": "Marco Solazzi",
   "license": "MIT",
-  "homepage": "https://dwightjack.github.io/vue-types/",
+  "homepage": "https://vue-types.pages.dev/",
   "main": "dist/index.cjs",
   "type": "module",
   "sideEffects": false,
@@ -57,7 +57,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dwightjack/vue-types.git",
+    "url": "git+https://github.com/dwightjack/vue-types.git",
     "directory": "packages/core"
   },
   "bugs": "https://github.com/dwightjack/vue-types/issues",

@@ -9,7 +9,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ExtractPropTypes, Prop, PropType } from 'vue'
+import { defineComponent, ExtractPropTypes } from 'vue'
 import {
   userType,
   messageType,

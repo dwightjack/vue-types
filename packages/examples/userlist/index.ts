@@ -1,18 +1,15 @@
 import { defineComponent, createApp, h } from 'vue'
-import VueTypes, { fromType, number } from 'vue-types'
+import { fromType, number, string, shape, arrayOf } from 'vue-types'
 
-class CustomTypes extends VueTypes {
-  static get adult() {
-    return fromType('adult', number(), {
-      validator: (v: number) => v >= 18,
-    })
-  }
-}
+const adult = () =>
+  fromType('adult', number(), {
+    validator: (v: number) => v >= 18,
+  })
 
 const User = defineComponent({
   props: {
-    name: CustomTypes.string.isRequired,
-    age: CustomTypes.adult,
+    name: string().isRequired,
+    age: adult(),
   },
   template: '<li><strong>{{ name }}</strong> ({{ age }})</li>',
 })
@@ -22,7 +19,7 @@ const UserList = defineComponent({
     User,
   },
   props: {
-    users: VueTypes.arrayOf(VueTypes.shape(User.props)),
+    users: arrayOf(shape(User.props)),
   },
   template: `
   <ul>

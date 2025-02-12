@@ -1,5 +1,5 @@
 import { defineComponent, createApp, h, computed, ref } from 'vue'
-import VueTypes from 'vue-types'
+import { shape, string, oneOf, bool } from 'vue-types'
 
 interface ModelItem {
   id: string
@@ -9,10 +9,10 @@ interface ModelItem {
 
 const Model = defineComponent({
   props: {
-    model: VueTypes.shape<ModelItem>({
-      id: VueTypes.string.isRequired,
-      pet: VueTypes.oneOf(['dog', 'cat'] as const).isRequired,
-      isNew: VueTypes.bool,
+    model: shape<ModelItem>({
+      id: string().isRequired,
+      pet: oneOf(['dog', 'cat'] as const).isRequired,
+      isNew: bool().def(true),
     }).isRequired,
   },
   setup(props) {
