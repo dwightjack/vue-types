@@ -27,25 +27,29 @@ describe('`.objectOf`', () => {
 
   it('should validate an object of same-type values', () => {
     const customType = objectOf(Number)
-    expect(forceNoContext(customType.validator)({ id: 10, age: 30 })).toBe(true)
+    expect(forceNoContext(customType.validator)({ id: 10, age: 30 }, {})).toBe(
+      true,
+    )
   })
 
   it('should NOT validate an array of mixed-type values', () => {
     const customType = objectOf(Number)
     expect(
-      forceNoContext(customType.validator)({ id: '10', age: 30 } as any),
+      forceNoContext(customType.validator)({ id: '10', age: 30 } as any, {}),
     ).toBe(false)
   })
 
   it('should allow validation of VuePropTypes native types', () => {
     const customType = objectOf(number())
-    expect(forceNoContext(customType.validator)({ id: 10, age: 30 })).toBe(true)
+    expect(forceNoContext(customType.validator)({ id: 10, age: 30 }, {})).toBe(
+      true,
+    )
   })
 
   it('should allow validation of VuePropTypes custom types', () => {
     const customType = objectOf(integer())
     const validator = forceNoContext(customType.validator)
-    expect(validator({ id: 10, age: 30 })).toBe(true)
-    expect(validator({ id: 10.2, age: 30 })).toBe(false)
+    expect(validator({ id: 10, age: 30 }, {})).toBe(true)
+    expect(validator({ id: 10.2, age: 30 }, {})).toBe(false)
   })
 })

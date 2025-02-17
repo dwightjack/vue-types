@@ -1,4 +1,4 @@
-import { defineComponent, createApp, h } from 'vue3'
+import { defineComponent, createApp, h } from 'vue'
 import VueTypes from 'vue-types'
 import {
   boolType,
@@ -17,7 +17,7 @@ import {
   ObjectOfType,
   shapeTypeLoose,
   shapeType,
-} from '../../shared/default-namespace'
+} from '../shared/default-namespace'
 
 const NativeComponent = defineComponent({
   props: {

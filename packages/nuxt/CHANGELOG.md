@@ -1,5 +1,17 @@
 # vue-types-nuxt
 
+## 3.0.0
+
+### Major Changes
+
+- 37c8fa4: - Remove Nuxt@2 support
+  - Update vue-types dependency to v6
+
+### Patch Changes
+
+- Updated dependencies [306173f]
+  - vue-types@6.0.0
+
 ## 2.0.3
 
 ### Patch Changes

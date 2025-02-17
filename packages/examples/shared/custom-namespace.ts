@@ -3,7 +3,6 @@ import {
   object,
   toValidableType,
   fromType,
-  VueTypeValidableDef,
   toType,
 } from 'vue-types'
 
@@ -14,22 +13,20 @@ interface User {
 
 export const userShape = object<User>()
 
-interface CustomVueTypes extends ReturnType<typeof createTypes> {
-  readonly test: VueTypeValidableDef<string>
-  readonly user: typeof userShape
+export class MyTypes extends createTypes({}) {
+  static get test() {
+    return toValidableType('test', {})
+  }
+  static get user() {
+    return fromType('user', userShape)
+  }
+  static get positive() {
+    return toType('positive', {
+      type: Number,
+      validator: (v) => Number(v) >= 0,
+    }).def(0)
+  }
 }
-export const MyTypes = createTypes({}).extend<CustomVueTypes>([
-  {
-    name: 'test',
-    validate: true,
-    getter: true,
-  },
-  {
-    name: 'user',
-    type: userShape,
-    getter: true,
-  },
-])
 
 export const userType = MyTypes.object.def({ ID: 1, name: 'John' })
 export const userType2 = MyTypes.object.def(() => ({ ID: 1, name: 'John' }))
@@ -46,18 +43,6 @@ export const customTestType = MyTypes.test.def('aaa')
 
 export const messageType = MyTypes.string
 
-export class MyTypesClass extends createTypes({}) {
-  static get test() {
-    return toValidableType('test', {})
-  }
-  static get user() {
-    return fromType('user', userShape)
-  }
-  static get positive() {
-    return toType('positive', { type: Number, validator: (v) => v >= 0 }).def(0)
-  }
-}
-
-export const userGetter2 = MyTypesClass.user.isRequired
-export const stringT = MyTypesClass.string.isRequired
-export const positiveT = MyTypesClass.positive.isRequired
+export const userGetter2 = MyTypes.user.isRequired
+export const stringT = MyTypes.string.isRequired
+export const positiveT = MyTypes.positive.isRequired
