@@ -1,38 +1,33 @@
----
----
+<script setup>
+import CodeExample from '../components/CodeExample.vue'
+</script>
 
 # Configuration
 
-Starting from version 4, VueTypes has a global configuration object that can be used to customize the library's behavior.
+VueTypes has a global configuration object that can be used to customize the library's behavior.
 
-The configuration is exposed both as a property of the default export, and as a named export:
+The configuration is exposed both as a property of the default export and as a named export:
 
-```ts
-// default exported instance
-import VueTypes from 'vue-types'
+<CodeExample>
 
-// named export
+```js
 import { config } from 'vue-types'
 
 VueTypes.config === config
 ```
 
-## Configuration Options
+---
 
-- `silent`: (boolean, default `false`) set to `true` to prevent VueTypes from logging validation warnings.
+```js
+import VueTypes from 'vue-types'
 
-::: tip
-Until version 2, VueTypes warning behavior was matching the [Vue.config.silent](https://vuejs.org/v2/api/#silent) global config parameter. But that global property has been removed in Vue@3.
-
-To reproduce that behavior in application running Vue@2 you can use:
-
-```ts
-import { config } from 'vue-types'
-import Vue from 'vue'
-
-config.silent = Vue.config.silent
+VueTypes.config === config
 ```
 
-:::
+</CodeExample>
 
-- `logLevel`: (string, default `warn`) allows choosing which console method will be used to display validation errors. Available options are `log`, `warn`, `error`, `debug` and`info`.
+## Configuration Options
+
+- `silent`: (boolean, default `false`) Set to `true` to prevent VueTypes from logging validation warnings.
+
+- `logLevel`: (string, default `warn`) Allows choosing which console method used to display validation errors. Available options are `log`, `warn`, `error`, `debug`, and `info`.

@@ -27,11 +27,13 @@ jobs:
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
       - run: pnpm i
+      - name: Build
+        run: pnpm build
       - name: Lint
-        run: pnpm -r run lint
+        run: pnpm lint
 
       - name: Test
-        run: pnpm -r test
+        run: pnpm test
       - name: Upload code coverage
         uses: paambaati/codeclimate-action@f429536ee076d758a24705203199548125a28ca7 # v9.0.0
         env:
@@ -39,8 +41,6 @@ jobs:
         with:
           coverageLocations: ${{github.workspace}}/packages/core/coverage/lcov.info:lcov
           prefix: test
-      - name: Build
-        run: pnpm -r run build
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         if: github.ref_name == 'main'

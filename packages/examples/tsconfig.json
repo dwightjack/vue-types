@@ -1,17 +1,15 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "lib": ["esnext", "dom"],
-    "resolveJsonModule": true,
+    "module": "ESNext",
+    "target": "ESNext",
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "strict": true,
-    "noEmit": true,
+    "lib": ["esnext", "dom"],
+    "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
       "vue-types": ["../core/src/index"]
     }
   },
-  "include": ["**/*.ts", "**/*.vue"]
+  "include": ["**/*.ts", "**/*.vue", "../core/src/**/*.ts"]
 }

@@ -36,11 +36,11 @@ describe('`.oneOfType`', () => {
     const customType = oneOfType(complexTypes)
     const validator = forceNoContext(customType.validator)
 
-    expect(validator(1)).toBe(true)
-    expect(validator(5 as any)).toBe(false)
+    expect(validator(1, {})).toBe(true)
+    expect(validator(5 as any, {})).toBe(false)
 
-    expect(validator({ id: 10 })).toBe(true)
-    expect(validator({ id: '10' } as any)).toBe(false)
+    expect(validator({ id: 10 }, {})).toBe(true)
+    expect(validator({ id: '10' } as any, {})).toBe(false)
   })
 
   it('should extract native types from other validators', () => {
@@ -62,11 +62,11 @@ describe('`.oneOfType`', () => {
     ])
 
     const validator = forceNoContext(customType.validator)
-    expect(validator({ id: 1, name: 'John' })).toBe(true)
-    expect(validator({ id: 2, age: 30 })).toBe(true)
-    expect(validator({})).toBe(true)
+    expect(validator({ id: 1, name: 'John' }, {})).toBe(true)
+    expect(validator({ id: 2, age: 30 }, {})).toBe(true)
+    expect(validator({}, {})).toBe(true)
 
-    expect(validator({ id: 2 })).toBe(false)
+    expect(validator({ id: 2 }, {})).toBe(false)
   })
 
   it('should validate edge cases with null and true', () => {

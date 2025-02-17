@@ -185,7 +185,7 @@ function minMax(min: number, max: number) {
   return toType<number>('minmax', {
     type: Number,
     validator(v) {
-      return v > min && v < max
+      return Number(v) > min && Number(v) < max
     },
   })
 }

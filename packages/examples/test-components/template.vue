@@ -9,7 +9,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue3'
+import { defineComponent, ExtractPropTypes } from 'vue'
 import {
   userType,
   messageType,
@@ -22,21 +22,29 @@ import {
   objectOfTuple,
   oneOfTuple,
   stringOrNull,
-} from '../../shared/validators'
+} from '../shared/validators'
+
+const componentProps = {
+  user: userType,
+  message: messageType,
+  age: ageType,
+  maybeStr: stringOrNull,
+  hobbies: arrayOfStringsType,
+  randomData: arrayOfMultipleType,
+  score: scoreType,
+  onClick: funcType,
+  action: anyType,
+  tupleObj: objectOfTuple,
+  oneOf: oneOfTuple,
+}
+
+type Props = ExtractPropTypes<typeof componentProps>
 
 export default defineComponent({
-  props: {
-    user: userType,
-    message: messageType,
-    age: ageType,
-    maybeStr: stringOrNull,
-    hobbies: arrayOfStringsType,
-    randomData: arrayOfMultipleType,
-    score: scoreType,
-    onClick: funcType,
-    action: anyType,
-    tupleObj: objectOfTuple,
-    oneOf: oneOfTuple,
+  props: componentProps,
+
+  setup(props) {
+    console.log(props.score)
   },
 })
 </script>

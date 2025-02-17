@@ -4,31 +4,34 @@
   "description": "Prop types utility for Vue",
   "author": "Marco Solazzi",
   "license": "MIT",
-  "homepage": "https://dwightjack.github.io/vue-types/",
-  "main": "dist/vue-types.cjs",
+  "homepage": "https://vue-types.codeful.dev/",
+  "main": "dist/index.cjs",
   "type": "module",
-  "source": [
-    "src/index.ts",
-    "src/shim.ts"
-  ],
-  "amdName": "VueTypes",
-  "unpkg": "dist/vue-types.umd.js",
-  "umd:main": "dist/vue-types.umd.js",
-  "module": "dist/vue-types.m.js",
-  "esmodule": "dist/vue-types.modern.js",
+  "sideEffects": false,
+  "unpkg": "dist/index.umd.js",
+  "umd:main": "dist/index.umd.js",
+  "module": "dist/index.mjs",
+  "esmodule": "dist/index.mjs",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/vue-types.cjs",
-      "import": "./dist/vue-types.modern.js"
-    },
-    "./dist/types": {
-      "types": "./dist/types.d.ts"
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      }
     },
     "./shim": {
-      "types": "./dist/shim.d.ts",
-      "require": "./shim/index.cjs.js",
-      "import": "./shim/index.modern.js"
+      "require": {
+        "types": "./dist/shim.d.cts",
+        "default": "./dist/shim.cjs"
+      },
+      "import": {
+        "types": "./dist/shim.d.mts",
+        "default": "./dist/shim.mjs"
+      }
     }
   },
   "types": "dist/index.d.ts",
@@ -41,19 +44,13 @@
   ],
   "scripts": {
     "prepublishOnly": "pnpm run build",
-    "build": "pnpm run \"/^clean:.*/\" && pnpm run copy && pnpm run \"/^build:.*/\"",
-    "clean:dist": "del dist",
-    "clean:shim": "del \"shim/*.*\" \"!shim/package.json\"",
-    "copy": "cpy --flat src/*.d.ts dist",
-    "build:ts": "microbundle --tsconfig=./tsconfig.build.json --format=modern,es",
-    "build:cjs": "microbundle --tsconfig=./tsconfig.build.json -i src/index.cjs.ts -o dist/vue-types.cjs --no-pkg-main --format=cjs",
-    "build:umd": "cross-env NODE_ENV=production microbundle --tsconfig=./tsconfig.build.json --format=umd",
-    "build:shim:ts": "microbundle --tsconfig=./tsconfig.build.json -i src/shim.ts -o shim/index.js --format=modern,es --no-sourcemap",
-    "build:shim:cjs": "microbundle --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o shim/index.cjs.js --no-pkg-main --format=cjs --no-sourcemap",
-    "build:shim:umd": "cross-env NODE_ENV=production microbundle --tsconfig=./tsconfig.build.json -i src/shim.cjs.ts -o shim/index.js --format=umd --no-sourcemap",
+    "build": "unbuild",
     "test": "vitest run --coverage",
     "test:watch": "vitest watch",
-    "lint": "eslint '{src,__tests__,.}/**/*.{ts,js,cjs}'"
+    "lint": "pnpm run \"/^lint:.*/\"",
+    "lint:npm": "publint .",
+    "lint:type": "tsc --noEmit --skipLibCheck",
+    "lint:js": "eslint '{src,__tests__,.}/**/*.{ts,js,cjs}'"
   },
   "keywords": [
     "vue",
@@ -61,27 +58,17 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dwightjack/vue-types.git",
+    "url": "git+https://github.com/dwightjack/vue-types.git",
     "directory": "packages/core"
   },
   "bugs": "https://github.com/dwightjack/vue-types/issues",
   "peerDependencies": {
-    "vue": "^2.0.0 || ^3.0.0"
+    "vue": "^3.0.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-nullish-coalescing-operator": "7.18.6",
-    "@babel/plugin-proposal-optional-chaining": "7.21.0",
     "@types/node": "20.17.11",
-    "babel-plugin-transform-node-env-inline": "0.4.3",
-    "cpy-cli": "5.0.0",
-    "cross-env": "7.0.3",
-    "del": "7.1.0",
-    "del-cli": "5.1.0",
-    "microbundle": "0.15.1",
-    "typescript": "5.6.3"
-  },
-  "dependencies": {
-    "is-plain-object": "5.0.0"
+    "typescript": "5.6.3",
+    "unbuild": "2.0.0"
   },
   "peerDependenciesMeta": {
     "vue": {

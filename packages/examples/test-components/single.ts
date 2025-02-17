@@ -1,4 +1,4 @@
-import { defineComponent, createApp, h } from 'vue3'
+import { defineComponent, createApp, h } from 'vue'
 
 import {
   userType,
@@ -12,7 +12,7 @@ import {
   objectOfTuple,
   oneOfTuple,
   stringOrNull,
-} from '../../shared/validators'
+} from '../shared/validators'
 
 const UserComponent = defineComponent({
   props: {

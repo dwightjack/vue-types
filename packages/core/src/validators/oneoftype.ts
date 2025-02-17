@@ -24,7 +24,7 @@ export default function oneOfType<
   let hasCustomValidators = false
   let hasNullable = false
 
-  let nativeChecks: Prop<V>[] = []
+  let nativeChecks: (Prop<V> | null)[] = []
 
   // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let i = 0; i < arr.length; i += 1) {
