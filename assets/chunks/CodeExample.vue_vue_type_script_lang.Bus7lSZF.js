@@ -1,0 +1,1 @@
+import{d as u,a1 as i,C as o,a5 as s}from"./framework.DGKqOisr.js";const r=u({setup(){const n=i(),l=o("PluginTabs"),t=o("PluginTabsTab"),[a,p,e]=n.default();return()=>e?s(l,{sharedStateKey:"code"},[s(t,{label:"Options API"},a),s(t,{label:"Setup API"},e)]):s(a)}});export{r as _};
