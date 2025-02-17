@@ -4,7 +4,7 @@
   "description": "Prop types utility for Vue",
   "author": "Marco Solazzi",
   "license": "MIT",
-  "homepage": "https://vue-types.pages.dev/",
+  "homepage": "https://vue-types.codeful.dev/",
   "main": "dist/index.cjs",
   "type": "module",
   "sideEffects": false,

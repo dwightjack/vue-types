@@ -49,7 +49,7 @@ Validators fall into two categories:
 
 Native validators include:
 
-- A `def(any)` method to set a default value for the prop. The provided value will be validated against the type configuration to prevent invalid values.
+- A `def(any)` method to set a default value for the prop. The provided value is validated against the type configuration to prevent invalid values.
 - An `isRequired` flag to set the `required: true` property.
 - A `validate(function)` method to set a custom validator function (not available in `integer` and `symbol` validators).
 
@@ -1056,7 +1056,7 @@ defineProps({
 
 </CodeExample>
 
-The function name will appear in validation warning messages.
+The function name appears in validation warning messages.
 
 You can provide a custom validation error message as the second argument:
 

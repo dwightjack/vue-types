@@ -2,11 +2,11 @@
 import CodeExample from '../components/CodeExample.vue'
 </script>
 
-# Extending namespaced validators in ES6+
+# Extending Namespaced Validators in ES6+
 
 <!--@include: ./shared/warning.md-->
 
-If your source code supports ES6 or newer, you can use the native ES `extends` feature with the `toType`, `toValidableType` or `fromType` utility functions (see [Custom validators](../advanced/custom-validators.md#custom-validators) for detailed usage instructions).
+If your source code supports ES6 or newer, you can use the native ES `extends` feature along with the `toType`, `toValidableType`, or `fromType` utility functions (see [Custom Validators](../advanced/custom-validators.md#custom-validators) for detailed usage instructions).
 
 For example, you could create a `prop-types.js` file in your project and export the extended VueTypes class:
 

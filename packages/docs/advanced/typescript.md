@@ -34,9 +34,9 @@ defineProps({
 
 </CodeExample>
 
-## Optional type constraint
+## Optional Type Constraint
 
-Some validators accepts an optional type argument to refine their TS typing.
+Some validators accept an optional type argument to refine their TypeScript typing.
 
 ### any<T = any>
 
@@ -103,7 +103,7 @@ defineProps({
 </CodeExample>
 
 ::: tip
-The same prop type can be expressed using `oneOf`, which will also perform validation at runtime:
+The same prop type can be expressed using `oneOf`, which also performs validation at runtime:
 
 <CodeExample>
 
@@ -153,7 +153,7 @@ defineProps({
 
 ### func<T = (...args: any[]) => any>
 
-Useful to type event handlers and function return types.
+Useful for typing event handlers and function return types.
 
 <CodeExample>
 
@@ -287,7 +287,7 @@ defineProps({
 </CodeExample>
 
 ::: tip
-The same prop types can be expressed using `arrayOf`, which will also perform validation at runtime:
+The same prop types can be expressed using `arrayOf`, which also performs validation at runtime:
 
 <CodeExample>
 
@@ -488,7 +488,7 @@ defineProps({
 
 ### oneOf
 
-You can use [const assertions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions) on the expected values to constrain the validators type:
+You can use [const assertions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions) on the expected values to constrain the validator's type:
 
 <CodeExample>
 
@@ -512,7 +512,7 @@ defineProps({
 
 </CodeExample>
 
-Alternative, you can pass a union type:
+Alternatively, you can pass a union type:
 
 <CodeExample>
 
@@ -538,7 +538,7 @@ defineProps({
 
 ::: warning {id=oneof-warning}
 
-Note that union types don't put any constraint on all their members' presence in the validation array. This can lead to runtime bugs not detected by the type checker:
+Note that union types don't put any constraints on the presence of all their members in the validation array. This can lead to runtime bugs not detected by the type checker:
 
 <CodeExample>
 
@@ -562,7 +562,7 @@ defineProps({
 
 </CodeExample>
 
-As a general rule, we strongly suggest to use [const assertions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions) whenever possible.
+As a general rule, we strongly suggest using [const assertions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions) whenever possible.
 
 <CodeExample>
 

@@ -45,7 +45,7 @@ For modern browsers [supporting ES Modules](https://caniuse.com/es6-module), you
 ## Usage with Bundlers
 
 VueTypes is published as a **native ESM module** with CommonJS and UMD support.
-Modern bundlers and tools will automatically select the appropriate entry point based on your configuration.
+Modern bundlers and tools automatically select the appropriate entry point based on your configuration.
 
 ```js
 import { string, oneOf } from 'vue-types' // or: import VueTypes from 'vue-types';
@@ -59,7 +59,7 @@ Vue.js does not validate component props in production builds. By using a bundle
 In the shim version, all validation functions (including `validateType` and `VueTypes.utils.validate`) always return `true`.
 :::
 
-By aliasing `vue-types` to `vue-types/shim`, bundlers will automatically select the appropriate module type (ES, CommonJS, etc.) based on your configuration.
+By aliasing `vue-types` to `vue-types/shim`, bundlers automatically select the appropriate module type (ES, CommonJS, etc.) based on your configuration.
 
 ### Common Configuration Scenarios
 
