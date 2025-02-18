@@ -6,22 +6,18 @@
   <a href="https://www.npmjs.com/package/vue-types" target="_blank">
     <img alt="NPM package version" src="https://img.shields.io/npm/v/vue-types" />
   </a>
-  <a href="https://circleci.com/gh/dwightjack/vue-types" target="_blank">
-    <img alt="CircleCI status" src="https://circleci.com/gh/dwightjack/vue-types.svg?style=shield" />
-  </a>
-<a href="https://www.npmjs.com/package/vue-types" target="_blank">
+  <a href="https://www.npmjs.com/package/vue-types" target="_blank">
     <img alt="Code coverage" src="https://img.shields.io/codeclimate/dwightjack/vue-types" />
   </a>
-
 </p>
 
-**Note: This document is for VueTypes 5. If you are looking for an older versions, refer to the `v1~v4` branches.**
+**Note: This document is for VueTypes 6. If you are looking for an older versions, refer to [the documentation for v2~v5](https://vue-types-v5.codeful.dev/)**
 
 ## Introduction
 
 `vue-types` is a collection of configurable [prop type](https://vuejs.org/guide/components/props.html) definitions for Vue.js components, inspired by React's `prop-types`.
 
-[Try it now!](https://stackblitz.com/edit/vitejs-vite-83cnar?file=src/App.vue) or learn more at the [official documentation site](https://dwightjack.github.io/vue-types/).
+[Try it now!](https://stackblitz.com/edit/vitejs-vite-exfrzex6?embed=1&file=src%2FApp.vue) or learn more at the [official documentation site](https://vue-types.codeful.dev/).
 
 ## Run examples
 
