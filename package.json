@@ -6,7 +6,7 @@
   "homepage": "https://vue-types.codeful.dev/",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@9.13.2",
+  "packageManager": "pnpm@9.15.6",
   "engines": {
     "node": ">=20.0.0",
     "pnpm": "^9.0.0"
@@ -26,23 +26,23 @@
   },
   "bugs": "https://github.com/dwightjack/vue-types/issues",
   "devDependencies": {
-    "@changesets/cli": "2.27.11",
-    "@eslint/js": "9.15.0",
+    "@changesets/cli": "2.28.1",
+    "@eslint/js": "9.21.0",
     "@vitest/coverage-v8": "2.1.8",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.2.1",
     "eslint-plugin-vue": "^9.32.0",
     "globals": "^15.14.0",
     "happy-dom": "15.11.7",
-    "lefthook": "1.8.5",
-    "prettier": "3.3.3",
+    "lefthook": "1.11.2",
+    "prettier": "3.5.2",
     "publint": "^0.3.4",
-    "typescript": "5.6.3",
-    "typescript-eslint": "8.15.0",
+    "typescript": "5.7.3",
+    "typescript-eslint": "8.25.0",
     "vite": "5.4.12",
     "vitest": "2.1.9"
   },
   "dependencies": {
-    "eslint": "9.15.0"
+    "eslint": "9.21.0"
   }
 }
