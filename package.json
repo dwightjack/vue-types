@@ -34,7 +34,7 @@
     "eslint-plugin-vue": "^9.32.0",
     "globals": "^15.14.0",
     "happy-dom": "15.11.7",
-    "lefthook": "1.11.12",
+    "lefthook": "1.11.13",
     "prettier": "3.5.3",
     "publint": "^0.3.4",
     "typescript": "5.7.3",
