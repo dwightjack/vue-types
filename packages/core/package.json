@@ -67,7 +67,7 @@
   },
   "devDependencies": {
     "@types/node": "20.17.57",
-    "typescript": "5.7.3",
+    "typescript": "5.8.3",
     "unbuild": "2.0.0"
   },
   "peerDependenciesMeta": {
