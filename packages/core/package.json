@@ -66,8 +66,8 @@
     "vue": "^3.0.0"
   },
   "devDependencies": {
-    "@types/node": "20.17.58",
-    "typescript": "5.8.3",
+    "@types/node": "20.19.11",
+    "typescript": "5.9.2",
     "unbuild": "2.0.0"
   },
   "peerDependenciesMeta": {
