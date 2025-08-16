@@ -13,8 +13,8 @@
   "devDependencies": {
     "cross-env": "7.0.3",
     "markdown-it-container": "4.0.0",
-    "vitepress": "1.6.3",
+    "vitepress": "1.6.4",
     "vitepress-plugin-tabs": "^0.7.0",
-    "vue": "3.5.16"
+    "vue": "3.5.18"
   }
 }
