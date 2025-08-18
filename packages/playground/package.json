@@ -4,10 +4,10 @@
   "name": "vue-types-nuxt-playground",
   "type": "module",
   "scripts": {
-    "prepare": "nuxi prepare",
-    "dev": "nuxi dev",
-    "build": "nuxi build",
-    "generate": "nuxi generate"
+    "dev:prepare": "nuxi prepare",
+    "dev": "pnpm dev:prepare && nuxi dev",
+    "build": "pnpm dev:prepare && nuxi build",
+    "generate": "pnpm dev:prepare && nuxi generate"
   },
   "dependencies": {
     "nuxt": "^4.0.3",
