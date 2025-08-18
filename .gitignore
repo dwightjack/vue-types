@@ -61,3 +61,6 @@ dist
 
 # VitePress
 **/.vitepress/cache
+
+# Vue Language Server
+vue-global-types.d.ts

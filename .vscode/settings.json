@@ -1,8 +1,12 @@
 {
-  "[js]": {
+  "eslint.validate": ["javascript", "typescript"],
+  "eslint.format.enable": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": false
   },
-  "[ts]": {
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": false
   },
   "[markdown]": {

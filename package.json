@@ -28,19 +28,19 @@
   "devDependencies": {
     "@changesets/cli": "2.29.6",
     "@eslint/js": "9.33.0",
-    "@vitest/coverage-v8": "2.1.9",
-    "eslint-config-prettier": "9.1.2",
+    "@vitest/coverage-v8": "3.2.4",
+    "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.4",
-    "eslint-plugin-vue": "^9.32.0",
-    "globals": "^15.14.0",
-    "happy-dom": "15.11.7",
+    "eslint-plugin-vue": "^10.4.0",
+    "globals": "^16.3.0",
+    "happy-dom": "18.0.1",
     "lefthook": "1.12.3",
     "prettier": "3.6.2",
     "publint": "^0.3.4",
     "typescript": "5.9.2",
     "typescript-eslint": "8.39.1",
-    "vite": "6.3.5",
-    "vitest": "2.1.9"
+    "vite": "7.1.2",
+    "vitest": "3.2.4"
   },
   "dependencies": {
     "eslint": "9.33.0"

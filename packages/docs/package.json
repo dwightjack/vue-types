@@ -11,7 +11,7 @@
     "lint:md": "prettier '**/*.md' --check"
   },
   "devDependencies": {
-    "cross-env": "7.0.3",
+    "cross-env": "10.0.0",
     "markdown-it-container": "4.0.0",
     "vitepress": "1.6.4",
     "vitepress-plugin-tabs": "^0.7.0",

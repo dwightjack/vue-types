@@ -5,9 +5,8 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/types.d.ts",
-      "import": "./dist/module.mjs",
-      "require": "./dist/module.cjs"
+      "types": "./dist/types.d.mts",
+      "import": "./dist/module.mjs"
     }
   },
   "engines": {
@@ -18,8 +17,14 @@
     "url": "https://github.com/dwightjack/vue-types.git",
     "directory": "packages/nuxt"
   },
-  "main": "./dist/module.cjs",
-  "types": "./dist/types.d.ts",
+  "main": "./dist/module.mjs",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/types.d.mts"
+      ]
+    }
+  },
   "files": [
     "dist"
   ],
@@ -31,12 +36,12 @@
     "lint:js": "eslint 'src/**/*.ts'"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.0.0"
+    "@nuxt/kit": "^3.0.0 || ^4.0.0"
   },
   "devDependencies": {
-    "@nuxt/module-builder": "^0.8.0",
-    "@nuxt/schema": "^3.0.0",
-    "nuxt": "^3.0.0",
+    "@nuxt/module-builder": "^1.0.2",
+    "@nuxt/schema": "^4.0.3",
+    "nuxt": "^4.0.3",
     "vue-types": "workspace:^"
   },
   "peerDependencies": {
