@@ -34,7 +34,7 @@
     "@nuxt/kit": "^3.0.0"
   },
   "devDependencies": {
-    "@nuxt/module-builder": "^0.8.0",
+    "@nuxt/module-builder": "^1.0.0",
     "@nuxt/schema": "^3.0.0",
     "nuxt": "^3.0.0",
     "vue-types": "workspace:^"
