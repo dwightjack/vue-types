@@ -14,6 +14,7 @@
   "scripts": {
     "examples:dev": "pnpm --filter=vue-types run build && pnpm --filter=examples start",
     "docs:dev": "pnpm --filter=docs run dev",
+    "nuxt:dev": "pnpm --filter=vue-types-nuxt stub && pnpm --filter=vue-types-nuxt-playground dev",
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",

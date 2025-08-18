@@ -6,8 +6,7 @@
   "scripts": {
     "dev:prepare": "nuxi prepare",
     "dev": "pnpm dev:prepare && nuxi dev",
-    "build": "pnpm dev:prepare && nuxi build",
-    "generate": "pnpm dev:prepare && nuxi generate"
+    "build": "pnpm dev:prepare &&  nuxi build"
   },
   "dependencies": {
     "nuxt": "^4.0.3",
