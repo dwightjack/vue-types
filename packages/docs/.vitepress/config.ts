@@ -56,7 +56,7 @@ export default defineConfig({
           { text: 'Using VueTypes', link: '/guide/validators' },
 
           { text: 'Configuration', link: '/guide/configuration' },
-          { text: 'Nuxt', link: '/guide/configuration' },
+          { text: 'Nuxt', link: '/guide/nuxt' },
         ],
       },
       {
