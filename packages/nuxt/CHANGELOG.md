@@ -1,5 +1,12 @@
 # vue-types-nuxt
 
+## 4.0.0
+
+### Major Changes
+
+- 97b3893: - Add support for Nuxt 4
+  - Package is now published as ESM-only
+
 ## 3.0.0
 
 ### Major Changes
