@@ -1,0 +1,6 @@
+{
+  "extends": "./.nuxt/tsconfig.json",
+  "vueCompilerOptions": {
+    "globalTypesPath": "./vue-global-types.d.ts"
+  }
+}

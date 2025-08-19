@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "version": "0.0.0",
+  "name": "vue-types-nuxt-playground",
+  "type": "module",
+  "scripts": {
+    "dev:prepare": "nuxi prepare",
+    "dev": "pnpm dev:prepare && nuxi dev",
+    "build": "pnpm dev:prepare &&  nuxi build"
+  },
+  "dependencies": {
+    "nuxt": "^4.0.3",
+    "vue-types-nuxt": "workspace:^",
+    "vue-types": "workspace:^"
+  }
+}

@@ -17,6 +17,7 @@ const umd = (entryName: string): BuildConfig => ({
     output: {
       format: 'umd',
       name: 'VueTypes',
+      exports: 'named',
       inlineDynamicImports: true,
     },
     esbuild: {
@@ -45,6 +46,9 @@ export default defineBuildConfig([
       emitCJS: true,
       cjsBridge: true,
       inlineDependencies: true,
+      output: {
+        exports: 'named',
+      },
     },
     declaration: true,
   },
