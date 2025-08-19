@@ -57,10 +57,14 @@ Icon
 dist
 **/shim
 !**/shim/package.json
-.nuxt
+
 
 # VitePress
 **/.vitepress/cache
 
 # Vue Language Server
 vue-global-types.d.ts
+
+# Nuxt
+.nuxt
+.output
