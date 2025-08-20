@@ -1,0 +1,5 @@
+---
+'vue-types': patch
+---
+
+demo
