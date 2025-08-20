@@ -1,4 +1,4 @@
-name: Build and Release
+name: CI
 on:
   push:
     paths-ignore:
@@ -11,12 +11,10 @@ permissions:
   id-token: write
   contents: write
   pull-requests: write
-
-env:
-  NPM_CONFIG_PROVENANCE: true
+  issues: write
 
 jobs:
-  build_and_release:
+  build_and_check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -26,12 +24,11 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
-      - run: pnpm i
+      - run: pnpm install --frozen-lockfile
       - name: Build
         run: pnpm build
       - name: Lint
         run: pnpm lint
-
       - name: Test
         run: pnpm test
       - name: Upload code coverage
@@ -41,16 +38,12 @@ jobs:
         with:
           coverageLocations: ${{github.workspace}}/packages/core/coverage/lcov.info:lcov
           prefix: test
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        if: github.ref_name == 'main'
-        uses: changesets/action@v1
-        with:
-          version: pnpm run ci:version # pnpm changeset version && pnpm install --lockfile-only
-          publish: pnpm run ci:publish
-          commit: 'chore: update versions'
-          title: 'Release: new versions'
-          createGithubReleases: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  release:
+    if: github.ref_name == 'main'
+    needs: [build_and_check]
+    uses: ./.github/workflows/release.yml
+    with:
+      ref_name: ${{ github.ref_name }}
+      release_type: 'stable'
+    secrets: inherit
