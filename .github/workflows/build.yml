@@ -1,0 +1,56 @@
+name: Build and Release
+on:
+  push:
+    paths-ignore:
+      - 'packages/docs/**'
+      - 'README.md'
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+env:
+  NPM_CONFIG_PROVENANCE: true
+
+jobs:
+  build_and_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+      - run: pnpm i
+      - name: Build
+        run: pnpm build
+      - name: Lint
+        run: pnpm lint
+
+      - name: Test
+        run: pnpm test
+      - name: Upload code coverage
+        uses: paambaati/codeclimate-action@f429536ee076d758a24705203199548125a28ca7 # v9.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
+        with:
+          coverageLocations: ${{github.workspace}}/packages/core/coverage/lcov.info:lcov
+          prefix: test
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        if: github.ref_name == 'main'
+        uses: changesets/action@v1
+        with:
+          version: pnpm run ci:version # pnpm changeset version && pnpm install --lockfile-only
+          publish: pnpm run ci:publish
+          commit: 'chore: update versions'
+          title: 'Release: new versions'
+          createGithubReleases: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
