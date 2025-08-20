@@ -4,7 +4,8 @@ on:
     paths-ignore:
       - 'packages/docs/**'
       - 'README.md'
-
+  pull_request:
+    types: [labeled]
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
@@ -32,6 +33,7 @@ jobs:
       - name: Test
         run: pnpm test
       - name: Upload code coverage
+        if: github.event_name != 'pull_request'
         uses: paambaati/codeclimate-action@f429536ee076d758a24705203199548125a28ca7 # v9.0.0
         env:
           CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
@@ -39,11 +41,77 @@ jobs:
           coverageLocations: ${{github.workspace}}/packages/core/coverage/lcov.info:lcov
           prefix: test
 
-  release:
+  stable_release:
+    name: Stable Release
     if: github.ref_name == 'main'
     needs: [build_and_check]
-    uses: ./.github/workflows/release.yml
-    with:
-      ref_name: ${{ github.ref_name }}
-      release_type: 'stable'
-    secrets: inherit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: pnpm run ci:version # pnpm changeset version && pnpm install --lockfile-only
+          publish: pnpm run ci:publish
+          commit: 'chore: update versions'
+          title: 'Release: new versions'
+          createGithubReleases: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  snapshot_release:
+    if: |
+      (github.event_name == 'pull_request' && github.event.label.name == 'release: snapshot')
+    name: Snapshot Release
+    needs: [build_and_check]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Unlabel PR
+        run: |
+          gh pr edit $GITHUB_HEAD_REF --remove-label='release: snapshot'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: pnpm install --frozen-lockfile
+      - name: Build
+        run: pnpm build
+      - name: Prepare snapshot releases
+        run: |
+          pnpm changeset version --snapshot
+          pnpm install --lockfile-only
+      - name: Publish snapshot releases
+        run: pnpm -r publish --tag=next --no-git-checks
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create or update the snapshot release PR
+        run: |
+          VERSIONS=$(pnpm -r ls --json --depth=-1 | jq -r 'map(select(.version // "" | contains ("0.0.0-"))) | .[] | (.name + "@" + .version)')
+
+          echo "Changesets published the following snapshots:" >> msg_body
+          echo "\`\`\`" >> msg_body
+          echo "$VERSIONS" >> msg_body
+          echo "\`\`\`" >> msg_body
+
+          echo "--------"
+          cat msg_body
+          echo "--------"
+
+          gh pr comment $BRANCH_NAME --body-file msg_body
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: ${{ github.head_ref }}
