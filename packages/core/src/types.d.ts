@@ -58,24 +58,28 @@ export interface VueTypeBaseDef<
 
 export type VueTypeDef<T = unknown> = VueTypeBaseDef<T>
 
-export interface VueTypeValidableDef<T = unknown, V = ValidatorFunction<T>>
-  extends VueTypeBaseDef<T> {
+export interface VueTypeValidableDef<
+  T = unknown,
+  V = ValidatorFunction<T>,
+> extends VueTypeBaseDef<T> {
   readonly validate: (fn: V) => this & { validator: V }
 }
 
 export type VueProp<T> = VueTypeBaseDef<T> | PropOptions<T>
 
-export interface VueTypeShape<T>
-  extends VueTypeBaseDef<T, DefaultType<Partial<T>>, () => Partial<T>> {
+export interface VueTypeShape<T> extends VueTypeBaseDef<
+  T,
+  DefaultType<Partial<T>>,
+  () => Partial<T>
+> {
   readonly loose: VueTypeLooseShape<T>
 }
 
-export interface VueTypeLooseShape<T>
-  extends VueTypeBaseDef<
-    T,
-    DefaultFactory<Partial<T & Record<string, any>>>,
-    () => Partial<T> & Record<string, any>
-  > {
+export interface VueTypeLooseShape<T> extends VueTypeBaseDef<
+  T,
+  DefaultFactory<Partial<T & Record<string, any>>>,
+  () => Partial<T> & Record<string, any>
+> {
   readonly loose: VueTypeLooseShape<T>
   readonly _vueTypes_isLoose: true
 }
