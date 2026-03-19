@@ -14,7 +14,7 @@
     "cross-env": "10.1.0",
     "markdown-it-container": "4.0.0",
     "vitepress": "1.6.4",
-    "vitepress-plugin-tabs": "^0.7.0",
+    "vitepress-plugin-tabs": "^0.8.0",
     "vue": "3.5.29"
   }
 }
