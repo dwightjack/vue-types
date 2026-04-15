@@ -6,10 +6,10 @@
   "homepage": "https://vue-types.codeful.dev/",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@9.15.9",
+  "packageManager": "pnpm@10.33.0",
   "engines": {
     "node": ">=20.0.0",
-    "pnpm": "^9.0.0"
+    "pnpm": "^10.0.0"
   },
   "scripts": {
     "examples:dev": "pnpm --filter=vue-types run build && pnpm --filter=examples start",
