@@ -1,2 +1,13 @@
 packages:
   - "packages/*"
+
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  lefthook: true
+
+# Security settings
+minimumReleaseAge: 10080 # 7 days
+strictDepBuilds: true
+trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 10080 # 7 days
