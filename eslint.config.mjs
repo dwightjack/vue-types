@@ -1,21 +1,22 @@
 // @ts-check
 
 import eslint from '@eslint/js'
+import { defineConfig } from 'eslint/config'
 import ts from 'typescript-eslint'
 import prettier from 'eslint-plugin-prettier/recommended'
 import vue from 'eslint-plugin-vue'
 import globals from 'globals'
 
-export default ts.config(
+export default defineConfig(
   eslint.configs.recommended,
-  ...ts.configs.strict,
-  ...ts.configs.stylistic,
+  ts.configs.strict,
+  ts.configs.stylistic,
   {
     extends: [
       eslint.configs.recommended,
-      ...ts.configs.strict,
-      ...ts.configs.stylistic,
-      ...vue.configs['flat/recommended'],
+      ts.configs.strict,
+      ts.configs.stylistic,
+      vue.configs['flat/recommended'],
     ],
     files: ['**/*.{ts,vue}'],
     languageOptions: {
