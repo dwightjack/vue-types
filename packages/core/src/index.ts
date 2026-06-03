@@ -105,7 +105,7 @@ const BaseVueTypes = /*#__PURE__*/ (() =>
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     static extend(...args: any[]) {
       warn(
-        `VueTypes.extend has been removed. Use the ES6+ method instead. See https://dwightjack.github.io/vue-types/advanced/extending-vue-types.html#extending-namespaced-validators-in-es6 for details.`,
+        `VueTypes.extend has been removed. Use the ES6+ method instead. See https://vue-types.codeful.dev/namespaced-usage/extend.html#extending-namespaced-validators-in-es6 for details.`,
       )
     }
 

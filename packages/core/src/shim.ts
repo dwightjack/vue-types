@@ -234,7 +234,7 @@ if (process.env.NODE_ENV !== 'production') {
   // oxlint-disable-next-line no-unused-expressions
   !config.silent &&
     console.warn(
-      'You are using the production shimmed version of VueTypes in a development build. Refer to https://dwightjack.github.io/vue-types/guide/installation.html#production-build to learn how to configure VueTypes for usage in multiple environments.',
+      'You are using the production shimmed version of VueTypes in a development build. Refer to https://vue-types.codeful.dev/guide/installation.html#production-build to learn how to configure VueTypes for usage in multiple environments.',
     )
 }
 

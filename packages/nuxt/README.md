@@ -2,4 +2,4 @@
 
 ## Usage
 
-See the [official documentation](https://dwightjack.github.io/vue-types/guide/installation.html#nuxt).
+See the [official documentation](https://vue-types.codeful.dev/guide/nuxt.html).
