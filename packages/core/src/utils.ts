@@ -14,7 +14,9 @@ import { isPlainObject } from './is-plain-obj'
 export { isPlainObject }
 
 const ObjProto = Object.prototype
+// oxlint-disable-next-line typescript/unbound-method
 const toString = ObjProto.toString
+// oxlint-disable-next-line typescript/unbound-method
 export const hasOwn = ObjProto.hasOwnProperty
 
 const FN_MATCH_REGEXP = /^\s*function (\w+)/
@@ -23,8 +25,10 @@ const FN_MATCH_REGEXP = /^\s*function (\w+)/
 export function getType(
   fn: VueProp<any> | (() => any) | (new (...args: any[]) => any),
 ): string {
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   const type = (fn as VueProp<any>)?.type ?? fn
   if (type) {
+    // oxlint-disable-next-line typescript/no-base-to-string
     const match = type.toString().match(FN_MATCH_REGEXP)
     return match ? match[1] : ''
   }
@@ -42,6 +46,7 @@ export function deepClone<T>(input: T): T {
     return structuredClone(input)
   }
   if (Array.isArray(input)) {
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     return [...input] as T
   }
   if (isPlainObject(input)) {
@@ -53,7 +58,6 @@ export function deepClone<T>(input: T): T {
 /**
  * No-op function
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-function
 export function noop() {}
 
 /**
@@ -68,8 +72,8 @@ let warn: (msg: string, level?: VueTypesConfig['logLevel']) => void = noop
 if (process.env.NODE_ENV !== 'production') {
   const hasConsole = typeof console !== 'undefined'
   warn = hasConsole
-    ? function warn(msg: string, level = config.logLevel) {
-        if (config.silent === false) {
+    ? (msg: string, level = config.logLevel) => {
+        if (!config.silent) {
           console[level](`[VueTypes warn]: ${msg}`)
         }
       }
@@ -84,15 +88,13 @@ export { warn }
  * @param {object} obj - Object
  * @param {string} prop - Property to check
  */
-export const has = <T, U extends keyof T>(obj: T, prop: U) =>
-  hasOwn.call(obj, prop)
+export const has = <T>(obj: T, prop: keyof T) => hasOwn.call(obj, prop)
 
 /**
  * Determines whether the passed value is an integer. Uses `Number.isInteger` if available
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger
- * @param {*} value - The value to be tested for being an integer.
- * @returns {boolean}
+ * @param value - The value to be tested for being an integer.
  */
 export const isInteger =
   Number.isInteger ||
@@ -107,8 +109,7 @@ export const isInteger =
 /**
  * Determines whether the passed value is an Array.
  *
- * @param {*} value - The value to be tested for being an array.
- * @returns {boolean}
+ * @param value - The value to be tested for being an array.
  */
 export const isArray =
   Array.isArray ||
@@ -119,11 +120,10 @@ export const isArray =
 /**
  * Checks if a value is a function
  *
- * @param {any} value - Value to check
- * @returns {boolean}
+ * @param  value - Value to check
  */
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-export const isFunction = <T extends Function>(value: unknown): value is T =>
+export const isFunction = (value: unknown): value is Function =>
   toString.call(value) === '[object Function]'
 
 /**
@@ -162,6 +162,7 @@ export interface WrappedFn {
  * @param ctx - New function context
  */
 export function bindTo(fn: (...args: any[]) => any, ctx: any): WrappedFn {
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   return Object.defineProperty(fn.bind(ctx) as WrappedFn, '__original', {
     value: fn,
   })
@@ -173,8 +174,8 @@ export function bindTo(fn: (...args: any[]) => any, ctx: any): WrappedFn {
  *
  * @param fn - Function to unwrap
  */
-// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-export function unwrap<T extends WrappedFn | Function>(fn: T) {
+export function unwrap(fn: WrappedFn | Function) {
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   return (fn as WrappedFn).__original ?? fn
 }
 
@@ -184,13 +185,13 @@ export function unwrap<T extends WrappedFn | Function>(fn: T) {
  * If `silent` is `false` (default) will return a boolean. If it is set to `true`
  * it will return `true` on success or a string error message on failure
  *
- * @param {Object|*} type - Type to use for validation. Either a type object or a constructor
- * @param {*} value - Value to check
- * @param {boolean} silent - Silence warnings
+ * @param  type - Type to use for validation. Either a type object or a constructor
+ * @param value - Value to check
+ * @param  silent - Silence warnings
  */
-export function validateType<T, U>(
-  type: T,
-  value: U,
+export function validateType(
+  type: unknown,
+  value: unknown,
   silent = false,
 ): string | boolean {
   let typeToCheck: Record<string, any>
@@ -214,11 +215,9 @@ export function validateType<T, U>(
     }
     if (isArray(typeToCheck.type)) {
       valid = typeToCheck.type.some(
-        (type: any) => validateType(type, value, true) === true,
+        (t: any) => validateType(t, value, true) === true,
       )
-      expectedType = typeToCheck.type
-        .map((type: any) => getType(type))
-        .join(' or ')
+      expectedType = typeToCheck.type.map((t: any) => getType(t)).join(' or ')
     } else {
       expectedType = getType(typeToCheck)
 
@@ -240,14 +239,16 @@ export function validateType<T, U>(
   }
 
   if (!valid) {
+    // oxlint-disable-next-line typescript/restrict-template-expressions
     const msg = `${namePrefix}value "${value}" should be of type "${expectedType}"`
-    if (silent === false) {
+    if (!silent) {
       warn(msg)
       return false
     }
     return msg
   }
 
+  // oxlint-disable-next-line typescript/unbound-method
   if (has(typeToCheck, 'validator') && isFunction(typeToCheck.validator)) {
     const oldWarn = warn
     const warnLog: string[] = []
@@ -261,7 +262,7 @@ export function validateType<T, U>(
     if (!valid) {
       const msg = (warnLog.length > 1 ? '* ' : '') + warnLog.join('\n* ')
       warnLog.length = 0
-      if (silent === false) {
+      if (!silent) {
         warn(msg)
         return valid
       }
@@ -274,10 +275,11 @@ export function validateType<T, U>(
 /**
  * Adds `isRequired` and `def` modifiers to an object
  *
- * @param {string} name - Type internal name
- * @param {object} obj - Object to enhance
+ * @param name - Type internal name
+ * @param obj - Object to enhance
  */
 export function toType<T = any>(name: string, obj: PropOptions<T>) {
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   const type: VueTypeDef<T> = Object.defineProperties(obj as VueTypeDef<T>, {
     _vueTypes_name: {
       value: name,
@@ -297,7 +299,7 @@ export function toType<T = any>(name: string, obj: PropOptions<T>) {
             (Array.isArray(this.type) && this.type.includes(Boolean))
           ) {
             this.default = undefined
-            return
+            return this
           }
           if (has(this, 'default')) {
             delete this.default
@@ -320,6 +322,7 @@ export function toType<T = any>(name: string, obj: PropOptions<T>) {
     },
   })
 
+  // oxlint-disable-next-line typescript/unbound-method
   const { validator } = type
   if (isFunction(validator)) {
     type.validator = bindTo(validator, type)
@@ -331,11 +334,13 @@ export function toType<T = any>(name: string, obj: PropOptions<T>) {
 /**
  * Like `toType` but also adds the `validate()` method to the type object
  *
- * @param {string} name - Type internal name
- * @param {object} obj - Object to enhance
+ * @param name - Type internal name
+ * @param obj - Object to enhance
  */
+
 export function toValidableType<T = any>(name: string, obj: PropOptions<T>) {
   const type = toType<T>(name, obj)
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   return Object.defineProperty(type, 'validate', {
     value(fn: ValidatorFunction<T>) {
       if (isFunction(this.validator)) {
@@ -360,11 +365,10 @@ export function toValidableType<T = any>(name: string, obj: PropOptions<T>) {
  */
 
 export function clone<T extends object>(obj: T): T {
-  const descriptors = {} as { [P in keyof T]: any }
-  Object.getOwnPropertyNames(obj).forEach((key) => {
-    descriptors[key as keyof T] = Object.getOwnPropertyDescriptor(obj, key)
-  })
-  return Object.defineProperties({}, descriptors) as T
+  return Object.create(
+    Object.getPrototypeOf(obj),
+    Object.getOwnPropertyDescriptors(obj),
+  )
 }
 
 /**
@@ -395,12 +399,14 @@ export function fromType<
   if (!isPlainObject(props)) {
     return copy
   }
+  // oxlint-disable-next-line typescript/unbound-method
   const { validator, ...rest } = props
 
   // 3. compose the validator function
   // with the one on the source (if present)
   // and ensure it is bound to the copy
   if (isFunction(validator)) {
+    // oxlint-disable-next-line typescript/unbound-method
     let { validator: prevValidator } = copy
 
     if (prevValidator) {
@@ -409,11 +415,10 @@ export function fromType<
 
     copy.validator = bindTo(
       prevValidator
-        ? function (this: T, value: any, props: any) {
+        ? function (this: T, value: any, p: any) {
             return (
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              prevValidator!.call(this, value, props) &&
-              validator.call(this, value, props)
+              prevValidator.call(this, value, p) &&
+              validator.call(this, value, p)
             )
           }
         : validator,
@@ -421,6 +426,7 @@ export function fromType<
     )
   }
   // 4. overwrite the rest, if present
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   return Object.assign(copy, rest as V)
 }
 

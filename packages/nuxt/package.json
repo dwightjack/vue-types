@@ -33,8 +33,9 @@
     "build": "nuxt-module-build build",
     "stub": "nuxt-module-build build --stub",
     "lint": "pnpm run \"/^lint:.*/\"",
+    "lint:npm": "publint .",
     "lint:type": "tsc --noEmit --skipLibCheck",
-    "lint:js": "eslint 'src/**/*.ts'"
+    "lint:js": "oxlint"
   },
   "dependencies": {
     "@nuxt/kit": "^3.0.0 || ^4.0.0"

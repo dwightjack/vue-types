@@ -15,7 +15,7 @@ export default function objectOf<T extends VueProp<any> | Prop<any>>(type: T) {
       })
 
       if (!valid) {
-        warn(`objectOf - value validation error:\n${indent(vResult as string)}`)
+        warn(`objectOf - value validation error:\n${indent(vResult)}`)
       }
       return valid
     },

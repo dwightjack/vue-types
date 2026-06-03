@@ -1,7 +1,7 @@
 .custom-block.ts {
-    background-color: rgba(142, 192, 248, 0.17);
-    color: #27578c;
-    border-color: #3177c6;
+  background-color: rgba(142, 192, 248, 0.17);
+  color: #27578c;
+  border-color: #3177c6;
 }
 
 .dark .custom-block.ts {

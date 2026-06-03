@@ -12,6 +12,7 @@ export default function custom<T>(
   }
 
   return toType<T>(validatorFn.name || '<<anonymous function>>', {
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     type: null as unknown as PropType<T>,
     validator(this: VueTypeDef<T>, value: T) {
       const valid = validatorFn(value)

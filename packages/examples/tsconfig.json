@@ -5,7 +5,6 @@
     "esModuleInterop": true,
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "baseUrl": ".",
     "paths": {
       "vue-types": ["../core/src/index"]
     }

@@ -1,3 +1,4 @@
+// oxlint-disable unicorn/consistent-function-scoping
 import * as utils from '../src/utils'
 import { VueTypeDef } from '../src'
 import { config } from '../src'

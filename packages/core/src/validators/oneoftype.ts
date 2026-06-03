@@ -11,9 +11,8 @@ import {
 } from '../utils'
 
 export default function oneOfType<
-  D extends V,
+  D extends InferType<U>,
   U extends VueProp<any> | Prop<any> = any,
-  V = InferType<U>,
 >(arr: U[]) {
   if (!isArray(arr)) {
     throw new TypeError(
@@ -21,20 +20,22 @@ export default function oneOfType<
     )
   }
 
+  type V = InferType<U>
+
   let hasCustomValidators = false
   let hasNullable = false
 
   let nativeChecks: (Prop<V> | null)[] = []
 
-  // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let i = 0; i < arr.length; i += 1) {
     const type = arr[i]
     if (isComplexType<V>(type)) {
+      // oxlint-disable-next-line typescript/unbound-method
       if (isFunction(type.validator)) {
         hasCustomValidators = true
       }
       if (isVueTypeDef<V>(type, 'oneOf') && type.type) {
-        nativeChecks = nativeChecks.concat(type.type as PropType<V>)
+        nativeChecks = nativeChecks.concat(type.type)
         continue
       }
       if (isVueTypeDef<V>(type, 'nullable')) {
@@ -47,6 +48,7 @@ export default function oneOfType<
       }
       nativeChecks = nativeChecks.concat(type.type)
     } else {
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       nativeChecks.push(type as Prop<V>)
     }
   }
@@ -54,18 +56,19 @@ export default function oneOfType<
   // filter duplicates
   nativeChecks = nativeChecks.filter((t, i) => nativeChecks.indexOf(t) === i)
 
-  const typeProp =
-    hasNullable === false && nativeChecks.length > 0 ? nativeChecks : null
+  const typeProp = !hasNullable && nativeChecks.length > 0 ? nativeChecks : null
 
   if (!hasCustomValidators) {
     // we got just native objects (ie: Array, Object)
     // delegate to Vue native prop check
     return toType<D>('oneOfType', {
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       type: typeProp as unknown as PropType<D>,
     })
   }
 
   return toType<D>('oneOfType', {
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     type: typeProp as unknown as PropType<D>,
     validator(value) {
       const err: string[] = []

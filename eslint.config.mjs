@@ -1,9 +1,7 @@
 // @ts-check
-
 import eslint from '@eslint/js'
 import { defineConfig } from 'eslint/config'
 import ts from 'typescript-eslint'
-import prettier from 'eslint-plugin-prettier/recommended'
 import vue from 'eslint-plugin-vue'
 import globals from 'globals'
 
@@ -18,7 +16,7 @@ export default defineConfig(
       ts.configs.stylistic,
       vue.configs['flat/recommended'],
     ],
-    files: ['**/*.{ts,vue}'],
+    files: ['**/*.vue'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -29,17 +27,10 @@ export default defineConfig(
     },
     rules: {
       'vue/one-component-per-file': 0,
+      'vue/singleline-html-element-content-newline': 0,
     },
   },
   {
-    files: ['**/*.ts'],
-    rules: {
-      '@typescript-eslint/explicit-function-return-type': 0,
-      '@typescript-eslint/no-explicit-any': 0,
-    },
-  },
-  prettier,
-  {
-    ignores: ['**/dist', '**/node_modules', '**/shim', '**/*.vue', '**/cache'],
+    ignores: ['**/dist', '**/node_modules', '**/shim', '**/cache'],
   },
 )

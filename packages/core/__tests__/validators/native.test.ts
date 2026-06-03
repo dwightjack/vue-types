@@ -1,3 +1,4 @@
+// oxlint-disable unicorn/consistent-function-scoping
 import * as native from '../../src/validators/native'
 import { forceNoContext, checkRequired } from '../helpers'
 

@@ -23,8 +23,9 @@ export default function oneOf<D, T extends readonly D[] = readonly D[]>(
     const type = arr.reduce(
       (ret, v) => {
         if (v !== null && v !== undefined) {
-          const constr = (v as any).constructor
-          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+          const constr = v.constructor as Prop<T[number]>
+          // oxlint-disable-next-line no-unused-expressions
           ret.indexOf(constr) === -1 && ret.push(constr)
         }
         return ret

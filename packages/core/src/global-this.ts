@@ -2,9 +2,9 @@
  * Support globalThis in E2019 and lower
  * @see https://mathiasbynens.be/notes/globalthis
  */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 ;(function () {
   if (typeof globalThis === 'object') return
+  // oxlint-disable-next-line no-extend-native
   Object.defineProperty(Object.prototype, '__magic__', {
     get: function () {
       return this

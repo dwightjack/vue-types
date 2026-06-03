@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unsafe-type-assertion
 export function checkRequired(type: any) {
   expect(type.isRequired).toEqual(
     expect.objectContaining({
@@ -11,27 +12,23 @@ export const forceNoContext = <T extends (..._args: any[]) => any>(
   validator?: T,
 ): T => validator?.bind(undefined) as T
 
-export function getDescriptors<T extends Record<string, any>>(type: T): T {
-  const descriptors = {} as { [P in keyof T]: any }
-  Object.getOwnPropertyNames(type).forEach((key) => {
-    descriptors[key as keyof T] = Object.getOwnPropertyDescriptor(type, key)
-  })
-  return descriptors
-}
+export const getDescriptors = (type: unknown) =>
+  Object.getOwnPropertyDescriptors(type)
 
-export function getExpectDescriptors<T extends Record<string, any>>(
-  type: T,
-): any {
-  const descriptors = {} as { [P in keyof T]: any }
-  Object.getOwnPropertyNames(type).forEach((key) => {
+export function getExpectDescriptors(type: unknown) {
+  const descriptors = getDescriptors(type)
+  Object.keys(descriptors).forEach((key) => {
     const descr = Object.getOwnPropertyDescriptor(type, key)
+    if (!descr) {
+      return
+    }
     if (typeof descr?.get === 'function') {
-      descr.get = expect.any(Function) as any
+      descr.get = expect.any(Function)
     }
     if (typeof descr?.value === 'function') {
-      descr.value = expect.any(Function) as any
+      descr.value = expect.any(Function)
     }
-    descriptors[key as keyof T] = descr
+    descriptors[key] = descr
   })
   return descriptors
 }
