@@ -1,3 +1,4 @@
+import { beforeEach, vi, describe, expect, it } from 'vitest'
 // oxlint-disable unicorn/consistent-function-scoping
 import * as utils from '../src/utils'
 import { VueTypeDef } from '../src'
@@ -25,24 +26,7 @@ describe('`getNativeType()`', () => {
     expect(utils.getNativeType(() => undefined)).toBe('Function')
     expect(utils.getNativeType(null)).toBe('')
     expect(utils.getNativeType(undefined)).toBe('')
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     expect(utils.getNativeType(async () => {})).toBe('Function')
-  })
-})
-
-describe('`has()`', () => {
-  it('return true for own properties', () => {
-    expect(utils.has({ a: true }, 'a')).toBe(true)
-    expect(utils.has({ a: undefined }, 'a')).toBe(true)
-  })
-  it('return false non available properties', () => {
-    expect(utils.has({ a: true }, 'b' as any)).toBe(false)
-  })
-  it('return false for inherited properties', () => {
-    const obj = Object.create({ a: 1 })
-    obj.b = 2
-    expect(utils.has(obj, 'a')).toBe(false)
-    expect(utils.has(obj, 'b')).toBe(true)
   })
 })
 
@@ -96,7 +80,7 @@ describe('`isComplexType()`', () => {
 
 describe('`bindTo()`', () => {
   it('binds a function and store its original value', () => {
-    const fn = vi.fn()
+    const fn = vi.fn<() => void>()
     const ctx = {}
     const bound = utils.bindTo(fn, ctx)
 
@@ -141,7 +125,7 @@ describe('`validateType()`', () => {
   })
 
   it('should execute the validator for type === null', () => {
-    const validator = vi.fn().mockReturnValue(false)
+    const validator = vi.fn<() => boolean>().mockReturnValue(false)
     expect(utils.validateType({ type: null, validator }, 'anyValue')).toBe(
       false,
     )
@@ -149,7 +133,6 @@ describe('`validateType()`', () => {
   })
 
   it('should validate async functions', () => {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const fn = async () => {}
     expect(utils.validateType({ type: Function }, fn)).toBe(true)
   })
@@ -164,7 +147,7 @@ describe('`toType()`', () => {
   })
 
   it('should bind provided `validator function to the passed in object`', () => {
-    const spy = vi.fn()
+    const spy = vi.fn<() => boolean>()
     const obj = {
       validator: spy,
     }
@@ -193,8 +176,7 @@ describe('`toType()`', () => {
       const obj = {}
 
       utils.toType('testType', obj)
-      // eslint-disable-next-line no-prototype-builtins
-      expect(obj.hasOwnProperty('isRequired')).toBe(true)
+      expect(Object.hasOwn(obj, 'isRequired')).toBe(true)
     })
 
     it('should set the required flag', () => {
@@ -219,10 +201,11 @@ describe('`toType()`', () => {
     it('`def` should NOT be writable', () => {
       const type = utils.toType('testType', {})
 
-      try {
+      expect(() => {
         ;(type as any).def = 'demo'
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty
-      } catch (e) {}
+      }).toThrow(/Cannot assign to read only property 'def'/)
+      try {
+      } catch {}
       expect(type.def).toBeInstanceOf(Function)
     })
 
@@ -270,7 +253,6 @@ describe('`toType()`', () => {
     it('sets a `default` key on the object', () => {
       const type = utils.toType('testType', {})
 
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       const stubs = [true, null, 'string', () => {}, 0]
 
       stubs.forEach((v) => {
@@ -312,7 +294,7 @@ describe('`toValidableType()`', () => {
     expect(type.validate).toBeInstanceOf(Function)
   })
   it('the validate function sets a custom validator', () => {
-    const fn = vi.fn()
+    const fn = vi.fn<() => boolean>()
     const type = utils
       .toValidableType('testType', { type: String })
       .validate(fn)
@@ -322,7 +304,7 @@ describe('`toValidableType()`', () => {
     expect(fn).toHaveBeenCalledWith('demo')
   })
   it('binds the validate function to the type object', () => {
-    const fn = vi.fn()
+    const fn = vi.fn<() => boolean>()
     const type = utils
       .toValidableType('testType', { type: String })
       .validate(fn)
@@ -392,10 +374,9 @@ describe('`fromType()`', () => {
   })
 
   it('composes validator functions', () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const validator = vi.fn((...args: any[]) => true)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const validatorCopy = vi.fn((...args: any[]) => false)
+    type Validator = (value: unknown, props: Record<string, unknown>) => boolean
+    const validator = vi.fn<Validator>((..._args: any[]) => true)
+    const validatorCopy = vi.fn<Validator>((..._args: any[]) => false)
     const base = utils.toType('a', {
       type: String,
       validator,

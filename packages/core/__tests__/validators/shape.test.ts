@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest'
 import { string, integer, any } from '../../src/validators/native'
 import shape from '../../src/validators/shape'
 import { forceNoContext, checkRequired } from '../helpers'
@@ -13,6 +14,7 @@ describe('`.shape`', () => {
     }
   })
 
+  // oxlint-disable-next-line vitest/expect-expect
   it('should add a `required` flag', () => {
     const customType = shape(shapeType)
     checkRequired(customType)

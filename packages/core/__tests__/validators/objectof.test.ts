@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest'
 import { integer, number } from '../../src/validators/native'
 import objectOf from '../../src/validators/objectof'
 import { forceNoContext, checkRequired } from '../helpers'
@@ -8,6 +9,7 @@ describe('`.objectOf`', () => {
     expect(customType.type).toBe(Object)
   })
 
+  // oxlint-disable-next-line vitest/expect-expect
   it('should add a `required` flag', () => {
     const customType = objectOf(Number)
     checkRequired(customType)

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 import VueTypes, { fromType, toValidableType } from 'vue-types'
 import { VueTypesProject } from './namespaced-extended'
 
@@ -130,9 +129,6 @@ export class myTypes extends VueTypes {
     return fromType('user', shapeType)
   }
 }
-
-myTypes.test.isRequired
-myTypes.test.isRequired
 
 export const a = myTypes.user.def({ name: 'xxx' })
 export const str = myTypes.string

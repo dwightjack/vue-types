@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest'
 import { noop } from '../src/utils'
 import * as native from '../src/validators/native'
 import custom from '../src/validators/custom'
@@ -20,7 +21,6 @@ describe('VueTypes', () => {
 
   describe('`.func`', () => {
     it('should proxy the `func` validator with a sensible default', () => {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       const expected = getExpectDescriptors(native.func().def(() => {}))
       expect(getDescriptors(VueTypes.func)).toEqual(expected)
       expect(VueTypes.func.default).toBeInstanceOf(Function)

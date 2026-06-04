@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "unicorn", "oxc"],
+  "plugins": ["typescript", "unicorn", "oxc", "vue"],
   "options": {
     "typeAware": true,
     "typeCheck": true
@@ -19,10 +19,12 @@
   "overrides": [
     {
       "files": ["**/*.test.ts"],
+      "plugins": ["typescript", "unicorn", "oxc", "vitest"],
       "rules": {
         "typescript/no-explicit-any": "off",
         "typescript/no-unsafe-type-assertion": "off",
-        "typescript/unbound-method": "off"
+        "typescript/unbound-method": "off",
+        "vitest/prefer-importing-vitest-globals": "error"
       }
     }
   ],

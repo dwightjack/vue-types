@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest'
 import { noop } from '../src/utils'
 import VueTypes, { fromType, toValidableType, toType } from '../src/shim'
 
@@ -643,8 +644,7 @@ describe('`toType()`', () => {
       const obj = {}
 
       toType('testType', obj)
-      // eslint-disable-next-line no-prototype-builtins
-      expect(obj.hasOwnProperty('isRequired')).toBe(true)
+      expect(Object.hasOwn(obj, 'isRequired')).toBe(true)
     })
 
     it('should set the required flag', () => {
@@ -669,10 +669,10 @@ describe('`toType()`', () => {
     it('`def` should NOT be writable', () => {
       const type = toType('testType', {})
 
-      try {
+      expect(() => {
         type.def = 'demo'
-        // eslint-disable-next-line no-empty, @typescript-eslint/no-unused-vars
-      } catch (e) {}
+      }).toThrow(/Cannot assign to read only property 'def'/)
+
       expect(type.def).toBeInstanceOf(Function)
     })
 
@@ -687,7 +687,6 @@ describe('`toType()`', () => {
     it('sets a `default` key on the object', () => {
       const type = toType('testType', {})
 
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       const stubs = [true, null, 'string', () => {}, 0]
 
       stubs.forEach((v) => {

@@ -8,7 +8,6 @@
     "build": "cross-env NODE_ENV=production vitepress build",
     "lint": "pnpm run \"/^lint:.*/\"",
     "lint:js": "oxlint .vitepress components",
-    "lint:vue": "eslint '{.vitepress,components}/**/*.vue'",
     "lint:md": "oxfmt '**/*.md' --check"
   },
   "devDependencies": {

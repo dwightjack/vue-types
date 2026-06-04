@@ -23,7 +23,6 @@ import {
   stringOrNull,
 } from '../shared/validators'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   user: userType,
   message: messageType,

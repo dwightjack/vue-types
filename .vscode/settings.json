@@ -1,15 +1,8 @@
 {
-  "eslint.enable": true,
-  "eslint.validate": ["vue"],
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "always"
-  },
-  "[vue]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "always"
-    }
   },
   "js/ts.tsdk.path": "node_modules/typescript/lib"
 }

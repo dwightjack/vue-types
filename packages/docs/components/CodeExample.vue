@@ -6,7 +6,6 @@ export default defineComponent({
     const slots = useSlots()
     const PluginTabs = resolveComponent('PluginTabs')
     const PluginTabsTab = resolveComponent('PluginTabsTab')
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [options, _hr, setup] = slots.default?.() ?? []
 
     return () =>

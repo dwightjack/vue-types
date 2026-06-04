@@ -38,7 +38,6 @@ const componentProps = {
   oneOf: oneOfTuple,
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type Props = ExtractPropTypes<typeof componentProps>
 
 export default defineComponent({

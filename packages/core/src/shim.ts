@@ -1,17 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { isPlainObject } from './is-plain-obj'
-import './global-this'
 import { typeDefaults } from './sensibles'
 import { config } from './config'
 import type { VueTypesDefaults } from './types'
 export type { VueTypeDef, VueTypeValidableDef } from './types'
 const dfn = Object.defineProperty
 
-const isArray =
-  Array.isArray ||
-  function (value) {
-    return Object.prototype.toString.call(value) === '[object Array]'
-  }
+const isArray = Array.isArray
 
 function deepClone<T>(input: T): T {
   if ('structuredClone' in globalThis) {
@@ -35,8 +29,6 @@ function type(name: string, props: any = {}, validable = false): any {
     },
     def: {
       value(this: any, v: any) {
-        // eslint-disable-next-line @typescript-eslint/no-this-alias
-        const t = this
         if (v === undefined) {
           if ('default' in this) {
             delete this.default
@@ -44,13 +36,13 @@ function type(name: string, props: any = {}, validable = false): any {
           return this
         }
         if (isArray(v)) {
-          t.default = () => deepClone(v)
+          this.default = () => deepClone(v)
         } else if (isPlainObject(v)) {
-          t.default = () => deepClone(v)
+          this.default = () => deepClone(v)
         } else {
-          t.default = v
+          this.default = v
         }
-        return t
+        return this
       },
     },
     isRequired: {
@@ -76,7 +68,7 @@ function type(name: string, props: any = {}, validable = false): any {
 export { config }
 
 // oxlint-disable-next-line typescript/no-unnecessary-type-parameters
-type TypeShim = <T = any>(...args: any[]) => any
+type TypeShim = <_T = any>(...args: any[]) => any
 
 export const any: TypeShim = () => type('any', {}, true)
 export const func: TypeShim = () => type('func', { type: Function }, true)
@@ -126,8 +118,9 @@ function createValidator(
 
 export function fromType(name: string, source: any, props: any = {}) {
   const t = type(name, Object.assign({}, source, props), !!source.validable)
-  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  t.validator && delete t.validator
+  if (t.validator) {
+    delete t.validator
+  }
   return t
 }
 
@@ -224,7 +217,6 @@ export function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
 export function validateType(
   _type: any,
   _value: any,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _silent = false,
 ): string | boolean {
   return true

@@ -1,4 +1,3 @@
-import './global-this'
 import { config } from './config'
 import {
   VueTypeDef,
@@ -12,12 +11,6 @@ import {
 import { isPlainObject } from './is-plain-obj'
 
 export { isPlainObject }
-
-const ObjProto = Object.prototype
-// oxlint-disable-next-line typescript/unbound-method
-const toString = ObjProto.toString
-// oxlint-disable-next-line typescript/unbound-method
-export const hasOwn = ObjProto.hasOwnProperty
 
 const FN_MATCH_REGEXP = /^\s*function (\w+)/
 
@@ -45,7 +38,7 @@ export function deepClone<T>(input: T): T {
   if ('structuredClone' in globalThis) {
     return structuredClone(input)
   }
-  if (Array.isArray(input)) {
+  if (isArray(input)) {
     // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     return [...input] as T
   }
@@ -83,14 +76,6 @@ if (process.env.NODE_ENV !== 'production') {
 export { warn }
 
 /**
- * Checks for a own property in an object
- *
- * @param {object} obj - Object
- * @param {string} prop - Property to check
- */
-export const has = <T>(obj: T, prop: keyof T) => hasOwn.call(obj, prop)
-
-/**
  * Determines whether the passed value is an integer. Uses `Number.isInteger` if available
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isInteger
@@ -106,23 +91,14 @@ export const isInteger =
     )
   }
 
-/**
- * Determines whether the passed value is an Array.
- *
- * @param value - The value to be tested for being an array.
- */
-export const isArray =
-  Array.isArray ||
-  function isArray(value): value is any[] {
-    return toString.call(value) === '[object Array]'
-  }
+export const isArray = Array.isArray
+const hasOwn = Object.hasOwn
 
 /**
  * Checks if a value is a function
  *
  * @param  value - Value to check
  */
-// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export const isFunction = (value: unknown): value is Function =>
   toString.call(value) === '[object Function]'
 
@@ -136,7 +112,7 @@ export const isVueTypeDef = <T>(
   name?: string,
 ): value is VueTypeDef<T> | VueTypeValidableDef<T> =>
   isPlainObject(value) &&
-  has(value, '_vueTypes_name') &&
+  hasOwn(value, '_vueTypes_name') &&
   (!name || value._vueTypes_name === name)
 
 /**
@@ -145,9 +121,9 @@ export const isVueTypeDef = <T>(
  */
 export const isComplexType = <T>(value: any): value is VueProp<T> =>
   isPlainObject(value) &&
-  (has(value, 'type') ||
+  (hasOwn(value, 'type') ||
     ['_vueTypes_name', 'validator', 'default', 'required'].some((k) =>
-      has(value, k),
+      hasOwn(value, k),
     ))
 
 export interface WrappedFn {
@@ -248,8 +224,11 @@ export function validateType(
     return msg
   }
 
-  // oxlint-disable-next-line typescript/unbound-method
-  if (has(typeToCheck, 'validator') && isFunction(typeToCheck.validator)) {
+  if (
+    hasOwn(typeToCheck, 'validator') &&
+    // oxlint-disable-next-line typescript/unbound-method
+    isFunction(typeToCheck.validator)
+  ) {
     const oldWarn = warn
     const warnLog: string[] = []
     warn = (msg) => {
@@ -296,12 +275,12 @@ export function toType<T = any>(name: string, obj: PropOptions<T>) {
         if (def === undefined) {
           if (
             this.type === Boolean ||
-            (Array.isArray(this.type) && this.type.includes(Boolean))
+            (isArray(this.type) && this.type.includes(Boolean))
           ) {
             this.default = undefined
             return this
           }
-          if (has(this, 'default')) {
+          if (hasOwn(this, 'default')) {
             delete this.default
           }
           return this
