@@ -1,3 +1,4 @@
+import { expect } from 'vitest'
 // oxlint-disable typescript/no-unsafe-type-assertion
 export function checkRequired(type: any) {
   expect(type.isRequired).toEqual(

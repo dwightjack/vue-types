@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "unicorn", "oxc", "vue"],
+  "plugins": ["typescript", "unicorn", "oxc", "import", "vue"],
   "options": {
     "typeAware": true,
     "typeCheck": true
@@ -11,7 +11,9 @@
     "perf": "warn"
   },
   "rules": {
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "import/no-named-as-default-member": "off",
+    "import/no-unassigned-import": "off"
   },
   "env": {
     "builtin": true
@@ -19,7 +21,7 @@
   "overrides": [
     {
       "files": ["**/*.test.ts"],
-      "plugins": ["typescript", "unicorn", "oxc", "vitest"],
+      "plugins": ["typescript", "unicorn", "oxc", "import", "vitest"],
       "rules": {
         "typescript/no-explicit-any": "off",
         "typescript/no-unsafe-type-assertion": "off",
