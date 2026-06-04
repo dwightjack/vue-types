@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "publishConfig": {
+    "access": "restricted"
+  },
   "scripts": {
     "start": "vite -c ./vite.config.ts",
     "lint": "pnpm run \"/^lint:.*/\"",

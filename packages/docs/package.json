@@ -3,6 +3,9 @@
   "private": true,
   "type": "module",
   "version": "0.0.0",
+  "publishConfig": {
+    "access": "restricted"
+  },
   "scripts": {
     "dev": "vitepress dev",
     "build": "cross-env NODE_ENV=production vitepress build",

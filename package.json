@@ -6,6 +6,9 @@
   "homepage": "https://vue-types.codeful.dev/",
   "type": "module",
   "private": true,
+  "publishConfig": {
+    "access": "restricted"
+  },
   "packageManager": "pnpm@11.5.0",
   "engines": {
     "node": ">=20.0.0",

@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "name": "vue-types-nuxt-playground",
   "type": "module",
+  "publishConfig": {
+    "access": "restricted"
+  },
   "scripts": {
     "dev:prepare": "nuxi prepare",
     "dev": "pnpm dev:prepare && nuxi dev",
