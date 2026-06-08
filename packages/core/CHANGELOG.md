@@ -59,7 +59,6 @@
   ```
 
   #### Package format review:
-
   - ESM and CJS builds target is ESNext (browsers with support for the latest JavaScript features).
   - UMD builds target is ES2016 (aligned with [Vue 3 browser support](https://vuejs.org/about/faq#what-browsers-does-vue-support))
 
@@ -133,7 +132,6 @@
 ### Patch Changes
 
 - 8cb1ccb: - Accepts null as valid value in validateType util
-
   - fix docs: `nullable()` should be used for nullable required props.
 
   Closes #383
@@ -143,7 +141,6 @@
 ### Patch Changes
 
 - 8cb1ccb: - Accepts null as valid value in validateType util
-
   - fix docs: `nullable()` should be used for nullable required props.
 
   Closes #383

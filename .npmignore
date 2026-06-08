@@ -1,7 +1,4 @@
 .DS_Store
 *.log
 __tests__
-examples
-.babelrc
 .editorconfig
-.eslintrc.json

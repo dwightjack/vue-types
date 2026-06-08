@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 80,
+  "trailingComma": "all",
+  "arrowParens": "always",
+  "semi": false,
+  "singleQuote": true,
+  "sortPackageJson": false,
+  "ignorePatterns": ["pnpm-lock.yaml"],
+  "embeddedLanguageFormatting": "auto",
+  "overrides": [
+    {
+      "files": ["*.yml", "*.yaml"],
+      "options": {
+        "singleQuote": false
+      }
+    }
+  ]
+}

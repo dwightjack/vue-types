@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest'
 import instanceOf from '../../src/validators/instanceof'
 import { VueTypeDef } from '../../src/types'
 import { checkRequired } from '../helpers'
@@ -21,6 +22,7 @@ describe('`.instanceOf`', () => {
     )
   })
 
+  // oxlint-disable-next-line vitest/expect-expect
   it('should add a `required` flag', () => {
     checkRequired(customType)
   })

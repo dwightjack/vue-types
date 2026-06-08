@@ -32,6 +32,7 @@ export default defineNuxtModule<VueTypesNuxtOptions>({
         })
       } else {
         config.resolve.alias = {
+          // oxlint-disable-next-line typescript/no-misused-spread
           ...config.resolve.alias,
           'vue-types': 'vue-types/shim',
         }

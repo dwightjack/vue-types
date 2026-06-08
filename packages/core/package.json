@@ -50,7 +50,7 @@
     "lint": "pnpm run \"/^lint:.*/\"",
     "lint:npm": "publint .",
     "lint:type": "tsc --noEmit --skipLibCheck",
-    "lint:js": "eslint '{src,__tests__,.}/**/*.{ts,js,cjs}'"
+    "lint:js": "oxlint"
   },
   "keywords": [
     "vue",
@@ -67,7 +67,7 @@
   },
   "devDependencies": {
     "@types/node": "24.12.0",
-    "typescript": "5.9.3",
+    "typescript": "6.0.3",
     "unbuild": "3.6.1"
   },
   "peerDependenciesMeta": {

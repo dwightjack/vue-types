@@ -6,7 +6,7 @@ export default defineComponent({
     const slots = useSlots()
     const PluginTabs = resolveComponent('PluginTabs')
     const PluginTabsTab = resolveComponent('PluginTabsTab')
-    const [options, _hr, setup] = slots.default()
+    const [options, _hr, setup] = slots.default?.() ?? []
 
     return () =>
       setup

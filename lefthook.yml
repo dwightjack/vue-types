@@ -1,6 +1,8 @@
 pre-commit:
-  parallel: true
-  commands:
-    linter:
-      glob: "*.{mjs,cjs,js,ts}"
-      run: pnpm exec eslint {staged_files}
+  parallel: false
+  jobs:
+    - glob: "*.{mjs,cjs,js,ts,vue}"
+      run: pnpm exec oxlint --type-aware {staged_files}
+    - name: format
+      run: pnpm exec oxfmt --no-error-on-unmatched-pattern {staged_files}
+      stage_fixed: true

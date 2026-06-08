@@ -1,3 +1,4 @@
+import { vi, describe, expect, it } from 'vitest'
 import { string, integer, any, nullable } from '../../src/validators/native'
 import oneOf from '../../src/validators/oneof'
 import shape from '../../src/validators/shape'
@@ -12,6 +13,7 @@ describe('`.oneOfType`', () => {
   const nativeTypes = [Number, Array, MyClass]
   const complexTypes = [oneOf([0, 1, 'string'] as const), shape({ id: Number })]
 
+  // oxlint-disable-next-line vitest/expect-expect
   it('should add a `required` flag', () => {
     const customType = oneOfType(nativeTypes)
     checkRequired(customType)

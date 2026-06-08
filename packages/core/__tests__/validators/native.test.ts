@@ -1,3 +1,6 @@
+// oxlint-disable vitest/expect-expect
+import { describe, expect, it } from 'vitest'
+// oxlint-disable unicorn/consistent-function-scoping
 import * as native from '../../src/validators/native'
 import { forceNoContext, checkRequired } from '../helpers'
 
@@ -26,7 +29,6 @@ describe('Native validators', () => {
     })
 
     it('should provide a method to set a custom default', () => {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       function myFn() {}
 
       expect(native.func().def(myFn).default).toBe(myFn)

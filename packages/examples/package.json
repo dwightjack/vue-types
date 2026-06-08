@@ -3,11 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "publishConfig": {
+    "access": "restricted"
+  },
   "scripts": {
     "start": "vite -c ./vite.config.ts",
     "lint": "pnpm run \"/^lint:.*/\"",
     "lint:type": "tsc --noEmit --skipLibCheck",
-    "lint:js": "eslint '**/*.{ts,vue}'"
+    "lint:js": "oxlint"
   },
   "dependencies": {
     "vue": "3.5.34"

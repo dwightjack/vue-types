@@ -11,7 +11,7 @@ export default function arrayOf<T extends VueProp<any> | Prop<any>>(type: T) {
         return vResult === true
       })
       if (!valid) {
-        warn(`arrayOf - value validation error:\n${indent(vResult as string)}`)
+        warn(`arrayOf - value validation error:\n${indent(vResult)}`)
       }
       return valid
     },

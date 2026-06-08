@@ -31,8 +31,26 @@ import objectOf from './validators/objectof'
 import shape from './validators/shape'
 import { config } from './config'
 
+function utilsToType<T = unknown>(
+  name: string,
+  obj: PropOptions<T>,
+  validable: true,
+): VueTypeValidableDef<T>
+function utilsToType<T = unknown>(
+  name: string,
+  obj: PropOptions<T>,
+  validable?: false,
+): VueTypeDef<T>
+function utilsToType<T = unknown>(
+  name: string,
+  obj: PropOptions<T>,
+  validable = false,
+): VueTypeDef<T> | VueTypeValidableDef<T> {
+  return validable ? toValidableType<T>(name, obj) : toType<T>(name, obj)
+}
+
 const BaseVueTypes = /*#__PURE__*/ (() =>
-  // eslint-disable-next-line @typescript-eslint/no-extraneous-class
+  // oxlint-disable-next-line no-shadow, typescript/no-extraneous-class
   class BaseVueTypes {
     static defaults: Partial<VueTypesDefaults> = {}
 
@@ -84,26 +102,17 @@ const BaseVueTypes = /*#__PURE__*/ (() =>
     static readonly objectOf = objectOf
     static readonly shape = shape
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    static extend(...args: any[]) {
+    static extend(..._args: any[]) {
       warn(
-        `VueTypes.extend has been removed. Use the ES6+ method instead. See https://dwightjack.github.io/vue-types/advanced/extending-vue-types.html#extending-namespaced-validators-in-es6 for details.`,
+        `VueTypes.extend has been removed. Use the ES6+ method instead. See https://vue-types.codeful.dev/namespaced-usage/extend.html#extending-namespaced-validators-in-es6 for details.`,
       )
     }
 
     static utils = {
-      validate<T, U>(value: T, type: U) {
-        return validateType<U, T>(type, value, true) === true
+      validate(value: unknown, type: unknown) {
+        return validateType(type, value, true) === true
       },
-      toType<T = unknown, Validable extends boolean = false>(
-        name: string,
-        obj: PropOptions<T>,
-        validable: Validable = false as Validable,
-      ): Validable extends true ? VueTypeValidableDef<T> : VueTypeDef<T> {
-        return (
-          validable ? toValidableType<T>(name, obj) : toType<T>(name, obj)
-        ) as any
-      },
+      toType: utilsToType,
     }
   })()
 

@@ -3,12 +3,15 @@
   "private": true,
   "type": "module",
   "version": "0.0.0",
+  "publishConfig": {
+    "access": "restricted"
+  },
   "scripts": {
     "dev": "vitepress dev",
     "build": "cross-env NODE_ENV=production vitepress build",
     "lint": "pnpm run \"/^lint:.*/\"",
-    "lint:js": "eslint '{.vitepress,components}/**/*.{ts,js,vue}'",
-    "lint:md": "prettier '**/*.md' --check"
+    "lint:js": "oxlint .vitepress components",
+    "lint:md": "oxfmt '**/*.md' --check"
   },
   "devDependencies": {
     "cross-env": "10.1.0",

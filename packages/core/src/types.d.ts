@@ -2,12 +2,10 @@ import type { PropType } from 'vue'
 
 export { PropType }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type ExtractNonArray<T> = T extends (infer U)[] ? never : T
 
 export type Prop<T> = ExtractNonArray<PropType<T>>
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export type NativeType = string | boolean | number | null | undefined | Function
 
 export type Constructor = new (...args: any[]) => any

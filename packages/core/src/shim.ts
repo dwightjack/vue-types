@@ -1,23 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { isPlainObject } from './is-plain-obj'
-import './global-this'
 import { typeDefaults } from './sensibles'
 import { config } from './config'
 import type { VueTypesDefaults } from './types'
 export type { VueTypeDef, VueTypeValidableDef } from './types'
 const dfn = Object.defineProperty
 
-const isArray =
-  Array.isArray ||
-  function (value) {
-    return Object.prototype.toString.call(value) === '[object Array]'
-  }
+const isArray = Array.isArray
 
 function deepClone<T>(input: T): T {
   if ('structuredClone' in globalThis) {
     return structuredClone(input)
   }
   if (Array.isArray(input)) {
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     return [...input] as T
   }
   if (isPlainObject(input)) {
@@ -34,8 +29,6 @@ function type(name: string, props: any = {}, validable = false): any {
     },
     def: {
       value(this: any, v: any) {
-        // eslint-disable-next-line @typescript-eslint/no-this-alias
-        const t = this
         if (v === undefined) {
           if ('default' in this) {
             delete this.default
@@ -43,13 +36,13 @@ function type(name: string, props: any = {}, validable = false): any {
           return this
         }
         if (isArray(v)) {
-          t.default = () => deepClone(v)
+          this.default = () => deepClone(v)
         } else if (isPlainObject(v)) {
-          t.default = () => deepClone(v)
+          this.default = () => deepClone(v)
         } else {
-          t.default = v
+          this.default = v
         }
-        return t
+        return this
       },
     },
     isRequired: {
@@ -61,8 +54,7 @@ function type(name: string, props: any = {}, validable = false): any {
   }
 
   if (validable) {
-    ;(descriptors as any).validate = {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
+    descriptors.validate = {
       value() {},
     }
   }
@@ -75,7 +67,8 @@ function type(name: string, props: any = {}, validable = false): any {
 
 export { config }
 
-type TypeShim = <T = any>(...args: any[]) => any
+// oxlint-disable-next-line typescript/no-unnecessary-type-parameters
+type TypeShim = <_T = any>(...args: any[]) => any
 
 export const any: TypeShim = () => type('any', {}, true)
 export const func: TypeShim = () => type('func', { type: Function }, true)
@@ -104,7 +97,6 @@ export const shape: TypeShim = (_a: any) =>
 export const nullable: TypeShim = () => ({
   type: null,
 })
-/* eslint-enable @typescript-eslint/no-unused-vars */
 
 function createValidator(
   root: any,
@@ -126,19 +118,20 @@ function createValidator(
 
 export function fromType(name: string, source: any, props: any = {}) {
   const t = type(name, Object.assign({}, source, props), !!source.validable)
-  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  t.validator && delete t.validator
+  if (t.validator) {
+    delete t.validator
+  }
   return t
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// oxlint-disable-next-line no-unused-vars typescript/no-unnecessary-type-parameters
 export const toValidableType = <T>(name: string, props: any) =>
   type(name, props, true)
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// oxlint-disable-next-line no-unused-vars typescript/no-unnecessary-type-parameters
 export const toType = <T>(name: string, props: any) => type(name, props)
 
 const BaseVueTypes = /*#__PURE__*/ (() =>
-  // eslint-disable-next-line @typescript-eslint/no-extraneous-class
+  // oxlint-disable-next-line no-shadow, typescript/no-extraneous-class
   class BaseVueTypes {
     static defaults: Partial<VueTypesDefaults> = {}
 
@@ -183,14 +176,14 @@ const BaseVueTypes = /*#__PURE__*/ (() =>
     static arrayOf = arrayOf
     static objectOf = objectOf
     static shape = shape
-    static extend<T = any>(props: any): T {
+    static extend(props: any) {
       if (isArray(props)) {
         props.forEach((p) => this.extend(p))
-        return this as any
+        return this
       }
-      const { name, validate, getter = false, type = null } = props
+      const { name, validate, getter = false, type: _type = null } = props
       // If we are inheriting from a custom type, let's ignore the type property
-      const extType = isPlainObject(type) && type.type ? null : type
+      const extType = isPlainObject(_type) && _type.type ? null : _type
       return createValidator(this, name, { type: extType }, getter, !!validate)
     }
     static utils = {
@@ -221,20 +214,19 @@ export function createTypes(defs: Partial<VueTypesDefaults> = typeDefaults()) {
   }
 }
 
-export function validateType<T, U>(
-  _type: T,
-  _value: U,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function validateType(
+  _type: any,
+  _value: any,
   _silent = false,
 ): string | boolean {
   return true
 }
 
 if (process.env.NODE_ENV !== 'production') {
-  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  config.silent === false &&
+  // oxlint-disable-next-line no-unused-expressions
+  !config.silent &&
     console.warn(
-      'You are using the production shimmed version of VueTypes in a development build. Refer to https://dwightjack.github.io/vue-types/guide/installation.html#production-build to learn how to configure VueTypes for usage in multiple environments.',
+      'You are using the production shimmed version of VueTypes in a development build. Refer to https://vue-types.codeful.dev/guide/installation.html#production-build to learn how to configure VueTypes for usage in multiple environments.',
     )
 }
 

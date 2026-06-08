@@ -1,3 +1,4 @@
+import { beforeEach, vi, describe, expect, it } from 'vitest'
 import { VueTypeDef } from '../../src/types'
 import oneOf from '../../src/validators/oneof'
 import { forceNoContext, checkRequired } from '../helpers'
@@ -22,6 +23,7 @@ describe('`.oneOf`', () => {
     expect(customType.type).toHaveProperty([0], Number)
   })
 
+  // oxlint-disable-next-line vitest/expect-expect
   it('should add a `required` flag', () => {
     checkRequired(customType)
   })

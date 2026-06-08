@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest'
 import arrayOf from '../../src/validators/arrayof'
 import { number, integer } from '../../src/validators/native'
 import { forceNoContext, checkRequired } from '../helpers'
@@ -8,6 +9,7 @@ describe('`.arrayOf`', () => {
     expect(customType.type).toBe(Array)
   })
 
+  // oxlint-disable-next-line vitest/expect-expect
   it('should add a `required` flag', () => {
     const customType = arrayOf(Number)
     checkRequired(customType)
