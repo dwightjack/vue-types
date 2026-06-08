@@ -1,5 +1,18 @@
 # vue-types-nuxt
 
+## 5.0.0
+
+### Major Changes
+
+- d37a012: - Remove old polyfills and shims for `Array.isArray`, `globalThis`, `Object.hasOwn`
+  - Update dependency to TypeScript 6 and code refactor
+  - migrate from ESLint+Prettier to the Oxc ecosystem
+
+### Patch Changes
+
+- Updated dependencies [d37a012]
+  - vue-types@7.0.0
+
 ## 4.0.0
 
 ### Major Changes
