@@ -11,3 +11,6 @@ minimumReleaseAge: 10080 # 7 days
 strictDepBuilds: true
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 10080 # 7 days
+minimumReleaseAgeExclude:
+  # Renovate security update: nuxt@4.4.7
+  - nuxt@4.4.7
