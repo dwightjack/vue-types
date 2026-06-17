@@ -14,3 +14,5 @@ trustPolicyIgnoreAfter: 10080 # 7 days
 minimumReleaseAgeExclude:
   # Renovate security update: nuxt@4.4.7
   - nuxt@4.4.7
+  # Renovate security update: vite@8.0.16
+  - vite@8.0.16
