@@ -30,7 +30,7 @@
   },
   "bugs": "https://github.com/dwightjack/vue-types/issues",
   "devDependencies": {
-    "@changesets/cli": "2.31.0",
+    "@changesets/cli": "3.0.1",
     "@vitest/coverage-v8": "4.1.7",
     "happy-dom": "20.9.0",
     "lefthook": "2.1.8",
