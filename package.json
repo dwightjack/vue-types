@@ -31,7 +31,7 @@
   "bugs": "https://github.com/dwightjack/vue-types/issues",
   "devDependencies": {
     "@changesets/cli": "3",
-    "@vitest/coverage-v8": "5.0.4",
+    "@vitest/coverage-v8": "5.0.5",
     "happy-dom": "21.0.1",
     "lefthook": "2.2.2",
     "oxfmt": "0.73.0",
@@ -40,6 +40,6 @@
     "publint": "^0.3.25",
     "typescript": "6.0.3",
     "vite": "8.3.4",
-    "vitest": "5.0.4"
+    "vitest": "5.0.5"
   }
 }
