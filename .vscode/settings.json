@@ -4,5 +4,8 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "always"
   },
-  "js/ts.tsdk.path": "node_modules/typescript/lib"
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "json.schemaDownload.trustedDomains": {
+    "https://unpkg.com/": true
+  }
 }
