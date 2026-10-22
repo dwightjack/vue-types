@@ -31,15 +31,15 @@
   "bugs": "https://github.com/dwightjack/vue-types/issues",
   "devDependencies": {
     "@changesets/cli": "2.31.0",
-    "@vitest/coverage-v8": "4.1.7",
-    "happy-dom": "20.9.0",
-    "lefthook": "2.1.8",
-    "oxfmt": "0.52.0",
-    "oxlint": "1.67.0",
-    "oxlint-tsgolint": "0.23.0",
-    "publint": "^0.3.21",
+    "@vitest/coverage-v8": "5.0.4",
+    "happy-dom": "21.0.1",
+    "lefthook": "2.2.2",
+    "oxfmt": "0.73.0",
+    "oxlint": "1.88.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "publint": "^0.3.25",
     "typescript": "6.0.3",
-    "vite": "8.2.4",
-    "vitest": "4.1.11"
+    "vite": "8.3.4",
+    "vitest": "5.0.4"
   }
 }

@@ -38,12 +38,12 @@
     "lint:js": "oxlint"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.0.0 || ^4.0.0"
+    "@nuxt/kit": "^4.6.1"
   },
   "devDependencies": {
-    "@nuxt/module-builder": "^1.0.2",
-    "@nuxt/schema": "^4.0.3",
-    "nuxt": "^4.0.3",
+    "@nuxt/module-builder": "^1.0.3",
+    "@nuxt/schema": "^4.6.1",
+    "nuxt": "^4.6.1",
     "vue-types": "workspace:^"
   },
   "peerDependencies": {
