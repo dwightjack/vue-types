@@ -6,7 +6,7 @@ This guide covers VueTypes 6+.
 - **VueTypes 6+ is compatible with Vue 3**.
 - **VueTypes 4+ is compatible with Vue 2 and Vue 3**.
 - **VueTypes 2 is compatible with Vue 1 and 2**.
-  :::
+:::
 
 ## NPM Package
 
