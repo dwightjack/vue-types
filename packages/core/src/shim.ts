@@ -98,24 +98,6 @@ export const nullable: TypeShim = () => ({
   type: null,
 })
 
-function createValidator(
-  root: any,
-  name: string,
-  props: any,
-  getter = false,
-  validable = false,
-) {
-  const prop = getter ? 'get' : 'value'
-  const descr = {
-    [prop]: () =>
-      type(name, Object.assign({}, props), validable).def(
-        getter ? root.defaults[name] : undefined,
-      ),
-  }
-
-  return dfn(root, name, descr)
-}
-
 export function fromType(name: string, source: any, props: any = {}) {
   const t = type(name, Object.assign({}, source, props), !!source.validable)
   if (t.validator) {
@@ -176,15 +158,10 @@ const BaseVueTypes = /*#__PURE__*/ (() =>
     static arrayOf = arrayOf
     static objectOf = objectOf
     static shape = shape
-    static extend(props: any) {
-      if (isArray(props)) {
-        props.forEach((p) => this.extend(p))
-        return this
-      }
-      const { name, validate, getter = false, type: _type = null } = props
-      // If we are inheriting from a custom type, let's ignore the type property
-      const extType = isPlainObject(_type) && _type.type ? null : _type
-      return createValidator(this, name, { type: extType }, getter, !!validate)
+    static extend(_props: any) {
+      console.warn(
+        `[VueTypes warn]: VueTypes.extend has been removed. Use the ES6+ method instead. See https://vue-types.codeful.dev/namespaced-usage/extend.html#extending-namespaced-validators-in-es6 for details.`,
+      )
     }
     static utils = {
       toType: type as (...args: any[]) => any,

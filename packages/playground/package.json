@@ -12,9 +12,9 @@
     "build": "pnpm dev:prepare &&  nuxi build"
   },
   "dependencies": {
-    "nuxt": "^4.0.3",
-    "vue": "^3.5.34",
-    "vue-types-nuxt": "workspace:^",
-    "vue-types": "workspace:^"
+    "nuxt": "^4.6.1",
+    "vue": "^3.5.44",
+    "vue-types": "workspace:^",
+    "vue-types-nuxt": "workspace:^"
   }
 }

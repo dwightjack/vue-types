@@ -12,9 +12,5 @@ strictDepBuilds: true
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 10080 # 7 days
 minimumReleaseAgeExclude:
-  # Renovate security update: nuxt@4.4.7 || 4.5.1
-  - nuxt@4.4.7 || 4.5.1
-  # Renovate security update: vite@8.0.16 || 8.2.4
-  - vite@8.0.16 || 8.2.4
-  # Renovate security update: vitest@4.1.11
-  - vitest@4.1.11
+  # Renovate security update: vite@8.3.5
+  - vite@8.3.5

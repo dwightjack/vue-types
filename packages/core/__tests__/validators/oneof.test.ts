@@ -73,7 +73,7 @@ describe('`.oneOf`', () => {
   it('should properly stringify values in error message', () => {
     vi.mocked(console.warn).mockClear()
     const myType = oneOf([Symbol('demo')])
-    myType.validator?.('a' as any, {})
+    myType.validator?.('a', {})
     expect(console.warn).toHaveBeenCalledWith(
       expect.stringContaining('Symbol(demo)'),
     )

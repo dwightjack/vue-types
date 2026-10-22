@@ -1,4 +1,4 @@
-import { Prop, VueProp, InferType, PropType } from '../types'
+import { Prop, VueProp, InferType } from '../types'
 import {
   isArray,
   isComplexType,
@@ -62,14 +62,12 @@ export default function oneOfType<
     // we got just native objects (ie: Array, Object)
     // delegate to Vue native prop check
     return toType<D>('oneOfType', {
-      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-      type: typeProp as unknown as PropType<D>,
+      type: typeProp,
     })
   }
 
   return toType<D>('oneOfType', {
-    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-    type: typeProp as unknown as PropType<D>,
+    type: typeProp,
     validator(value) {
       const err: string[] = []
       const valid = arr.some((type) => {
