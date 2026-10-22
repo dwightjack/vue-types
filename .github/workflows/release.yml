@@ -4,6 +4,8 @@ on:
     paths-ignore:
       - "packages/docs/**"
       - "README.md"
+    branches:
+      - main
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -24,7 +26,7 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: ".nvmrc"
-          cache: "pnpm"
+          package-manager-cache: false
           registry-url: "https://registry.npmjs.org"
       - run: pnpm i
       - name: Build
@@ -34,16 +36,8 @@ jobs:
 
       - name: Test
         run: pnpm test
-      # - name: Upload code coverage
-      #   uses: paambaati/codeclimate-action@f429536ee076d758a24705203199548125a28ca7 # v9.0.0
-      #   env:
-      #     CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
-      #   with:
-      #     coverageLocations: ${{github.workspace}}/packages/core/coverage/lcov.info:lcov
-      #     prefix: test
       - name: Create Release Pull Request or Publish to npm
         id: changesets
-        if: github.ref_name == 'main'
         uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
           version-script: pnpm run ci:version # pnpm changeset version && pnpm install --lockfile-only

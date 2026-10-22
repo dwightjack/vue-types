@@ -33,9 +33,9 @@ jobs:
           gh pr edit $GITHUB_HEAD_REF --remove-label='release: snapshot'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: pnpm i
-      - run: pnpm -r test
-      - run: pnpm -r run build
+      - run: pnpm install
+      - run: pnpm test
+      - run: pnpm build
 
       - name: Prepare snapshot releases
         run: |
