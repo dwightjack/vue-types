@@ -1,5 +1,11 @@
 # vue-types
 
+## 7.0.1
+
+### Patch Changes
+
+- 2005933: Shim: remove `VueTypes.extend` implementation and add a removal warning. The static method was removed from VueTypes' core in v6.0.0
+
 ## 7.0.0
 
 ### Major Changes
@@ -27,47 +33,46 @@
   Using `VueTypes.extend` (old):
 
   ```js
-  import VueTypes from "vue-types";
+  import VueTypes from 'vue-types'
 
   export const VueTypesProject = VueTypes.extend([
     {
-      name: "maxLength",
+      name: 'maxLength',
       type: String,
       validator: (max, v) => v.length <= max,
     },
     {
-      name: "positive",
+      name: 'positive',
       getter: true,
       type: Number,
       validator: (v) => v > 0,
     },
-  ]);
+  ])
   ```
 
   Using ES6+ `extends` (new):
 
   ```js
-  import VueTypes, { toType } from "vue-types";
+  import VueTypes, { toType } from 'vue-types'
 
   export class VueTypesProject extends VueTypes {
     static maxLength(max) {
-      return toType("maxLength", {
+      return toType('maxLength', {
         type: String,
         validator: (v) => String(v).length <= max,
-      });
+      })
     }
 
     static get positive() {
-      return toType("positive", {
+      return toType('positive', {
         type: Number,
         validator: (v) => v > 0,
-      });
+      })
     }
   }
   ```
 
   #### Package format review:
-
   - ESM and CJS builds target is ESNext (browsers with support for the latest JavaScript features).
   - UMD builds target is ES2016 (aligned with [Vue 3 browser support](https://vuejs.org/about/faq#what-browsers-does-vue-support))
 
@@ -116,10 +121,10 @@
 
   ```ts
   // Before: v is of type unknown
-  string().validate((v) => v === "Hello"); // <-- TS error!
+  string().validate((v) => v === 'Hello') // <-- TS error!
 
   // After: v is of type string
-  string().validate((v) => v === "Hello"); // <-- Works!
+  string().validate((v) => v === 'Hello') // <-- Works!
   ```
 
   This should not be a breaking change, but you should be aware of the new behavior.
