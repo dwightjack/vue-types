@@ -1,0 +1,11 @@
+import { vi, beforeAll } from 'vitest'
+
+console.log('xxxxx')
+
+beforeAll(() => {
+  console.log = vi.fn()
+  console.warn = vi.fn()
+  console.error = vi.fn()
+  console.debug = vi.fn()
+  console.info = vi.fn()
+})

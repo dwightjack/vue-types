@@ -1,17 +1,21 @@
 /// <reference types="vitest/config" />
 import { defineConfig } from 'vite'
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 
 export default defineConfig({
   test: {
     environment: 'happy-dom',
-    setupFiles: [resolve(__dirname, './vitest.setup.ts')],
+    setupFiles: [resolve(import.meta.dirname, './vitest.setup.ts')],
     include: ['__tests__/**/*.test.ts'],
     coverage: {
       provider: 'v8',
       include: ['src/**/*.ts', '!src/**/*.{d,cjs}.ts'],
       reportsDirectory: 'coverage',
-      reporter: ['text', ['lcov', { projectRoot: __dirname }], 'json'],
+      reporter: [
+        'text',
+        ['lcov', { projectRoot: import.meta.dirname }],
+        'json',
+      ],
     },
   },
 })
