@@ -92,7 +92,7 @@ jobs:
 
   pack:
     if: needs.select_mode.outputs.mode == 'publish'
-    needs: [select_mode, version]
+    needs: select_mode
     runs-on: ubuntu-latest
     outputs:
       pack-dir-artifact-id: ${{ steps.pack.outputs.pack-dir-artifact-id }}
