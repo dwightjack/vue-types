@@ -18,12 +18,11 @@ jobs:
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
-          registry-url: "https://registry.npmjs.org"
-      - run: pnpm i
+      - name: Install dependencies
+        run: pnpm install
       - name: Build
         run: pnpm build
       - name: Lint
         run: pnpm lint
-
       - name: Test
         run: pnpm test

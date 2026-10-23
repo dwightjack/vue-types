@@ -7,44 +7,131 @@ on:
     branches:
       - main
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
 
-permissions:
-  id-token: write
-  contents: write
-  pull-requests: write
+# recommended: reset permissions and explicitly specify for each job
+permissions: {}
 
 env:
   NPM_CONFIG_PROVENANCE: true
 
 jobs:
-  build_and_release:
+  build_and_check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: ".nvmrc"
-          package-manager-cache: false
-          registry-url: "https://registry.npmjs.org"
-      - run: pnpm i
+          cache: "pnpm"
+      - run: pnpm install
       - name: Build
         run: pnpm build
       - name: Lint
         run: pnpm lint
-
       - name: Test
         run: pnpm test
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+
+  select_mode:
+    runs-on: ubuntu-latest
+    needs: build_and_check
+    permissions:
+      contents: read
+    outputs:
+      mode: ${{ steps.select-mode.outputs.mode }}
+      publish-plan-artifact-id: ${{ steps.select-mode.outputs.publish-plan-artifact-id }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          version-script: pnpm run ci:version # pnpm changeset version && pnpm install --lockfile-only
-          publish-script: pnpm run ci:publish
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install
+      - name: Select Changesets mode
+        id: select-mode
+        uses: changesets/action/select-mode@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+
+  version:
+    if: needs.select_mode.outputs.mode == 'version'
+    needs: select_mode
+    runs-on: ubuntu-latest
+    outputs:
+      version-dir-artifact-id: ${{ steps.version.outputs.version-dir-artifact-id }}
+    permissions:
+      contents: write # to check out repo (actions/checkout) and commit version changes (changesets/action/version)
+      pull-requests: write # to create pull request (changesets/action/version)
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: ".nvmrc"
+          package-manager-cache: false # recommended: avoid cache poisoning
+      - name: Install dependencies
+        run: pnpm install
+      - name: Version packages
+        id: version
+        uses: changesets/action/version@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        with:
+          pr-draft: "create"
           commit-message: "chore: update versions"
           pr-title: "Release: new versions"
+
+  pack:
+    if: needs.select_mode.outputs.mode == 'publish'
+    needs: select_mode
+    runs-on: ubuntu-latest
+    outputs:
+      pack-dir-artifact-id: ${{ steps.pack.outputs.pack-dir-artifact-id }}
+    permissions:
+      contents: read # to check out repo (actions/checkout)
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: ".nvmrc"
+          package-manager-cache: false # recommended: avoid cache poisoning
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build
+        run: pnpm build
+      - name: Pack packages
+        id: pack
+        uses: changesets/action/pack@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        with:
+          publish-plan-artifact-id: ${{ needs.select_mode.outputs.publish-plan-artifact-id }}
+
+  publish:
+    needs: pack
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to check out repo (actions/checkout) and push git tags (changesets/action/publish)
+      id-token: write # for trusted publishing (changesets/action/publish)
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: ".nvmrc"
+          package-manager-cache: false # recommended: avoid cache poisoning
+          registry-url: "https://registry.npmjs.org"
+      - name: Install dependencies
+        run: pnpm install --ignore-scripts # no build/lifecycle scripts in the job holding id-token
+      - name: Publish packages
+        uses: changesets/action/publish@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        with:
+          pack-dir-artifact-id: ${{ needs.pack.outputs.pack-dir-artifact-id }}
           create-github-releases: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
