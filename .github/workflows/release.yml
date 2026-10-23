@@ -56,6 +56,11 @@ jobs:
       - name: Select Changesets mode
         id: select-mode
         uses: changesets/action/select-mode@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+      - name: Log mode
+        run: |
+          echo "Mode: $SELECT_MODE\n"
+        env:
+          SELECT_MODE: ${{ steps.select-mode.outputs.mode }}
 
   version:
     if: needs.select_mode.outputs.mode == 'version'
