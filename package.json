@@ -20,9 +20,7 @@
     "nuxt:dev": "pnpm --filter=vue-types-nuxt stub && pnpm --filter=vue-types-nuxt-playground dev",
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",
-    "test": "pnpm -r test",
-    "ci:version": "pnpm changeset version && pnpm install --lockfile-only",
-    "ci:publish": "git status && pnpm -r publish"
+    "test": "pnpm -r test"
   },
   "repository": {
     "type": "git",

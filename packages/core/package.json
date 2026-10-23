@@ -40,7 +40,8 @@
   },
   "files": [
     "dist",
-    "shim"
+    "shim",
+    "README.md"
   ],
   "scripts": {
     "prepublishOnly": "pnpm run build",
