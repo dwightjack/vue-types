@@ -67,21 +67,14 @@ jobs:
     needs: pack
     runs-on: ubuntu-latest
     permissions:
-      contents: read # to check out repo (actions/checkout)
-      id-token: write # for trusted publishing (changesets/action/publish)
+      id-token: write # for trusted publishing (npm publish)
       pull-requests: write
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: ".nvmrc"
           package-manager-cache: false # recommended: avoid cache poisoning
           registry-url: "https://registry.npmjs.org"
-      - name: Install dependencies
-        run: pnpm install --ignore-scripts # no build/lifecycle scripts in the job holding id-token
       - name: Download packed artifacts
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
@@ -89,9 +82,12 @@ jobs:
           path: ${{ format('release-{0}', needs.pack.outputs.pack-dir-artifact-id) }}
       - name: Publish packages
         run: |
-          pnpm changeset publish --no-git-tag --tag=next --from-pack-dir="$PACK_DIR"
+          for f in ./$PACK_DIR/*.tgz; do
+            echo "Publishing $f..."
+            npm publish "$f" --access=public --tag=next
+          done
         env:
-          PACK_DIR: ${{ format('release-{0}', needs.pack.outputs.pack-dir-artifact-id) }}
+          PACK_DIR: ${{ format('release-{0}/packages', needs.pack.outputs.pack-dir-artifact-id) }}
       - name: Update the snapshot release PR
         run: |
           VERSIONS=$(cat ./$PACK_DIR/publish-plan.json | jq -r '.plan[][] | .name + "@" + .version')
@@ -108,5 +104,6 @@ jobs:
           gh pr comment $PR_NUMBER --body-file msg_body
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PACK_DIR: ${{ format('release-{0}', needs.pack.outputs.pack-dir-artifact-id) }}
