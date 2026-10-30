@@ -14,3 +14,5 @@ trustPolicyIgnoreAfter: 10080 # 7 days
 minimumReleaseAgeExclude:
   # Renovate security update: vite@8.3.5
   - vite@8.3.5
+  # Renovate security update: happy-dom@21.0.4
+  - happy-dom@21.0.4
