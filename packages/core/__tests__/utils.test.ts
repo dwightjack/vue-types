@@ -2,7 +2,7 @@ import { beforeEach, vi, describe, expect, it } from 'vitest'
 // oxlint-disable unicorn/consistent-function-scoping
 import * as utils from '../src/utils'
 import { VueTypeDef } from '../src'
-import { config } from '../src'
+import { any, config, symbol } from '../src'
 
 beforeEach(() => {
   config.logLevel = 'warn'
@@ -132,6 +132,14 @@ describe('`validateType()`', () => {
     expect(validator).toHaveBeenLastCalledWith('anyValue')
   })
 
+  it('validates public validators without a native type', () => {
+    expect(utils.validateType(symbol(), Symbol('valid'))).toBe(true)
+    expect(utils.validateType(symbol(), 1)).toBe(false)
+    const onlyOk = any<string>().validate((value) => value === 'ok')
+    expect(utils.validateType(onlyOk, 'ok')).toBe(true)
+    expect(utils.validateType(onlyOk, 'wrong')).toBe(false)
+  })
+
   it('should validate async functions', () => {
     const fn = async () => {}
     expect(utils.validateType({ type: Function }, fn)).toBe(true)
@@ -158,6 +166,19 @@ describe('`toType()`', () => {
 
     expect(spy.mock.instances[0]).toBe(type)
   })
+
+  it.each([undefined, true] as const)(
+    'runs custom validators without changing the native type (%s)',
+    (type) => {
+      const prop = utils.toType('positive', {
+        type,
+        validator: (value) => typeof value === 'number' && value > 0,
+      })
+      expect(prop.type).toBe(type)
+      expect(utils.validateType(prop, 1)).toBe(true)
+      expect(utils.validateType(prop, -1)).toBe(false)
+    },
+  )
 
   it('should add a non-enumerable name property', () => {
     const type = utils.toType('demo', {})
@@ -303,6 +324,18 @@ describe('`toValidableType()`', () => {
     type.validator('demo')
     expect(fn).toHaveBeenCalledWith('demo')
   })
+  it.each([undefined, true] as const)(
+    'runs validators added with validate() when type is %s',
+    (type) => {
+      const prop = utils
+        .toValidableType('positive', { type })
+        .validate((value) => typeof value === 'number' && value > 0)
+      expect(prop.type).toBe(type)
+      expect(utils.validateType(prop, 1)).toBe(true)
+      expect(utils.validateType(prop, -1)).toBe(false)
+    },
+  )
+
   it('binds the validate function to the type object', () => {
     const fn = vi.fn<() => boolean>()
     const type = utils

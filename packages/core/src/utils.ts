@@ -182,7 +182,14 @@ export function validateType(
     ? typeToCheck._vueTypes_name + ' - '
     : ''
 
-  if (isComplexType(typeToCheck) && typeToCheck.type !== null) {
+  if (
+    isComplexType(typeToCheck) &&
+    typeToCheck.type !== null &&
+    !(
+      (typeToCheck.type === undefined || typeToCheck.type === true) &&
+      isVueTypeDef(typeToCheck)
+    )
+  ) {
     if (typeToCheck.type === undefined || typeToCheck.type === true) {
       return valid
     }
