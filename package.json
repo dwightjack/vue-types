@@ -36,7 +36,7 @@
     "oxlint": "1.88.0",
     "oxlint-tsgolint": "7.0.2004",
     "publint": "^0.3.25",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "vite": "8.3.4",
     "vitest": "5.0.5"
   }
