@@ -145,7 +145,9 @@ describe('`validateType()`', () => {
     for (const value of [null, undefined]) {
       expect(utils.validateType(symbol(), value)).toBe(true)
       expect(utils.validateType(onlyOk, value)).toBe(true)
-      expect(utils.validateType(shape({ s: symbol() }), { s: value })).toBe(true)
+      expect(utils.validateType(shape({ s: symbol() }), { s: value })).toBe(
+        true,
+      )
       expect(utils.validateType(arrayOf(symbol()), [value])).toBe(true)
       expect(utils.validateType(objectOf(symbol()), { a: value })).toBe(true)
     }
