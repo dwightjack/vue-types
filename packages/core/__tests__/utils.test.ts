@@ -2,7 +2,7 @@ import { beforeEach, vi, describe, expect, it } from 'vitest'
 // oxlint-disable unicorn/consistent-function-scoping
 import * as utils from '../src/utils'
 import { VueTypeDef } from '../src'
-import { any, config, symbol } from '../src'
+import { any, arrayOf, config, objectOf, shape, symbol } from '../src'
 
 beforeEach(() => {
   config.logLevel = 'warn'
@@ -138,6 +138,17 @@ describe('`validateType()`', () => {
     const onlyOk = any<string>().validate((value) => value === 'ok')
     expect(utils.validateType(onlyOk, 'ok')).toBe(true)
     expect(utils.validateType(onlyOk, 'wrong')).toBe(false)
+  })
+
+  it('accepts nullish values for optional untyped validators', () => {
+    const onlyOk = any<string>().validate((value) => value === 'ok')
+    for (const value of [null, undefined]) {
+      expect(utils.validateType(symbol(), value)).toBe(true)
+      expect(utils.validateType(onlyOk, value)).toBe(true)
+      expect(utils.validateType(shape({ s: symbol() }), { s: value })).toBe(true)
+      expect(utils.validateType(arrayOf(symbol()), [value])).toBe(true)
+      expect(utils.validateType(objectOf(symbol()), { a: value })).toBe(true)
+    }
   })
 
   it('should validate async functions', () => {
