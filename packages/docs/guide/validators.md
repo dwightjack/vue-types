@@ -1140,7 +1140,7 @@ validateType(isArrayOfStrings, ['hello', 1]) // false
 validateType(Number, 10) // true
 
 // returns an error message on failure
-validateType(String, 10, false) // 'value "10" should be of type "string"`
+validateType(String, 10, true) // 'value "10" should be of type "String"'
 ```
 
 ### toType / toValidableType

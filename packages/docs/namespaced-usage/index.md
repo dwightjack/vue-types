@@ -212,7 +212,7 @@ If the last argument is `true`, the resulting validator object supports the `.va
 ```js
 const password = {
   type: String,
-  required: true
+  required: true,
 }
 
 const passwordType = VueTypes.utils.toType('password', password, true)
@@ -220,7 +220,7 @@ const passwordType = VueTypes.utils.toType('password', password, true)
 export default {
   props: {
     // This password prop must include at least a digit
-    password: passwordType.validate((v) => /[0-9]/test.(v)),
+    password: passwordType.validate((v) => /[0-9]/.test(v)),
   },
 }
 ```
