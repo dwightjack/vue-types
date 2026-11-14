@@ -18,3 +18,5 @@ minimumReleaseAgeExclude:
   - happy-dom@21.0.4
   # Renovate security update: nuxt@4.6.3
   - nuxt@4.6.3
+  # Renovate security update: @nuxt/schema@4.6.4
+  - "@nuxt/schema@4.6.4"
